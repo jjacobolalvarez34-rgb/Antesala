@@ -54,7 +54,8 @@ app/
   demo-assets/[hotel]/[...path]/route.ts   sirve content/<hotel>/{media,plans} en la demo (estático)
   panel/page.tsx             métricas simuladas
 components/
-  scene/                     SceneLayer (capa persistente), Scene (Canvas), Building, Context, CameraRig, Pois; luego UnitModel, SplatView
+  scene/                     SceneLayer (capa persistente), Scene (Canvas), Backdrop (fondo en dos capas), Building, windows (cuarto en paralaje), Context (entorno), CameraRig, Pois, UnitOverlay, assets (carga escalonada); luego UnitModel, SplatView
+public/visor/                assets genéricos del visor: env/ (HDRI día/noche) y materials/ (texturas CC0)
   pano/                      PanoViewer
   gallery/                   Gallery, ZoomImage
   plan/                      PlanSvg (2D interactivo), planToMesh (SVG → geometría)
@@ -128,6 +129,7 @@ interface Unit {
   viewPremiumCOP?: number;   // extra por vista o piso alto
   view?: string;             // qué se ve; justifica el extra
   plan: string;              // "plans/suite-502.svg"
+  exterior?: { facade: number; windows: number[] }[]; // ventanas en la fachada (0 = principal; izq→der visto desde afuera)
   spaces: Space[];
   featured?: boolean;
 }
@@ -217,6 +219,8 @@ La transferencia por visita sirve para calcular la "transferencia incluida" de c
 ## 9. Despliegue
 
 - **Demo:** Vercel, en `demo.<dominio>` o en la URL de Vercel. Los assets en R2 si se pasan del límite del repo; si no, en `public/` mientras sea la demo.
+- **Alternativa para la demo: Netlify.** `netlify.toml` ya está listo (pnpm build, Node 22, caché larga para `/visor/*`). Netlify usa su adaptador oficial de Next.js. Casi todo es estático, así que no hay diferencia práctica para la demo.
+- **Assets del visor** (`public/visor/`, unos 3 MB: HDRI de día y de noche y texturas CC0): en `public/` durante la demo; con `NEXT_PUBLIC_ASSETS_BASE_URL` pasan a R2 (`<base>/visor/...`).
 - **Con clientes (Fase 1+):** subdominio del hotel (`experiencia.hotelx.com`) apuntado con un CNAME. Vercel for Platforms o Cloudflare for SaaS para el SSL automático. Nunca pedir la contraseña del DNS del hotel ni tocar sus registros MX.
 - Variables de entorno: `NEXT_PUBLIC_ASSETS_BASE_URL` y, en el futuro, las de Supabase.
 

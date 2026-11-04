@@ -1,0 +1,16 @@
+# Despliegue en Netlify (alternativa a Vercel para la demo; ver ARQUITECTURA.md §9).
+# Netlify detecta Next.js y usa su adaptador oficial (OpenNext) sin configuración extra.
+# pnpm se instala con la versión del campo "packageManager" de package.json.
+
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Los assets del visor (HDRI y texturas) cambian poco: caché larga en el navegador.
+[[headers]]
+  for = "/visor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"

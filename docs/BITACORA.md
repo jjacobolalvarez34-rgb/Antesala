@@ -25,6 +25,32 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-04 · Bloques 2 (v2) y 3 · Realismo, día/noche y maqueta de unidad
+
+**Hecho**
+- Nueva estrategia de Jacobo: el edificio es el protagonista. Se renderiza en dos capas: el fondo queda congelado y se desenfoca en el giro, y el edificio va en vivo (D-028).
+- Realismo: HDRI reales de día y de noche y ladrillo PBR (CC0, Poly Haven), ventanas con cuarto en paralaje y cortinas de lino, balcones con matas, entrada de hotel con letrero, faroles y bañadores (D-030 a D-032).
+- Día y noche: por defecto según la hora del dispositivo, con botón sol/luna para cambiarlo y `?hora=` para forzarlo (D-031, D-035).
+- Habitaciones en la fachada: cada unidad ocupa ventanas concretas (`Unit.exterior`). El hover o los chips prenden sus luces y la tarjeta trae "Ver la vista" (renderizada desde la ventana) y "Ver unidad" (D-030, D-033).
+- Carga escalonada: precarga en tiempo ocioso, texturas reales progresivas y la noche en poscarga (D-029).
+- Bloque 3: `planToMesh` y la maqueta dentro del edificio, con fondo de estudio, espacios tocables, etiquetas y panel de espacio con galería (D-034).
+- `netlify.toml` para desplegar en Netlify.
+
+**Problemas / bloqueos**
+- `SceneLayer` importaba un módulo con three.js y el JS inicial subió a 257 KB. Se separó `prefetch.ts` (sin three) y volvió a 156 KB.
+- Los chips y la tarjeta quedaban bajo un `aria-hidden` (bug de accesibilidad). Ahora el `aria-hidden` va solo en el canvas.
+- Las cortinas hacían moiré a distancia. Los pliegues se atenúan con `fwidth`.
+- Congelar el reloj en las pruebas dejaba las animaciones de GSAP a medias. Se cambió por `?hora=`.
+
+**Mediciones**
+- JS inicial máximo: 156 KB gzip (límite 180).
+- Assets del visor: unos 3 MB (HDRI de día 1,2 MB, de noche 1,6 MB solo al pedirla, texturas 231 KB).
+
+**Siguiente sesión**
+- Empezar por: que Jacobo pruebe en el celular el día/noche, el hover de habitaciones, la vista desde la ventana y la maqueta; después el bloque 4 (360° y fundido desde la maqueta).
+
+---
+
 ## 2026-11-04 · Bloque 2 · Escena exterior (en curso)
 
 **Hecho**

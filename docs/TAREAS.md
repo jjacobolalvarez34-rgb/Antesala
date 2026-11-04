@@ -51,16 +51,26 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Cámara a las fachadas: vuelo de entrada y selector de fachada (D-027)
 - [x] Realismo v1: escena de día, fachada de ladrillo con ventanas reales, calles, árboles, vecinos y cerros (D-026)
 - [ ] Prefetch del chunk 3D desde la entrada (hoy se descarga al abrir `/explorar`)
-- [ ] Realismo v2: HDRI y texturas PBR CC0 (Poly Haven), balcones en las suites, árboles con follaje más natural y algo de vida en la calle (andenes, postes, carros quietos) sin tapar los corredores de vista
+- [x] Realismo v2: HDRI y texturas PBR CC0 (Poly Haven), balcones en las suites, faroles, entrada de hotel con letrero (D-031, D-032)
+- [x] Render en dos capas: fondo congelado con desenfoque en movimiento y edificio en vivo (D-028)
+- [x] Carga escalonada: precarga en tiempo ocioso, texturas reales progresivas y noche en poscarga (D-029)
+- [x] Ventanas con cuarto en paralaje y cortinas; luces por unidad con hover y chips de fachada (D-030)
+- [x] Día y noche, por defecto según la hora del dispositivo (D-031)
+- [x] Vista desde la ventana de cada unidad (D-033)
+- [x] `netlify.toml` para desplegar la demo en Netlify
+- [ ] Árboles con follaje más natural (copas con textura de hojas) y algún carro quieto en la calle
+- [ ] Vista desde la ventana en el detalle de la unidad (no solo en la fachada)
 - [ ] Mostrar las unidades sobre la planta del piso seleccionado (puente con el bloque 3)
 
 ## Bloque 3 — Maqueta de unidad
 
-- [ ] `planToMesh`: paredes extruidas con huecos de puertas y ventanas
-- [ ] Pisos por espacio con resaltado al hacer hover o clic
-- [ ] Muebles low-poly desde `<g id="furniture">`
-- [ ] Transición de cámara piso → unidad → espacio
-- [ ] Probar con las 3 unidades
+- [x] `planToMesh`: paredes extruidas con huecos de puertas y ventanas
+- [x] Pisos por espacio con resaltado al hacer hover o clic
+- [x] Muebles low-poly desde `<g id="furniture">`
+- [x] Transición de cámara piso → unidad → espacio (la maqueta aparece dentro del edificio, D-034)
+- [x] Probar con las 3 unidades (capturas 3D de las 5 unidades y de un espacio)
+- [ ] Muebles con algo más de forma (cabecero en camas, cojines en sofás); hoy son cajas de color
+- [ ] Prueba en celular real de la maqueta
 
 ## Bloque 4 — Detalle de espacio
 

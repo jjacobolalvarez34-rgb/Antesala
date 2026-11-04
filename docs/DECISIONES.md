@@ -121,3 +121,38 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-027 · 2026-11-04 · La cámara llega a las fachadas**
 - Decisión: la vista exterior abre con un vuelo desde arriba que baja en arco hasta la fachada principal, casi de frente y a altura de calle elevada (perspectiva de foto de arquitectura). Un selector (Fachada principal, Costado derecho, Fachada posterior, Costado izquierdo) lleva la cámara alrededor del edificio hasta cada una. Las fachadas salen de los bordes del `footprint`, así que sirven para cualquier forma.
 - Por qué: pedido de Jacobo. La vista aérea en 3/4 no mostraba la fachada como la ve el huésped.
+
+**D-028 · 2026-11-04 · Render en dos capas: fondo congelado y edificio en vivo**
+- Decisión: el entorno (calles, vecinos, árboles, cerros, cielo) vive en una escena aparte (`Backdrop`) y no se renderiza cada frame. Mientras la cámara se mueve, o durante el cambio día/noche, se renderiza a 20 % de resolución y se muestra desenfocado. Al detenerse se renderiza una vez en alta y se funde en 0,45 s. Cada frame solo se dibuja ese fondo y el edificio encima. La sombra del edificio cae sobre el fondo con un "shadow catcher". Se quitó el postproceso: el resplandor lo hacen halos aditivos.
+- Por qué: propuesta de Jacobo. El edificio es el plano principal y el fondo no tiene por qué costar cada frame. El desenfoque del giro esconde el cambio de perspectiva y da sensación de cámara real.
+- Detalle técnico: three no aplica tone mapping al renderizar a textura, así que el fondo aplica el mismo ACES a mano.
+
+**D-029 · 2026-11-04 · Carga escalonada: precarga, carga progresiva y poscarga**
+- Decisión: (1) desde cualquier etapa, en tiempo ocioso, se descarga el JS del 3D y se calienta la caché con lo del día (HDRI y texturas), salvo con "ahorro de datos" o si hay que preguntar antes del 3D; (2) la escena arranca con texturas procedurales y cambia a las reales cuando llegan; (3) lo de noche se pide 5 s después de que el día está listo, o al pasar a noche; (4) la vista desde una ventana se renderiza solo cuando se pide.
+- Por qué: "optimizado no significa sacrificar calidad", sino que lo pesado no bloquee lo primero que se ve.
+
+**D-030 · 2026-11-04 · Ventanas con cuarto en paralaje y cortinas; luces por unidad**
+- Decisión: cada ventana es un quad con "interior mapping" (pared del fondo, laterales, piso de madera y techo con lámpara), con cortinas de lino con pliegues y visillos. Cada unidad ocupa ventanas concretas (`Unit.exterior`); al pasar el mouse (o el foco del teclado por los chips de la fachada) sus luces se encienden y la cortina se ilumina. De noche se encienden cuartos al azar y el lobby queda siempre encendido.
+- Por qué: pedido de Jacobo (hover que prende las luces, realismo en cortinas y luz). El paralaje hace que la ventana no se vea como un sticker al mover la cámara.
+
+**D-031 · 2026-11-04 · Día y noche reales, por defecto según la hora del dispositivo**
+- Decisión: iluminación HDRI CC0 de Poly Haven (`kloofendal_43d_clear_puresky` de día, `moonless_golf` de noche) y texturas CC0 (`red_brick_03`, `rough_linen`) a 512 px en `public/visor/`. De noche hay cielo con estrellas, faroles con charcos de luz, ventanas de vecinos encendidas, letrero y apliques del hotel encendidos y bañadores en la fachada. La escena arranca de noche entre 6 p. m. y 6 a. m. según la hora del dispositivo, y se puede cambiar con el botón sol/luna.
+- Licencia: CC0 (dominio público), sin atribución obligatoria.
+- Por qué: pedido de Jacobo ("que lea la hora del dispositivo, pero que permita cambiarlo").
+
+**D-032 · 2026-11-04 · Que el edificio se lea como hotel**
+- Decisión: marquesina con el nombre del hotel (sale de `tokens.json`), puerta de vidrio, apliques, materas, balcones con matas en las unidades con balcón y lobby siempre iluminado.
+- Por qué: Jacobo: "no parece un hotel, parece un edificio X".
+
+**D-033 · 2026-11-04 · Vista desde la ventana**
+- Decisión: al elegir una unidad en la fachada, "Ver la vista" renderiza el entorno desde su ventana (a 1,65 m de altura y 0,6 m afuera del vidrio) y lo muestra como imagen ilustrativa.
+- Por qué: es el gancho del extra por vista. El penthouse ve por encima de los vecinos y el estudio no.
+- Detalle: los vecinos y árboles del corredor de vista de cada fachada viven en una capa (`VIEW_ONLY_LAYER`) que la cámara de la fachada no ve pero la de la ventana sí. Así la fachada se ve limpia y la vista desde adentro no muestra un lote vacío.
+
+**D-034 · 2026-11-04 · La maqueta de la unidad aparece dentro del edificio**
+- Decisión: la maqueta (`planToMesh`: paredes de 2,6 m con vanos reales, pisos por espacio, vidrio y muebles) se ubica a escala real sobre la losa de su piso. Al entrar a la unidad la cámara baja hacia ella, el edificio se desvanece (tras el fundido se oculta el grupo entero para que no proyecte sombra) y el fondo pasa a un estudio neutro, donde el entorno deja de renderizarse. Los espacios se tocan en la maqueta o en sus etiquetas. El detalle del espacio acerca la cámara y muestra un panel con la galería.
+- Por qué: "piso → unidad → espacio" se lee como un acercamiento continuo y no como un cambio de pantalla. Solo se monta la maqueta de la unidad actual.
+
+**D-035 · 2026-11-04 · `?hora=` para fijar la hora del día**
+- Decisión: `?hora=0..23` fuerza la hora de la escena (si no, la del dispositivo). Las capturas usan `?hora=15` y `?hora=21`.
+- Por qué: congelar el reloj del navegador en las pruebas deja las animaciones de GSAP a medias (mide el tiempo con `Date.now`). También sirve para mostrar la demo de noche a cualquier hora.
