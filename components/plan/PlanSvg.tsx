@@ -1,0 +1,190 @@
+'use client';
+
+import Link from 'next/link';
+import type { Route } from 'next';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+
+import { formatArea } from '@/lib/hotel';
+import { polygonLabelPoint } from '@/lib/plan';
+import type { PlanGeometry } from '@/lib/types';
+import { cn } from '@/lib/utils';
+
+export interface PlanSpaceMeta {
+  id: string;
+  name: string;
+  areaM2?: number;
+  href: Route;
+  outdoor?: boolean;
+}
+
+interface Props {
+  geometry: PlanGeometry;
+  spaces: PlanSpaceMeta[];
+  /** espacio resaltado (página de espacio) */
+  selectedId?: string;
+  /** thumb: miniatura sin etiquetas ni interacción */
+  variant?: 'interactive' | 'thumb';
+  title: string;
+  className?: string;
+}
+
+/**
+ * Plano 2D interactivo desde la geometría del SVG (CONTENIDO.md §4).
+ * Los polígonos reaccionan al puntero; las etiquetas son enlaces HTML
+ * superpuestos (accesibles por teclado y lectores de pantalla).
+ */
+export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive', title, className }: Props) {
+  const router = useRouter();
+  const [hovered, setHovered] = useState<string | null>(null);
+  const interactive = variant === 'interactive';
+  const meta = useMemo(() => new Map(spaces.map((s) => [s.id, s])), [spaces]);
+  const { width, height } = geometry;
+
+  const labels = useMemo(
+    () =>
+      geometry.spaces.map((s) => {
+        const [x, y] = polygonLabelPoint(s.points);
+        return { id: s.id, left: (x / width) * 100, top: (y / height) * 100 };
+      }),
+    [geometry.spaces, width, height],
+  );
+
+  return (
+    <figure className={cn('relative', className)}>
+      <div className="relative w-full" style={{ aspectRatio: `${width} / ${height}` }}>
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          className="absolute inset-0 size-full overflow-visible"
+          role="img"
+          aria-label={title}
+        >
+          <g>
+            {geometry.spaces.map((s) => {
+              const info = meta.get(s.id);
+              const active = s.id === selectedId;
+              const hot = interactive && s.id === hovered;
+              return (
+                <polygon
+                  key={s.id}
+                  points={s.points.map((p) => p.join(',')).join(' ')}
+                  className={cn(
+                    'transition-[fill] duration-200',
+                    info?.outdoor ? 'fill-stone/45' : 'fill-card',
+                    hot && 'fill-accent/16',
+                    active && 'fill-accent/18',
+                    interactive && 'cursor-pointer',
+                  )}
+                  onPointerEnter={interactive ? () => setHovered(s.id) : undefined}
+                  onPointerLeave={interactive ? () => setHovered(null) : undefined}
+                  onClick={interactive && info ? () => router.push(info.href) : undefined}
+                />
+              );
+            })}
+          </g>
+          <g className="pointer-events-none" aria-hidden>
+            {geometry.spaces
+              .filter((s) => s.id === selectedId || (interactive && s.id === hovered))
+              .map((s) => (
+                <polygon
+                  key={s.id}
+                  points={s.points.map((p) => p.join(',')).join(' ')}
+                  fill="none"
+                  className="stroke-accent"
+                  strokeWidth={Math.max(3, width / 220)}
+                  strokeDasharray={s.id === selectedId ? undefined : '10 8'}
+                />
+              ))}
+            {geometry.furniture.map((f, i) => (
+              <rect
+                key={i}
+                x={f.x + 3}
+                y={f.y + 3}
+                width={Math.max(f.width - 6, 1)}
+                height={Math.max(f.height - 6, 1)}
+                rx={Math.min(8, f.width / 6, f.height / 6)}
+                className="fill-ink/[0.035] stroke-ink/30"
+                strokeWidth={Math.max(1.5, width / 520)}
+              />
+            ))}
+            {geometry.walls.map((w, i) => (
+              <rect key={i} {...w} className="fill-ink" />
+            ))}
+            {geometry.openings.map((o, i) => {
+              const horizontal = o.width >= o.height;
+              return (
+                <g key={i}>
+                  <rect {...o} className="fill-background" />
+                  {o.type === 'window' ? (
+                    horizontal ? (
+                      <line
+                        x1={o.x}
+                        x2={o.x + o.width}
+                        y1={o.y + o.height / 2}
+                        y2={o.y + o.height / 2}
+                        className="stroke-ink/70"
+                        strokeWidth={2}
+                      />
+                    ) : (
+                      <line
+                        x1={o.x + o.width / 2}
+                        x2={o.x + o.width / 2}
+                        y1={o.y}
+                        y2={o.y + o.height}
+                        className="stroke-ink/70"
+                        strokeWidth={2}
+                      />
+                    )
+                  ) : null}
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+
+        {interactive ? (
+          <ul className="absolute inset-0">
+            {labels.map((l) => {
+              const info = meta.get(l.id);
+              if (!info) return null;
+              const active = l.id === selectedId;
+              return (
+                <li
+                  key={l.id}
+                  className="absolute -translate-x-1/2 -translate-y-1/2"
+                  style={{ left: `${l.left}%`, top: `${l.top}%` }}
+                >
+                  <Link
+                    href={info.href}
+                    aria-current={active ? 'page' : undefined}
+                    onPointerEnter={() => setHovered(l.id)}
+                    onPointerLeave={() => setHovered(null)}
+                    onFocus={() => setHovered(l.id)}
+                    onBlur={() => setHovered(null)}
+                    className={cn(
+                      'flex min-h-8 flex-col items-center rounded-lg px-2 py-1 text-center leading-tight whitespace-nowrap shadow-sm transition-colors duration-200',
+                      'before:absolute before:-inset-2 before:content-[""]',
+                      active || hovered === l.id ? 'bg-accent text-accent-foreground' : 'glass text-ink',
+                    )}
+                  >
+                    <span className="text-[0.75rem] font-medium">{info.name}</span>
+                    {info.areaM2 ? (
+                      <span
+                        className={cn(
+                          'text-[0.75rem]',
+                          active || hovered === l.id ? 'text-accent-foreground/85' : 'text-muted-foreground',
+                        )}
+                      >
+                        {formatArea(info.areaM2)}
+                      </span>
+                    ) : null}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </div>
+    </figure>
+  );
+}
