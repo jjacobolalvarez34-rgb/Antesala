@@ -5,9 +5,9 @@ import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
-import { detectQuality, qualityOverride } from '@/lib/capabilities';
+import { detectCapability, qualityOverride } from '@/lib/capabilities';
 import { routes } from '@/lib/routes';
-import { useTour } from '@/lib/store';
+import { can3d, useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
 import type { SceneData, SceneStage } from './Scene';
@@ -25,7 +25,7 @@ export function SceneLayer({ data }: { data: SceneData }) {
   const router = useRouter();
   const [stageName, param] = useSelectedLayoutSegments();
   const reduced = useReducedMotion();
-  const { quality, qualityLocked, sceneReady, sceneMounted, intro, setQuality, mountScene } = useTour();
+  const { quality, qualityLocked, askConsent, consent, sceneReady, sceneMounted, intro, init, mountScene } = useTour();
 
   const stage: SceneStage | null =
     stageName === 'explorar'
@@ -37,28 +37,30 @@ export function SceneLayer({ data }: { data: SceneData }) {
   useEffect(() => {
     if (quality !== null) return;
     const forced = qualityOverride();
-    setQuality(forced ?? detectQuality(), forced !== null);
-  }, [quality, setQuality]);
+    const cap = forced ? { quality: forced, ask: false } : detectCapability();
+    init(cap.quality, { locked: forced !== null, ask: cap.ask });
+  }, [quality, init]);
 
-  const wants3d = stage !== null && quality !== null && quality !== 'lista';
+  const allowed = can3d({ quality, askConsent, consent });
+  const wants3d = stage !== null && allowed;
 
   useEffect(() => {
     if (wants3d) mountScene(stage?.kind === 'explorar');
   }, [wants3d, stage?.kind, mountScene]);
 
-  // Sin 3D (sin WebGL2, render por software o FPS bajo): la vista exterior pasa a la lista
+  // Sin WebGL2, o si la persona eligió la lista: la vista exterior pasa a la lista
   useEffect(() => {
-    if (stageName === 'explorar' && quality === 'lista') {
+    if (stageName === 'explorar' && (quality === 'lista' || consent === 'declined')) {
       router.replace(`${routes.lista(data.slug)}?aviso=sin-3d` as ReturnType<typeof routes.lista>);
     }
-  }, [stageName, quality, router, data.slug]);
+  }, [stageName, quality, consent, router, data.slug]);
 
   const active = wants3d && sceneReady;
   useEffect(() => {
     document.documentElement.dataset.scene = active ? 'on' : 'off';
   }, [active]);
 
-  if (!sceneMounted || quality === null || quality === 'lista') return null;
+  if (!sceneMounted || !allowed || quality === null || quality === 'lista') return null;
 
   return (
     <div

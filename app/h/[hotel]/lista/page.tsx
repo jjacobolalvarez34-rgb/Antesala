@@ -31,7 +31,7 @@ export default async function ListaPage({ params }: PageProps<'/h/[hotel]/lista'
           El edificio de arriba hacia abajo. Toca una unidad para ver su plano y recorrer cada espacio.
         </p>
         <Suspense>
-          <NoSceneNotice />
+          <NoSceneNotice slug={hotel.slug} />
         </Suspense>
       </header>
 
