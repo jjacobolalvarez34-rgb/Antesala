@@ -215,6 +215,21 @@
       "basePriceCOP": 280000,
       "view": "Hacia la calle, con árboles al frente.",
       "plan": "plans/estudio-201.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4
+          ]
+        }
+      ],
       "spaces": [
         {
           "id": "descanso",
@@ -229,6 +244,39 @@
             "Lámparas de lectura"
           ],
           "media": [
+            {
+              "id": "pano-201-descanso",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/descanso-360.svg",
+              "alt": "Zona de descanso en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.5554,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 0,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.838,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 1.7532,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-201-descanso-1",
               "kind": "photo",
@@ -271,6 +319,39 @@
             "Wifi de 300 Mbps"
           ],
           "media": [
+            {
+              "id": "pano-201-sala",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/sala-360.svg",
+              "alt": "Sala en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.5862,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": 3.1416,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.7295,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.4524,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-201-sala-1",
               "kind": "photo",
@@ -315,6 +396,39 @@
           ],
           "media": [
             {
+              "id": "pano-201-cocina",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/cocina-360.svg",
+              "alt": "Cocineta y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": -2.3036,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -1.4121,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 3.1141,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-201-cocina-1",
               "kind": "photo",
               "src": "media/units/201/cocina-amplia.svg",
@@ -356,6 +470,39 @@
           ],
           "media": [
             {
+              "id": "pano-201-bano",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": -1.3884,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -0.6892,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": -0.0275,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                }
+              ]
+            },
+            {
               "id": "units-201-bano-1",
               "kind": "photo",
               "src": "media/units/201/bano-amplia.svg",
@@ -388,6 +535,21 @@
       "basePriceCOP": 290000,
       "view": "Hacia la calle, a la altura de las copas de los árboles.",
       "plan": "plans/estudio-201.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4
+          ]
+        }
+      ],
       "spaces": [
         {
           "id": "descanso",
@@ -402,6 +564,39 @@
             "Lámparas de lectura"
           ],
           "media": [
+            {
+              "id": "pano-301-descanso",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/descanso-360.svg",
+              "alt": "Zona de descanso en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.5554,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 0,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.838,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 1.7532,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-301-descanso-1",
               "kind": "photo",
@@ -444,6 +639,39 @@
             "Wifi de 300 Mbps"
           ],
           "media": [
+            {
+              "id": "pano-301-sala",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/sala-360.svg",
+              "alt": "Sala en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.5862,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": 3.1416,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.7295,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.4524,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-301-sala-1",
               "kind": "photo",
@@ -488,6 +716,39 @@
           ],
           "media": [
             {
+              "id": "pano-301-cocina",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/cocina-360.svg",
+              "alt": "Cocineta y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": -2.3036,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -1.4121,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 3.1141,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-301-cocina-1",
               "kind": "photo",
               "src": "media/units/201/cocina-amplia.svg",
@@ -529,6 +790,39 @@
           ],
           "media": [
             {
+              "id": "pano-301-bano",
+              "kind": "pano360",
+              "src": "media/panos/estudio-201/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-descanso",
+                  "yaw": -1.3884,
+                  "pitch": -0.12,
+                  "label": "Zona de descanso",
+                  "target": "descanso"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -0.6892,
+                  "pitch": -0.12,
+                  "label": "Sala",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": -0.0275,
+                  "pitch": -0.12,
+                  "label": "Cocineta y comedor",
+                  "target": "cocina"
+                }
+              ]
+            },
+            {
               "id": "units-301-bano-1",
               "kind": "photo",
               "src": "media/units/201/bano-amplia.svg",
@@ -561,6 +855,23 @@
       "basePriceCOP": 430000,
       "view": "Hacia los cerros orientales.",
       "plan": "plans/suite-402.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
       "featured": true,
       "spaces": [
         {
@@ -576,6 +887,46 @@
             "Wifi de 300 Mbps"
           ],
           "media": [
+            {
+              "id": "pano-402-sala",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/sala-360.svg",
+              "alt": "Sala y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.9848,
+              "hotspots": [
+                {
+                  "id": "a-balcon",
+                  "yaw": -1.8423,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.5708,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -3.1328,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.7062,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-402-sala-1",
               "kind": "photo",
@@ -616,6 +967,46 @@
             "Vista a los cerros orientales"
           ],
           "media": [
+            {
+              "id": "pano-402-balcon",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/balcon-360.svg",
+              "alt": "Balcón en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 1.6352,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 1.2993,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.4386,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": 2.6981,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.3537,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-402-balcon-1",
               "kind": "photo",
@@ -659,6 +1050,46 @@
           ],
           "media": [
             {
+              "id": "pano-402-cocina",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/cocina-360.svg",
+              "alt": "Cocina en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0.0599,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": -1.5708,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -1.703,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -2.6975,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 3.1372,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-402-cocina-1",
               "kind": "photo",
               "src": "media/units/402/cocina-amplia.svg",
@@ -701,6 +1132,46 @@
           ],
           "media": [
             {
+              "id": "pano-402-dormitorio",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/dormitorio-360.svg",
+              "alt": "Dormitorio en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.1071,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 0.0088,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -0.4434,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.4441,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 1.5983,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-402-dormitorio-1",
               "kind": "photo",
               "src": "media/units/402/dormitorio-amplia.svg",
@@ -742,6 +1213,46 @@
           ],
           "media": [
             {
+              "id": "pano-402-bano",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": -0.4354,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -0.7879,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": -0.0043,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -1.5433,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                }
+              ]
+            },
+            {
               "id": "units-402-bano-1",
               "kind": "photo",
               "src": "media/units/402/bano-amplia.svg",
@@ -774,6 +1285,24 @@
       "basePriceCOP": 430000,
       "view": "Hacia los cerros orientales, por encima de los techos vecinos.",
       "plan": "plans/suite-402.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "viewPremiumCOP": 60000,
       "spaces": [
         {
           "id": "sala",
@@ -788,6 +1317,46 @@
             "Wifi de 300 Mbps"
           ],
           "media": [
+            {
+              "id": "pano-502-sala",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/sala-360.svg",
+              "alt": "Sala y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.9848,
+              "hotspots": [
+                {
+                  "id": "a-balcon",
+                  "yaw": -1.8423,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.5708,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -3.1328,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.7062,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-502-sala-1",
               "kind": "photo",
@@ -828,6 +1397,46 @@
             "Vista a los cerros orientales"
           ],
           "media": [
+            {
+              "id": "pano-502-balcon",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/balcon-360.svg",
+              "alt": "Balcón en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 1.6352,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 1.2993,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.4386,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": 2.6981,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.3537,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-502-balcon-1",
               "kind": "photo",
@@ -871,6 +1480,46 @@
           ],
           "media": [
             {
+              "id": "pano-502-cocina",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/cocina-360.svg",
+              "alt": "Cocina en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0.0599,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": -1.5708,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -1.703,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -2.6975,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 3.1372,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-502-cocina-1",
               "kind": "photo",
               "src": "media/units/402/cocina-amplia.svg",
@@ -913,6 +1562,46 @@
           ],
           "media": [
             {
+              "id": "pano-502-dormitorio",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/dormitorio-360.svg",
+              "alt": "Dormitorio en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.1071,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 0.0088,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -0.4434,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.4441,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 1.5983,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-502-dormitorio-1",
               "kind": "photo",
               "src": "media/units/402/dormitorio-amplia.svg",
@@ -954,6 +1643,46 @@
           ],
           "media": [
             {
+              "id": "pano-502-bano",
+              "kind": "pano360",
+              "src": "media/panos/suite-402/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": -0.4354,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": -0.7879,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": -0.0043,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -1.5433,
+                  "pitch": -0.12,
+                  "label": "Dormitorio",
+                  "target": "dormitorio"
+                }
+              ]
+            },
+            {
               "id": "units-502-bano-1",
               "kind": "photo",
               "src": "media/units/402/bano-amplia.svg",
@@ -973,8 +1702,7 @@
             }
           ]
         }
-      ],
-      "viewPremiumCOP": 60000
+      ]
     },
     {
       "id": "601",
@@ -988,6 +1716,25 @@
       "viewPremiumCOP": 120000,
       "view": "Abierta hacia los cerros orientales y el occidente de la ciudad.",
       "plan": "plans/penthouse-601.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
       "spaces": [
         {
           "id": "terraza",
@@ -1002,6 +1749,46 @@
             "Vista a los cerros y a la ciudad"
           ],
           "media": [
+            {
+              "id": "pano-601-terraza",
+              "kind": "pano360",
+              "src": "media/panos/penthouse-601/terraza-360.svg",
+              "alt": "Terraza en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0.4727,
+              "hotspots": [
+                {
+                  "id": "a-sala",
+                  "yaw": 0.7854,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.1144,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": 2.3834,
+                  "pitch": -0.12,
+                  "label": "Dormitorio principal",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.0374,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
             {
               "id": "units-601-terraza-1",
               "kind": "photo",
@@ -1046,6 +1833,46 @@
           ],
           "media": [
             {
+              "id": "pano-601-sala",
+              "kind": "pano360",
+              "src": "media/panos/penthouse-601/sala-360.svg",
+              "alt": "Sala y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -2.0521,
+              "hotspots": [
+                {
+                  "id": "a-terraza",
+                  "yaw": -2.3562,
+                  "pitch": -0.12,
+                  "label": "Terraza",
+                  "target": "terraza"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 1.5708,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -3.1042,
+                  "pitch": -0.12,
+                  "label": "Dormitorio principal",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 2.6839,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-601-sala-1",
               "kind": "photo",
               "src": "media/units/601/sala-amplia.svg",
@@ -1089,6 +1916,46 @@
           ],
           "media": [
             {
+              "id": "pano-601-cocina",
+              "kind": "pano360",
+              "src": "media/panos/penthouse-601/cocina-360.svg",
+              "alt": "Cocina en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0.0167,
+              "hotspots": [
+                {
+                  "id": "a-terraza",
+                  "yaw": -2.0271,
+                  "pitch": -0.12,
+                  "label": "Terraza",
+                  "target": "terraza"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -1.5708,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -2.6297,
+                  "pitch": -0.12,
+                  "label": "Dormitorio principal",
+                  "target": "dormitorio"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -3.1157,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-601-cocina-1",
               "kind": "photo",
               "src": "media/units/601/cocina-amplia.svg",
@@ -1131,6 +1998,46 @@
           ],
           "media": [
             {
+              "id": "pano-601-dormitorio",
+              "kind": "pano360",
+              "src": "media/panos/penthouse-601/dormitorio-360.svg",
+              "alt": "Dormitorio principal en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.2793,
+              "hotspots": [
+                {
+                  "id": "a-terraza",
+                  "yaw": -0.7582,
+                  "pitch": -0.12,
+                  "label": "Terraza",
+                  "target": "terraza"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 0.0374,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.5119,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": 1.5918,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                }
+              ]
+            },
+            {
               "id": "units-601-dormitorio-1",
               "kind": "photo",
               "src": "media/units/601/dormitorio-amplia.svg",
@@ -1172,6 +2079,46 @@
             "Luz natural"
           ],
           "media": [
+            {
+              "id": "pano-601-bano",
+              "kind": "pano360",
+              "src": "media/panos/penthouse-601/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -3.009,
+              "hotspots": [
+                {
+                  "id": "a-terraza",
+                  "yaw": -1.1042,
+                  "pitch": -0.12,
+                  "label": "Terraza",
+                  "target": "terraza"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -0.4577,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.0259,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-dormitorio",
+                  "yaw": -1.5498,
+                  "pitch": -0.12,
+                  "label": "Dormitorio principal",
+                  "target": "dormitorio"
+                }
+              ]
+            },
             {
               "id": "units-601-bano-1",
               "kind": "photo",

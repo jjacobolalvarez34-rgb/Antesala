@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 
 import { Gallery } from '@/components/gallery/Gallery';
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
+import { SpaceSheet } from '@/components/hotel/SpaceSheet';
 import { SpaceChips } from '@/components/hotel/SpaceChips';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
@@ -55,7 +56,10 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
     }));
 
   return (
-    <main className="mx-auto max-w-6xl px-5 md:px-10">
+    <main>
+      <SpaceSheet slug={hotel.slug} unit={unit} space={space} photos={photos} />
+      {/* Modo lista (sin escena) */}
+      <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
         <Breadcrumbs
           items={[
@@ -159,6 +163,7 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
           )}
         </nav>
       </section>
+      </div>
     </main>
   );
 }

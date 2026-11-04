@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- las variantes AVIF/WebP llegan del pipeline (bloque 5) con srcset propio, servidas desde R2; next/image no aplica */
 
-import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Expand, Minus, Plus, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
@@ -135,15 +135,8 @@ export function Gallery({ items, title, className }: { items: GalleryItem[]; tit
               <X aria-hidden className="size-5" />
             </button>
           </div>
-          <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center">
-            {open ? (
-              <img
-                  key={current.id}
-                  src={current.url}
-                  alt={current.alt}
-                  className="max-h-full max-w-full animate-in rounded-xl object-contain duration-300 ease-out fade-in slide-in-from-right-4"
-                />
-            ) : null}
+          <div className="relative my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden">
+            {open ? <ZoomImage key={current.id} src={current.url} alt={current.alt} /> : null}
             <FidelityBadge fidelity={current.fidelity} className="absolute top-3 left-3" />
           </div>
           {count > 1 ? (
@@ -186,5 +179,85 @@ function NavButton({ side, onClick, label }: { side: 'left' | 'right'; onClick: 
     >
       <Icon aria-hidden className="size-5" />
     </button>
+  );
+}
+
+/**
+ * Imagen con zoom progresivo (bloque 4): doble toque o doble clic acerca al
+ * punto tocado, la rueda gradúa (1× a 4×), el arrastre recorre la imagen
+ * ampliada y los botones +/− sirven con teclado.
+ */
+function ZoomImage({ src, alt }: { src: string; alt: string }) {
+  const [view, setView] = useState({ scale: 1, x: 0, y: 0 });
+  const drag = useRef<{ px: number; py: number; x: number; y: number } | null>(null);
+  const clamp = (s: number) => Math.min(4, Math.max(1, s));
+  const zoomAt = (next: number, cx = 0, cy = 0) =>
+    setView((v) => {
+      const scale = clamp(next);
+      if (scale === 1) return { scale: 1, x: 0, y: 0 };
+      // mantiene el punto bajo el cursor en su lugar
+      const k = scale / v.scale;
+      return { scale, x: cx - (cx - v.x) * k, y: cy - (cy - v.y) * k };
+    });
+  const local = (e: React.MouseEvent | React.WheelEvent) => {
+    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    return [e.clientX - r.left - r.width / 2, e.clientY - r.top - r.height / 2] as const;
+  };
+
+  return (
+    <div className="relative flex size-full items-center justify-center">
+      <div
+        className={cn('flex size-full touch-none items-center justify-center', view.scale > 1 ? 'cursor-grab' : 'cursor-zoom-in')}
+        onDoubleClick={(e) => {
+          const [cx, cy] = local(e);
+          zoomAt(view.scale > 1 ? 1 : 2.5, cx, cy);
+        }}
+        onWheel={(e) => {
+          const [cx, cy] = local(e);
+          zoomAt(view.scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15), cx, cy);
+        }}
+        onPointerDown={(e) => {
+          if (view.scale === 1) return;
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+          drag.current = { px: e.clientX, py: e.clientY, x: view.x, y: view.y };
+        }}
+        onPointerMove={(e) => {
+          const d = drag.current;
+          if (!d) return;
+          setView((v) => ({ ...v, x: d.x + e.clientX - d.px, y: d.y + e.clientY - d.py }));
+        }}
+        onPointerUp={() => {
+          drag.current = null;
+        }}
+      >
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})` }}
+          className="max-h-full max-w-full animate-in rounded-xl object-contain transition-transform duration-200 ease-out fade-in select-none"
+        />
+      </div>
+      <div className="absolute right-3 bottom-3 flex gap-2">
+        <button
+          type="button"
+          onClick={() => zoomAt(view.scale / 1.5)}
+          disabled={view.scale <= 1}
+          aria-label="Alejar"
+          className="grid size-11 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20 disabled:opacity-40"
+        >
+          <Minus aria-hidden className="size-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => zoomAt(view.scale * 1.5)}
+          disabled={view.scale >= 4}
+          aria-label="Acercar"
+          className="grid size-11 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20 disabled:opacity-40"
+        >
+          <Plus aria-hidden className="size-5" />
+        </button>
+      </div>
+    </div>
   );
 }
