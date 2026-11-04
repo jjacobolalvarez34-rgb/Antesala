@@ -31,6 +31,8 @@ export interface Media {
   height?: number;
   /** solo pano360 */
   hotspots?: PanoHotspot[];
+  /** solo pano360: hacia dónde mira la cámara al entrar (radianes, misma convención que los hotspots) */
+  yaw?: number;
 }
 
 export type SpaceType =
@@ -75,6 +77,12 @@ export interface Unit {
   view?: string;
   /** "plans/suite-502.svg" */
   plan: string;
+  /**
+   * Ventanas que ocupa la unidad en la fachada del edificio procedural.
+   * facade: índice en el orden del visor (0 = principal, luego alrededor).
+   * windows: índices de ventana vistos desde afuera, de izquierda a derecha.
+   */
+  exterior?: { facade: number; windows: number[] }[];
   spaces: Space[];
   featured?: boolean;
 }

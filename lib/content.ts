@@ -3,6 +3,7 @@ import path from 'node:path';
 import { cache } from 'react';
 import { z } from 'zod';
 
+import { facadesOf, windowsOn } from './building';
 import { parsePlan, polygonAreaM2 } from './plan';
 import type { Hotel, HotelTokens, PlanGeometry } from './types';
 
@@ -40,6 +41,7 @@ const media = z.object({
   width: z.number().int().positive().optional(),
   height: z.number().int().positive().optional(),
   hotspots: z.array(panoHotspot).optional(),
+  yaw: z.number().optional(),
 });
 
 const space = z.object({
@@ -64,6 +66,14 @@ const unit = z.object({
   viewPremiumCOP: z.number().int().nonnegative().optional(),
   view: z.string().optional(),
   plan: relPath.regex(/^plans\/.+\.svg$/, 'el plano va en plans/*.svg'),
+  exterior: z
+    .array(
+      z.object({
+        facade: z.number().int().nonnegative(),
+        windows: z.array(z.number().int().nonnegative()).min(1),
+      }),
+    )
+    .optional(),
   spaces: z.array(space).min(1),
   featured: z.boolean().optional(),
 });
@@ -176,12 +186,35 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
   }
 
   const plans: Record<string, PlanGeometry> = {};
+  const building = hotel.site.building;
+  const facades = building ? facadesOf(building) : [];
+  /** "piso|fachada|ventana" → unidad, para detectar ventanas compartidas */
+  const taken = new Map<string, string>();
 
   for (const u of hotel.units) {
     if (unitIds.has(u.id)) problems.push(`unidad "${u.id}" repetida`);
     unitIds.add(u.id);
     if (!levelIds.has(u.levelId)) problems.push(`unidad "${u.id}" → levelId "${u.levelId}" no existe`);
     if (!categoryIds.has(u.categoryId)) problems.push(`unidad "${u.id}" → categoryId "${u.categoryId}" no existe`);
+
+    const order = hotel.levels.find((l) => l.id === u.levelId)?.order;
+    for (const ext of u.exterior ?? []) {
+      const facade = facades[ext.facade];
+      if (!building || !facade || order === undefined) {
+        problems.push(`unidad "${u.id}" → exterior: la fachada ${ext.facade} no existe`);
+        continue;
+      }
+      const count = windowsOn(building, facade.index, order);
+      for (const w of ext.windows) {
+        if (w >= count) {
+          problems.push(`unidad "${u.id}" → exterior: ${facade.label} tiene ${count} ventanas en ese piso (índice ${w} no existe)`);
+        }
+        const key = `${u.levelId}|${ext.facade}|${w}`;
+        const other = taken.get(key);
+        if (other) problems.push(`unidad "${u.id}" → la ventana ${w} de ${facade.label} ya es de la unidad "${other}"`);
+        taken.set(key, u.id);
+      }
+    }
 
     let geometry = plans[u.plan];
     if (!geometry) {

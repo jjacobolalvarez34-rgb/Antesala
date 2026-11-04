@@ -41,6 +41,96 @@ export function buildingFrame(b: Building): BuildingFrame {
 /** Altura de la losa inferior del piso (order empieza en 1). */
 export const floorBaseY = (frame: BuildingFrame, order: number) => (order - 1) * frame.floorHeight;
 
+/** Ancho objetivo de una crujía (ventana + machones), en metros. */
+export const BAY = 2.7;
+/** Retranqueo del frente en el último piso (terraza), en metros. */
+export const SETBACK = 2.6;
+export const bayCount = (length: number) => Math.max(1, Math.round(length / BAY));
+
+type Pt = [number, number];
+
+export interface Edge {
+  index: number;
+  a: Pt;
+  dir: Pt;
+  normal: Pt;
+  length: number;
+}
+
+export function edgesOf(pts: Pt[]): Edge[] {
+  const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
+  const cz = pts.reduce((s, p) => s + p[1], 0) / pts.length;
+  return pts.map((a, i) => {
+    const b = pts[(i + 1) % pts.length]!;
+    const dx = b[0] - a[0];
+    const dz = b[1] - a[1];
+    const length = Math.hypot(dx, dz);
+    const dir: Pt = [dx / length, dz / length];
+    let normal: Pt = [dir[1], -dir[0]];
+    const mid: Pt = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+    if (normal[0] * (mid[0] - cx) + normal[1] * (mid[1] - cz) < 0) normal = [-normal[0], -normal[1]];
+    return { index: i, a, dir, normal, length };
+  });
+}
+
+/** Borde de la fachada principal (el que mira a +z). */
+export const frontEdgeIndex = (pts: Pt[]) => {
+  const edges = edgesOf(pts);
+  return edges.reduce((best, e, i) => (e.normal[1] > edges[best]!.normal[1] ? i : best), 0);
+};
+
+/** Planta de un piso: igual al footprint, salvo el último, con el frente retranqueado. */
+export function floorFootprint(b: Building, order: number): Pt[] {
+  const pts = b.footprint as Pt[];
+  if (order !== b.floors) return pts;
+  const front = frontEdgeIndex(pts);
+  const n = edgesOf(pts)[front]!.normal;
+  return pts.map((q, i) =>
+    i === front || i === (front + 1) % pts.length ? [q[0] - n[0] * SETBACK, q[1] - n[1] * SETBACK] : q,
+  );
+}
+
+/**
+ * Índice de una crujía visto desde afuera, de izquierda a derecha.
+ * `bay` cuenta desde el vértice inicial del borde.
+ */
+export function viewerBay(edge: Edge, bay: number, bays: number): number {
+  // derecha del observador que mira la fachada: (nz, −nx)
+  const right: Pt = [edge.normal[1], -edge.normal[0]];
+  return edge.dir[0] * right[0] + edge.dir[1] * right[1] >= 0 ? bay : bays - 1 - bay;
+}
+
+/**
+ * Punto de vista desde una ventana (para la "vista desde la habitación"):
+ * un poco afuera del vidrio, a la altura de los ojos de alguien de pie.
+ */
+export function windowViewpoint(
+  b: Building,
+  edgeIndex: number,
+  order: number,
+  windowIndex: number,
+): { position: [number, number, number]; normal: [number, number] } | null {
+  const edge = edgesOf(floorFootprint(b, order))[edgeIndex];
+  if (!edge) return null;
+  const bays = bayCount(edge.length);
+  const raw = viewerBay(edge, windowIndex, bays);
+  const t = ((raw + 0.5) * edge.length) / bays;
+  return {
+    position: [
+      edge.a[0] + edge.dir[0] * t + edge.normal[0] * 0.6,
+      (order - 1) * b.floorHeightM + 1.65,
+      edge.a[1] + edge.dir[1] * t + edge.normal[1] * 0.6,
+    ],
+    normal: edge.normal,
+  };
+}
+
+/** Cantidad de ventanas de una fachada (índice de borde) en un piso. */
+export function windowsOn(b: Building, edgeIndex: number, order: number): number {
+  const edge = edgesOf(floorFootprint(b, order))[edgeIndex];
+  return edge ? bayCount(edge.length) : 0;
+}
+
 export interface Facade {
   /** índice del borde en el footprint */
   index: number;
@@ -155,6 +245,47 @@ export const FLOOR_PULL = 3.2;
 
 /** Dirección (x, z) hacia afuera de una fachada. */
 export const facadeDir = (facade: Facade): [number, number] => [Math.sin(facade.azimuth), Math.cos(facade.azimuth)];
+
+/**
+ * Maqueta de la unidad: vista cenital en 3/4, encuadrando el plano completo
+ * (sizeX × sizeZ en metros) con centro en `target`.
+ */
+export function unitPose(
+  target: [number, number, number],
+  size: [number, number],
+  facade: Facade,
+  fov: number,
+  aspect: number,
+  layout: 'sheet' | 'side',
+): CameraPose {
+  const r = Math.hypot(size[0], size[1]) / 2 + 0.6;
+  return {
+    target,
+    radius: fitDistance(r, fov, aspect, aspect < 1 ? 1.15 : 1.25),
+    polar: 40 * DEG,
+    azimuth: facade.azimuth + 24 * DEG,
+    shiftX: layout === 'side' ? 0.16 : 0,
+    shiftY: layout === 'sheet' ? 0.2 : 0,
+  };
+}
+
+/** Un espacio de la unidad: acercamiento más bajo hacia su centro. */
+export function spacePose(
+  target: [number, number, number],
+  facade: Facade,
+  fov: number,
+  aspect: number,
+  layout: 'sheet' | 'side',
+): CameraPose {
+  return {
+    target,
+    radius: fitDistance(3.2, fov, aspect, 1.2),
+    polar: 52 * DEG,
+    azimuth: facade.azimuth + 30 * DEG,
+    shiftX: layout === 'side' ? 0.2 : 0,
+    shiftY: layout === 'sheet' ? 0.24 : 0,
+  };
+}
 
 export function floorPose(
   f: BuildingFrame,

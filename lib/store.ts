@@ -24,6 +24,16 @@ interface TourState {
   hoveredLevelId: string | null;
   /** fachada que mira la cámara en la vista exterior (índice de borde del footprint) */
   facade: number;
+  /** hora del día de la escena */
+  night: boolean;
+  /** unidad bajo el puntero en la fachada (id) y posición del puntero */
+  hoveredUnit: { id: string; x: number; y: number } | null;
+  /** unidad elegida en la fachada (id) */
+  selectedUnit: string | null;
+  /** vista desde la ventana de la unidad elegida (data URL) */
+  view: { unitId: string; src: string } | null;
+  /** en el detalle de un espacio: 360° (true) o maqueta (false) */
+  view360: boolean;
   /** la escena se montó alguna vez (no se desmonta: Canvas persistente) */
   sceneMounted: boolean;
   /** la escena se montó entrando por /explorar → vuelo de entrada */
@@ -34,6 +44,11 @@ interface TourState {
   setSceneReady: (ready: boolean) => void;
   setHoveredLevel: (id: string | null) => void;
   setFacade: (i: number) => void;
+  setNight: (night: boolean) => void;
+  setHoveredUnit: (u: TourState['hoveredUnit']) => void;
+  setSelectedUnit: (id: string | null) => void;
+  setView: (v: TourState['view']) => void;
+  setView360: (on: boolean) => void;
   mountScene: (intro: boolean) => void;
 }
 
@@ -45,11 +60,23 @@ export const useTour = create<TourState>((set) => ({
   sceneReady: false,
   hoveredLevelId: null,
   facade: 0,
+  night: false,
+  hoveredUnit: null,
+  selectedUnit: null,
+  view: null,
+  view360: true,
   sceneMounted: false,
   intro: false,
   init: (quality, { locked, ask }) => {
     const stored = typeof window !== 'undefined' ? sessionStorage.getItem(CONSENT_KEY) : null;
+    // la escena arranca como se ve a la hora del dispositivo (Bogotá anochece ~6 p. m. todo el año)
+    // ?hora=21 fuerza la hora (demos y capturas); si no, la del dispositivo
+    const forced = Number(new URLSearchParams(window.location.search).get('hora'));
+    const hour = Number.isFinite(forced) && forced >= 0 && forced < 24 && window.location.search.includes('hora=')
+      ? forced
+      : new Date().getHours();
     set({
+      night: hour >= 18 || hour < 6,
       quality,
       qualityLocked: locked,
       askConsent: ask && !locked,
@@ -63,7 +90,12 @@ export const useTour = create<TourState>((set) => ({
   },
   setSceneReady: (sceneReady) => set({ sceneReady }),
   setHoveredLevel: (hoveredLevelId) => set({ hoveredLevelId }),
-  setFacade: (facade) => set({ facade }),
+  setFacade: (facade) => set({ facade, selectedUnit: null }),
+  setNight: (night) => set({ night }),
+  setHoveredUnit: (hoveredUnit) => set({ hoveredUnit }),
+  setSelectedUnit: (selectedUnit) => set({ selectedUnit }),
+  setView: (view) => set({ view }),
+  setView360: (view360) => set({ view360 }),
   mountScene: (intro) => set((s) => (s.sceneMounted ? s : { sceneMounted: true, intro })),
 }));
 

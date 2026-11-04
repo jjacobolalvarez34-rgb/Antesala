@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { facadesOf } from '@/lib/building';
@@ -16,6 +16,8 @@ export function FacadePicker({ building, className }: { building: Building; clas
   const facades = useMemo(() => facadesOf(building), [building]);
   const index = useTour((s) => s.facade) % facades.length;
   const setFacade = useTour((s) => s.setFacade);
+  const night = useTour((s) => s.night);
+  const setNight = useTour((s) => s.setNight);
   const go = (delta: number) => setFacade((index + delta + facades.length) % facades.length);
   const current = facades[index]!;
 
@@ -60,6 +62,16 @@ export function FacadePicker({ building, className }: { building: Building; clas
           </li>
         ))}
       </ul>
+      <button
+        type="button"
+        onClick={() => setNight(!night)}
+        aria-pressed={night}
+        aria-label={night ? 'Ver de día' : 'Ver de noche'}
+        title={night ? 'Ver de día' : 'Ver de noche'}
+        className="ml-1 grid size-11 shrink-0 place-items-center rounded-xl border-l border-bone/15 transition-colors hover:bg-bone/12"
+      >
+        {night ? <Sun aria-hidden className="size-5" /> : <Moon aria-hidden className="size-5" />}
+      </button>
     </div>
   );
 }

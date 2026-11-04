@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
 import { detectCapability, qualityOverride } from '@/lib/capabilities';
+import { prefetch } from './prefetch';
 import { routes } from '@/lib/routes';
 import { can3d, useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
@@ -13,7 +14,8 @@ import { cn } from '@/lib/utils';
 import type { SceneData, SceneStage } from './Scene';
 
 /** El JS de three.js se descarga solo cuando hace falta (ARQUITECTURA.md §6). */
-const Scene = dynamic(() => import('./Scene'), { ssr: false });
+const loadScene = () => import('./Scene');
+const Scene = dynamic(loadScene, { ssr: false });
 
 /**
  * Capa persistente del layout: decide la calidad, monta la escena la primera
@@ -23,7 +25,7 @@ const Scene = dynamic(() => import('./Scene'), { ssr: false });
  */
 export function SceneLayer({ data }: { data: SceneData }) {
   const router = useRouter();
-  const [stageName, param] = useSelectedLayoutSegments();
+  const [stageName, param, spaceParam] = useSelectedLayoutSegments();
   const reduced = useReducedMotion();
   const { quality, qualityLocked, askConsent, consent, sceneReady, sceneMounted, intro, init, mountScene } = useTour();
 
@@ -32,7 +34,9 @@ export function SceneLayer({ data }: { data: SceneData }) {
       ? { kind: 'explorar' }
       : stageName === 'piso' && param
         ? { kind: 'piso', levelId: param }
-        : null;
+        : stageName === 'unidad' && param && data.unitPlans[param]
+          ? { kind: 'unidad', unitId: param, spaceId: spaceParam ?? null }
+          : null;
 
   useEffect(() => {
     if (quality !== null) return;
@@ -43,6 +47,19 @@ export function SceneLayer({ data }: { data: SceneData }) {
 
   const allowed = can3d({ quality, askConsent, consent });
   const wants3d = stage !== null && allowed;
+
+  // precarga (D-029): desde cualquier etapa, en tiempo ocioso, el JS del 3D y lo del día
+  useEffect(() => {
+    if (!allowed || sceneMounted) return;
+    const run = () => {
+      loadScene().catch(() => {});
+      prefetch('dia');
+    };
+    // Safari no tiene requestIdleCallback
+    const idle = 'requestIdleCallback' in window;
+    const id = idle ? window.requestIdleCallback(run, { timeout: 4000 }) : window.setTimeout(run, 2500);
+    return () => (idle ? window.cancelIdleCallback(id) : window.clearTimeout(id));
+  }, [allowed, sceneMounted]);
 
   useEffect(() => {
     if (wants3d) mountScene(stage?.kind === 'explorar');
@@ -64,7 +81,6 @@ export function SceneLayer({ data }: { data: SceneData }) {
 
   return (
     <div
-      aria-hidden
       className={cn(
         'fixed inset-0 z-0 transition-opacity ease-out',
         reduced ? 'duration-200' : 'duration-700',
