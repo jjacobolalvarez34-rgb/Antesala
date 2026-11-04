@@ -51,9 +51,18 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
     const prices = data.units.filter((u) => u.levelId === a && u.price !== undefined).map((u) => u.price!);
     return {
       label: level?.name ?? 'Piso',
-      detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))} / noche en este piso` : from,
-      back: routes.lista(data.slug),
-      backLabel: 'Volver a pisos y unidades',
+      detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))} / noche` : from,
+      back: routes.explorar(data.slug),
+      backLabel: 'Volver al edificio',
+      context: base,
+    };
+  }
+  if (stage === 'explorar') {
+    return {
+      label: 'Explorar el edificio',
+      detail: from,
+      back: routes.hotel(data.slug),
+      backLabel: 'Volver a la entrada',
       context: base,
     };
   }

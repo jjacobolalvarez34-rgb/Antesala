@@ -2,6 +2,9 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+/* Modo escena: la escena 3D está activa y la página se muestra como capas encima. */
+@custom-variant scene (&:where([data-scene='on'] *));
+
 /*
  * Tema del visor. Los valores del hotel llegan como --hotel-* desde
  * tokens.json (app/h/[hotel]/layout.tsx). Aquí solo hay defaults neutros
@@ -137,6 +140,18 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+}
+
+[data-scene='on'],
+[data-scene='on'] body {
+  background: #121211;
+}
+
+.glass-dark {
+  background: color-mix(in oklab, var(--hotel-ink) 72%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  color: var(--hotel-base);
 }
 
 @media (prefers-reduced-motion: reduce) {

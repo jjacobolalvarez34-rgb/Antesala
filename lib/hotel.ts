@@ -33,3 +33,12 @@ export const formatArea = (m2: number): string =>
   `${m2.toLocaleString('es-CO', { maximumFractionDigits: 1 })} m²`;
 
 export const pluralize = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+
+/** Resumen corto de un piso: unidades y zonas comunes ("Suite 402 · Cowork"). */
+export const levelSummary = (hotel: Hotel, levelId: string): string => {
+  const parts = [
+    ...unitsOnLevel(hotel, levelId).map((u) => u.name),
+    ...poisOnLevel(hotel, levelId).map((p) => p.name),
+  ];
+  return parts.length ? parts.join(' · ') : 'Sin unidades de muestra';
+};

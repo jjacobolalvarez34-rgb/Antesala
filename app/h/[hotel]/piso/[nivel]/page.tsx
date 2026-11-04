@@ -6,6 +6,7 @@ import { ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
 
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
+import { FloorSheet } from '@/components/hotel/FloorSheet';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
 import {
@@ -50,7 +51,19 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
   const pois = poisOnLevel(hotel, level.id);
 
   return (
-    <main className="mx-auto max-w-6xl px-5 md:px-10">
+    <main>
+      <FloorSheet
+        slug={hotel.slug}
+        level={level}
+        total={levels.length}
+        units={units}
+        categories={hotel.categories}
+        pois={pois}
+        above={above}
+        below={below}
+      />
+      {/* Modo lista (sin escena) */}
+      <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
         <Breadcrumbs items={[{ label: 'Pisos', href: routes.lista(hotel.slug) }, { label: level.name }]} />
       </div>
@@ -210,6 +223,7 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
           </Link>
         </div>
       ) : null}
+      </div>
     </main>
   );
 }

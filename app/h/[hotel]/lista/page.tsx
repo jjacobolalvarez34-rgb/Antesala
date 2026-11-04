@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 import { UnitCard } from '@/components/hotel/UnitCard';
+import { NoSceneNotice } from '@/components/scene/NoSceneNotice';
 import { getHotelBundle } from '@/lib/content';
 import { findCategory, poisOnLevel, sortedLevels, unitsOnLevel } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
@@ -28,6 +30,9 @@ export default async function ListaPage({ params }: PageProps<'/h/[hotel]/lista'
         <p className="mt-4 max-w-lg text-pretty text-muted-foreground">
           El edificio de arriba hacia abajo. Toca una unidad para ver su plano y recorrer cada espacio.
         </p>
+        <Suspense>
+          <NoSceneNotice />
+        </Suspense>
       </header>
 
       <ol className="mt-10 md:mt-14">

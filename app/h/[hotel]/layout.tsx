@@ -5,8 +5,11 @@ import { BookingBar, type BookingSummary } from '@/components/booking/BookingBar
 import { DemoBanner } from '@/components/hotel/DemoBanner';
 import { HotelHeader } from '@/components/hotel/HotelHeader';
 import { PoweredBy } from '@/components/hotel/PoweredBy';
+import type { SceneData } from '@/components/scene/Scene';
+import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
-import { priceFrom, sortedLevels, unitPrice } from '@/lib/hotel';
+import { findLevel, priceFrom, sortedLevels, unitPrice } from '@/lib/hotel';
+import { routes } from '@/lib/routes';
 import { tokensToStyle } from '@/lib/tokens';
 
 export const dynamicParams = false;
@@ -50,15 +53,42 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
     })),
   };
 
+  const building = hotel.site.kind === 'edificio' ? hotel.site.building : undefined;
+  const scene: SceneData | null = building
+    ? {
+        slug: hotel.slug,
+        building,
+        floors: sortedLevels(hotel).map((l) => ({ id: l.id, order: l.order, name: l.name })),
+        pois: hotel.site.pois.map((p) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          position: p.position,
+          levelName: p.levelId ? findLevel(hotel, p.levelId)?.name : undefined,
+          href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
+        })),
+        colors: {
+          model: '#f1ede6',
+          accent: tokens.color.accentOnDark ?? tokens.color.accent,
+          glass: '#56656c',
+          glow: '#e2b57a',
+        },
+      }
+    : null;
+
   return (
-    <div style={tokensToStyle(tokens)} className="flex min-h-dvh flex-col bg-background text-foreground">
+    <div
+      style={tokensToStyle(tokens)}
+      className="relative flex min-h-dvh flex-col bg-background text-foreground scene:pointer-events-none scene:bg-transparent"
+    >
+      {scene ? <SceneLayer data={scene} /> : null}
       {hotel.isDemo ? <DemoBanner /> : null}
       <HotelHeader
         slug={hotel.slug}
         name={tokens.brand.name}
         place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
       />
-      <div className="flex-1">{children}</div>
+      <div className="relative z-10 flex-1">{children}</div>
       <BookingBar data={summary} />
       <PoweredBy />
     </div>

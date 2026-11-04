@@ -22,6 +22,10 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
   const featured = hotel.units.find((u) => u.featured) ?? hotel.units[0];
   const hero = featured ? unitCover(featured) : undefined;
   const floors = hotel.site.building?.floors ?? hotel.levels.length;
+  // una unidad por categoría (la destacada si la hay)
+  const showcase = hotel.categories
+    .map((c) => hotel.units.find((u) => u.categoryId === c.id && u.featured) ?? hotel.units.find((u) => u.categoryId === c.id))
+    .filter((u) => u !== undefined);
 
   return (
     <main className="mx-auto max-w-6xl px-5 md:px-10">
@@ -35,20 +39,18 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
           {hotel.intro ? <p className="mt-6 max-w-md text-pretty">{hotel.intro}</p> : null}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
-              href={routes.lista(hotel.slug)}
+              href={routes.explorar(hotel.slug)}
               className="inline-flex min-h-12 items-center gap-2 rounded-md bg-ink px-6 text-sm font-medium text-bone transition-[background-color,transform] duration-200 hover:bg-ink/88 active:scale-[0.98]"
             >
               Explorar el hotel
               <ArrowRight aria-hidden className="size-4" />
             </Link>
-            {featured ? (
-              <Link
-                href={routes.unidad(hotel.slug, featured.id)}
-                className="inline-flex min-h-12 items-center rounded-md px-4 text-sm font-medium underline-offset-4 hover:underline"
-              >
-                Ver {featured.name}
-              </Link>
-            ) : null}
+            <Link
+              href={routes.lista(hotel.slug)}
+              className="inline-flex min-h-12 items-center rounded-md px-4 text-sm font-medium underline-offset-4 hover:underline"
+            >
+              Ver lista de habitaciones
+            </Link>
           </div>
         </div>
         {hero ? (
@@ -84,7 +86,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
       <section aria-labelledby="unidades" className="mt-12 md:mt-20">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="eyebrow">{pluralize(hotel.units.length, 'unidad', 'unidades')} para recorrer</p>
+            <p className="eyebrow">{pluralize(hotel.categories.length, 'categoría', 'categorías')}</p>
             <h2 id="unidades" className="mt-2 font-display text-title md:text-4xl">
               Elige cómo quedarte
             </h2>
@@ -97,7 +99,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
           </Link>
         </div>
         <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
-          {hotel.units.map((u) => (
+          {showcase.map((u) => (
             <li key={u.id}>
               <UnitCard
                 hotel={hotel.slug}
