@@ -1,0 +1,29 @@
+# dependencias
+node_modules/
+.pnpm-store/
+
+# next
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# assets procesados (se generan con pnpm assets)
+dist-assets/
+
+# entorno
+.env*.local
+.env
+
+# sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# capturas de pnpm shots (se regeneran; no se versionan)
+tests/__shots__/
