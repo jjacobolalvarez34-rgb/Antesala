@@ -55,3 +55,32 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Por qué: la metáfora se explica sola (la sala antes de entrar), es en español y no apareció ninguna empresa grande con ese nombre en software o turismo.
 - Descartados: Postigo, Zaguán, Asomo, Atisbo, Corográfica, Proemio y Dédalo. Se evitaron Piranesi (ya es software de arquitectura), Codazzi (se confunde con el IGAC) y otros nombres muy usados.
 - Pendiente: verificar la marca en la SIC, los dominios y el usuario en Instagram antes de invertir en identidad.
+
+**D-012 · 2026-11-04 · Campos opcionales en el modelo para el modo lista**
+- Decisión: se suman `Hotel.neighborhood`, `Hotel.intro`, `Unit.view`, `Space.description`, `Poi.levelId` y `Poi.description`, todos opcionales.
+- Por qué: el modo lista necesita textos propios del hotel (presentación, qué se ve, descripción del espacio, en qué piso está cada zona común), y la regla 1 prohíbe ponerlos en componentes. Al ser opcionales no rompen el esquema de Supabase.
+
+**D-013 · 2026-11-04 · TypeScript 6.0 y ESLint 9, no las últimas**
+- Decisión: TypeScript 6.0.3 y ESLint 9.39.5 (las últimas son TS 7.0.2 y ESLint 10.14).
+- Por qué: typescript-eslint 8.72 exige TS < 6.1, y eslint-plugin-react, jsx-a11y e import (dentro de eslint-config-next 16.4.5) solo declaran hasta ESLint 9. Se reevalúa cuando lo soporten.
+- También: shadcn 4.23 instala `cn` (paquete oficial de shadcn) en lugar de clsx + tailwind-merge; se quitaron esos dos.
+
+**D-014 · 2026-11-04 · Acento de Niebla Alta: bronce envejecido**
+- Decisión: `accent` = `#7D5F3B` (5,2:1 sobre hueso; 5,9:1 con texto blanco encima) y `accentOnDark` = `#B89A6A` (6,5:1 sobre carbón) para la escena 3D.
+- Por qué: Jacobo pidió algo más elegante que el verde eucalipto propuesto. El bronce sobre hueso y carbón se lee como hotel boutique clásico y pasa AA.
+
+**D-015 · 2026-11-04 · Medios de la demo servidos desde content/ por una ruta estática**
+- Decisión: `app/demo-assets/[hotel]/[...path]` sirve `media/` y `plans/` de cada hotel y se prerenderiza en el build. Con `NEXT_PUBLIC_ASSETS_BASE_URL` (R2) deja de usarse.
+- Por qué: `content/` sigue siendo la única fuente de verdad, sin copiar archivos a `public/`.
+
+**D-016 · 2026-11-04 · Motion fuera del JS inicial en el bloque 1**
+- Decisión: la UI del bloque 1 (cambio de etiqueta de la barra, galería) usa transiciones CSS (tw-animate-css). Motion entra con `LazyMotion` cuando haya *bottom sheets*, gestos o *layout animations*.
+- Por qué: con Motion en el layout el JS inicial era de 193 KB gzip (límite 180). Sin él baja a 152 KB. No es otra librería de animación: son transiciones CSS, apagadas con `prefers-reduced-motion`.
+
+**D-017 · 2026-11-04 · Textos sin artículo delante del nombre de la unidad**
+- Decisión: "Reservar esta unidad", "me interesa reservar la unidad Penthouse 601", "Ver Suite 402".
+- Por qué: "la Penthouse" o "la Estudio" suenan mal y adivinar el género desde el nombre es frágil. Así el texto sirve para cualquier hotel.
+
+**D-018 · 2026-11-04 · WhatsApp de la demo: el número de Jacobo**
+- Decisión: `contact.whatsapp` = `573204871882`.
+- Por qué: un número inventado podría ser de una persona real. Los mensajes de prueba de la demo le llegan a Jacobo.

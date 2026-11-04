@@ -50,7 +50,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 - Commits pequeños en español, uno por cambio lógico. Una rama por bloque (`bloque-2-exterior`).
 - Si algo resulta inviable o se ve mal, **para y propone una alternativa** en vez de forzarlo, y deja la propuesta anotada en la bitácora.
 - Verifica versiones actuales y compatibilidad antes de instalar. No fijes versiones de memoria.
-- Usa la skill **frontend-design** al crear o rediseñar pantallas.
+- Usa la skill **frontend-design** al crear o rediseñar pantallas (si no está instalada, **ui-ux-pro-max**).
 - Idioma: interfaz, docs y commits en español; código e identificadores en inglés.
 
 ## Comandos
@@ -60,7 +60,9 @@ pnpm dev          # desarrollo
 pnpm build        # build de producción
 pnpm lint         # ESLint
 pnpm typecheck    # tsc --noEmit
-pnpm shots        # capturas Playwright en tests/__shots__/
+pnpm shots        # capturas Playwright en tests/__shots__/ (correr después de pnpm build)
+pnpm budget       # JS inicial gzip vs. presupuesto (después de pnpm build)
+pnpm placeholders # placeholders SVG de los medios que falten
 pnpm assets       # pipeline de assets: content/ → dist-assets/
 ```
 

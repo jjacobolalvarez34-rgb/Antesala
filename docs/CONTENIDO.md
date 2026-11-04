@@ -31,11 +31,13 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
 
 - Unidades del `viewBox` = **centímetros** (una unidad de 6 × 8 m → `viewBox="0 0 600 800"`).
 - Grupos obligatorios:
-  - `<g id="walls">`: paredes como `rect` o `path`, con grosor real (15 cm interiores, 25 cm exteriores).
+  - `<g id="walls">`: paredes como `rect`, con grosor real (15 cm interiores, 25 cm exteriores). El parser aún no acepta `path` (ver Aparcado en `TAREAS.md`).
   - `<g id="spaces">`: un `<polygon id="<space.id>">` por espacio. El `id` debe coincidir con `Space.id`.
   - `<g id="openings">`: puertas (`data-type="door"`) y ventanas (`data-type="window"`) como `rect` que marcan los huecos.
 - Opcional: `<g id="furniture">` con `rect` y `data-item="bed|sofa|table|…"` para colocar muebles low-poly.
-- Sin transformaciones anidadas ni estilos en línea. La geometría va limpia.
+- Sin transformaciones, estilos en línea ni grupos anidados. La geometría va limpia. `lib/plan.ts` rechaza lo que se salga de la convención.
+- El `viewBox` empieza en `0 0`. Balcones y terrazas van fuera de los muros exteriores, como polígonos sin pared (por eso el `viewBox` incluye su franja).
+- `Unit.areaM2` es el área total (interior bruto + balcón o terraza); `Space.areaM2` es el área útil del polígono.
 
 **Extrusión a 3D** (`components/plan/planToMesh`):
 - Paredes a 2,6 m de alto, con huecos de puertas a 2,1 m y ventanas de 0,9 a 2,2 m.
@@ -68,6 +70,7 @@ Desde `site.building`:
 | `tile-pano` | equirectangular | versión baja (2048 px) + teselas |
 | `optimize-splat` | `.ply` | SPZ / SOG (preparado, sin uso aún) |
 | `upload-r2` | `dist-assets/` | bucket R2 por hotel (fase de despliegue) |
+| `placeholders.mjs` | `hotel.json` | SVG livianos (~1,5 KB) con el nombre del espacio para cada medio `media/**/*.svg` que falte. Solo demo; `pnpm placeholders` (con `--force` los regenera) |
 
 `pnpm assets` corre todo sobre `content/` y deja el resultado en `dist-assets/`. Cada script es idempotente y omite lo que ya está procesado.
 
