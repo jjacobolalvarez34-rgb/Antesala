@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, Check, Eye } from 'lucide-react';
 
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
+import { UnitSheet } from '@/components/hotel/UnitSheet';
 import { Facts } from '@/components/hotel/Facts';
 import { WhatsAppButton } from '@/components/booking/WhatsAppButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
@@ -39,7 +40,10 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
   const price = unitPrice(unit);
 
   return (
-    <main className="mx-auto max-w-6xl px-5 md:px-10">
+    <main>
+      <UnitSheet slug={hotel.slug} unit={unit} category={category} level={level} />
+      {/* Modo lista (sin escena) */}
+      <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
         <Breadcrumbs
           items={[
@@ -178,6 +182,7 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
           })}
         </ul>
       </section>
+      </div>
     </main>
   );
 }
