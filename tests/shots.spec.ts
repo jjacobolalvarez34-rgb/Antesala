@@ -10,6 +10,7 @@ function routesFor(hotel: Hotel): { name: string; url: string }[] {
   const h = `/h/${hotel.slug}`;
   const list = [
     { name: 'entrada', url: h },
+    { name: 'explorar', url: `${h}/explorar` },
     { name: 'lista', url: `${h}/lista` },
     ...hotel.levels.map((l) => ({ name: `piso-${l.id}`, url: `${h}/piso/${l.id}` })),
   ];
