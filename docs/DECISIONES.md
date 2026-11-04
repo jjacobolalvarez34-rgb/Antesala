@@ -156,3 +156,12 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-035 · 2026-11-04 · `?hora=` para fijar la hora del día**
 - Decisión: `?hora=0..23` fuerza la hora de la escena (si no, la del dispositivo). Las capturas usan `?hora=15` y `?hora=21`.
 - Por qué: congelar el reloj del navegador en las pruebas deja las animaciones de GSAP a medias (mide el tiempo con `Date.now`). También sirve para mostrar la demo de noche a cualquier hora.
+
+**D-036 · 2026-11-04 · 360° propio en la misma escena, no Photo Sphere Viewer** (reemplaza la fila 360° de ARQUITECTURA §2)
+- Decisión: el panorama es una esfera con la imagen equirectangular alrededor del punto de vista del espacio, dentro del mismo Canvas. Al entrar a un espacio la cámara se para a 1,5 m, mira hacia la abertura vidriada más ancha (`Media.yaw`), se abre a 75° de campo y la esfera se funde sobre la maqueta. Los controles pasan a "mirar alrededor" y los hotspots a espacios vecinos son enlaces HTML proyectados. Hay un interruptor 360°/Maqueta.
+- Por qué: Photo Sphere Viewer 5.15 exige three `^0.185.1` (solo 0.185.x) y usamos 0.187, lo que significaría dos copias de three o un peer roto. Además, en la misma escena el fundido "maqueta → 360°" de DISENO.md es literal y no hay un segundo contexto WebGL.
+- Pendiente: teselas para zoom en 360° de alta resolución cuando haya capturas reales (bloque 5 / Fase 1).
+
+**D-037 · 2026-11-04 · Panoramas placeholder con geometría real**
+- Decisión: `pipeline/panos.mjs` genera un equirectangular SVG por espacio a partir de su polígono y de los vanos del plano. Desde el punto de vista, piso, techo, paredes, ventanas, puertas y puertas corredizas vidriadas caen donde caerían en una foto 360°. También genera los hotspots (yaw hacia el centro de cada espacio vecino) y la mirada inicial. Las unidades con el mismo plano comparten panorama.
+- Por qué: sin renders de Blender todavía (bloque 5) el visor 360° queda probado con geometría creíble; en el bloque 5 solo se cambian las imágenes.

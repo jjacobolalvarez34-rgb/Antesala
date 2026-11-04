@@ -72,6 +72,7 @@ Desde `site.building`:
 | `tile-pano` | equirectangular | versión baja (2048 px) + teselas |
 | `optimize-splat` | `.ply` | SPZ / SOG (preparado, sin uso aún) |
 | `upload-r2` | `dist-assets/` | bucket R2 por hotel (fase de despliegue) |
+| `panos.mjs` | `hotel.json` + planos SVG | Panoramas 360° placeholder (SVG equirectangular 4096×2048) con geometría real por espacio, hotspots y mirada inicial (D-037). Solo demo; `node pipeline/panos.mjs --force` |
 | `placeholders.mjs` | `hotel.json` | SVG livianos (~1,5 KB) con el nombre del espacio para cada medio `media/**/*.svg` que falte. Solo demo; `pnpm placeholders` (con `--force` los regenera) |
 
 `pnpm assets` corre todo sobre `content/` y deja el resultado en `dist-assets/`. Cada script es idempotente y omite lo que ya está procesado.

@@ -74,11 +74,14 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 ## Bloque 4 — Detalle de espacio
 
-- [ ] `PanoViewer` con Photo Sphere Viewer, hotspots y navegación entre espacios
-- [ ] Galería con zoom progresivo
-- [ ] Ficha del espacio y SpaceChips
-- [ ] Fundido entre la maqueta y el 360°
-- [ ] Recorrido completo; capturas; prueba con 2–3 personas
+- [x] Visor 360° (propio, en la misma escena; D-036) con hotspots y navegación entre espacios
+- [x] Galería con zoom progresivo (doble toque, rueda, arrastre y botones +/−)
+- [x] Ficha del espacio y SpaceChips (panel sobre la escena; plegable en móvil)
+- [x] Fundido entre la maqueta y el 360° (la cámara entra al espacio y se abre a 75°)
+- [x] Panoramas placeholder con geometría real (`pipeline/panos.mjs`, D-037)
+- [x] Recorrido completo; capturas
+- [ ] Prueba con 2–3 personas ajenas al proyecto (punto de decisión del bloque 4) — pendiente de Jacobo
+- [ ] Giroscopio del celular para mirar alrededor en 360°
 
 ## Bloque 5 — Contenido
 

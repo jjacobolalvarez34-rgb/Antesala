@@ -23,7 +23,7 @@ En la demo, la columna de captura la reemplazan el código, Blender y los render
 | App | Next.js 16.4 (App Router, Turbopack), React 19.3, TypeScript 6.0 estricto, Tailwind 4.3, shadcn/ui 4.23 (base-nova, Base UI) | pnpm. TS 7 y ESLint 10 esperan a que typescript-eslint y los plugins de eslint-config-next los soporten (D-013) |
 | 3D | React Three Fiber, drei, @react-three/postprocessing | `Canvas` persistente en el layout |
 | Splats | Spark (`@sparkjsdev/spark`, MIT) | Preparado, sin contenido en la Fase 0. three.js r186 trae un renderizador nativo en WebGPU; reevaluar más adelante |
-| 360° | Photo Sphere Viewer + `virtual-tour` + `markers` | |
+| 360° | Propio: esfera equirectangular en la misma escena (`PanoSphere`) | Photo Sphere Viewer descartado: exige three 0.185.x (D-036) |
 | Motion | GSAP (cámara, líneas de tiempo) · Motion 14 (UI) | Ver `DISENO.md`. Motion entra con `LazyMotion` cuando haya *bottom sheets* y gestos; en el bloque 1 bastan transiciones CSS (D-016) |
 | UI animada | Unlumen UI, SmoothUI | Vía registro shadcn o MCP de 21st.dev; solo piezas puntuales |
 | Marca | Rive (opcional) | Solo en la entrada |
