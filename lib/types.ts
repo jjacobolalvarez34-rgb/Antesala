@@ -103,11 +103,16 @@ export interface Poi {
   media: Media[];
 }
 
+/** Revestimiento de fachada del edificio procedural. */
+export type Cladding = 'ladrillo' | 'estuco' | 'concreto';
+
 export interface Building {
   /** polígono en metros */
   footprint: [number, number][];
   floors: number;
   floorHeightM: number;
+  /** acabado del edificio procedural; sin style se usa estuco */
+  style?: { cladding: Cladding };
 }
 
 export interface Site {

@@ -6,7 +6,7 @@ import { EffectComposer, N8AO, Vignette } from '@react-three/postprocessing';
 import { useRouter } from 'next/navigation';
 import { useMemo, useRef } from 'react';
 
-import { buildingFrame, explorePose, floorPose } from '@/lib/building';
+import { buildingFrame, facadeDir, facadePose, facadesOf, floorPose } from '@/lib/building';
 import { lowerQuality, higherQuality, type Quality } from '@/lib/capabilities';
 import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
@@ -49,51 +49,28 @@ function ReadySignal() {
   return null;
 }
 
+/** Cámara: fachada elegida en la vista exterior; el piso visto desde esa fachada. */
 function Rig({ data, stage, reduced, intro }: Pick<Props, 'data' | 'stage' | 'reduced' | 'intro'>) {
   const frame = useMemo(() => buildingFrame(data.building), [data.building]);
-  const floorOrder = stage.kind === 'piso' ? data.floors.find((f) => f.id === stage.levelId)?.order : undefined;
-  return (
-    <CameraAdapter
-      frame={frame}
-      floorOrder={floorOrder}
-      stageKey={stage.kind === 'piso' ? `piso-${stage.levelId}` : 'explorar'}
-      depth={stage.kind === 'piso' ? 2 : 1}
-      reduced={reduced}
-      intro={intro}
-    />
-  );
-}
-
-function CameraAdapter({
-  frame,
-  floorOrder,
-  stageKey,
-  depth,
-  reduced,
-  intro,
-}: {
-  frame: ReturnType<typeof buildingFrame>;
-  floorOrder?: number;
-  stageKey: string;
-  depth: number;
-  reduced: boolean;
-  intro: boolean;
-}) {
+  const facades = useMemo(() => facadesOf(data.building), [data.building]);
+  const facadeIndex = useTour((s) => s.facade);
+  const facade = facades[facadeIndex % facades.length]!;
   const size = useThree((s) => s.size);
   const aspect = size.width / Math.max(size.height, 1);
   const wide = size.width >= 768;
+  const floorOrder = stage.kind === 'piso' ? data.floors.find((f) => f.id === stage.levelId)?.order : undefined;
   const pose =
     floorOrder !== undefined
-      ? floorPose(frame, floorOrder, FOV, aspect, wide ? 'side' : 'sheet')
-      : explorePose(frame, FOV, aspect, wide);
+      ? floorPose(frame, floorOrder, facade, FOV, aspect, wide ? 'side' : 'sheet')
+      : facadePose(frame, facade, FOV, aspect, wide);
   return (
     <CameraRig
       pose={pose}
-      stageKey={stageKey}
-      depth={depth}
+      stageKey={stage.kind === 'piso' ? `piso-${stage.levelId}` : `explorar-${facade.index}`}
+      depth={stage.kind === 'piso' ? 2 : 1}
       intro={intro}
       reduced={reduced}
-      autoRotate={floorOrder === undefined}
+      autoRotate={false}
     />
   );
 }
@@ -105,54 +82,65 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const setHoveredLevel = useTour((s) => s.setHoveredLevel);
   const setQuality = useTour((s) => s.setQuality);
   const high = quality === 'alto';
+  const shadows = quality !== 'bajo';
   const selectedId = stage.kind === 'piso' ? stage.levelId : null;
   const [cx, cz] = frame.center;
   const anchors = useRef(new Map<string, HTMLElement>());
   const showPois = stage.kind === 'explorar' && active;
+  const facades = useMemo(() => facadesOf(data.building), [data.building]);
+  const facadeIndex = useTour((s) => s.facade);
+  const pullDir = facadeDir(facades[facadeIndex % facades.length]!);
 
   return (
     <div className="relative size-full">
     <Canvas
       frameloop={active ? 'always' : 'never'}
-      shadows={high}
-      dpr={high ? [1, 2] : [1, 1.5]}
+      shadows={shadows ? 'soft' : false}
+      dpr={high ? [1, 2] : quality === 'medio' ? [1, 1.5] : 1}
       gl={{ antialias: !high, powerPreference: 'high-performance' }}
-      camera={{ fov: FOV, near: 0.5, far: 2000, position: [cx + 60, 60, cz + 80] }}
+      camera={{ fov: FOV, near: 0.5, far: 3000, position: [cx + 60, 60, cz + 80] }}
       onPointerMissed={() => setHoveredLevel(null)}
     >
-      <fog attach="fog" args={['#2a2420', 140, 560]} />
-      <hemisphereLight args={['#ebe6de', '#1a1917', 0.9]} />
+      {/* luz de tarde bogotana: sol cálido y bajo desde el occidente, cielo suave */}
+      <fog attach="fog" args={['#d9dcda', 160, 820]} />
+      <hemisphereLight args={['#dce6ee', '#6f665a', 0.75]} />
       <directionalLight
-        position={[cx + 70, 55, cz + 60]}
-        intensity={2.3}
-        color="#ffe4c4"
-        castShadow={high}
-        shadow-mapSize={[2048, 2048]}
-        shadow-bias={-0.0004}
-        shadow-camera-left={-45}
-        shadow-camera-right={45}
-        shadow-camera-top={45}
-        shadow-camera-bottom={-45}
+        position={[cx + 75, 62, cz + 58]}
+        intensity={3.1}
+        color="#ffe3c2"
+        castShadow={shadows}
+        shadow-mapSize={high ? [2048, 2048] : [1024, 1024]}
+        shadow-bias={-0.0003}
+        shadow-normalBias={0.04}
+        shadow-camera-left={-55}
+        shadow-camera-right={55}
+        shadow-camera-top={55}
+        shadow-camera-bottom={-55}
         shadow-camera-near={10}
-        shadow-camera-far={220}
+        shadow-camera-far={260}
       />
-      <directionalLight position={[cx - 50, 30, cz - 40]} intensity={0.35} color="#9fb3c8" />
-      <Environment resolution={64} frames={1}>
-        <Lightformer form="rect" intensity={1.6} color="#ffd9b0" position={[30, 12, 30]} scale={[40, 10, 1]} />
-        <Lightformer form="rect" intensity={0.6} color="#a9bcd0" position={[-30, 20, -20]} scale={[30, 20, 1]} />
-        <Lightformer form="ring" intensity={0.8} color="#ffffff" position={[0, 40, 0]} scale={10} />
+      <Environment resolution={128} frames={1}>
+        {/* cielo y sol para los reflejos del vidrio */}
+        <Lightformer form="rect" intensity={1.1} color="#9fb9cf" position={[0, 60, 0]} rotation-x={Math.PI / 2} scale={[200, 200, 1]} />
+        <Lightformer form="rect" intensity={3} color="#ffe2bd" position={[60, 25, 45]} scale={[30, 14, 1]} />
+        <Lightformer form="rect" intensity={0.9} color="#dfe3e1" position={[-60, 12, 0]} rotation-y={Math.PI / 2} scale={[120, 20, 1]} />
+        <Lightformer form="rect" intensity={0.9} color="#dfe3e1" position={[0, 12, -60]} scale={[120, 20, 1]} />
+        <Lightformer form="rect" intensity={0.35} color="#7a7368" position={[0, -10, 0]} rotation-x={-Math.PI / 2} scale={[200, 200, 1]} />
       </Environment>
 
-      <Context frame={frame} />
+      <Context frame={frame} facades={facades} shadows={shadows} />
       <BuildingModel
         footprint={data.building.footprint}
         frame={frame}
         floors={data.floors}
+        cladding={data.building.style?.cladding ?? 'estuco'}
         selectedId={selectedId}
         hoveredId={hoveredLevelId}
+        pullDir={pullDir}
         colors={data.colors}
         reduced={reduced}
         interactive={active}
+        shadows={shadows}
         onHover={setHoveredLevel}
         onSelect={(id) => router.push(routes.piso(data.slug, id))}
       />
@@ -163,10 +151,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         enablePan={false}
         enableDamping
         dampingFactor={0.08}
-        minDistance={25}
-        maxDistance={220}
-        minPolarAngle={0.35}
-        maxPolarAngle={1.42}
+        minDistance={18}
+        maxDistance={260}
+        minPolarAngle={0.3}
+        maxPolarAngle={1.5}
         rotateSpeed={0.6}
       />
       <Rig data={data} stage={stage} reduced={reduced} intro={intro} />
@@ -176,7 +164,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           flipflops={3}
           onDecline={() => setQuality(lowerQuality(quality))}
           onIncline={() => setQuality(higherQuality(quality))}
-          onFallback={() => setQuality('lista')}
+          onFallback={() => setQuality('bajo')}
         />
       ) : null}
 

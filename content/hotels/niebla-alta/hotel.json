@@ -31,7 +31,10 @@
         ]
       ],
       "floors": 6,
-      "floorHeightM": 3.1
+      "floorHeightM": 3.1,
+      "style": {
+        "cladding": "ladrillo"
+      }
     },
     "exterior": [],
     "pois": [

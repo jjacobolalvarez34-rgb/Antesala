@@ -67,12 +67,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           levelName: p.levelId ? findLevel(hotel, p.levelId)?.name : undefined,
           href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
         })),
-        colors: {
-          model: '#f1ede6',
-          accent: tokens.color.accentOnDark ?? tokens.color.accent,
-          glass: '#56656c',
-          glow: '#e2b57a',
-        },
+        colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
       }
     : null;
 

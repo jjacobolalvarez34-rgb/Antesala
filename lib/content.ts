@@ -86,6 +86,7 @@ const hotelSchema = z.object({
         footprint: z.array(z.tuple([z.number(), z.number()])).min(3),
         floors: z.number().int().positive(),
         floorHeightM: z.number().positive(),
+        style: z.object({ cladding: z.enum(['ladrillo', 'estuco', 'concreto']) }).optional(),
       })
       .optional(),
     exterior: z.array(media),

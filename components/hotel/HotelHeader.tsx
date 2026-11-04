@@ -5,7 +5,10 @@ import { routes } from '@/lib/routes';
 export function HotelHeader({ slug, name, place }: { slug: string; name: string; place: string }) {
   return (
     <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4 scene:pointer-events-auto scene:text-bone md:px-10 md:pt-6">
-      <Link href={routes.hotel(slug)} className="group flex min-h-11 flex-col justify-center">
+      <Link
+        href={routes.hotel(slug)}
+        className="group flex min-h-11 flex-col justify-center scene:glass-dark scene:rounded-2xl scene:px-4 scene:py-1.5"
+      >
         <span className="font-display text-[1.375rem] leading-none tracking-tight">{name}</span>
         <span className="mt-1 hidden text-xs tracking-[0.14em] text-muted-foreground uppercase scene:text-bone/70 sm:block">{place}</span>
       </Link>

@@ -126,11 +126,6 @@
     font-weight: 500;
     color: var(--muted-foreground);
   }
-  .glass {
-    background: color-mix(in oklab, var(--hotel-base) 78%, transparent);
-    backdrop-filter: blur(18px) saturate(1.2);
-    -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  }
   .pb-booking {
     padding-bottom: calc(var(--booking-bar-h) + var(--safe-bottom) + 1.5rem);
   }
@@ -147,7 +142,14 @@
   background: #121211;
 }
 
-.glass-dark {
+/* @utility (no clases sueltas) para que funcionen con variantes como scene: */
+@utility glass {
+  background: color-mix(in oklab, var(--hotel-base) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+}
+
+@utility glass-dark {
   background: color-mix(in oklab, var(--hotel-ink) 72%, transparent);
   backdrop-filter: blur(18px) saturate(1.2);
   -webkit-backdrop-filter: blur(18px) saturate(1.2);
