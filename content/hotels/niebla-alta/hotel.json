@@ -1,0 +1,818 @@
+{
+  "slug": "niebla-alta",
+  "name": "Niebla Alta",
+  "city": "Bogotá",
+  "neighborhood": "Chapinero Alto",
+  "intro": "Apartahotel de seis pisos en Chapinero Alto, a pocas cuadras de la Circunvalar. Cada unidad tiene cocina propia, luz de tarde y, en los pisos altos, vista a los cerros orientales.",
+  "locale": "es",
+  "contact": {
+    "whatsapp": "573204871882"
+  },
+  "isDemo": true,
+  "site": {
+    "kind": "edificio",
+    "building": {
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          18,
+          0
+        ],
+        [
+          18,
+          14
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "floors": 6,
+      "floorHeightM": 3.1
+    },
+    "exterior": [],
+    "pois": [
+      {
+        "id": "lobby",
+        "name": "Lobby",
+        "levelId": "1",
+        "description": "Recepción de 7 a. m. a 11 p. m. y entrega de llaves a cualquier hora con código.",
+        "position": [
+          9,
+          1.5,
+          14.5
+        ],
+        "media": [
+          {
+            "id": "pois-lobby-1",
+            "kind": "photo",
+            "src": "media/pois/lobby-amplia.svg",
+            "alt": "Lobby: vista general (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          },
+          {
+            "id": "pois-lobby-2",
+            "kind": "photo",
+            "src": "media/pois/lobby-detalle.svg",
+            "alt": "Lobby: detalle (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          }
+        ]
+      },
+      {
+        "id": "cowork",
+        "name": "Cowork",
+        "levelId": "1",
+        "description": "Mesas compartidas, dos cabinas para llamadas y café de filtrado durante el día.",
+        "position": [
+          15,
+          1.5,
+          7
+        ],
+        "media": [
+          {
+            "id": "pois-cowork-1",
+            "kind": "photo",
+            "src": "media/pois/cowork-amplia.svg",
+            "alt": "Cowork: vista general (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          },
+          {
+            "id": "pois-cowork-2",
+            "kind": "photo",
+            "src": "media/pois/cowork-detalle.svg",
+            "alt": "Cowork: detalle (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          }
+        ]
+      },
+      {
+        "id": "terraza",
+        "name": "Terraza",
+        "levelId": "6",
+        "description": "Terraza común en la cubierta, sobre el piso 6. Abierta de 7 a. m. a 10 p. m.",
+        "position": [
+          5,
+          19,
+          4
+        ],
+        "media": [
+          {
+            "id": "pois-terraza-1",
+            "kind": "photo",
+            "src": "media/pois/terraza-amplia.svg",
+            "alt": "Terraza común: vista general (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          },
+          {
+            "id": "pois-terraza-2",
+            "kind": "photo",
+            "src": "media/pois/terraza-detalle.svg",
+            "alt": "Terraza común: detalle (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 1067
+          }
+        ]
+      }
+    ]
+  },
+  "levels": [
+    {
+      "id": "1",
+      "name": "Piso 1",
+      "kind": "piso",
+      "order": 1
+    },
+    {
+      "id": "2",
+      "name": "Piso 2",
+      "kind": "piso",
+      "order": 2
+    },
+    {
+      "id": "3",
+      "name": "Piso 3",
+      "kind": "piso",
+      "order": 3
+    },
+    {
+      "id": "4",
+      "name": "Piso 4",
+      "kind": "piso",
+      "order": 4
+    },
+    {
+      "id": "5",
+      "name": "Piso 5",
+      "kind": "piso",
+      "order": 5
+    },
+    {
+      "id": "6",
+      "name": "Piso 6",
+      "kind": "piso",
+      "order": 6
+    }
+  ],
+  "categories": [
+    {
+      "id": "estudio",
+      "name": "Estudio",
+      "tagline": "Todo a mano, en un solo ambiente.",
+      "highlights": [
+        "Cama queen",
+        "Cocineta equipada",
+        "Escritorio frente a la ventana"
+      ]
+    },
+    {
+      "id": "suite-balcon",
+      "name": "Suite con balcón",
+      "tagline": "Un dormitorio aparte y un balcón hacia los cerros.",
+      "highlights": [
+        "Dormitorio independiente",
+        "Balcón con mesa para dos",
+        "Cocina abierta en L"
+      ]
+    },
+    {
+      "id": "penthouse",
+      "name": "Penthouse",
+      "tagline": "El último piso, con terraza propia.",
+      "highlights": [
+        "Terraza privada de 20 m²",
+        "Bañera y ducha separadas",
+        "Comedor para seis"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "201",
+      "name": "Estudio 201",
+      "categoryId": "estudio",
+      "levelId": "2",
+      "capacity": 2,
+      "beds": "1 cama queen",
+      "areaM2": 32,
+      "basePriceCOP": 280000,
+      "view": "Hacia la calle, con árboles al frente.",
+      "plan": "plans/estudio-201.svg",
+      "spaces": [
+        {
+          "id": "descanso",
+          "name": "Zona de descanso",
+          "type": "dormitorio",
+          "areaM2": 8,
+          "description": "La cama queda contra el muro interior, lejos de la calle. Cortinas blackout en toda la ventana.",
+          "features": [
+            "Cama queen",
+            "Cortinas blackout",
+            "Clóset con espejo",
+            "Lámparas de lectura"
+          ],
+          "media": [
+            {
+              "id": "units-201-descanso-1",
+              "kind": "photo",
+              "src": "media/units/201/descanso-amplia.svg",
+              "alt": "Zona de descanso: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-descanso-2",
+              "kind": "photo",
+              "src": "media/units/201/descanso-detalle.svg",
+              "alt": "Zona de descanso: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-descanso-3",
+              "kind": "photo",
+              "src": "media/units/201/descanso-luz.svg",
+              "alt": "Zona de descanso: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala",
+          "type": "sala",
+          "areaM2": 8,
+          "description": "Sofá, mesa baja y un escritorio frente a la ventana para trabajar con luz natural.",
+          "features": [
+            "Sofá de tres puestos",
+            "Escritorio con silla de oficina",
+            "Smart TV de 43\"",
+            "Wifi de 300 Mbps"
+          ],
+          "media": [
+            {
+              "id": "units-201-sala-1",
+              "kind": "photo",
+              "src": "media/units/201/sala-amplia.svg",
+              "alt": "Sala: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-sala-2",
+              "kind": "photo",
+              "src": "media/units/201/sala-detalle.svg",
+              "alt": "Sala: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-sala-3",
+              "kind": "photo",
+              "src": "media/units/201/sala-luz.svg",
+              "alt": "Sala: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "cocina",
+          "name": "Cocineta y comedor",
+          "type": "cocina",
+          "areaM2": 7,
+          "description": "Cocineta lineal con lo necesario para quedarse varios días, y mesa para dos.",
+          "features": [
+            "Estufa de inducción de dos puestos",
+            "Nevera",
+            "Microondas",
+            "Cafetera de goteo",
+            "Mesa para dos"
+          ],
+          "media": [
+            {
+              "id": "units-201-cocina-1",
+              "kind": "photo",
+              "src": "media/units/201/cocina-amplia.svg",
+              "alt": "Cocineta y comedor: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-cocina-2",
+              "kind": "photo",
+              "src": "media/units/201/cocina-detalle.svg",
+              "alt": "Cocineta y comedor: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-cocina-3",
+              "kind": "photo",
+              "src": "media/units/201/cocina-luz.svg",
+              "alt": "Cocineta y comedor: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 3,
+          "description": "Ducha con división en vidrio y agua caliente a gas.",
+          "features": [
+            "Ducha con división en vidrio",
+            "Toallas y amenities",
+            "Secador de pelo"
+          ],
+          "media": [
+            {
+              "id": "units-201-bano-1",
+              "kind": "photo",
+              "src": "media/units/201/bano-amplia.svg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-201-bano-2",
+              "kind": "photo",
+              "src": "media/units/201/bano-detalle.svg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "402",
+      "name": "Suite 402",
+      "categoryId": "suite-balcon",
+      "levelId": "4",
+      "capacity": 3,
+      "beds": "1 cama king + sofá cama",
+      "areaM2": 54,
+      "basePriceCOP": 430000,
+      "view": "Hacia los cerros orientales.",
+      "plan": "plans/suite-402.svg",
+      "featured": true,
+      "spaces": [
+        {
+          "id": "sala",
+          "name": "Sala y comedor",
+          "type": "sala",
+          "areaM2": 15.3,
+          "description": "Sala con salida directa al balcón y comedor para cuatro.",
+          "features": [
+            "Sofá cama doble",
+            "Comedor para cuatro",
+            "Smart TV de 50\"",
+            "Wifi de 300 Mbps"
+          ],
+          "media": [
+            {
+              "id": "units-402-sala-1",
+              "kind": "photo",
+              "src": "media/units/402/sala-amplia.svg",
+              "alt": "Sala y comedor: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-sala-2",
+              "kind": "photo",
+              "src": "media/units/402/sala-detalle.svg",
+              "alt": "Sala y comedor: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-sala-3",
+              "kind": "photo",
+              "src": "media/units/402/sala-luz.svg",
+              "alt": "Sala y comedor: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "balcon",
+          "name": "Balcón",
+          "type": "balcon",
+          "areaM2": 4.8,
+          "description": "Balcón hacia el oriente, con mesa para dos. Recibe el sol de la mañana.",
+          "features": [
+            "Mesa y dos sillas",
+            "Vista a los cerros orientales"
+          ],
+          "media": [
+            {
+              "id": "units-402-balcon-1",
+              "kind": "photo",
+              "src": "media/units/402/balcon-amplia.svg",
+              "alt": "Balcón: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-balcon-2",
+              "kind": "photo",
+              "src": "media/units/402/balcon-detalle.svg",
+              "alt": "Balcón: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-balcon-3",
+              "kind": "photo",
+              "src": "media/units/402/balcon-luz.svg",
+              "alt": "Balcón: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "cocina",
+          "name": "Cocina",
+          "type": "cocina",
+          "areaM2": 5,
+          "description": "Cocina abierta en L hacia la sala, con ventana lateral.",
+          "features": [
+            "Estufa de inducción de cuatro puestos",
+            "Horno",
+            "Nevera con congelador",
+            "Lavavajillas"
+          ],
+          "media": [
+            {
+              "id": "units-402-cocina-1",
+              "kind": "photo",
+              "src": "media/units/402/cocina-amplia.svg",
+              "alt": "Cocina: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-cocina-2",
+              "kind": "photo",
+              "src": "media/units/402/cocina-detalle.svg",
+              "alt": "Cocina: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-cocina-3",
+              "kind": "photo",
+              "src": "media/units/402/cocina-luz.svg",
+              "alt": "Cocina: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "dormitorio",
+          "name": "Dormitorio",
+          "type": "dormitorio",
+          "areaM2": 15.5,
+          "description": "Dormitorio independiente con escritorio y un vestier de paso hacia el baño.",
+          "features": [
+            "Cama king",
+            "Vestier",
+            "Escritorio",
+            "Cortinas blackout"
+          ],
+          "media": [
+            {
+              "id": "units-402-dormitorio-1",
+              "kind": "photo",
+              "src": "media/units/402/dormitorio-amplia.svg",
+              "alt": "Dormitorio: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-dormitorio-2",
+              "kind": "photo",
+              "src": "media/units/402/dormitorio-detalle.svg",
+              "alt": "Dormitorio: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-dormitorio-3",
+              "kind": "photo",
+              "src": "media/units/402/dormitorio-luz.svg",
+              "alt": "Dormitorio: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 5,
+          "description": "Baño privado del dormitorio, con ducha amplia.",
+          "features": [
+            "Ducha tipo lluvia",
+            "Mueble de lavamanos con cajones",
+            "Toallas y amenities"
+          ],
+          "media": [
+            {
+              "id": "units-402-bano-1",
+              "kind": "photo",
+              "src": "media/units/402/bano-amplia.svg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-402-bano-2",
+              "kind": "photo",
+              "src": "media/units/402/bano-detalle.svg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "601",
+      "name": "Penthouse 601",
+      "categoryId": "penthouse",
+      "levelId": "6",
+      "capacity": 4,
+      "beds": "1 cama king + sofá cama doble",
+      "areaM2": 95,
+      "basePriceCOP": 820000,
+      "viewPremiumCOP": 120000,
+      "view": "Abierta hacia los cerros orientales y el occidente de la ciudad.",
+      "plan": "plans/penthouse-601.svg",
+      "spaces": [
+        {
+          "id": "terraza",
+          "name": "Terraza",
+          "type": "terraza",
+          "areaM2": 20,
+          "description": "Terraza privada a todo lo ancho de la unidad, con materas, sala exterior y mesa.",
+          "features": [
+            "Sala exterior",
+            "Mesa para cuatro",
+            "Materas con plantas nativas",
+            "Vista a los cerros y a la ciudad"
+          ],
+          "media": [
+            {
+              "id": "units-601-terraza-1",
+              "kind": "photo",
+              "src": "media/units/601/terraza-amplia.svg",
+              "alt": "Terraza: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-terraza-2",
+              "kind": "photo",
+              "src": "media/units/601/terraza-detalle.svg",
+              "alt": "Terraza: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-terraza-3",
+              "kind": "photo",
+              "src": "media/units/601/terraza-luz.svg",
+              "alt": "Terraza: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala y comedor",
+          "type": "sala",
+          "areaM2": 28.8,
+          "description": "Sala con puerta corrediza a la terraza y comedor para seis.",
+          "features": [
+            "Sofá en L",
+            "Comedor para seis",
+            "Smart TV de 55\"",
+            "Parlante bluetooth",
+            "Wifi de 300 Mbps"
+          ],
+          "media": [
+            {
+              "id": "units-601-sala-1",
+              "kind": "photo",
+              "src": "media/units/601/sala-amplia.svg",
+              "alt": "Sala y comedor: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-sala-2",
+              "kind": "photo",
+              "src": "media/units/601/sala-detalle.svg",
+              "alt": "Sala y comedor: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-sala-3",
+              "kind": "photo",
+              "src": "media/units/601/sala-luz.svg",
+              "alt": "Sala y comedor: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "cocina",
+          "name": "Cocina",
+          "type": "cocina",
+          "areaM2": 7.6,
+          "description": "Cocina con isla y ventana al oriente.",
+          "features": [
+            "Isla con dos bancos",
+            "Estufa de inducción de cuatro puestos",
+            "Horno",
+            "Lavavajillas",
+            "Cafetera de espresso"
+          ],
+          "media": [
+            {
+              "id": "units-601-cocina-1",
+              "kind": "photo",
+              "src": "media/units/601/cocina-amplia.svg",
+              "alt": "Cocina: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-cocina-2",
+              "kind": "photo",
+              "src": "media/units/601/cocina-detalle.svg",
+              "alt": "Cocina: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-cocina-3",
+              "kind": "photo",
+              "src": "media/units/601/cocina-luz.svg",
+              "alt": "Cocina: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "dormitorio",
+          "name": "Dormitorio principal",
+          "type": "dormitorio",
+          "areaM2": 19.6,
+          "description": "Dormitorio con vestier, sillón de lectura y ventana hacia la terraza.",
+          "features": [
+            "Cama king",
+            "Vestier",
+            "Sillón de lectura",
+            "Cortinas blackout"
+          ],
+          "media": [
+            {
+              "id": "units-601-dormitorio-1",
+              "kind": "photo",
+              "src": "media/units/601/dormitorio-amplia.svg",
+              "alt": "Dormitorio principal: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-dormitorio-2",
+              "kind": "photo",
+              "src": "media/units/601/dormitorio-detalle.svg",
+              "alt": "Dormitorio principal: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-dormitorio-3",
+              "kind": "photo",
+              "src": "media/units/601/dormitorio-luz.svg",
+              "alt": "Dormitorio principal: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 8.5,
+          "description": "Bañera, ducha separada y doble lavamanos, con ventana.",
+          "features": [
+            "Bañera",
+            "Ducha tipo lluvia",
+            "Doble lavamanos",
+            "Luz natural"
+          ],
+          "media": [
+            {
+              "id": "units-601-bano-1",
+              "kind": "photo",
+              "src": "media/units/601/bano-amplia.svg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-bano-2",
+              "kind": "photo",
+              "src": "media/units/601/bano-detalle.svg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            },
+            {
+              "id": "units-601-bano-3",
+              "kind": "photo",
+              "src": "media/units/601/bano-luz.svg",
+              "alt": "Baño: luz de la tarde (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

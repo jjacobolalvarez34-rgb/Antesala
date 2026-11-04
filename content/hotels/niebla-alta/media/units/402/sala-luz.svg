@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#EFE9DF"/>
+      <stop offset="1" stop-color="#C8B9A3"/>
+    </linearGradient>
+    <radialGradient id="f" cx="0.3" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1067" fill="url(#g)"/>
+  <rect width="1600" height="1067" fill="url(#f)"/>
+  <rect x="150" y="160" width="420" height="560" fill="#fff" fill-opacity="0.32" stroke="#1C1B19" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M360 160 V720 M150 440 H570" fill="none" stroke="#1C1B19" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M570 160 L1300 1067 L620 1067 L150 720 Z" fill="#fff" fill-opacity="0.22"/>
+  <path d="M0 860 H1600" fill="none" stroke="#1C1B19" stroke-opacity="0.28" stroke-width="2"/>
+  <text x="800" y="917" text-anchor="middle" font-family="'Instrument Serif', Georgia, 'Times New Roman', serif" font-size="76" fill="#1C1B19" fill-opacity="0.82">Sala y comedor</text>
+  <text x="800" y="971" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" letter-spacing="4" fill="#1C1B19" fill-opacity="0.55">SUITE 402</text>
+</svg>

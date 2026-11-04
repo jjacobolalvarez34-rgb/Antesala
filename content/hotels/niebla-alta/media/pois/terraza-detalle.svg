@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#ECE5D8"/>
+      <stop offset="1" stop-color="#BCAD94"/>
+    </linearGradient>
+    <radialGradient id="f" cx="0.3" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1067" fill="url(#g)"/>
+  <rect width="1600" height="1067" fill="url(#f)"/>
+  <path d="M520 1067 V520 A280 280 0 0 1 1080 520 V1067" fill="none" stroke="#1C1B19" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M600 1067 V540 A200 200 0 0 1 1000 540 V1067" fill="none" stroke="#1C1B19" stroke-opacity="0.16" stroke-width="2"/>
+  <circle cx="800" cy="300" r="46" fill="#7D5F3B" fill-opacity="0.28"/>
+  <path d="M800 0 V254" fill="none" stroke="#1C1B19" stroke-opacity="0.28" stroke-width="2"/>
+  <text x="800" y="917" text-anchor="middle" font-family="'Instrument Serif', Georgia, 'Times New Roman', serif" font-size="76" fill="#1C1B19" fill-opacity="0.82">Terraza</text>
+  <text x="800" y="971" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" letter-spacing="4" fill="#1C1B19" fill-opacity="0.55">NIEBLA ALTA · ZONA COMÚN</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 950">
+  <title>Penthouse 601 · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="200" width="1000" height="25"/>
+    <rect x="0" y="925" width="1000" height="25"/>
+    <rect x="0" y="200" width="25" height="750"/>
+    <rect x="975" y="200" width="25" height="750"/>
+    <rect x="440" y="225" width="15" height="700"/>
+    <rect x="25" y="600" width="290" height="15"/>
+    <rect x="300" y="615" width="15" height="310"/>
+  </g>
+  <g id="spaces">
+    <polygon id="dormitorio" points="25,225 440,225 440,925 315,925 315,600 25,600"/>
+    <polygon id="bano" points="25,615 300,615 300,925 25,925"/>
+    <polygon id="sala" points="455,225 975,225 975,650 700,650 700,925 455,925"/>
+    <polygon id="cocina" points="700,650 975,650 975,925 700,925"/>
+    <polygon id="terraza" points="0,0 1000,0 1000,200 0,200"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="100" y="200" width="260" height="25"/>
+    <rect data-type="door" x="540" y="200" width="360" height="25"/>
+    <rect data-type="door" x="540" y="925" width="100" height="25"/>
+    <rect data-type="door" x="440" y="700" width="15" height="90"/>
+    <rect data-type="door" x="300" y="720" width="15" height="80"/>
+    <rect data-type="window" x="0" y="700" width="25" height="100"/>
+    <rect data-type="window" x="975" y="720" width="25" height="140"/>
+    <rect data-type="window" x="975" y="320" width="25" height="220"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" x="25" y="300" width="210" height="200"/>
+    <rect data-item="nightstand" x="25" y="250" width="50" height="45"/>
+    <rect data-item="nightstand" x="25" y="505" width="50" height="45"/>
+    <rect data-item="armchair" x="330" y="260" width="80" height="80"/>
+    <rect data-item="wardrobe" x="395" y="620" width="45" height="300"/>
+    <rect data-item="bathtub" x="25" y="615" width="170" height="75"/>
+    <rect data-item="shower" x="210" y="615" width="90" height="90"/>
+    <rect data-item="sink" x="25" y="790" width="55" height="130"/>
+    <rect data-item="toilet" x="200" y="870" width="40" height="55"/>
+    <rect data-item="sofa" x="470" y="260" width="240" height="95"/>
+    <rect data-item="table" x="530" y="390" width="120" height="70"/>
+    <rect data-item="armchair" x="760" y="280" width="85" height="85"/>
+    <rect data-item="table" x="760" y="480" width="180" height="95"/>
+    <rect data-item="console" x="455" y="700" width="40" height="120"/>
+    <rect data-item="counter" x="915" y="650" width="60" height="275"/>
+    <rect data-item="counter" x="720" y="865" width="195" height="60"/>
+    <rect data-item="island" x="760" y="720" width="120" height="80"/>
+    <rect data-item="planter" x="20" y="20" width="960" height="40"/>
+    <rect data-item="sofa" x="120" y="80" width="180" height="80"/>
+    <rect data-item="table" x="620" y="80" width="120" height="80"/>
+  </g>
+</svg>

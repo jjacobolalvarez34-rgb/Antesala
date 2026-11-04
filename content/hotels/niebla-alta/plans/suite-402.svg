@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 730">
+  <title>Suite con balcón 402 · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="150" width="850" height="25"/>
+    <rect x="0" y="705" width="850" height="25"/>
+    <rect x="0" y="150" width="25" height="580"/>
+    <rect x="825" y="150" width="25" height="580"/>
+    <rect x="425" y="175" width="15" height="530"/>
+    <rect x="25" y="470" width="240" height="15"/>
+    <rect x="250" y="485" width="15" height="220"/>
+  </g>
+  <g id="spaces">
+    <polygon id="dormitorio" points="25,175 425,175 425,705 265,705 265,470 25,470"/>
+    <polygon id="bano" points="25,485 250,485 250,705 25,705"/>
+    <polygon id="sala" points="440,175 825,175 825,480 600,480 600,705 440,705"/>
+    <polygon id="cocina" points="600,480 825,480 825,705 600,705"/>
+    <polygon id="balcon" points="460,20 830,20 830,150 460,150"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="110" y="150" width="230" height="25"/>
+    <rect data-type="door" x="520" y="150" width="240" height="25"/>
+    <rect data-type="door" x="480" y="705" width="90" height="25"/>
+    <rect data-type="door" x="425" y="560" width="15" height="90"/>
+    <rect data-type="door" x="250" y="580" width="15" height="75"/>
+    <rect data-type="window" x="825" y="540" width="25" height="120"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" x="25" y="220" width="200" height="180"/>
+    <rect data-item="nightstand" x="25" y="178" width="45" height="38"/>
+    <rect data-item="nightstand" x="25" y="405" width="45" height="38"/>
+    <rect data-item="desk" x="300" y="178" width="110" height="55"/>
+    <rect data-item="wardrobe" x="380" y="485" width="45" height="200"/>
+    <rect data-item="shower" x="25" y="485" width="100" height="90"/>
+    <rect data-item="sink" x="25" y="620" width="55" height="85"/>
+    <rect data-item="toilet" x="170" y="650" width="40" height="55"/>
+    <rect data-item="sofa" x="440" y="215" width="90" height="220"/>
+    <rect data-item="table" x="570" y="270" width="70" height="110"/>
+    <rect data-item="table" x="690" y="380" width="110" height="75"/>
+    <rect data-item="counter" x="765" y="480" width="60" height="225"/>
+    <rect data-item="counter" x="620" y="645" width="145" height="60"/>
+    <rect data-item="table" x="700" y="50" width="60" height="60"/>
+  </g>
+</svg>

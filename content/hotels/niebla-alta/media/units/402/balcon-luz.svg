@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#E3E7E4"/>
+      <stop offset="1" stop-color="#A9B6B2"/>
+    </linearGradient>
+    <radialGradient id="f" cx="0.3" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1067" fill="url(#g)"/>
+  <rect width="1600" height="1067" fill="url(#f)"/>
+  <path d="M0,1067 L0,530 L80,500 L160,492 L240,497 L320,501 L400,499 L480,493 L560,496 L640,520 L720,555 L800,500 L880,456 L960,440 L1040,456 L1120,496 L1200,540 L1280,547 L1360,531 L1440,524 L1520,517 L1600,500 L1600,1067 Z" fill="#1C1B19" fill-opacity="0.10"/>
+  <path d="M0,1067 L0,620 L80,600 L160,595 L240,598 L320,601 L400,599 L480,595 L560,598 L640,613 L720,637 L800,600 L880,571 L960,560 L1040,571 L1120,597 L1200,626 L1280,632 L1360,621 L1440,616 L1520,611 L1600,600 L1600,1067 Z" fill="#1C1B19" fill-opacity="0.10"/>
+  <circle cx="420" cy="250" r="90" fill="#fff" fill-opacity="0.45"/>
+  <text x="800" y="917" text-anchor="middle" font-family="'Instrument Serif', Georgia, 'Times New Roman', serif" font-size="76" fill="#1C1B19" fill-opacity="0.82">Balcón</text>
+  <text x="800" y="971" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" letter-spacing="4" fill="#1C1B19" fill-opacity="0.55">SUITE 402</text>
+</svg>
