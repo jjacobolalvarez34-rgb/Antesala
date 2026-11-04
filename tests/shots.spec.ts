@@ -43,7 +43,7 @@ for (const hotel of hotels) {
       await page.waitForLoadState('networkidle');
 
       // Reservar siempre visible (regla 4 de CLAUDE.md)
-      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /Reservar/ })).toBeVisible();
+      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
       if (hotel.isDemo) await expect(page.getByText('Hotel ficticio · imágenes ilustrativas')).toBeVisible();
 
       // Ninguna imagen cargada puede estar rota (las lazy sin cargar se ignoran)

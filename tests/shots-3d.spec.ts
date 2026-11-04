@@ -50,7 +50,7 @@ for (const hotel of hotels) {
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await openScene(page, r.url, DAY);
-      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /Reservar/ })).toBeVisible();
+      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
       await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-${r.name}.png` });
       expect(errors, `errores en ${r.url}`).toEqual([]);
     });

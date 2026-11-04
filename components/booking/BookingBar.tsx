@@ -8,7 +8,7 @@ import { formatCOP } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { WhatsAppContext } from '@/lib/whatsapp';
 
-import { WhatsAppButton } from './WhatsAppButton';
+import { ReserveButton } from './ReserveSheet';
 
 export interface BookingSummary {
   slug: string;
@@ -16,7 +16,7 @@ export interface BookingSummary {
   whatsapp: string;
   priceFrom?: number;
   levels: { id: string; name: string }[];
-  units: { id: string; name: string; levelId: string; price?: number; spaces: { id: string; name: string }[] }[];
+  units: { id: string; name: string; levelId: string; price?: number; capacity?: number; spaces: { id: string; name: string }[] }[];
 }
 
 interface Stage {
@@ -25,6 +25,8 @@ interface Stage {
   back?: ReturnType<typeof routes.hotel>;
   backLabel?: string;
   context: WhatsAppContext;
+  price?: number;
+  capacity?: number;
 }
 
 function resolveStage(data: BookingSummary, segments: string[]): Stage {
@@ -43,6 +45,8 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
         back: space ? routes.unidad(data.slug, unit.id) : routes.piso(data.slug, unit.levelId),
         backLabel: space ? `Volver a ${unit.name}` : `Volver a ${level?.name ?? 'el piso'}`,
         context: { ...base, unitName: unit.name, spaceName: space?.name },
+        price: unit.price,
+        capacity: unit.capacity,
       };
     }
   }
@@ -106,7 +110,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
               {stage.detail ? <p className="truncate text-xs text-muted-foreground">{stage.detail}</p> : null}
           </div>
         </div>
-        <WhatsAppButton context={stage.context} className="shrink-0 rounded-xl" />
+        <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} className="shrink-0 rounded-xl" />
       </nav>
     </div>
   );

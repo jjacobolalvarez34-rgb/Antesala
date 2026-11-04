@@ -50,6 +50,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       name: u.name,
       levelId: u.levelId,
       price: unitPrice(u),
+      capacity: u.capacity,
       spaces: u.spaces.map(({ id, name }) => ({ id, name })),
     })),
   };
