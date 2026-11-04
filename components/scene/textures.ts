@@ -168,6 +168,40 @@ export function interiorAtlas(seed = 5) {
   return finish(cv, true, false);
 }
 
+/**
+ * Ventanas encendidas de los vecinos (mapa emisivo). Cubre 4 × 4 tiles de la
+ * fachada de vecino (texture.repeat = 1/4) para que el patrón no se repita.
+ */
+export function neighborLitTexture(seed = 21) {
+  const W = 1024;
+  const H = 512;
+  const tiles = 4;
+  const tw = W / tiles;
+  const th = H / tiles;
+  const rand = mulberry32(seed);
+  const cv = document.createElement('canvas');
+  cv.width = W;
+  cv.height = H;
+  const c = cv.getContext('2d')!;
+  c.fillStyle = '#000';
+  c.fillRect(0, 0, W, H);
+  for (let i = 0; i < tiles; i++) {
+    for (let j = 0; j < tiles; j++) {
+      for (const fx of [0.12, 0.58]) {
+        if (rand() > 0.42) continue;
+        const warm = 0.75 + rand() * 0.25;
+        c.fillStyle = `rgb(${Math.round(255 * warm)},${Math.round(190 * warm)},${Math.round(120 * warm)})`;
+        c.fillRect(i * tw + tw * fx, j * th + th * 0.28, tw * 0.3, th * 0.46);
+      }
+    }
+  }
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(1 / tiles, 1 / tiles);
+  return t;
+}
+
 /** Fachada genérica de vecino: muro con ventanas en grilla. Tile 6 m × 3 m (un piso, dos ventanas). */
 export function neighborFacadeTexture(kind: 'ladrillo' | 'estuco', seed = 1) {
   const W = 512;
@@ -177,7 +211,7 @@ export function neighborFacadeTexture(kind: 'ladrillo' | 'estuco', seed = 1) {
   cv.width = W;
   cv.height = H;
   const c = cv.getContext('2d')!;
-  c.fillStyle = kind === 'ladrillo' ? '#94503a' : '#d8d2c6';
+  c.fillStyle = kind === 'ladrillo' ? '#7b4636' : '#cfc8bb';
   c.fillRect(0, 0, W, H);
   if (kind === 'ladrillo') {
     for (let y = 0; y < H; y += 6) {

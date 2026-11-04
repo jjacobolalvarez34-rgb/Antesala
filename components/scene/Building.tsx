@@ -1,23 +1,42 @@
 'use client';
 
-import type { ThreeEvent } from '@react-three/fiber';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-import { FLOOR_PULL, type BuildingFrame } from '@/lib/building';
-import type { Cladding as CladdingKind } from '@/lib/types';
+import {
+  bayCount,
+  edgesOf,
+  floorFootprint,
+  FLOOR_PULL,
+  frontEdgeIndex,
+  viewerBay,
+  type BuildingFrame,
+  type Edge,
+} from '@/lib/building';
+import type { Building } from '@/lib/types';
 
-import { mergeBoxes, mergeQuads, onEdge, type Box, type EdgeFrame, type Quad } from './geometry';
+import type { CladdingMaps } from './assets';
+import { mergeBoxes, onEdge, type Box } from './geometry';
 import { brickTexture, concreteTexture, interiorAtlas, stuccoTexture, type Cladding } from './textures';
+import {
+  buildGlowGeometry,
+  buildWindowGeometry,
+  createGlowMaterial,
+  createWindowMaterial,
+  STYLE,
+  type LightUniforms,
+  type WindowSpec,
+} from './windows';
 
 /**
- * Edificio procedural con fachada realista (CONTENIDO.md §5, D-026):
- * revestimiento (ladrillo, pañete o concreto) en machones, antepechos y
- * dinteles; ventanas con marco de aluminio, vidrio retranqueado que refleja el
- * cielo e interiores tenues detrás; losas de concreto; locales vidriados en el
- * primer piso; retranqueo con terraza en el último; cubierta con pérgola.
- * Un grupo por piso; cada material se fusiona en una sola geometría por piso.
+ * Edificio procedural v2 (D-026, D-030): fachada con revestimiento real (PBR
+ * cuando carga), ventanas con cuarto en paralaje y cortinas, balcones en las
+ * unidades que los tienen, entrada de hotel con letrero, apliques y materas,
+ * retranqueo con terraza y cubierta con pérgola. De noche: cuartos encendidos,
+ * letrero y apliques iluminados y bañadores de luz en la fachada.
  */
 
 export interface SceneFloor {
@@ -30,14 +49,29 @@ export interface BuildingColors {
   accent: string;
 }
 
+/** Unidad ubicada en la fachada: slot para la luz y el hover. */
+export interface FacadeUnit {
+  slot: number;
+  order: number;
+  /** ventanas: borde del footprint + índice visto desde afuera */
+  windows: { edge: number; window: number }[];
+  /** ventana del balcón (si la unidad tiene balcón) */
+  balcony?: { edge: number; window: number };
+}
+
 interface Props {
-  footprint: [number, number][];
+  building: Building;
   frame: BuildingFrame;
   floors: SceneFloor[];
-  cladding: CladdingKind;
+  brandName: string;
+  units: FacadeUnit[];
+  light: LightUniforms;
+  cladMaps: CladdingMaps | null;
+  linen: THREE.Texture | null;
   selectedId: string | null;
+  /** el edificio se desvanece (maqueta de la unidad en primer plano) */
+  gone?: boolean;
   hoveredId: string | null;
-  /** dirección (x, z) hacia la que se separa el piso elegido */
   pullDir: [number, number];
   colors: BuildingColors;
   reduced: boolean;
@@ -45,16 +79,17 @@ interface Props {
   shadows: boolean;
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
+  onUnitHover: (slot: number | null, clientX: number, clientY: number) => void;
+  onUnitSelect: (slot: number) => void;
 }
 
 type Pt = [number, number];
 
 const SLAB = 0.3;
 const WALL = 0.22;
-const BAY = 2.7;
 const SILL = 0.9;
 const WIN_H = 1.6;
-const SETBACK = 2.6;
+const RECESS = -0.14;
 
 function mulberry32(seed: number) {
   return () => {
@@ -65,25 +100,6 @@ function mulberry32(seed: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-
-function edgesOf(pts: Pt[]): EdgeFrame[] {
-  const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
-  const cz = pts.reduce((s, p) => s + p[1], 0) / pts.length;
-  return pts.map((a, i) => {
-    const b = pts[(i + 1) % pts.length]!;
-    const dx = b[0] - a[0];
-    const dz = b[1] - a[1];
-    const length = Math.hypot(dx, dz);
-    const dir: Pt = [dx / length, dz / length];
-    let normal: Pt = [dir[1], -dir[0]];
-    const mid: Pt = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-    if (normal[0] * (mid[0] - cx) + normal[1] * (mid[1] - cz) < 0) normal = [-normal[0], -normal[1]];
-    return { a, dir, normal, length };
-  });
-}
-
-const frontIndex = (edges: EdgeFrame[]) =>
-  edges.reduce((best, e, i) => (e.normal[1] > edges[best]!.normal[1] ? i : best), 0);
 
 function scaled(pts: Pt[], grow: number): Pt[] {
   const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
@@ -103,6 +119,8 @@ function slabGeometry(pts: Pt[], thickness: number) {
   return geo;
 }
 
+const facing = (e: Edge) => Math.atan2(e.normal[0], e.normal[1]);
+
 interface FloorParts {
   clad: Box[];
   concrete: Box[];
@@ -110,51 +128,47 @@ interface FloorParts {
   glass: Box[];
   rail: Box[];
   green: Box[];
-  interiors: Quad[];
+  windows: WindowSpec[];
 }
 
-const facing = (e: EdgeFrame) => Math.atan2(e.normal[0], e.normal[1]);
-
-/** Ventana con marco, vidrio retranqueado, alféizar e interior detrás. */
 function addWindow(
   p: FloorParts,
-  e: EdgeFrame,
+  e: Edge,
   t: number,
   y0: number,
   w: number,
   h: number,
-  rand: () => number,
+  spec: Omit<WindowSpec, 'center' | 'width' | 'height' | 'rotY'>,
   sill = true,
 ) {
   const fr = 0.06;
-  const recess = -0.13;
-  p.frame.push(onEdge(e, t, recess, y0 + h - fr / 2, w, fr, 0.09));
-  p.frame.push(onEdge(e, t, recess, y0 + fr / 2, w, fr, 0.09));
-  p.frame.push(onEdge(e, t - w / 2 + fr / 2, recess, y0 + h / 2, fr, h, 0.09));
-  p.frame.push(onEdge(e, t + w / 2 - fr / 2, recess, y0 + h / 2, fr, h, 0.09));
-  if (w > 1.3) p.frame.push(onEdge(e, t, recess, y0 + h / 2, 0.05, h - fr * 2, 0.07));
-  p.glass.push(onEdge(e, t, recess - 0.01, y0 + h / 2, w - fr, h - fr, 0.015));
+  p.frame.push(onEdge(e, t, RECESS + 0.02, y0 + h - fr / 2, w, fr, 0.09));
+  p.frame.push(onEdge(e, t, RECESS + 0.02, y0 + fr / 2, w, fr, 0.09));
+  p.frame.push(onEdge(e, t - w / 2 + fr / 2, RECESS + 0.02, y0 + h / 2, fr, h, 0.09));
+  p.frame.push(onEdge(e, t + w / 2 - fr / 2, RECESS + 0.02, y0 + h / 2, fr, h, 0.09));
+  if (w > 1.3) p.frame.push(onEdge(e, t, RECESS + 0.02, y0 + h / 2, 0.05, h - fr * 2, 0.07));
+  p.glass.push(onEdge(e, t, RECESS + 0.015, y0 + h / 2, w - fr, h - fr, 0.012));
   if (sill) p.concrete.push(onEdge(e, t, 0.02, y0 - 0.03, w + 0.12, 0.06, 0.16));
-  const inside = onEdge(e, t, -1.7, y0 + h / 2, w + 1.4, h + 0.9, 0);
-  p.interiors.push({ box: { ...inside, rotY: facing(e) }, cell: Math.floor(rand() * 4) });
+  const c = onEdge(e, t, RECESS, y0 + h / 2, 0, 0, 0);
+  p.windows.push({ ...spec, center: [c.x, c.y, c.z], width: w - fr, height: h - fr, rotY: facing(e) });
 }
 
-function floorParts(footprint: Pt[], order: number, floors: number, floorH: number): FloorParts {
+function floorParts(
+  building: Building,
+  order: number,
+  floorH: number,
+  unitAt: Map<string, number>,
+  balconyAt: Set<string>,
+): FloorParts {
   const isGround = order === 1;
-  const isTop = order === floors;
+  const isTop = order === building.floors;
   const rand = mulberry32(order * 7919 + 13);
-  const p: FloorParts = { clad: [], concrete: [], frame: [], glass: [], rail: [], green: [], interiors: [] };
+  const p: FloorParts = { clad: [], concrete: [], frame: [], glass: [], rail: [], green: [], windows: [] };
+  const base = building.footprint as Pt[];
+  const front = frontEdgeIndex(base);
 
-  const baseEdges = edgesOf(footprint);
-  const front = frontIndex(baseEdges);
-  let pts = footprint;
   if (isTop) {
-    const n = baseEdges[front]!.normal;
-    pts = footprint.map((q, i) =>
-      i === front || i === (front + 1) % footprint.length ? [q[0] - n[0] * SETBACK, q[1] - n[1] * SETBACK] : q,
-    );
-    const fe = baseEdges[front]!;
-    // baranda de vidrio y materas en el borde de la terraza
+    const fe = edgesOf(base)[front]!;
     p.rail.push(onEdge(fe, fe.length / 2, 0.05, SLAB + 0.55, fe.length - 0.3, 1.1, 0.03));
     p.frame.push(onEdge(fe, fe.length / 2, 0.05, SLAB + 1.12, fe.length - 0.3, 0.05, 0.06));
     for (let t = 1.6; t < fe.length - 1; t += 3.2) {
@@ -163,31 +177,36 @@ function floorParts(footprint: Pt[], order: number, floors: number, floorH: numb
     }
   }
 
-  const ceil = floorH; // tope del muro = siguiente losa
-  edgesOf(pts).forEach((e, ei) => {
-    const isSetbackFacade = isTop && ei === front;
-    const bays = Math.max(1, Math.round(e.length / BAY));
+  const ceil = floorH;
+  edgesOf(floorFootprint(building, order)).forEach((e) => {
+    const bays = bayCount(e.length);
     const bw = e.length / bays;
     const wallOff = -WALL / 2;
+    const keyOf = (b: number) => `${order}|${e.index}|${viewerBay(e, b, bays)}`;
+    const specFor = (b: number, style: number) => ({
+      seed: order * 131 + e.index * 17 + b * 3 + 0.5,
+      slot: unitAt.get(keyOf(b)) ?? -1,
+      style,
+      cell: Math.floor(rand() * 4),
+    });
 
     if (isGround) {
-      // locales vidriados entre machones de concreto
       const glassTop = ceil - 0.7;
       for (let b = 0; b <= bays; b++) {
         p.concrete.push(onEdge(e, b * bw, wallOff + 0.04, (SLAB + ceil) / 2, 0.45, ceil - SLAB, WALL + 0.08));
       }
       p.clad.push(onEdge(e, e.length / 2, wallOff, (glassTop + ceil) / 2, e.length, ceil - glassTop, WALL));
-      for (let b = 0; b < bays; b++) addWindow(p, e, (b + 0.5) * bw, SLAB, bw - 0.45, glassTop - SLAB, rand, false);
-      if (ei === front) {
-        p.concrete.push(onEdge(e, e.length / 2, 1.2, glassTop + 0.12, Math.min(7, e.length * 0.45), 0.16, 2.4));
+      for (let b = 0; b < bays; b++) {
+        addWindow(p, e, (b + 0.5) * bw, SLAB, bw - 0.45, glassTop - SLAB, specFor(b, STYLE.lobby), false);
       }
       return;
     }
 
-    if (isSetbackFacade) {
-      // fachada vidriada de piso a techo hacia la terraza
+    if (isTop && e.index === front) {
       for (let b = 0; b <= bays; b++) p.clad.push(onEdge(e, b * bw, wallOff, (SLAB + ceil) / 2, 0.3, ceil - SLAB, WALL));
-      for (let b = 0; b < bays; b++) addWindow(p, e, (b + 0.5) * bw, SLAB + 0.05, bw - 0.3, ceil - SLAB - 0.35, rand, false);
+      for (let b = 0; b < bays; b++) {
+        addWindow(p, e, (b + 0.5) * bw, SLAB + 0.05, bw - 0.3, ceil - SLAB - 0.35, specFor(b, STYLE.sheer), false);
+      }
       p.clad.push(onEdge(e, e.length / 2, wallOff, ceil - 0.15, e.length, 0.3, WALL));
       return;
     }
@@ -199,13 +218,27 @@ function floorParts(footprint: Pt[], order: number, floors: number, floorH: numb
       const t0 = b * bw;
       const tc = t0 + bw / 2;
       const pier = (bw - winW) / 2;
-      // machones a cada lado de la ventana
       p.clad.push(onEdge(e, t0 + pier / 2, wallOff, (SLAB + ceil) / 2, pier, ceil - SLAB, WALL));
       p.clad.push(onEdge(e, t0 + bw - pier / 2, wallOff, (SLAB + ceil) / 2, pier, ceil - SLAB, WALL));
-      // antepecho y dintel
+      const style = rand() < 0.3 ? STYLE.sheer : STYLE.panels;
+      if (balconyAt.has(keyOf(b))) {
+        // puerta-ventana al balcón: de piso a dintel, sin antepecho
+        const doorTop = ceil - 0.45;
+        p.clad.push(onEdge(e, tc, wallOff, (doorTop + ceil) / 2, winW, ceil - doorTop, WALL));
+        addWindow(p, e, tc, SLAB + 0.02, winW, doorTop - SLAB - 0.02, specFor(b, style), false);
+        const bwid = Math.min(3.6, bw * 1.35);
+        p.concrete.push(onEdge(e, tc, 0.65, SLAB - 0.1, bwid, 0.2, 1.3));
+        p.rail.push(onEdge(e, tc, 1.27, SLAB + 0.55, bwid, 1.05, 0.03));
+        p.rail.push(onEdge(e, tc - bwid / 2, 0.65, SLAB + 0.55, 0.03, 1.05, 1.24));
+        p.rail.push(onEdge(e, tc + bwid / 2, 0.65, SLAB + 0.55, 0.03, 1.05, 1.24));
+        p.frame.push(onEdge(e, tc, 1.27, SLAB + 1.1, bwid + 0.04, 0.05, 0.06));
+        p.concrete.push(onEdge(e, tc + bwid / 2 - 0.45, 0.85, SLAB + 0.2, 0.5, 0.4, 0.5));
+        p.green.push(onEdge(e, tc + bwid / 2 - 0.45, 0.85, SLAB + 0.62, 0.62, 0.6, 0.6));
+        continue;
+      }
       p.clad.push(onEdge(e, tc, wallOff, (SLAB + winY) / 2, winW, winY - SLAB, WALL));
       p.clad.push(onEdge(e, tc, wallOff, (winTop + ceil) / 2, winW, ceil - winTop, WALL));
-      addWindow(p, e, tc, winY, winW, WIN_H, rand);
+      addWindow(p, e, tc, winY, winW, WIN_H, specFor(b, style));
     }
   });
   return p;
@@ -217,24 +250,27 @@ function useMerged(boxes: Box[], tile: number, yBase: number) {
   return geo;
 }
 
+interface SharedTextures {
+  clad: Cladding;
+  concrete: Cladding;
+  atlas: THREE.Texture;
+}
+
 interface Materials {
   clad: THREE.MeshStandardMaterial;
   concrete: THREE.MeshStandardMaterial;
   slab: THREE.MeshStandardMaterial;
   frame: THREE.MeshStandardMaterial;
   glass: THREE.MeshStandardMaterial;
-  interior: THREE.MeshBasicMaterial;
   rail: THREE.MeshStandardMaterial;
   green: THREE.MeshStandardMaterial;
+  windows: THREE.ShaderMaterial;
+  glow: THREE.ShaderMaterial;
 }
 
-interface SharedTextures {
-  clad: Cladding;
-  concrete: Cladding;
-  interior: THREE.Texture;
-}
+const BASE_OPACITY = { clad: 1, concrete: 1, slab: 1, frame: 1, glass: 0.42, rail: 0.3, green: 1 } as const;
 
-function makeMaterials(tex: SharedTextures): Materials {
+function makeMaterials(tex: SharedTextures, light: LightUniforms): Materials {
   return {
     clad: new THREE.MeshStandardMaterial({
       map: tex.clad.map,
@@ -251,90 +287,121 @@ function makeMaterials(tex: SharedTextures): Materials {
       transparent: true,
     }),
     slab: new THREE.MeshStandardMaterial({ color: '#d4cfc6', roughness: 0.88, transparent: true }),
-    frame: new THREE.MeshStandardMaterial({ color: '#2d3033', roughness: 0.45, metalness: 0.6, transparent: true }),
+    frame: new THREE.MeshStandardMaterial({ color: '#2a2d30', roughness: 0.4, metalness: 0.65, transparent: true }),
     glass: new THREE.MeshStandardMaterial({
-      color: '#9fb4bd',
-      roughness: 0.04,
-      metalness: 0.85,
-      envMapIntensity: 1.6,
+      color: '#a9bcc4',
+      roughness: 0.03,
+      metalness: 0.9,
+      envMapIntensity: 1.5,
       transparent: true,
-      opacity: 0.55,
+      opacity: BASE_OPACITY.glass,
       depthWrite: false,
     }),
-    interior: new THREE.MeshBasicMaterial({ map: tex.interior, transparent: true, color: '#b9b0a4' }),
     rail: new THREE.MeshStandardMaterial({
       color: '#c9dad8',
       roughness: 0.05,
       metalness: 0.3,
       transparent: true,
-      opacity: 0.3,
+      opacity: BASE_OPACITY.rail,
       depthWrite: false,
     }),
-    green: new THREE.MeshStandardMaterial({ color: '#5b7346', roughness: 0.95, transparent: true }),
+    green: new THREE.MeshStandardMaterial({ color: '#4f6b3c', roughness: 0.95, transparent: true }),
+    windows: createWindowMaterial(light, tex.atlas),
+    glow: createGlowMaterial(light),
   };
 }
 
-const BASE_OPACITY: Record<keyof Materials, number> = {
-  clad: 1,
-  concrete: 1,
-  slab: 1,
-  frame: 1,
-  glass: 0.55,
-  interior: 1,
-  rail: 0.3,
-  green: 1,
-};
+const noRaycast = () => null;
 
 function Floor({
   floor,
-  footprint,
+  building,
   frame,
   tex,
+  light,
+  cladMaps,
+  linen,
   colors,
   state,
+  unitAt,
+  balconyAt,
   pullDir,
   reduced,
   interactive,
   shadows,
   onHover,
   onSelect,
+  onUnitHover,
+  onUnitSelect,
 }: {
   floor: SceneFloor;
-  footprint: Pt[];
+  building: Building;
   frame: BuildingFrame;
   tex: SharedTextures;
+  light: LightUniforms;
+  cladMaps: CladdingMaps | null;
+  linen: THREE.Texture | null;
   colors: BuildingColors;
-  state: 'idle' | 'hovered' | 'selected' | 'dimmed';
+  state: 'idle' | 'hovered' | 'selected' | 'dimmed' | 'gone';
+  unitAt: Map<string, number>;
+  balconyAt: Set<string>;
   pullDir: [number, number];
   reduced: boolean;
   interactive: boolean;
   shadows: boolean;
   onHover: Props['onHover'];
   onSelect: Props['onSelect'];
+  onUnitHover: Props['onUnitHover'];
+  onUnitSelect: Props['onUnitSelect'];
 }) {
   const group = useRef<THREE.Group>(null);
   const yBase = (floor.order - 1) * frame.floorHeight;
   const parts = useMemo(
-    () => floorParts(footprint, floor.order, frame.floors, frame.floorHeight),
-    [footprint, floor.order, frame.floors, frame.floorHeight],
+    () => floorParts(building, floor.order, frame.floorHeight, unitAt, balconyAt),
+    [building, floor.order, frame.floorHeight, unitAt, balconyAt],
   );
-  const slab = useMemo(() => slabGeometry(scaled(footprint, 0.18), SLAB), [footprint]);
+  const slab = useMemo(() => slabGeometry(scaled(building.footprint as Pt[], 0.18), SLAB), [building.footprint]);
   const clad = useMerged(parts.clad, tex.clad.tile, yBase);
   const concrete = useMerged(parts.concrete, tex.concrete.tile, yBase);
   const frameGeo = useMerged(parts.frame, 1, 0);
   const glass = useMerged(parts.glass, 1, 0);
   const rail = useMerged(parts.rail, 1, 0);
   const green = useMerged(parts.green, 1, 0);
-  const interiors = useMemo(() => mergeQuads(parts.interiors), [parts.interiors]);
-  const mats = useMemo(() => makeMaterials(tex), [tex]);
+  const windowGeo = useMemo(() => buildWindowGeometry(parts.windows), [parts.windows]);
+  const glowGeo = useMemo(() => buildGlowGeometry(parts.windows), [parts.windows]);
+  const mats = useMemo(() => makeMaterials(tex, light), [tex, light]);
+
+  // ladrillo real cuando llega (carga progresiva)
+  useEffect(() => {
+    if (!cladMaps) return;
+    const m = mats.clad;
+    m.map = cladMaps.map;
+    m.normalMap = cladMaps.normalMap;
+    m.normalScale.set(0.9, 0.9);
+    m.aoMap = cladMaps.arm;
+    m.roughnessMap = cladMaps.arm;
+    m.roughness = 1;
+    m.bumpMap = null;
+    m.color.setRGB(1.22, 1.0, 0.88);
+    m.needsUpdate = true;
+  }, [cladMaps, mats]);
+
+  useEffect(() => {
+    if (!linen) return;
+    mats.windows.uniforms.uLinen!.value = linen;
+    mats.windows.uniforms.uHasLinen!.value = 1;
+  }, [linen, mats]);
 
   useLayoutEffect(() => {
-    const dim = state === 'dimmed';
+    const gone = state === 'gone';
+    const dim = state === 'dimmed' || gone;
+    const fade = gone ? 0 : 0.08;
     const selected = state === 'selected';
     const lifted = state === 'hovered' || selected;
     const d = reduced ? 0 : 1.2;
     const ease = 'power2.inOut';
     const g = group.current;
+    if (g && !gone) g.visible = true;
     if (g) {
       gsap.to(g.position, {
         x: selected ? pullDir[0] * FLOOR_PULL : 0,
@@ -344,19 +411,32 @@ function Floor({
         overwrite: true,
       });
     }
-    for (const key of Object.keys(mats) as (keyof Materials)[]) {
+    for (const key of Object.keys(BASE_OPACITY) as (keyof typeof BASE_OPACITY)[]) {
       const mat = mats[key];
       gsap.to(mat, {
-        opacity: dim ? BASE_OPACITY[key] * 0.08 : BASE_OPACITY[key],
+        opacity: dim ? BASE_OPACITY[key] * fade : BASE_OPACITY[key],
         duration: d * 0.7,
         ease,
         overwrite: true,
+        onComplete: gone && key === 'clad' ? () => g && (g.visible = false) : undefined,
       });
       if (key !== 'glass' && key !== 'rail') mat.depthWrite = !dim;
+    }
+    for (const m of [mats.windows, mats.glow]) {
+      gsap.to(m.uniforms.uOpacity!, { value: dim ? fade : 1, duration: d * 0.7, ease, overwrite: true });
+      m.depthWrite = m === mats.windows ? !dim : false;
     }
     const slabColor = new THREE.Color(lifted ? colors.accent : '#d4cfc6');
     gsap.to(mats.slab.color, { r: slabColor.r, g: slabColor.g, b: slabColor.b, duration: 0.25, overwrite: true });
   }, [state, reduced, mats, colors, pullDir]);
+
+  const slotAt = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
+    const geo = (e.object as THREE.Mesh).geometry;
+    const face = e.faceIndex ?? -1;
+    if (face < 0) return -1;
+    const vi = geo.index ? geo.index.getX(face * 3) : face * 3;
+    return Math.round(geo.getAttribute('aRoom').getZ(vi));
+  };
 
   return (
     <group
@@ -395,28 +475,222 @@ function Floor({
           <mesh geometry={concrete} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
         ) : null}
         {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={shadows} /> : null}
-        {interiors ? <mesh geometry={interiors} material={mats.interior} /> : null}
-        {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} /> : null}
-        {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} /> : null}
+        {windowGeo ? (
+          <mesh
+            geometry={windowGeo}
+            material={mats.windows}
+            onPointerMove={
+              interactive
+                ? (e: ThreeEvent<PointerEvent>) => {
+                    const slot = slotAt(e);
+                    onUnitHover(slot >= 0 ? slot : null, e.nativeEvent.clientX, e.nativeEvent.clientY);
+                  }
+                : undefined
+            }
+            onPointerLeave={interactive ? () => onUnitHover(null, 0, 0) : undefined}
+            onClick={
+              interactive
+                ? (e: ThreeEvent<MouseEvent>) => {
+                    const slot = slotAt(e);
+                    if (slot >= 0) {
+                      e.stopPropagation();
+                      onUnitSelect(slot);
+                    }
+                  }
+                : undefined
+            }
+          />
+        ) : null}
+        {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} raycast={noRaycast} /> : null}
+        {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
+        {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
         {green ? <mesh geometry={green} material={mats.green} castShadow={shadows} /> : null}
       </group>
     </group>
   );
 }
 
+/** Letrero del hotel en la marquesina: textura con el nombre y emisivo de noche. */
+function useSignTextures(name: string) {
+  const [fontReady, setFontReady] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    document.fonts?.ready.then(() => alive && setFontReady(true));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return useMemo(() => {
+    const W = 1024;
+    const H = 160;
+    const family =
+      getComputedStyle(document.documentElement).getPropertyValue('--font-instrument-serif').trim() || 'Georgia, serif';
+    const make = (bg: string, fg: string) => {
+      const c = document.createElement('canvas');
+      c.width = W;
+      c.height = H;
+      const ctx = c.getContext('2d')!;
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = fg;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = `400 ${H * 0.62}px ${family}`;
+      const text = name.toUpperCase().split('').join(' ');
+      ctx.fillText(text, W / 2, H * 0.54);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = 8;
+      return t;
+    };
+    return { map: make('#2d261f', '#e9dcc4'), emissive: make('#000000', '#ffd9a0'), key: fontReady };
+  }, [name, fontReady]);
+}
+
+function Entrance({
+  building,
+  frame,
+  brandName,
+  shadows,
+  light,
+}: {
+  building: Building;
+  frame: BuildingFrame;
+  brandName: string;
+  shadows: boolean;
+  light: LightUniforms;
+}) {
+  const pts = building.footprint as Pt[];
+  const e = edgesOf(pts)[frontEdgeIndex(pts)]!;
+  const glassTop = frame.floorHeight - 0.7;
+  const canopyW = Math.min(7, e.length * 0.45);
+  const sign = useSignTextures(brandName);
+  const mats = useMemo(
+    () => ({
+      sign: new THREE.MeshStandardMaterial({
+        map: sign.map,
+        emissiveMap: sign.emissive,
+        emissive: new THREE.Color('#ffcf94'),
+        emissiveIntensity: 0.2,
+        roughness: 0.5,
+        metalness: 0.3,
+      }),
+      sconce: new THREE.MeshStandardMaterial({ color: '#f3e3c8', emissive: new THREE.Color('#ffcf94'), emissiveIntensity: 0.4 }),
+      door: new THREE.MeshStandardMaterial({ color: '#1f2224', roughness: 0.4, metalness: 0.7 }),
+      planter: new THREE.MeshStandardMaterial({ color: '#4a4744', roughness: 0.8 }),
+      plant: new THREE.MeshStandardMaterial({ color: '#3f5a30', roughness: 1 }),
+      canopy: new THREE.MeshStandardMaterial({ color: '#2d261f', roughness: 0.55, metalness: 0.5 }),
+    }),
+    [sign],
+  );
+  useFrame(() => {
+    const n = light.uNight.value;
+    mats.sign.emissiveIntensity = 0.25 + n * 2.2;
+    mats.sconce.emissiveIntensity = 0.5 + n * 3.5;
+  });
+
+  const pieces = useMemo(() => {
+    const at = (t: number, off: number, y: number, w: number, h: number, d: number) => onEdge(e, t, off, y, w, h, d);
+    const mid = e.length / 2;
+    return {
+      canopy: mergeBoxes([at(mid, 1.25, glassTop + 0.1, canopyW, 0.14, 2.5)]),
+      sign: at(mid, 2.5, glassTop + 0.28, canopyW * 0.86, 0.42, 0.05),
+      door: mergeBoxes([
+        at(mid, RECESS + 0.03, (SLAB + glassTop) / 2, 0.08, glassTop - SLAB, 0.1),
+        at(mid - 1.1, RECESS + 0.03, (SLAB + glassTop) / 2, 0.08, glassTop - SLAB, 0.1),
+        at(mid + 1.1, RECESS + 0.03, (SLAB + glassTop) / 2, 0.08, glassTop - SLAB, 0.1),
+        at(mid, RECESS + 0.03, glassTop - 0.45, 2.3, 0.06, 0.1),
+        at(mid - 0.55, RECESS + 0.05, 1.15, 0.03, 0.5, 0.06),
+        at(mid + 0.55, RECESS + 0.05, 1.15, 0.03, 0.5, 0.06),
+      ]),
+      sconces: mergeBoxes([at(mid - 1.7, 0.12, 2.05, 0.16, 0.42, 0.14), at(mid + 1.7, 0.12, 2.05, 0.16, 0.42, 0.14)]),
+      planters: mergeBoxes([at(mid - 2.6, 0.75, 0.38, 0.9, 0.76, 0.9), at(mid + 2.6, 0.75, 0.38, 0.9, 0.76, 0.9)]),
+      plants: [at(mid - 2.6, 0.75, 1.15, 0, 0, 0), at(mid + 2.6, 0.75, 1.15, 0, 0, 0)],
+    };
+  }, [e, glassTop, canopyW]);
+
+  return (
+    <group>
+      {pieces.canopy ? <mesh geometry={pieces.canopy} material={mats.canopy} castShadow={shadows} receiveShadow={shadows} /> : null}
+      <mesh position={[pieces.sign.x, pieces.sign.y, pieces.sign.z]} rotation-y={pieces.sign.rotY} material={mats.sign}>
+        <boxGeometry args={[pieces.sign.w, pieces.sign.h, pieces.sign.d]} />
+      </mesh>
+      {pieces.door ? <mesh geometry={pieces.door} material={mats.door} /> : null}
+      {pieces.sconces ? <mesh geometry={pieces.sconces} material={mats.sconce} /> : null}
+      {pieces.planters ? <mesh geometry={pieces.planters} material={mats.planter} castShadow={shadows} /> : null}
+      {pieces.plants.map((p, i) => (
+        <mesh key={i} position={[p.x, p.y, p.z]} scale={[0.62, 0.8, 0.62]} material={mats.plant} castShadow={shadows}>
+          <icosahedronGeometry args={[1, 2]} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+/** Bañadores de luz en la fachada (solo de noche): planos aditivos con degradé vertical. */
+function Uplights({ building, light }: { building: Building; light: LightUniforms }) {
+  const geo = useMemo(() => {
+    const parts: THREE.BufferGeometry[] = [];
+    for (const e of edgesOf(building.footprint as Pt[])) {
+      const bays = bayCount(e.length);
+      const bw = e.length / bays;
+      for (let b = 0; b <= bays; b++) {
+        const box = onEdge(e, b * bw, 0.26, 4.5, 1.7, 9.0, 0);
+        const g = new THREE.PlaneGeometry(box.w, box.h);
+        g.rotateY(facing(e));
+        g.translate(box.x, box.y, box.z);
+        parts.push(g);
+      }
+    }
+    const merged = mergeGeometriesSafe(parts);
+    parts.forEach((p) => p.dispose());
+    return merged;
+  }, [building]);
+  const mat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: { uNight: light.uNight },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexShader: /* glsl */ `
+          varying vec2 vUv;
+          void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
+        `,
+        fragmentShader: /* glsl */ `
+          uniform float uNight;
+          varying vec2 vUv;
+          void main() {
+            float x = abs(vUv.x - 0.5) * 2.0;
+            float a = pow(1.0 - vUv.y, 1.35) * (1.0 - x * x) * 0.5 * uNight;
+            gl_FragColor = vec4(vec3(1.0, 0.78, 0.5) * a, 1.0);
+          }
+        `,
+      }),
+    [light],
+  );
+  if (!geo) return null;
+  return <mesh geometry={geo} material={mat} renderOrder={5} raycast={noRaycast} />;
+}
+
+const mergeGeometriesSafe = (parts: THREE.BufferGeometry[]) => (parts.length ? mergeGeometries(parts, false) : null);
+
 function Roof({
-  footprint,
+  building,
   frame,
   tex,
   dimmed,
+  gone = false,
   shadows,
 }: {
-  footprint: Pt[];
+  building: Building;
   frame: BuildingFrame;
   tex: SharedTextures;
   dimmed: boolean;
+  gone?: boolean;
   shadows: boolean;
 }) {
+  const footprint = building.footprint as Pt[];
   const roof = useMemo(() => slabGeometry(scaled(footprint, 0.3), 0.4), [footprint]);
   const mats = useMemo(
     () => ({
@@ -442,10 +716,10 @@ function Roof({
   useLayoutEffect(() => {
     for (const [k, m] of Object.entries(mats)) {
       const base = k === 'rail' ? 0.3 : 1;
-      gsap.to(m, { opacity: dimmed ? base * 0.08 : base, duration: 0.8, overwrite: true });
-      if (k !== 'rail') m.depthWrite = !dimmed;
+      gsap.to(m, { opacity: gone ? 0 : dimmed ? base * 0.08 : base, duration: 0.8, overwrite: true });
+      if (k !== 'rail') m.depthWrite = !dimmed && !gone;
     }
-  }, [dimmed, mats]);
+  }, [dimmed, gone, mats]);
 
   const { parapet, beams, rails } = useMemo(() => {
     const edges = edgesOf(scaled(footprint, 0.3));
@@ -479,17 +753,22 @@ function Roof({
         <mesh geometry={parapetGeo} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
       ) : null}
       {beamGeo ? <mesh geometry={beamGeo} material={mats.wood} castShadow={shadows} /> : null}
-      {railGeo ? <mesh geometry={railGeo} material={mats.rail} renderOrder={3} /> : null}
+      {railGeo ? <mesh geometry={railGeo} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
     </group>
   );
 }
 
 export function BuildingModel({
-  footprint,
+  building,
   frame,
   floors,
-  cladding,
+  brandName,
+  units,
+  light,
+  cladMaps,
+  linen,
   selectedId,
+  gone = false,
   hoveredId,
   pullDir,
   colors,
@@ -498,40 +777,86 @@ export function BuildingModel({
   shadows,
   onHover,
   onSelect,
+  onUnitHover,
+  onUnitSelect,
 }: Props) {
-  const pts = footprint as Pt[];
+  const cladding = building.style?.cladding ?? 'estuco';
   const tex = useMemo<SharedTextures>(
     () => ({
       clad: cladding === 'ladrillo' ? brickTexture() : cladding === 'concreto' ? concreteTexture(17) : stuccoTexture(),
       concrete: concreteTexture(),
-      interior: interiorAtlas(),
+      atlas: interiorAtlas(),
     }),
     [cladding],
   );
-  const plinth = useMemo(() => slabGeometry(scaled(pts, 0.9), 0.2), [pts]);
+  const { unitAt, balconyAt } = useMemo(() => {
+    const unitAt = new Map<string, number>();
+    const balconyAt = new Set<string>();
+    for (const u of units) {
+      for (const w of u.windows) unitAt.set(`${u.order}|${w.edge}|${w.window}`, u.slot);
+      if (u.balcony) balconyAt.add(`${u.order}|${u.balcony.edge}|${u.balcony.window}`);
+    }
+    return { unitAt, balconyAt };
+  }, [units]);
+  const plinth = useMemo(() => slabGeometry(scaled(building.footprint as Pt[], 0.9), 0.2), [building.footprint]);
   const plinthMat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#9a948a', roughness: 0.9 }), []);
+  const catcher = useMemo(() => new THREE.ShadowMaterial({ opacity: 0.32, transparent: true }), []);
+  const [cx, cz] = frame.center;
+
+  // cuando el edificio se va (maqueta en primer plano), tras el fundido se oculta todo:
+  // un objeto con opacidad 0 sigue proyectando sombra y ocupando el plano
+  const root = useRef<THREE.Group>(null);
+  useLayoutEffect(() => {
+    const g = root.current;
+    if (!g) return;
+    if (!gone) {
+      g.visible = true;
+      return;
+    }
+    const call = gsap.delayedCall(reduced ? 0 : 0.95, () => {
+      g.visible = false;
+    });
+    return () => {
+      call.kill();
+    };
+  }, [gone, reduced]);
 
   return (
-    <group>
+    <group ref={root}>
+      {/* recibe la sombra del edificio sobre el fondo congelado */}
+      {shadows ? (
+        <mesh rotation-x={-Math.PI / 2} position={[cx, 0.02, cz]} material={catcher} receiveShadow raycast={noRaycast}>
+          <planeGeometry args={[160, 160]} />
+        </mesh>
+      ) : null}
       <mesh geometry={plinth} material={plinthMat} position={[0, -0.18, 0]} receiveShadow={shadows} />
       {floors.map((f) => (
         <Floor
           key={f.id}
           floor={f}
-          footprint={pts}
+          building={building}
           frame={frame}
           tex={tex}
+          light={light}
+          cladMaps={cladding === 'ladrillo' ? cladMaps : null}
+          linen={linen}
           colors={colors}
-          state={selectedId ? (f.id === selectedId ? 'selected' : 'dimmed') : f.id === hoveredId ? 'hovered' : 'idle'}
+          state={gone ? 'gone' : selectedId ? (f.id === selectedId ? 'selected' : 'dimmed') : f.id === hoveredId ? 'hovered' : 'idle'}
+          unitAt={unitAt}
+          balconyAt={balconyAt}
           pullDir={pullDir}
           reduced={reduced}
-          interactive={interactive}
+          interactive={interactive && !gone}
           shadows={shadows}
           onHover={onHover}
           onSelect={onSelect}
+          onUnitHover={onUnitHover}
+          onUnitSelect={onUnitSelect}
         />
       ))}
-      <Roof footprint={pts} frame={frame} tex={tex} dimmed={selectedId !== null} shadows={shadows} />
+      {selectedId || gone ? null : <Entrance building={building} frame={frame} brandName={brandName} shadows={shadows} light={light} />}
+      {selectedId || gone ? null : <Uplights building={building} light={light} />}
+      <Roof building={building} frame={frame} tex={tex} dimmed={selectedId !== null} gone={gone} shadows={shadows} />
     </group>
   );
 }
