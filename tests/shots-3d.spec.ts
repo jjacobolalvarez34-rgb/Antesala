@@ -40,4 +40,15 @@ for (const hotel of hotels) {
       expect(errors, `errores en ${r.url}`).toEqual([]);
     });
   }
+
+  test(`${hotel.slug} · 3d · fachada-siguiente`, async ({ page }, info) => {
+    test.setTimeout(120_000);
+    await page.goto(`${h}/explorar?calidad=medio`);
+    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 90_000 });
+    await page.getByRole('button', { name: 'Fachada siguiente' }).click();
+    await expect(page.getByText('Vista 2 de')).toBeVisible();
+    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-fachada-2.png` });
+  });
 }
