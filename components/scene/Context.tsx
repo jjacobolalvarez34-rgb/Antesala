@@ -1,12 +1,15 @@
 'use client';
 
+import { useFrame, useThree } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 import type { BuildingFrame, Facade } from '@/lib/building';
 
+import { VIEW_ONLY_LAYER } from './Backdrop';
 import { mergeBoxes, type Box } from './geometry';
-import { neighborFacadeTexture } from './textures';
+import { neighborFacadeTexture, neighborLitTexture } from './textures';
+import type { LightUniforms } from './windows';
 
 /**
  * Entorno urbano de día (D-026): cielo de tarde, andenes, calles con
@@ -36,7 +39,7 @@ function inViewCorridor(x: number, z: number, frame: BuildingFrame, facades: Fac
     const dx = Math.sin(az);
     const dz = Math.cos(az);
     const along = rx * dx + rz * dz;
-    if (along < 0 || along > 110) return false;
+    if (along < 0 || along > 75) return false;
     const perp = Math.abs(rx * dz - rz * dx);
     return perp < f.length / 2 + 5 + along * 0.32 + pad;
   });
@@ -52,6 +55,8 @@ interface Block {
   d: number;
   h: number;
   kind: 'ladrillo' | 'estuco';
+  /** en el corredor de vista: solo lo ve la cámara de la ventana (capa VIEW_ONLY) */
+  viewOnly: boolean;
 }
 
 function useNeighbors(frame: BuildingFrame, facades: Facade[]): Block[] {
@@ -82,9 +87,9 @@ function useNeighbors(frame: BuildingFrame, facades: Facade[]): Block[] {
           ) {
             continue;
           }
-          // no tapar la vista desde la calle frente a la fachada principal
-          if (inViewCorridor(bx, bz, frame, facades, Math.max(w, d) / 2)) continue;
-          out.push({ x: bx, z: bz, w, d, h: floors * 2.9, kind: rand() < 0.62 ? 'ladrillo' : 'estuco' });
+          // en el corredor de vista de una fachada: no tapa la cámara, pero sí aparece en la vista desde la ventana
+          const viewOnly = inViewCorridor(bx, bz, frame, facades, Math.max(w, d) / 2);
+          out.push({ x: bx, z: bz, w, d, h: floors * 2.9, kind: rand() < 0.62 ? 'ladrillo' : 'estuco', viewOnly });
         }
       }
     }
@@ -92,31 +97,79 @@ function useNeighbors(frame: BuildingFrame, facades: Facade[]): Block[] {
   }, [frame, facades]);
 }
 
-function NeighborBlocks({ frame, facades, shadows }: { frame: BuildingFrame; facades: Facade[]; shadows: boolean }) {
+function NeighborBlocks({
+  frame,
+  facades,
+  shadows,
+  light,
+}: {
+  frame: BuildingFrame;
+  facades: Facade[];
+  shadows: boolean;
+  light: LightUniforms;
+}) {
   const blocks = useNeighbors(frame, facades);
   const mats = useMemo(() => {
     const roof = new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 });
-    const make = (kind: 'ladrillo' | 'estuco') =>
-      new THREE.MeshStandardMaterial({ map: neighborFacadeTexture(kind, kind === 'ladrillo' ? 3 : 9), roughness: 0.92 });
-    return { roof, ladrillo: make('ladrillo'), estuco: make('estuco') };
+    const make = (kind: 'ladrillo' | 'estuco', seed: number) =>
+      new THREE.MeshStandardMaterial({
+        map: neighborFacadeTexture(kind, kind === 'ladrillo' ? 3 : 9),
+        emissiveMap: neighborLitTexture(seed),
+        emissive: new THREE.Color('#ffffff'),
+        emissiveIntensity: 0,
+        roughness: 0.92,
+      });
+    return { roof, ladrillo: make('ladrillo', 21), estuco: make('estuco', 37) };
   }, []);
+  useFrame(() => {
+    const n = light.uNight.value;
+    mats.ladrillo.emissiveIntensity = n * 1.4;
+    mats.estuco.emissiveIntensity = n * 1.4;
+  });
 
-  const geos = useMemo(() => {
-    const byKind: Record<'ladrillo' | 'estuco', Box[]> = { ladrillo: [], estuco: [] };
-    const roofs: Box[] = [];
-    for (const b of blocks) {
-      byKind[b.kind].push({ x: b.x, y: b.h / 2, z: b.z, w: b.w, h: b.h, d: b.d, rotY: 0 });
-      roofs.push({ x: b.x, y: b.h + 0.05, z: b.z, w: b.w + 0.1, h: 0.1, d: b.d + 0.1, rotY: 0 });
-    }
-    return {
-      ladrillo: mergeBoxes(byKind.ladrillo, 6, 0, 2.9),
-      estuco: mergeBoxes(byKind.estuco, 6, 0, 2.9),
-      roofs: mergeBoxes(roofs, 4),
-    };
-  }, [blocks]);
+  const geos = useMemo(() => build(blocks.filter((b) => !b.viewOnly)), [blocks]);
+  const viewGeos = useMemo(() => build(blocks.filter((b) => b.viewOnly)), [blocks]);
 
   return (
     <group>
+      <BlockMeshes geos={geos} mats={mats} shadows={shadows} />
+      <BlockMeshes geos={viewGeos} mats={mats} shadows={false} layer={VIEW_ONLY_LAYER} />
+    </group>
+  );
+}
+
+function build(blocks: Block[]) {
+  const byKind: Record<'ladrillo' | 'estuco', Box[]> = { ladrillo: [], estuco: [] };
+  const roofs: Box[] = [];
+  for (const b of blocks) {
+    byKind[b.kind].push({ x: b.x, y: b.h / 2, z: b.z, w: b.w, h: b.h, d: b.d, rotY: 0 });
+    roofs.push({ x: b.x, y: b.h + 0.05, z: b.z, w: b.w + 0.1, h: 0.1, d: b.d + 0.1, rotY: 0 });
+  }
+  return {
+    ladrillo: mergeBoxes(byKind.ladrillo, 6, 0, 2.9),
+    estuco: mergeBoxes(byKind.estuco, 6, 0, 2.9),
+    roofs: mergeBoxes(roofs, 4),
+  };
+}
+
+/** Pone un objeto (y sus hijos) en una capa de render. */
+const onLayer = (layer?: number) => (o: THREE.Object3D | null) => {
+  if (o && layer !== undefined) o.traverse((c) => c.layers.set(layer));
+};
+
+function BlockMeshes({
+  geos,
+  mats,
+  shadows,
+  layer,
+}: {
+  geos: ReturnType<typeof build>;
+  mats: { roof: THREE.Material; ladrillo: THREE.Material; estuco: THREE.Material };
+  shadows: boolean;
+  layer?: number;
+}) {
+  return (
+    <group ref={onLayer(layer)}>
       {geos.ladrillo ? (
         <mesh geometry={geos.ladrillo} material={mats.ladrillo} castShadow={shadows} receiveShadow={shadows} />
       ) : null}
@@ -186,16 +239,20 @@ function Streets({ frame, shadows }: { frame: BuildingFrame; shadows: boolean })
   );
 }
 
-/** Árboles de calle: tronco y copa de varias esferas, con variación. */
+interface TreeSpot {
+  x: number;
+  z: number;
+  s: number;
+}
+
+/** Árboles de calle; los del corredor de vista solo aparecen en la vista desde la ventana. */
 function Trees({ frame, facades, shadows }: { frame: BuildingFrame; facades: Facade[]; shadows: boolean }) {
-  const trunks = useRef<THREE.InstancedMesh>(null);
-  const crowns = useRef<THREE.InstancedMesh>(null);
   const [cx, cz] = frame.center;
-  const spots = useMemo(() => {
+  const all = useMemo(() => {
     const rand = mulberry32(77);
     const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
     const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
-    const out: { x: number; z: number; s: number }[] = [];
+    const out: TreeSpot[] = [];
     for (let t = -120; t <= 120; t += 8.5) {
       for (const side of [-1, 1]) {
         out.push({ x: cx + t + (rand() - 0.5) * 2, z: frontStreet + side * (STREET / 2 + 0.9), s: 0.8 + rand() * 0.5 });
@@ -207,11 +264,22 @@ function Trees({ frame, facades, shadows }: { frame: BuildingFrame; facades: Fac
       (p) =>
         !(Math.abs(p.x - cx) < frame.width / 2 + 5 && p.z < frontStreet && p.z > cz) &&
         !(Math.abs(p.z - cz) < frame.depth / 2 + 5 && p.x < sideStreet && p.x > cx) &&
-        !(Math.abs(p.x - sideStreet) < STREET && Math.abs(p.z - frontStreet) < STREET) &&
-        !inViewCorridor(p.x, p.z, frame, facades, -2),
+        !(Math.abs(p.x - sideStreet) < STREET && Math.abs(p.z - frontStreet) < STREET),
     );
-  }, [cx, cz, frame, facades]);
+  }, [cx, cz, frame]);
+  const main = useMemo(() => all.filter((p) => !inViewCorridor(p.x, p.z, frame, facades, -2)), [all, frame, facades]);
+  const viewOnly = useMemo(() => all.filter((p) => inViewCorridor(p.x, p.z, frame, facades, -2)), [all, frame, facades]);
+  return (
+    <group>
+      <TreeSet spots={main} shadows={shadows} />
+      <TreeSet spots={viewOnly} shadows={false} layer={VIEW_ONLY_LAYER} />
+    </group>
+  );
+}
 
+function TreeSet({ spots, shadows, layer }: { spots: TreeSpot[]; shadows: boolean; layer?: number }) {
+  const trunks = useRef<THREE.InstancedMesh>(null);
+  const crowns = useRef<THREE.InstancedMesh>(null);
   useLayoutEffect(() => {
     const m = new THREE.Object3D();
     const rand = mulberry32(5);
@@ -239,8 +307,9 @@ function Trees({ frame, facades, shadows }: { frame: BuildingFrame; facades: Fac
     }
   }, [spots]);
 
+  if (!spots.length) return null;
   return (
-    <group>
+    <group ref={onLayer(layer)}>
       <instancedMesh ref={trunks} args={[undefined, undefined, spots.length]} castShadow={shadows}>
         <cylinderGeometry args={[0.6, 1, 1, 6]} />
         <meshStandardMaterial color="#5c4a3a" roughness={1} />
@@ -281,50 +350,220 @@ function Ridge({ frame }: { frame: BuildingFrame }) {
   );
 }
 
-const skyShader = {
-  uniforms: {
-    top: { value: new THREE.Color('#7f9db6') },
-    horizon: { value: new THREE.Color('#dfe3e1') },
-    glow: { value: new THREE.Color('#ffe2b8') },
-  },
-  vertexShader: /* glsl */ `
-    varying vec3 vDir;
-    void main() {
-      vDir = normalize(position);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: /* glsl */ `
-    uniform vec3 top;
-    uniform vec3 horizon;
-    uniform vec3 glow;
-    varying vec3 vDir;
-    void main() {
-      float h = clamp(vDir.y, 0.0, 1.0);
-      vec3 col = mix(horizon, top, pow(h, 0.55));
-      // sol de la tarde hacia el occidente (+x)
-      float sun = pow(max(dot(normalize(vDir), normalize(vec3(0.75, 0.32, 0.55))), 0.0), 18.0);
-      col += glow * sun * 0.6;
-      gl_FragColor = vec4(col, 1.0);
-    }
-  `,
-};
+const skyFragment = /* glsl */ `
+  uniform float uNight;
+  varying vec3 vDir;
+  float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  void main() {
+    vec3 dir = normalize(vDir);
+    float h = clamp(dir.y, 0.0, 1.0);
+    // día: tarde bogotana; el sol bajo hacia el occidente (+x)
+    vec3 day = mix(vec3(0.87, 0.89, 0.88), vec3(0.50, 0.62, 0.71), pow(h, 0.55));
+    float sun = pow(max(dot(dir, normalize(vec3(0.75, 0.32, 0.55))), 0.0), 18.0);
+    day += vec3(1.0, 0.89, 0.72) * sun * 0.6;
+    // noche: azul profundo, resplandor de ciudad en el horizonte y estrellas
+    vec3 night = mix(vec3(0.10, 0.09, 0.11), vec3(0.012, 0.018, 0.04), pow(h, 0.4));
+    night += vec3(0.20, 0.12, 0.06) * pow(1.0 - h, 6.0) * 0.6;
+    vec2 cell = floor(vec2(atan(dir.z, dir.x) * 180.0, dir.y * 260.0));
+    float star = step(0.9965, hash2(cell)) * smoothstep(0.08, 0.35, h);
+    night += vec3(star) * 0.9;
+    gl_FragColor = vec4(mix(day, night, uNight), 1.0);
+  }
+`;
 
-export function Context({ frame, facades, shadows }: { frame: BuildingFrame; facades: Facade[]; shadows: boolean }) {
+/** Faroles a lo largo de los andenes: poste, cabeza encendida de noche y charco de luz. */
+function StreetLamps({
+  frame,
+  facades,
+  light,
+  shadows,
+}: {
+  frame: BuildingFrame;
+  facades: Facade[];
+  light: LightUniforms;
+  shadows: boolean;
+}) {
   const [cx, cz] = frame.center;
+  const spots = useMemo(() => {
+    const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
+    const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
+    const out: { x: number; z: number; rot: number }[] = [];
+    for (let t = -150; t <= 150; t += 17) {
+      out.push({ x: cx + t, z: frontStreet - STREET / 2 - 0.5, rot: 0 });
+      out.push({ x: cx + t + 8, z: frontStreet + STREET / 2 + 0.5, rot: Math.PI });
+      out.push({ x: sideStreet - STREET / 2 - 0.5, z: cz + t, rot: -Math.PI / 2 });
+      out.push({ x: sideStreet + STREET / 2 + 0.5, z: cz + t + 8, rot: Math.PI / 2 });
+    }
+    return out.filter((p) => !inViewCorridor(p.x, p.z, frame, facades, -7));
+  }, [cx, cz, frame, facades]);
+  const posts = useRef<THREE.InstancedMesh>(null);
+  const heads = useRef<THREE.InstancedMesh>(null);
+  const pools = useRef<THREE.InstancedMesh>(null);
+  const headMat = useMemo(
+    () => new THREE.MeshStandardMaterial({ color: '#d9d4c8', emissive: new THREE.Color('#ffc983'), emissiveIntensity: 0 }),
+    [],
+  );
+  const poolMat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: { uNight: light.uNight },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexShader: /* glsl */ `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0); }`,
+        fragmentShader: /* glsl */ `
+          uniform float uNight; varying vec2 vUv;
+          void main() { float r = length(vUv - 0.5) * 2.0; float a = pow(clamp(1.0 - r, 0.0, 1.0), 1.8) * 0.5 * uNight;
+          gl_FragColor = vec4(vec3(1.0, 0.76, 0.45) * a, 1.0); }
+        `,
+      }),
+    [light],
+  );
+  useFrame(() => {
+    headMat.emissiveIntensity = light.uNight.value * 4;
+  });
+  useLayoutEffect(() => {
+    const m = new THREE.Object3D();
+    spots.forEach((p, i) => {
+      m.position.set(p.x, 2.8, p.z);
+      m.rotation.set(0, 0, 0);
+      m.scale.set(1, 1, 1);
+      m.updateMatrix();
+      posts.current?.setMatrixAt(i, m.matrix);
+      const off = new THREE.Vector3(0, 0, 0.9).applyAxisAngle(new THREE.Vector3(0, 1, 0), p.rot);
+      m.position.set(p.x + off.x, 5.55, p.z + off.z);
+      m.rotation.set(0, p.rot, 0);
+      m.updateMatrix();
+      heads.current?.setMatrixAt(i, m.matrix);
+      m.position.set(p.x + off.x * 1.6, 0.03, p.z + off.z * 1.6);
+      m.rotation.set(-Math.PI / 2, 0, 0);
+      m.updateMatrix();
+      pools.current?.setMatrixAt(i, m.matrix);
+    });
+    for (const r of [posts, heads, pools]) if (r.current) r.current.instanceMatrix.needsUpdate = true;
+  }, [spots]);
   return (
     <group>
-      <mesh scale={900}>
+      <instancedMesh ref={posts} args={[undefined, undefined, spots.length]} castShadow={shadows}>
+        <cylinderGeometry args={[0.07, 0.09, 5.6, 8]} />
+        <meshStandardMaterial color="#2c2e30" roughness={0.6} metalness={0.5} />
+      </instancedMesh>
+      <instancedMesh ref={heads} args={[undefined, undefined, spots.length]} material={headMat}>
+        <boxGeometry args={[0.32, 0.12, 0.9]} />
+      </instancedMesh>
+      <instancedMesh ref={pools} args={[undefined, undefined, spots.length]} material={poolMat} renderOrder={2}>
+        <planeGeometry args={[9, 9]} />
+      </instancedMesh>
+    </group>
+  );
+}
+
+/** Luces de sol/luna; se usan en las dos escenas (fondo y edificio). */
+export function DayNightLights({
+  frame,
+  light,
+  shadows,
+  high,
+}: {
+  frame: BuildingFrame;
+  light: LightUniforms;
+  shadows: boolean;
+  high: boolean;
+}) {
+  const [cx, cz] = frame.center;
+  const sun = useRef<THREE.DirectionalLight>(null);
+  const hemi = useRef<THREE.HemisphereLight>(null);
+  const daySun = useMemo(() => new THREE.Color('#ffe3c2'), []);
+  const moon = useMemo(() => new THREE.Color('#9fb4d6'), []);
+  const daySky = useMemo(() => new THREE.Color('#dce6ee'), []);
+  const nightSky = useMemo(() => new THREE.Color('#2a3550'), []);
+  useFrame(() => {
+    const n = light.uNight.value;
+    if (sun.current) {
+      sun.current.intensity = THREE.MathUtils.lerp(3.1, 0.45, n);
+      sun.current.color.copy(daySun).lerp(moon, n);
+    }
+    if (hemi.current) {
+      hemi.current.intensity = THREE.MathUtils.lerp(0.75, 0.34, n);
+      hemi.current.color.copy(daySky).lerp(nightSky, n);
+    }
+  });
+  return (
+    <>
+      <hemisphereLight ref={hemi} args={['#dce6ee', '#6f665a', 0.75]} />
+      <directionalLight
+        ref={sun}
+        position={[cx + 75, 62, cz + 58]}
+        intensity={3.1}
+        color="#ffe3c2"
+        castShadow={shadows}
+        shadow-mapSize={high ? [2048, 2048] : [1024, 1024]}
+        shadow-bias={-0.0003}
+        shadow-normalBias={0.04}
+        shadow-camera-left={-60}
+        shadow-camera-right={60}
+        shadow-camera-top={60}
+        shadow-camera-bottom={-60}
+        shadow-camera-near={10}
+        shadow-camera-far={280}
+      />
+    </>
+  );
+}
+
+export function Context({
+  frame,
+  facades,
+  shadows,
+  high,
+  light,
+}: {
+  frame: BuildingFrame;
+  facades: Facade[];
+  shadows: boolean;
+  high: boolean;
+  light: LightUniforms;
+}) {
+  const [cx, cz] = frame.center;
+  const sky = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        uniforms: { uNight: light.uNight },
+        vertexShader: /* glsl */ `varying vec3 vDir; void main() { vDir = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+        fragmentShader: skyFragment,
+        side: THREE.BackSide,
+        depthWrite: false,
+        fog: false,
+      }),
+    [light],
+  );
+  const fog = useMemo(() => new THREE.Fog('#d9dcda', 160, 820), []);
+  const dayFog = useMemo(() => new THREE.Color('#d9dcda'), []);
+  const nightFog = useMemo(() => new THREE.Color('#14161d'), []);
+  const scene = useThree((s) => s.scene);
+  useLayoutEffect(() => {
+    scene.fog = fog;
+    return () => {
+      scene.fog = null;
+    };
+  }, [scene, fog]);
+  useFrame(() => {
+    fog.color.copy(dayFog).lerp(nightFog, light.uNight.value);
+  });
+  return (
+    <group>
+      <DayNightLights frame={frame} light={light} shadows={shadows} high={high} />
+      <mesh scale={900} material={sky}>
         <sphereGeometry args={[1, 32, 16]} />
-        <shaderMaterial args={[skyShader]} side={THREE.BackSide} depthWrite={false} fog={false} />
       </mesh>
       <mesh rotation-x={-Math.PI / 2} position={[cx, -0.02, cz]} receiveShadow={shadows}>
         <circleGeometry args={[480, 48]} />
         <meshStandardMaterial color="#8a867e" roughness={1} />
       </mesh>
       <Streets frame={frame} shadows={shadows} />
+      <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} />
       <Trees frame={frame} facades={facades} shadows={shadows} />
-      <NeighborBlocks frame={frame} facades={facades} shadows={shadows} />
+      <NeighborBlocks frame={frame} facades={facades} shadows={shadows} light={light} />
       <Ridge frame={frame} />
     </group>
   );
