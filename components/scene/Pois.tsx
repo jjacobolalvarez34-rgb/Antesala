@@ -41,6 +41,63 @@ export function PoiProjector({ pois, anchors }: { pois: ScenePoi[]; anchors: Poi
   return null;
 }
 
+/** Etiquetas de los espacios sobre la maqueta: enlaces al detalle, sincronizados con el hover 3D. */
+export function SpaceLabelLayer({
+  labels,
+  anchors,
+  visible,
+  current,
+  hovered,
+  onHover,
+  ariaLabel = 'Espacios de la unidad',
+}: {
+  labels: { id: string; name: string; href: Route }[];
+  anchors: PoiAnchors;
+  visible: boolean;
+  current: string | null;
+  hovered: string | null;
+  onHover: (id: string | null) => void;
+  ariaLabel?: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
+    >
+      <ul aria-label={ariaLabel}>
+        {labels.map((l) => {
+          const active = l.id === current || l.id === hovered;
+          return (
+            <li
+              key={l.id}
+              ref={(el) => {
+                if (el) anchors.current.set(l.id, el);
+                else anchors.current.delete(l.id);
+              }}
+              className={`absolute top-0 left-0 ${visible ? 'pointer-events-auto' : ''}`}
+              style={{ visibility: 'hidden' }}
+            >
+              <Link
+                href={l.href}
+                tabIndex={visible ? 0 : -1}
+                aria-current={l.id === current ? 'page' : undefined}
+                onPointerEnter={() => onHover(l.id)}
+                onPointerLeave={() => onHover(null)}
+                onFocus={() => onHover(l.id)}
+                onBlur={() => onHover(null)}
+                className={`flex min-h-9 items-center rounded-full px-3.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg transition-colors duration-200 ${
+                  active ? 'bg-accent-on-dark text-ink' : 'glass-dark'
+                }`}
+              >
+                {l.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 /**
  * Fuera del Canvas: hotspots de zonas comunes como HTML normal
  * (DISENO.md §6: los textos de la interfaz no van dentro del canvas).

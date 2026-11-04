@@ -8,7 +8,8 @@ import { PoweredBy } from '@/components/hotel/PoweredBy';
 import type { SceneData } from '@/components/scene/Scene';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
-import { findLevel, priceFrom, sortedLevels, unitPrice } from '@/lib/hotel';
+import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice } from '@/lib/hotel';
+import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 import { tokensToStyle } from '@/lib/tokens';
 
@@ -68,6 +69,42 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
         })),
         colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
+        brandName: tokens.brand.name,
+        units: hotel.units.map((u) => ({
+          id: u.id,
+          name: u.name,
+          category: findCategory(hotel, u.categoryId)?.name,
+          levelId: u.levelId,
+          levelName: findLevel(hotel, u.levelId)?.name,
+          price: unitPrice(u),
+          viewPremium: u.viewPremiumCOP,
+          view: u.view,
+          href: routes.unidad(hotel.slug, u.id),
+          exterior: u.exterior ?? [],
+          balcony: u.spaces.some((s) => s.type === 'balcon'),
+        })),
+        unitPlans: Object.fromEntries(
+          hotel.units.flatMap((u) => {
+            const plan = bundle.plans[u.plan];
+            if (!plan) return [];
+            const spaces = u.spaces.map(({ id, name, type, media }) => {
+              const pano = media.find((m) => m.kind === 'pano360');
+              return {
+                id,
+                name,
+                type,
+                pano: pano
+                  ? {
+                      url: mediaUrl(hotel.slug, pano.src),
+                      yaw: pano.yaw ?? 0,
+                      hotspots: (pano.hotspots ?? []).map(({ yaw, pitch, label, target }) => ({ yaw, pitch, label, target })),
+                    }
+                  : undefined,
+              };
+            });
+            return [[u.id, { plan, spaces }]];
+          }),
+        ),
       }
     : null;
 
