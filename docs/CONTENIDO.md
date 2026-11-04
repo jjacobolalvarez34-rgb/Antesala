@@ -49,7 +49,9 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
 Desde `site.building`:
 - `footprint`: polígono en metros.
 - `floors` y `floorHeightM`.
-- Fachada de maqueta arquitectónica: losas marcadas, ventanas como bandas, un remate en el último piso y una terraza.
+- `style.cladding` (opcional): `ladrillo`, `estuco` o `concreto`. Por defecto, estuco.
+- Fachada realista (D-026): machones, antepechos y dinteles del revestimiento; ventanas con marco de aluminio, vidrio retranqueado e interior tenue; losas de concreto; primer piso vidriado con marquesina en la fachada principal; retranqueo con terraza, baranda y materas en el último piso; cubierta con parapeto y pérgola. Las texturas se generan en canvas, a escala real (UV en metros).
+- La fachada principal es el borde que mira a +z (la calle). Las demás salen de los otros bordes del `footprint` (selector de fachada, D-027).
 - Cada piso es un grupo separado (para resaltarlo y separarlo).
 - Debe verse **intencional y premium**. Si al cerrar el bloque 2 no se logra, se evalúa una vista aérea ilustrada (ver `PLAN.md`).
 

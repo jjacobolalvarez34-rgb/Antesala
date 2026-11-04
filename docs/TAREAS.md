@@ -36,15 +36,23 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 ## Bloque 2 — Escena exterior
 
-- [ ] Canvas persistente en el layout, con carga diferida y `lib/capabilities.ts`
-- [ ] Edificio procedural desde `site.building`, con un grupo por piso
-- [ ] Material de maqueta, luz, cielo y oclusión ambiental
-- [ ] `CameraRig` con GSAP, sincronizado con la ruta
-- [ ] Selector de piso: resaltado, separación del piso y panel de unidades
-- [ ] Hotspots de zonas comunes (lobby, cowork, terraza)
-- [ ] `PerformanceMonitor` y niveles de calidad
-- [ ] Prueba en un celular real; anotar los FPS en la bitácora
-- [ ] **Decisión:** ¿el edificio se ve premium? Registrarlo en `DECISIONES.md`
+- [x] Canvas persistente en el layout, con carga diferida y `lib/capabilities.ts`
+- [x] Edificio procedural desde `site.building`, con un grupo por piso
+- [x] Material de maqueta, luz, cielo y oclusión ambiental (N8AO y sombras solo en calidad alta)
+- [x] `CameraRig` con GSAP, sincronizado con la ruta
+- [x] Selector de piso: resaltado, separación del piso y panel de unidades
+- [x] Hotspots de zonas comunes (lobby, cowork, terraza)
+- [x] `PerformanceMonitor` y niveles de calidad
+- [x] Unidades 301 y 502 para que cada piso tenga contenido (D-019)
+- [x] Capturas 3D en `tests/shots-3d.spec.ts` (D-024)
+- [ ] Prueba en un celular real; anotar los FPS en la bitácora — pendiente de Jacobo (probar también `?calidad=alto`)
+- [ ] **Decisión:** ¿el edificio se ve premium? Registrarlo en `DECISIONES.md` — pendiente de Jacobo tras verlo en el celular (mi evaluación está en la bitácora)
+- [x] Preguntar antes del 3D en equipos justos; la calidad nunca baja a lista sola (D-025)
+- [x] Cámara a las fachadas: vuelo de entrada y selector de fachada (D-027)
+- [x] Realismo v1: escena de día, fachada de ladrillo con ventanas reales, calles, árboles, vecinos y cerros (D-026)
+- [ ] Prefetch del chunk 3D desde la entrada (hoy se descarga al abrir `/explorar`)
+- [ ] Realismo v2: HDRI y texturas PBR CC0 (Poly Haven), balcones en las suites, árboles con follaje más natural y algo de vida en la calle (andenes, postes, carros quietos) sin tapar los corredores de vista
+- [ ] Mostrar las unidades sobre la planta del piso seleccionado (puente con el bloque 3)
 
 ## Bloque 3 — Maqueta de unidad
 

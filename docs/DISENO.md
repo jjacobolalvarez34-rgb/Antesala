@@ -17,7 +17,7 @@ Referencias: Apple (jerarquía, ritmo, transiciones de profundidad) y Godly (lan
 ### Color
 - Base de neutros cálidos: hueso `#F4F1EA`, piedra `#D9D3C7`, carbón `#1C1B19` (ajustables por hotel).
 - **Un solo acento por hotel**, definido en `tokens.json`.
-- La escena 3D va en oscuro; las fichas, el comparador y la lista en claro.
+- La escena 3D va de día, con luz de tarde y fachada realista (D-026). Los paneles sobre la escena usan vidrio oscuro (`glass-dark`) para mantener el contraste. Las fichas, el comparador y la lista van en claro.
 - Contraste AA mínimo en todo el texto, incluido el que va sobre la escena (usar paneles, no texto suelto sobre el 3D).
 
 ### Superficies
@@ -69,7 +69,8 @@ Animmaster Lib y The Prompts Factory son **referencia**: se toma la idea y se re
 ### Coreografía por etapa
 | Transición | Cámara | UI |
 |---|---|---|
-| Entrada → exterior | Desde arriba, baja en arco hasta 3/4 del edificio | El logo se encoge hacia la barra superior |
+| Entrada → exterior | Desde arriba, baja en arco hasta la fachada principal, casi de frente (D-027) | El logo se encoge hacia la barra superior |
+| Fachada → fachada | Viaja alrededor del edificio hasta la fachada elegida | El selector de fachada cambia de etiqueta |
 | Exterior → piso | Acercamiento lateral; los demás pisos se atenúan y el elegido se separa | Entra el panel de unidades |
 | Piso → unidad | Cenital hacia la unidad; aparece la maqueta sin techo | Ficha de la unidad en *bottom sheet* |
 | Unidad → espacio | Acercamiento al espacio y fundido al 360° | Galería y ficha del espacio |

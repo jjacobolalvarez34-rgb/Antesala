@@ -84,3 +84,40 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-018 · 2026-11-04 · WhatsApp de la demo: el número de Jacobo**
 - Decisión: `contact.whatsapp` = `573204871882`.
 - Por qué: un número inventado podría ser de una persona real. Los mensajes de prueba de la demo le llegan a Jacobo.
+
+**D-019 · 2026-11-04 · Unidades 301 y 502 que reúsan planos y medios**
+- Decisión: el Estudio 301 (piso 3) y la Suite 502 (piso 5, con `viewPremiumCOP` de $60.000) reúsan el plano y las imágenes de la 201 y la 402. Solo es JSON.
+- Por qué: los pisos 3 y 5 quedaban vacíos y el extra por vista del piso 5 no tenía unidad. En un apartahotel real las unidades apiladas comparten planta. También deja listo el "elige tu unidad exacta" del bloque 6.
+
+**D-020 · 2026-11-04 · La escena se activa por capas con `data-scene`**
+- Decisión: `SceneLayer` (en el layout) monta el Canvas la primera vez que una etapa lo necesita y no lo desmonta. Cuando la escena está lista marca `<html data-scene="on">`, y las páginas usan la variante `scene:` de Tailwind para ocultar la lista y mostrar los paneles sobre el 3D.
+- Por qué: el HTML del modo lista sigue siendo lo primero que llega (ARQUITECTURA §6). Las mismas rutas sirven para 3D y para lista, sin duplicar páginas.
+
+**D-021 · 2026-11-04 · Hotspots como capa HTML proyectada, no `<Html>` de drei**
+- Decisión: las etiquetas de las zonas comunes son botones normales en una capa encima del canvas. `PoiProjector` (dentro del Canvas) proyecta su posición en cada frame y escribe el `transform` directo en el DOM.
+- Por qué: con `<Html>` de drei uno de los tres hotspots no llegaba al DOM (cada `<Html>` crea su propia raíz de React). Así quedan en el mismo árbol, son accesibles por teclado y no hay textos dentro del canvas.
+
+**D-022 · 2026-11-04 · Render por software = modo lista; `?calidad=` para forzar**
+- Decisión: `lib/capabilities.ts` manda a lista los equipos sin WebGL2, con render por software (SwiftShader, llvmpipe) o con muy poca memoria. Los táctiles arrancan en "medio" y `PerformanceMonitor` sube o baja la calidad. `?calidad=alto|medio|lista` la fuerza y desactiva el ajuste automático.
+- Por qué: con render por software el 3D corre a pocos FPS. Forzar la calidad sirve para las capturas y para presentar la demo en un equipo concreto.
+
+**D-023 · 2026-11-04 · Regla `react-hooks/immutability` apagada solo en `components/scene/`**
+- Decisión: se desactiva esa regla del React Compiler para los componentes 3D.
+- Por qué: en R3F mutar materiales, cámara y controles es la forma recomendada de animar sin re-render. El proyecto no usa el React Compiler. El resto del código conserva la regla.
+
+**D-024 · 2026-11-04 · Capturas 3D en serie y sin animación**
+- Decisión: `tests/shots-3d.spec.ts` corre en serie, con `reducedMotion: 'reduce'` y `?calidad=medio`.
+- Por qué: headless renderiza WebGL por software. En paralelo satura la CPU, y GSAP frena las animaciones cuando cada frame tarda mucho. Sin animación, la captura muestra la pose final, que es lo que se revisa.
+
+**D-025 · 2026-11-04 · Preguntar antes del 3D; nunca sacar a nadie del 3D** (reemplaza parte de D-022)
+- Decisión: si el equipo parece justo (render por software o muy poca memoria), la vista exterior pregunta "¿Quieres ver el edificio en 3D?" con las opciones Ver en 3D y Ver la lista. Si el rendimiento cae durante el recorrido, la calidad baja de alto a medio a bajo, pero nunca a lista. Solo un navegador sin WebGL2 va directo a la lista. Desde la lista hay un botón para volver al 3D.
+- Por qué: pedido de Jacobo. En su equipo el monitor de rendimiento lo mandaba a la lista sin preguntar. Aunque no vaya 100 % fluido, la persona debe poder verlo.
+
+**D-026 · 2026-11-04 · Escena de día y fachada realista** (reemplaza "la escena 3D va en oscuro" de DISENO.md y la estética de maqueta blanca)
+- Decisión: luz de tarde con sombras, cielo y reflejos. Fachada con revestimiento (`site.building.style.cladding`: ladrillo, estuco o concreto), ventanas con marco de aluminio, vidrio retranqueado e interiores tenues detrás, primer piso vidriado, retranqueo con terraza y pérgola. Entorno con andenes, calles demarcadas, árboles, vecinos con fachadas y cerros. Todo procedural, con texturas generadas en canvas y sin descargas.
+- Por qué: Jacobo pidió que la demo demuestre realismo ("que la fachada se vea como se ve en la realidad"). La maqueta blanca sobre fondo oscuro se leía como software de arquitectura.
+- Pendiente: es una primera iteración. El siguiente salto de realismo necesita HDRI y texturas PBR (CC0 de Poly Haven) o un modelo de Blender con luz horneada (no hay Blender instalado). Con clientes reales, el realismo total lo da el splat de dron (D-008).
+
+**D-027 · 2026-11-04 · La cámara llega a las fachadas**
+- Decisión: la vista exterior abre con un vuelo desde arriba que baja en arco hasta la fachada principal, casi de frente y a altura de calle elevada (perspectiva de foto de arquitectura). Un selector (Fachada principal, Costado derecho, Fachada posterior, Costado izquierdo) lleva la cámara alrededor del edificio hasta cada una. Las fachadas salen de los bordes del `footprint`, así que sirven para cualquier forma.
+- Por qué: pedido de Jacobo. La vista aérea en 3/4 no mostraba la fachada como la ve el huésped.

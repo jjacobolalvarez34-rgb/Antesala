@@ -25,6 +25,42 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-04 · Bloque 2 · Escena exterior (en curso)
+
+**Hecho**
+- Canvas persistente en el layout (`SceneLayer`), cargado de forma diferida. El JS inicial sigue en 155,5 KB, porque three.js solo se descarga al abrir `/explorar`. Modo escena por capas con `data-scene` y la variante `scene:` (D-020).
+- Edificio procedural con fachada realista: ladrillo (o estuco o concreto, según `site.building.style`), ventanas con marco, vidrio retranqueado e interiores, primer piso vidriado, retranqueo con terraza y pérgola (D-026).
+- Escena de día: sol de tarde con sombras, reflejos, calles demarcadas, andenes, árboles, vecinos con fachadas y cerros verdes.
+- Cámara: vuelo de entrada que baja hasta la fachada principal y selector de fachada (principal, costados y posterior) que viaja alrededor del edificio (D-027). Piso elegido: se separa hacia la fachada y los demás quedan en rayos X. Panel de unidades como *bottom sheet* en móvil y lateral en escritorio.
+- Selector de pisos sincronizado con el 3D y hotspots de lobby, cowork y terraza como HTML proyectado (D-021).
+- Calidad alto, medio o bajo. En equipos justos se pregunta "¿Quieres ver el edificio en 3D?". Nunca se saca a nadie del 3D por rendimiento (D-025).
+- Unidades 301 y 502 para que cada piso tenga contenido (D-019).
+- `tests/shots-3d.spec.ts`: explorar, los 6 pisos y el cambio de fachada, en móvil y escritorio (16 capturas, D-024).
+
+**Decisiones**
+- D-019 a D-027. Las más importantes las pidió Jacobo: preguntar antes del 3D (D-025), realismo (D-026) y cámara a las fachadas (D-027).
+
+**Problemas / bloqueos**
+- En el equipo de Jacobo el monitor de rendimiento lo mandaba a la lista sin preguntar. Corregido con D-025.
+- Un hotspot de `<Html>` de drei no llegaba al DOM. Se reemplazó por una capa HTML proyectada.
+- Headless renderiza por software: las capturas 3D tardan alrededor de 1 minuto cada una y corren en serie.
+- Las comillas invertidas dentro de comandos del shell se ejecutaron dos veces como comandos. A partir de ahí el código se edita solo con Edit y Write.
+- No hay Blender instalado, así que el realismo es procedural.
+
+**Mediciones**
+- JS inicial máximo: 155,5 KB gzip (límite 180). El 3D se carga de forma diferida.
+- Capturas: 76 de lista y 16 de 3D en verde.
+- FPS en celular real: pendiente.
+
+**Evaluación del edificio (punto de decisión del bloque 2)**
+- Mi lectura: con la fachada de ladrillo ya se ve como un edificio bogotano creíble, no como una maqueta. Todavía se nota que es tiempo real (árboles simples, calles vacías por los corredores de vista, interiores planos). Para vender alcanza como "ilustrativo de alta calidad"; para fotorrealismo hace falta el realismo v2 o, con clientes reales, el splat de dron.
+- La decisión final es de Jacobo después de verlo en el celular.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo pruebe `/h/niebla-alta/explorar` en su celular (y con `?calidad=alto`), anote los FPS y decida si el edificio convence. Después, el realismo v2 o el bloque 3 (maqueta de unidad).
+
+---
+
 ## 2026-11-04 · Bloque 1 · Base
 
 **Hecho**

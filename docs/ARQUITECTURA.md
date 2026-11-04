@@ -54,7 +54,7 @@ app/
   demo-assets/[hotel]/[...path]/route.ts   sirve content/<hotel>/{media,plans} en la demo (estático)
   panel/page.tsx             métricas simuladas
 components/
-  scene/                     Building, LevelHighlight, UnitModel, SplatView, CameraRig, Pois
+  scene/                     SceneLayer (capa persistente), Scene (Canvas), Building, Context, CameraRig, Pois; luego UnitModel, SplatView
   pano/                      PanoViewer
   gallery/                   Gallery, ZoomImage
   plan/                      PlanSvg (2D interactivo), planToMesh (SVG → geometría)
@@ -78,9 +78,11 @@ lib/
   store.ts                   estado del recorrido
   media.ts                   resolución de URLs por entorno
   whatsapp.ts                armado del mensaje prellenado
-  capabilities.ts            detección de WebGL2 y gama del dispositivo
+  capabilities.ts            detección de WebGL2 y gama del dispositivo; ?calidad= para forzar
+  building.ts                geometría del edificio y poses de cámara (puro)
 pipeline/                    scripts de assets (ver CONTENIDO.md); placeholders.mjs
 tests/shots.spec.ts          capturas + chequeos (Reservar visible, banner, imágenes rotas, consola)
+tests/shots-3d.spec.ts       capturas de la escena (en serie, ?calidad=medio, sin animación)
 tests/budget.mjs             JS inicial vs. §8
 docs/
 ```
@@ -138,7 +140,7 @@ interface Poi { id: string; name: string; levelId?: string; description?: string
 
 interface Site {
   kind: 'edificio' | 'terreno';
-  building?: { footprint: [number, number][]; floors: number; floorHeightM: number };
+  building?: { footprint: [number, number][]; floors: number; floorHeightM: number; style?: { cladding: 'ladrillo' | 'estuco' | 'concreto' } };
   exterior: Media[];         // glb | splat | foto aérea; si está vacío se usa el procedural
   pois: Poi[];
 }
@@ -172,7 +174,8 @@ Reglas (las comprueba `lib/content.ts`; cualquier fallo rompe el build):
 
 - Cada etapa del recorrido es una ruta, así que todo es compartible por link.
 - El `Canvas` vive en `app/h/[hotel]/layout.tsx` y no se desmonta. Cuando cambia la ruta, `CameraRig` anima la cámara hacia el objetivo de esa etapa.
-- `lib/store.ts` guarda la etapa, la selección (nivel/unidad/espacio), la calidad gráfica y si las animaciones están saltadas. La URL es la fuente de verdad de la selección; el store solo la refleja.
+- `lib/store.ts` (Zustand) guarda la calidad gráfica, si la escena está montada y lista, y el piso resaltado por hover (sincroniza el 3D y el LevelPicker). La URL es la fuente de verdad de la selección; el store no la duplica.
+- Modo escena: `SceneLayer` marca `<html data-scene="on">` cuando la escena está visible y lista. Las páginas usan la variante `scene:` de Tailwind para ocultar la lista y mostrar paneles sobre el 3D (D-020). Sin escena, la misma página es el modo lista.
 - En el futuro, multi-hotel por subdominio: `middleware.ts` reescribe `hotelx.dominio.com` → `/h/hotelx`. En la demo se usa la ruta directa.
 
 ## 6. Carga y degradación
