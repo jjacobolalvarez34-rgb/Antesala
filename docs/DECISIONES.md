@@ -220,3 +220,12 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - El fondo de estudio de la unidad pasa de hueso a carbón cálido, para que los muros claros se lean.
 - Por qué: los primeros usuarios vieron la planta "a veces blanca, a veces negra", la cocina tapada por los muros, un zoom que dejaba ver el vacío del fondo y muros blancos sobre fondo blanco.
 
+**D-050 · 2026-11-05 · Entrar a una habitación, fondo sin negro, crepúsculo y acabados de la unidad**
+- Decisión:
+  - Al tocar una habitación (ventana o planta), su luz se enciende y se queda 0,75 s con el nombre antes de la transición de cámara. La página se precarga en ese momento y tocar el vacío cancela.
+  - El fondo nítido usa MSAA solo si el GPU tiene `EXT_color_buffer_float`, y se vuelve a pintar al cambiar de tamaño. En varios celulares salía negro al quitarse el desenfoque.
+  - El HDRI cambia de día a noche a mitad del crepúsculo, con una caída suave de su intensidad (antes saltaba al tocar el botón).
+  - Unidad con pañete procedural, zócalo, corte oscuro, piso de tablas (baldosa en baño y cocina) y la puerta de entrada cerrada (por la puerta ya no se ve la calle).
+  - En el recorrido por dentro, el cielo raso hace sombra y bajan el relleno y el entorno: la luz entra por las ventanas.
+- Por qué: retroalimentación de Jacobo después de probarlo en el celular.
+

@@ -38,7 +38,10 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - Menos saturación (D-048): el panel del piso es un resumen sin lista; las etiquetas de las habitaciones salen solo con el puntero o el foco; en móvil, el panel de la unidad y el del espacio empiezan recogidos y la maqueta queda centrada.
 - Lighthouse móvil contra Netlify (antes de estos cambios): accesibilidad 100, buenas prácticas 100, SEO 60-63 (solo falla "indexable": la demo es `noindex` a propósito), rendimiento 56-73.
 
+- Segunda ronda (D-050): luz encendida un momento antes de entrar a la habitación (también en celular); fondo que se quedaba negro al quitarse el desenfoque (MSAA sin soporte en el GPU y copia vacía al cambiar de tamaño); HDRI que cambia a mitad del crepúsculo; pañete, zócalo, piso de tablas y baldosa en la unidad; puerta de entrada cerrada en el recorrido por dentro; luz interior con sombra del cielo raso.
+
 **Problemas / bloqueos**
+- El fondo negro no se pudo reproducir en el navegador de pruebas (tiene `EXT_color_buffer_float`): hay que confirmarlo en el celular de Jacobo.
 - Rendimiento (Lighthouse, CPU ×4): el TBT es alto. En la entrada (1,8 s) es por la precarga en ocio, que evalúa three.js (851 ms) y baja el HDRI de 619 KB incluso en móvil. En explorar (14 s) es por construir la escena con el CPU lento. Propuesta para la próxima sesión: en táctil, precargar por intención (al tocar "Explorar") y no en ocio; medir dónde se va el armado de la escena en un teléfono real.
 - En el WebGL por software de las pruebas, GSAP avanza ~33 ms por cuadro lento: algunas transiciones tardan 40-60 s. Se ampliaron las esperas de esas pruebas; en un equipo con GPU no pasa.
 - El giro de fachada se volvió algo más lento en esas pruebas (balcones de las suites nuevas). Hay que medirlo en un teléfono real.
