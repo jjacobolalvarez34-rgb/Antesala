@@ -199,3 +199,24 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-045 · 2026-11-05 · Inglés aparcado**
 - Decisión: no se hace i18n en la Fase 0. La interfaz sigue solo en español.
 - Por qué: todos los prospectos son colombianos, y traducir solo la interfaz dejaría el contenido del hotel en español. Se retoma cuando un cliente tenga huéspedes extranjeros y entregue su contenido en inglés.
+
+**D-046 · 2026-11-05 · En la demo, el 360° se recorre por dentro de la maqueta amoblada**
+- Decisión: si `hotel.isDemo`, el 360° de cada espacio no muestra la imagen de muestra: la cámara se para a 1,5 m dentro de la maqueta amoblada, con cielo raso (solo visible desde abajo) y la ciudad por las ventanas. Un hotel real muestra sus fotos 360° capturadas.
+- Por qué: pedido de Jacobo ("que en el tour 3D también se vea el amueblado, para la demo"). Los 360° de muestra eran planos y no vendían el espacio. Es ilustrativo, como todo el contenido de la demo.
+
+**D-047 · 2026-11-05 · Unidades tipo (`sameAs`) y todas las habitaciones tocables**
+- Decisión: una unidad puede declararse `{"sameAs": "201", "id": "202", ...}`. Hereda plano, espacios y fotos, y solo cambia número, piso, ventanas, vista, precio y destacado (`lib/content.ts` la expande y valida). Niebla Alta pasa de 5 a 21 unidades: todas las de la planta se tocan, tienen página, luz en su ventana y precio por piso. "Elige tu unidad exacta" muestra la misma columna del edificio (mismas ventanas en otros pisos) y cuenta aparte las del mismo tipo en otras fachadas.
+- Por qué: pedido de Jacobo ("debería tener TODAS LAS HABITACIONES del hotel, y uno debe darle clic"). Un hotel real tiene muchas habitaciones iguales: se describe una y se listan las demás.
+
+**D-048 · 2026-11-05 · Guía del recorrido y menos texto sobre la escena**
+- Decisión: la primera vez en el edificio aparece una tarjeta con tres pasos y "Empezar". Después hay una pista corta por pantalla ("Toca una habitación para entrar", "Arrastra para mirar alrededor"), una vez por sesión, que se va al interactuar. Para limpiar la escena: el panel del piso ya no lista unidades (solo el resumen, "5 habitaciones · desde…"); las etiquetas de las habitaciones en la planta aparecen solo bajo el puntero o con el foco del teclado; en móvil, el panel de la unidad empieza recogido (nombre y precio) y se quitaron los botones de espacios que repetían las etiquetas de la maqueta.
+- Por qué: retroalimentación de las primeras personas que lo probaron: "la gente no sabe usarlo" y "en celular se ve saturado".
+
+**D-049 · 2026-11-05 · Luz de la planta, maqueta abierta, límites de cámara y fondo oscuro de la unidad**
+- Decisión:
+  - La planta del piso abierto tiene muros oscuros en corte (como el relleno de un plano) y, de noche, luz interior cálida. Antes dependía del sol y la hora: blanca sobre blanco de día, casi negra de noche.
+  - Al ver un espacio en modo maqueta, muros y muebles bajan a 1,15 m. El corte se hace en el GPU y también recorta las sombras. La cámara mira más desde arriba (38°), así que los muros ya no tapan espacios pequeños como la cocina.
+  - El acercamiento y la inclinación quedan limitados alrededor del encuadre de cada vista (65 % a 130 % de la distancia).
+  - El fondo de estudio de la unidad pasa de hueso a carbón cálido, para que los muros claros se lean.
+- Por qué: los primeros usuarios vieron la planta "a veces blanca, a veces negra", la cocina tapada por los muros, un zoom que dejaba ver el vacío del fondo y muros blancos sobre fondo blanco.
+

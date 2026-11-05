@@ -25,6 +25,30 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-05 · Bloque 7 · Retroalimentación de las primeras personas: luz, cámara, guía y todas las habitaciones
+
+**Hecho**
+- Luz de la planta (D-049): por qué era blanca o negra. Dependía del sol y la hora; ahora tiene muros oscuros en corte y luz interior cálida de noche.
+- Espacios en modo maqueta (D-049): muros y muebles bajan a 1,15 m (corte en el GPU, con sombras) y la cámara mira más desde arriba. La cocina ya no queda tapada.
+- Límites de zoom e inclinación alrededor del encuadre de cada vista.
+- Fondo de la unidad en carbón cálido (los muros blancos se leen).
+- Recorrido 360° amoblado en la demo (D-046): por dentro de la maqueta, con cielo raso y la ciudad por la ventana. La cámara arranca contra el muro opuesto y un poco inclinada.
+- Unidades tipo `sameAs` (D-047): 21 habitaciones, todas tocables en la planta, con luz en su ventana, precio por piso y página propia. "Elige tu unidad exacta" muestra la misma columna del edificio.
+- Guía (D-048): tarjeta de tres pasos la primera vez y una pista por pantalla. Va en un portal al body, encima de todo.
+- Menos saturación (D-048): el panel del piso es un resumen sin lista; las etiquetas de las habitaciones salen solo con el puntero o el foco; en móvil, el panel de la unidad y el del espacio empiezan recogidos y la maqueta queda centrada.
+- Lighthouse móvil contra Netlify (antes de estos cambios): accesibilidad 100, buenas prácticas 100, SEO 60-63 (solo falla "indexable": la demo es `noindex` a propósito), rendimiento 56-73.
+
+**Problemas / bloqueos**
+- Rendimiento (Lighthouse, CPU ×4): el TBT es alto. En la entrada (1,8 s) es por la precarga en ocio, que evalúa three.js (851 ms) y baja el HDRI de 619 KB incluso en móvil. En explorar (14 s) es por construir la escena con el CPU lento. Propuesta para la próxima sesión: en táctil, precargar por intención (al tocar "Explorar") y no en ocio; medir dónde se va el armado de la escena en un teléfono real.
+- En el WebGL por software de las pruebas, GSAP avanza ~33 ms por cuadro lento: algunas transiciones tardan 40-60 s. Se ampliaron las esperas de esas pruebas; en un equipo con GPU no pasa.
+- El giro de fachada se volvió algo más lento en esas pruebas (balcones de las suites nuevas). Hay que medirlo en un teléfono real.
+
+**Mediciones**
+- JS inicial máximo: 159,6 KB gzip. Capturas de lista (114) en verde; 3D revisadas en escritorio y móvil.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo y su mamá prueben de nuevo en el celular. Luego, rendimiento en móvil (precarga por intención, armado de la escena) y bloque 8.
+
 ## 2026-11-05 · Bloque 7 · Entrada de marca, amoblado y lobby
 
 **Hecho**

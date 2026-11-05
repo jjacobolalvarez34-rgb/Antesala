@@ -40,6 +40,8 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
 - El `viewBox` empieza en `0 0`. Balcones y terrazas van fuera de los muros exteriores, como polígonos sin pared (por eso el `viewBox` incluye su franja).
 - `Unit.areaM2` es el área total (interior bruto + balcón o terraza); `Space.areaM2` es el área útil del polígono.
 
+**Unidades tipo** (D-047): en `hotel.json`, una unidad puede ser copia de otra completa: `{"sameAs": "201", "id": "202", "name": "Estudio 202", "levelId": "2", "basePriceCOP": 260000, "view": "…", "exterior": […]}`. Hereda categoría, capacidad, camas, área, plano y espacios (con sus medios). Solo puede cambiar `id`, `name`, `levelId`, `exterior`, `view`, `viewPremiumCOP`, `basePriceCOP` y `featured`. Las ventanas y la vista no se heredan.
+
 **Extrusión a 3D** (`components/plan/planToMesh`):
 - Paredes a 2,6 m de alto, con huecos de puertas a 2,1 m y ventanas de 0,9 a 2,2 m.
 - Piso por espacio con su propio material (permite resaltarlo al hacer hover o clic).
