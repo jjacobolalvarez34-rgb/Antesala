@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1400">
+  <title>Piso 6 · planta</title>
+  <g id="walls">
+    <rect x="0" y="0" width="1800" height="25"/>
+    <rect x="0" y="0" width="25" height="1140"/>
+    <rect x="1775" y="0" width="25" height="1140"/>
+    <rect x="0" y="1125" width="1800" height="15"/>
+    <rect x="692" y="25" width="15" height="585"/>
+    <rect x="1092" y="25" width="15" height="585"/>
+    <rect x="707" y="595" width="385" height="15"/>
+  </g>
+  <g id="spaces">
+    <polygon id="nucleo" data-label="Escalera y ascensor" points="707,25 1092,25 1092,595 707,595"/>
+    <polygon id="601" points="25,25 692,25 692,610 1107,610 1107,25 1775,25 1775,1125 25,1125"/>
+    <polygon id="terraza-601" data-label="Terraza privada" points="25,1140 1775,1140 1775,1375 25,1375"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="840" y="595" width="120" height="15"/>
+    <rect data-type="door" x="500" y="1125" width="400" height="15"/>
+    <rect data-type="door" x="1100" y="1125" width="400" height="15"/>
+  </g>
+</svg>

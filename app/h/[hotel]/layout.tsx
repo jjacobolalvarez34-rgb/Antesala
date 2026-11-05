@@ -84,6 +84,23 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           exterior: u.exterior ?? [],
           balcony: u.spaces.some((s) => s.type === 'balcon'),
         })),
+        levelPlans: Object.fromEntries(
+          hotel.levels.flatMap((l) => {
+            const plan = l.plan ? bundle.plans[l.plan] : undefined;
+            if (!plan) return [];
+            const spaces = plan.spaces.map((s) => {
+              const unit = hotel.units.find((u) => u.id === s.id && u.levelId === l.id);
+              const poi = hotel.site.pois.find((p) => p.id === s.id);
+              return {
+                id: s.id,
+                kind: unit ? ('unit' as const) : poi ? ('poi' as const) : ('other' as const),
+                name: unit?.name ?? poi?.name ?? s.label ?? s.id,
+                unitId: unit?.id,
+              };
+            });
+            return [[l.id, { plan, spaces }]];
+          }),
+        ),
         unitPlans: Object.fromEntries(
           hotel.units.flatMap((u) => {
             const plan = bundle.plans[u.plan];

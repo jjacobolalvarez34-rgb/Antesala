@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1400">
+  <title>Piso 3 · planta</title>
+  <g id="walls">
+    <rect x="0" y="0" width="1800" height="25"/>
+    <rect x="0" y="1375" width="1800" height="25"/>
+    <rect x="0" y="0" width="25" height="1400"/>
+    <rect x="1775" y="0" width="25" height="1400"/>
+    <rect x="25" y="595" width="1750" height="15"/>
+    <rect x="25" y="790" width="1750" height="15"/>
+    <rect x="592" y="805" width="15" height="570"/>
+    <rect x="1092" y="805" width="15" height="570"/>
+    <rect x="692" y="25" width="15" height="570"/>
+    <rect x="1092" y="25" width="15" height="570"/>
+  </g>
+  <g id="spaces">
+    <polygon id="pasillo" data-label="Pasillo" points="25,610 1775,610 1775,790 25,790"/>
+    <polygon id="nucleo" data-label="Escalera y ascensor" points="707,25 1092,25 1092,595 707,595"/>
+    <polygon id="301" points="25,805 592,805 592,1375 25,1375"/>
+    <polygon id="u-302" data-label="Unidad 302" points="607,805 1092,805 1092,1375 607,1375"/>
+    <polygon id="u-303" data-label="Unidad 303" points="1107,805 1775,805 1775,1375 1107,1375"/>
+    <polygon id="u-304" data-label="Unidad 304" points="25,25 692,25 692,595 25,595"/>
+    <polygon id="u-305" data-label="Unidad 305" points="1107,25 1775,25 1775,595 1107,595"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="250" y="790" width="90" height="15"/>
+    <rect data-type="door" x="800" y="790" width="90" height="15"/>
+    <rect data-type="door" x="1350" y="790" width="90" height="15"/>
+    <rect data-type="door" x="300" y="595" width="90" height="15"/>
+    <rect data-type="door" x="840" y="595" width="120" height="15"/>
+    <rect data-type="door" x="1400" y="595" width="90" height="15"/>
+  </g>
+</svg>

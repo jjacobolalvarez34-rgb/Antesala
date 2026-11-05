@@ -84,7 +84,7 @@ export function parsePlan(svg: string, file = 'plano.svg'): PlanGeometry {
 
   const spaces: PlanSpace[] = elements(bodies.spaces, 'polygon').map((a) => {
     if (!a.id) throw new PlanError(file, 'hay un polígono de espacio sin id');
-    return { id: a.id, points: points(file, a.points, a.id) };
+    return { id: a.id, label: a['data-label'], points: points(file, a.points, a.id) };
   });
   const seen = new Set<string>();
   for (const s of spaces) {

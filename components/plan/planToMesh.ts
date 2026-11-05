@@ -64,7 +64,8 @@ function box(x0: number, x1: number, z0: number, z1: number, y0: number, y1: num
   return g;
 }
 
-export function planToMesh(plan: PlanGeometry): UnitMeshes {
+/** wallHeight < 2,6 m da una maqueta en corte (planta de piso vista desde arriba). */
+export function planToMesh(plan: PlanGeometry, { wallHeight = WALL_H }: { wallHeight?: number } = {}): UnitMeshes {
   const ox = (plan.width * CM) / 2;
   const oz = (plan.height * CM) / 2;
   // cm → m, centrado (x del SVG = x; y del SVG = z)
@@ -91,12 +92,12 @@ export function planToMesh(plan: PlanGeometry): UnitMeshes {
     for (const o of cuts) {
       const o0 = Math.max(start, horizontal ? o.x : o.y);
       const o1 = Math.min(end, horizontal ? o.x + o.width : o.y + o.height);
-      segment(cursor, o0, 0, WALL_H);
+      segment(cursor, o0, 0, wallHeight);
       if (o.type === 'door') {
-        segment(o0, o1, DOOR_H, WALL_H);
+        if (DOOR_H < wallHeight) segment(o0, o1, DOOR_H, wallHeight);
       } else {
-        segment(o0, o1, 0, SILL);
-        segment(o0, o1, HEAD, WALL_H);
+        segment(o0, o1, 0, Math.min(SILL, wallHeight));
+        if (HEAD < wallHeight) segment(o0, o1, HEAD, wallHeight);
         const mid = horizontal ? w.y + w.height / 2 : w.x + w.width / 2;
         glassParts.push(
           horizontal
@@ -106,7 +107,7 @@ export function planToMesh(plan: PlanGeometry): UnitMeshes {
       }
       cursor = Math.max(cursor, o1);
     }
-    segment(cursor, end, 0, WALL_H);
+    segment(cursor, end, 0, wallHeight);
   }
 
   const floors = plan.spaces.map((s) => {

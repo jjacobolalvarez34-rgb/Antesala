@@ -104,6 +104,25 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
         </nav>
       </header>
 
+      {level.plan && plans[level.plan] ? (
+        <section aria-labelledby="planta" className="mt-8 rounded-3xl border border-border bg-secondary p-4 sm:p-8 md:mt-12">
+          <h2 id="planta" className="eyebrow">
+            Planta del piso · toca una unidad
+          </h2>
+          <PlanSvg
+            geometry={plans[level.plan]!}
+            spaces={units.map((u) => ({
+              id: u.id,
+              name: u.name,
+              areaM2: u.areaM2,
+              href: routes.unidad(hotel.slug, u.id),
+            }))}
+            title={`Planta del ${level.name}`}
+            className="mx-auto mt-4 max-w-2xl"
+          />
+        </section>
+      ) : null}
+
       {units.length ? (
         <section aria-label="Unidades" className="mt-8 flex flex-col gap-5 md:mt-12">
           {units.map((u) => {

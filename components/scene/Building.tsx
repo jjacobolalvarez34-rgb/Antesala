@@ -17,9 +17,10 @@ import {
   type BuildingFrame,
   type Edge,
 } from '@/lib/building';
-import type { Building } from '@/lib/types';
+import type { Building, PlanGeometry } from '@/lib/types';
 
 import type { CladdingMaps } from './assets';
+import { FloorPlanModel, type FloorPlanSpace } from './FloorPlanModel';
 import { mergeBoxes, onEdge, type Box } from './geometry';
 import { brickTexture, concreteTexture, interiorAtlas, stuccoTexture, type Cladding } from './textures';
 import {
@@ -82,6 +83,11 @@ interface Props {
   onSelect: (id: string) => void;
   onUnitHover: (slot: number | null, clientX: number, clientY: number) => void;
   onUnitSelect: (slot: number) => void;
+  /** plantas de piso (D-041) por id de nivel */
+  floorPlans?: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
+  planHovered?: string | null;
+  onPlanHover?: (unitId: string | null) => void;
+  onPlanSelect?: (unitId: string) => void;
 }
 
 type Pt = [number, number];
@@ -334,7 +340,15 @@ function Floor({
   onSelect,
   onUnitHover,
   onUnitSelect,
+  floorPlan,
+  planHovered,
+  onPlanHover,
+  onPlanSelect,
 }: {
+  floorPlan?: { plan: PlanGeometry; spaces: FloorPlanSpace[] };
+  planHovered: string | null;
+  onPlanHover: (unitId: string | null) => void;
+  onPlanSelect: (unitId: string) => void;
   floor: SceneFloor;
   building: Building;
   frame: BuildingFrame;
@@ -356,6 +370,7 @@ function Floor({
   onUnitSelect: Props['onUnitSelect'];
 }) {
   const group = useRef<THREE.Group>(null);
+  const hasPlan = Boolean(floorPlan);
   const yBase = (floor.order - 1) * frame.floorHeight;
   const parts = useMemo(
     () => floorParts(building, floor.order, frame.floorHeight, unitAt, balconyAt),
@@ -416,20 +431,29 @@ function Floor({
         overwrite: true,
       });
     }
+    // planta del piso: con el cajón afuera, la fachada de este piso se retira (queda la losa)
+    const cutaway = selected && hasPlan;
     for (const key of Object.keys(BASE_OPACITY) as (keyof typeof BASE_OPACITY)[]) {
       const mat = mats[key];
+      const keep = key === 'slab';
       gsap.to(mat, {
-        opacity: dim ? BASE_OPACITY[key] * fade : BASE_OPACITY[key],
+        opacity: dim ? BASE_OPACITY[key] * fade : cutaway && !keep ? 0 : BASE_OPACITY[key],
         duration: gone ? d * 0.9 : d * 0.7,
-        delay: reduced ? rd : gone ? 0.55 : 0,
+        delay: reduced ? rd : gone ? 0.55 : cutaway ? 1.1 : 0,
         ease,
         overwrite: true,
         onComplete: gone && key === 'clad' ? () => g && (g.visible = false) : undefined,
       });
-      if (key !== 'glass' && key !== 'rail') mat.depthWrite = !dim;
+      if (key !== 'glass' && key !== 'rail') mat.depthWrite = !dim && !(cutaway && !keep);
     }
     for (const m of [mats.windows, mats.glow]) {
-      gsap.to(m.uniforms.uOpacity!, { value: dim ? fade : 1, duration: d * 0.7, delay: rd, ease, overwrite: true });
+      gsap.to(m.uniforms.uOpacity!, {
+        value: dim ? fade : cutaway ? 0 : 1,
+        duration: d * 0.7,
+        delay: reduced ? rd : cutaway ? 1.1 : 0,
+        ease,
+        overwrite: true,
+      });
       m.depthWrite = m === mats.windows ? !dim : false;
     }
     // señal visible de "esto se puede tocar": el piso bajo el puntero se entibia
@@ -438,7 +462,7 @@ function Floor({
     mats.concrete.emissive.set(hot ? '#3a2a18' : '#000000');
     const slabColor = new THREE.Color(lifted ? colors.accent : '#d4cfc6');
     gsap.to(mats.slab.color, { r: slabColor.r, g: slabColor.g, b: slabColor.b, duration: 0.25, overwrite: true });
-  }, [state, reduced, mats, colors, pullDir]);
+  }, [state, reduced, mats, colors, pullDir, hasPlan]);
 
   const slotAt = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
     const geo = (e.object as THREE.Mesh).geometry;
@@ -515,6 +539,19 @@ function Floor({
         {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
         {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
         {green ? <mesh geometry={green} material={mats.green} castShadow={shadows} /> : null}
+        {floorPlan ? (
+          <FloorPlanModel
+            plan={floorPlan.plan}
+            spaces={floorPlan.spaces}
+            position={[frame.center[0], SLAB, frame.center[1]]}
+            visible={state === 'selected'}
+            hovered={planHovered}
+            reduced={reduced}
+            shadows={shadows}
+            onHover={onPlanHover}
+            onSelect={onPlanSelect}
+          />
+        ) : null}
       </group>
     </group>
   );
@@ -789,6 +826,10 @@ export function BuildingModel({
   onSelect,
   onUnitHover,
   onUnitSelect,
+  floorPlans,
+  planHovered = null,
+  onPlanHover = () => {},
+  onPlanSelect = () => {},
 }: Props) {
   const cladding = building.style?.cladding ?? 'estuco';
   const tex = useMemo<SharedTextures>(
@@ -862,6 +903,10 @@ export function BuildingModel({
           onSelect={onSelect}
           onUnitHover={onUnitHover}
           onUnitSelect={onUnitSelect}
+          floorPlan={floorPlans?.[f.id]}
+          planHovered={planHovered}
+          onPlanHover={onPlanHover}
+          onPlanSelect={onPlanSelect}
         />
       ))}
       {selectedId || gone ? null : <Entrance building={building} frame={frame} brandName={brandName} shadows={shadows} light={light} />}

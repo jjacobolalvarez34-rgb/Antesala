@@ -179,3 +179,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: no se hacen renders de Blender para la demo. Las fotos siguen como ilustraciones de línea y los 360° como placeholders con geometría real (D-037). Con el primer cliente se capturan fotos y 360° reales (cámara alquilada, CONTENIDO.md §8) y solo se reemplazan los archivos de `media/`; el visor no cambia.
 - Por qué: Blender no corre en el equipo de Jacobo. El edificio, la fachada y la maqueta ya muestran el valor; las fotos reales del cliente son las que más convencen.
 - Pendiente: el pipeline de compresión (`optimize-images`, `tile-pano`) se hace cuando lleguen las primeras capturas reales.
+
+**D-041 · 2026-11-04 · Planta del piso dentro del cajón**
+- Decisión: cada piso tiene su plano SVG (`Level.plan`: pasillo, núcleo, unidades; `data-label` para lo que no es unidad ni zona común). Al elegir el piso, el cajón sale y luego la fachada de ese piso se retira (queda la losa) y aparece la planta en corte (muros de 1,1 m). Las unidades de la demo van en madera, con su nombre y precio, y se pueden tocar para entrar; las demás van en gris. En modo lista, la página del piso muestra la misma planta en 2D. La validación exige que cada unidad del piso tenga su polígono.
+- Por qué: pedido de Jacobo ("las paredes de los pasillos... una visión del piso"). Es el "elige tu unidad exacta" sobre el mapa del piso (PRODUCTO.md, paso 7).

@@ -305,7 +305,8 @@ export function floorPose(
   return {
     target: [f.center[0] + dx * FLOOR_PULL * 0.6, y, f.center[1] + dz * FLOOR_PULL * 0.6],
     radius: fitDistance(floorRadius, fov, aspect, aspect < 1 ? 1.4 : 1.45),
-    polar: 58 * DEG,
+    // más desde arriba: la planta del piso tiene que leerse
+    polar: 46 * DEG,
     azimuth: facade.azimuth + 22 * DEG,
     shiftX: layout === 'side' ? 0.16 : 0,
     // en móvil el panel ocupa la parte baja: subimos el piso en la imagen

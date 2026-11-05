@@ -108,10 +108,23 @@ const hotelSchema = z.object({
         description: z.string().optional(),
         position: z.tuple([z.number(), z.number(), z.number()]),
         media: z.array(media),
+        viewpoints: z
+          .array(z.object({ id, name: z.string().min(1), position: z.tuple([z.number(), z.number(), z.number()]), yaw: z.number() }))
+          .optional(),
       }),
     ),
   }),
-  levels: z.array(z.object({ id, name: z.string().min(1), kind: z.enum(['piso', 'zona']), order: z.number() })).min(1),
+  levels: z
+    .array(
+      z.object({
+        id,
+        name: z.string().min(1),
+        kind: z.enum(['piso', 'zona']),
+        order: z.number(),
+        plan: relPath.regex(/^plans\/.+\.svg$/, 'el plano va en plans/*.svg').optional(),
+      }),
+    )
+    .min(1),
   categories: z.array(z.object({ id, name: z.string(), tagline: z.string(), highlights: z.array(z.string()) })).min(1),
   units: z.array(unit),
   isDemo: z.boolean(),
@@ -254,6 +267,25 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
     }
     for (const pid of polygonIds.keys()) {
       if (!spaceIds.has(pid)) problems.push(`unidad "${u.id}" → ${u.plan} tiene el polígono "${pid}" sin espacio en hotel.json`);
+    }
+  }
+
+  // plantas de piso: cada unidad del piso necesita su polígono (id = id de la unidad)
+  for (const level of hotel.levels) {
+    if (!level.plan) continue;
+    let geometry = plans[level.plan];
+    if (!geometry) {
+      try {
+        geometry = parsePlan(await readFile(path.join(dir, level.plan), 'utf8'), level.plan);
+        plans[level.plan] = geometry;
+      } catch (e) {
+        problems.push(`piso "${level.id}" → ${e instanceof Error ? e.message : String(e)}`);
+        continue;
+      }
+    }
+    const ids = new Set(geometry.spaces.map((s) => s.id));
+    for (const u of hotel.units.filter((x) => x.levelId === level.id)) {
+      if (!ids.has(u.id)) problems.push(`piso "${level.id}" → ${level.plan} no tiene el polígono de la unidad "${u.id}"`);
     }
   }
 

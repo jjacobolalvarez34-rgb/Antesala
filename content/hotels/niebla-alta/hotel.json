@@ -129,6 +129,38 @@
             "width": 1600,
             "height": 1067
           }
+        ],
+        "viewpoints": [
+          {
+            "id": "cerros",
+            "name": "Mirador a los cerros",
+            "position": [
+              9,
+              20.6,
+              1.4
+            ],
+            "yaw": -1.5708
+          },
+          {
+            "id": "ciudad",
+            "name": "Vista a la ciudad",
+            "position": [
+              9,
+              20.6,
+              12.6
+            ],
+            "yaw": 1.5708
+          },
+          {
+            "id": "occidente",
+            "name": "Atardecer al occidente",
+            "position": [
+              16.4,
+              20.6,
+              7
+            ],
+            "yaw": 0
+          }
         ]
       }
     ]
@@ -138,37 +170,43 @@
       "id": "1",
       "name": "Piso 1",
       "kind": "piso",
-      "order": 1
+      "order": 1,
+      "plan": "plans/piso-1.svg"
     },
     {
       "id": "2",
       "name": "Piso 2",
       "kind": "piso",
-      "order": 2
+      "order": 2,
+      "plan": "plans/piso-2.svg"
     },
     {
       "id": "3",
       "name": "Piso 3",
       "kind": "piso",
-      "order": 3
+      "order": 3,
+      "plan": "plans/piso-3.svg"
     },
     {
       "id": "4",
       "name": "Piso 4",
       "kind": "piso",
-      "order": 4
+      "order": 4,
+      "plan": "plans/piso-4.svg"
     },
     {
       "id": "5",
       "name": "Piso 5",
       "kind": "piso",
-      "order": 5
+      "order": 5,
+      "plan": "plans/piso-5.svg"
     },
     {
       "id": "6",
       "name": "Piso 6",
       "kind": "piso",
-      "order": 6
+      "order": 6,
+      "plan": "plans/piso-6.svg"
     }
   ],
   "categories": [

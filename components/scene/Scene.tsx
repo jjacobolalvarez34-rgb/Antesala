@@ -14,12 +14,15 @@ import {
   facadePose,
   facadesOf,
   floorPose,
+  FLOOR_PULL,
   spacePose,
   unitPose,
   windowViewpoint,
   type Facade,
 } from '@/lib/building';
 import { higherQuality, lowerQuality, type Quality } from '@/lib/capabilities';
+import { formatCOP } from '@/lib/hotel';
+import { polygonLabelPoint } from '@/lib/plan';
 import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, PlanGeometry } from '@/lib/types';
@@ -27,6 +30,7 @@ import type { Building, PlanGeometry } from '@/lib/types';
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
 import { Backdrop, type BackdropApi } from './Backdrop';
 import { BuildingModel, type BuildingColors, type FacadeUnit, type SceneFloor } from './Building';
+import type { FloorPlanSpace } from './FloorPlanModel';
 import { CameraRig } from './CameraRig';
 import { Context, DayNightLights } from './Context';
 import { PanoSphere, panoDirection } from './PanoSphere';
@@ -57,6 +61,8 @@ export interface SceneData {
   pois: ScenePoi[];
   units: SceneUnit[];
   colors: BuildingColors;
+  /** planta de cada piso (D-041) */
+  levelPlans: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
   unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
 }
@@ -231,6 +237,34 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const unitId = stage.kind === 'unidad' ? stage.unitId : null;
   const spaceId = stage.kind === 'unidad' ? stage.spaceId : null;
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
+  const [planHovered, setPlanHovered] = useState<string | null>(null);
+  const floorAnchors = useRef(new Map<string, HTMLElement>());
+  const floorLabels = useMemo(() => {
+    if (stage.kind !== 'piso') return [];
+    const entry = data.levelPlans[stage.levelId];
+    const order = data.floors.find((f) => f.id === stage.levelId)?.order;
+    if (!entry || order === undefined) return [];
+    const fc = facadesOf(data.building);
+    const [px, pz] = facadeDir(fc[facadeIndex % fc.length]!);
+    return entry.spaces.flatMap((sp) => {
+      if (sp.kind !== 'unit' || !sp.unitId) return [];
+      const poly = entry.plan.spaces.find((p) => p.id === sp.id);
+      const unit = data.units.find((u) => u.id === sp.unitId);
+      if (!poly || !unit) return [];
+      const [lx, ly] = polygonLabelPoint(poly.points);
+      const x = frame.center[0] + lx / 100 - entry.plan.width / 200 + px * FLOOR_PULL;
+      const z = frame.center[1] + ly / 100 - entry.plan.height / 200 + pz * FLOOR_PULL;
+      const y = (order - 1) * frame.floorHeight + 1.9;
+      return [
+        {
+          id: sp.unitId,
+          name: unit.price !== undefined ? `${unit.name} · ${formatCOP(unit.price)}` : unit.name,
+          position: [x, y, z] as [number, number, number],
+          href: unit.href,
+        },
+      ];
+    });
+  }, [stage, data, frame, facadeIndex]);
   const view360 = useTour((s) => s.view360);
   const currentPano =
     unitId && spaceId ? (data.unitPlans[unitId]?.spaces.find((s) => s.id === spaceId)?.pano ?? null) : null;
@@ -393,6 +427,13 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           linen={linen}
           selectedId={selectedId}
           gone={inUnit}
+          floorPlans={data.levelPlans}
+          planHovered={planHovered}
+          onPlanHover={setPlanHovered}
+          onPlanSelect={(id) => {
+            const u = data.units.find((x) => x.id === id);
+            if (u) router.push(u.href);
+          }}
           hoveredId={hoveredLevelId}
           pullDir={pullDir}
           colors={data.colors}
@@ -435,6 +476,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           />
         ) : null}
         <PoiProjector pois={spaceLabels} anchors={spaceAnchors} />
+        <PoiProjector pois={floorLabels} anchors={floorAnchors} />
         {currentPano && eye ? (
           <PanoSphere key={spaceId} url={currentPano.url} position={eye} visible={in360} reduced={reduced} />
         ) : null}
@@ -466,6 +508,15 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         <ReadySignal />
       </Canvas>
       <PoiLayer pois={data.pois} anchors={anchors} visible={showPois} />
+      <SpaceLabelLayer
+        labels={floorLabels}
+        anchors={floorAnchors}
+        visible={stage.kind === 'piso' && active}
+        current={null}
+        hovered={planHovered}
+        onHover={setPlanHovered}
+        ariaLabel="Unidades del piso"
+      />
       <SpaceLabelLayer
         labels={panoLinks}
         anchors={panoAnchors}

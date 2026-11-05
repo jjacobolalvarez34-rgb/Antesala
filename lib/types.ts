@@ -99,6 +99,8 @@ export interface Level {
   name: string;
   kind: 'piso' | 'zona';
   order: number;
+  /** planta completa del piso ("plans/piso-4.svg"): polígonos con id de unidad, de zona común o con data-label */
+  plan?: string;
 }
 
 export interface Poi {
@@ -109,6 +111,16 @@ export interface Poi {
   description?: string;
   position: [number, number, number];
   media: Media[];
+  /** puntos de vista para mirar alrededor en 360° dentro de la escena (en metros, ojo a la altura indicada) */
+  viewpoints?: Viewpoint[];
+}
+
+export interface Viewpoint {
+  id: string;
+  name: string;
+  position: [number, number, number];
+  /** hacia dónde mira al llegar (radianes; misma convención que los hotspots) */
+  yaw: number;
 }
 
 /** Revestimiento de fachada del edificio procedural. */
@@ -187,6 +199,8 @@ export interface PlanFurniture extends PlanRect {
 
 export interface PlanSpace {
   id: string;
+  /** etiqueta opcional (data-label) para polígonos que no son espacios ni unidades */
+  label?: string;
   /** puntos [x, y] en cm */
   points: [number, number][];
 }
