@@ -150,7 +150,7 @@ export function polygonLabelPoint(pts: [number, number][]): [number, number] {
   return [pts.reduce((s, p) => s + p[0], 0) / n, pts.reduce((s, p) => s + p[1], 0) / n];
 }
 
-function pointInPolygon([x, y]: [number, number], pts: [number, number][]): boolean {
+export function pointInPolygon([x, y]: [number, number], pts: [number, number][]): boolean {
   let inside = false;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
     const [xi, yi] = pts[i]!;

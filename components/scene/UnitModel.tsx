@@ -38,18 +38,63 @@ const WOOD = '#a57f5c';
 const FULL_CUT = 3;
 const SPACE_CUT = 1.15;
 
-/** Recorta en el GPU todo lo que pase de uCut (sin deformar: los vértices altos bajan al corte). */
-function cuttable<T extends THREE.Material>(mat: T, cut: { value: number }): T {
+/** Acabado procedural de la superficie (sin texturas que descargar). */
+type Surface = 'plaster' | 'wood' | 'tile';
+
+const NOISE = `
+float uHash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float uNoise(vec3 x) {
+  vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(uHash(i), uHash(i + vec3(1,0,0)), f.x), mix(uHash(i + vec3(0,1,0)), uHash(i + vec3(1,1,0)), f.x), f.y),
+             mix(mix(uHash(i + vec3(0,0,1)), uHash(i + vec3(1,0,1)), f.x), mix(uHash(i + vec3(0,1,1)), uHash(i + vec3(1,1,1)), f.x), f.y), f.z);
+}`;
+
+const SURFACE: Record<Surface, string> = {
+  // pañete pintado con manchas suaves, zócalo abajo y la cara de corte oscura (como una maqueta)
+  plaster: `
+    float pn = uNoise(vSurfPos * 0.9) * 0.35 + uNoise(vSurfPos * 3.1) * 0.4 + uNoise(vSurfPos * 11.0) * 0.25;
+    diffuseColor.rgb *= 0.8 + 0.28 * pn;
+    if (vSurfNormal.y < 0.5 && vSurfPos.y < 0.09) diffuseColor.rgb *= vec3(0.78, 0.74, 0.7);
+    if (vSurfNormal.y > 0.5) diffuseColor.rgb = vec3(0.34, 0.31, 0.28);`,
+  // tablas de 19 cm con largos alternados, juntas y veta
+  wood: `
+    float row = floor(vSurfPos.x / 0.19);
+    float along = (vSurfPos.z + uHash(vec3(row, 1.0, 3.0)) * 1.4) / 1.4;
+    float plank = floor(along);
+    float tint = 0.88 + 0.16 * uHash(vec3(row, plank, 7.0));
+    float grain = 0.94 + 0.06 * uNoise(vec3(vSurfPos.x * 40.0, 0.0, vSurfPos.z * 2.5));
+    float seam = step(0.035, fract(vSurfPos.x / 0.19)) * step(0.006, fract(along));
+    diffuseColor.rgb *= tint * grain * mix(0.72, 1.0, seam);`,
+  // baldosa de 60 cm con junta clara
+  tile: `
+    vec2 t = fract(vSurfPos.xz / 0.6);
+    float joint = step(0.012, t.x) * step(0.012, t.y);
+    diffuseColor.rgb *= mix(1.1, 0.96 + 0.06 * uNoise(vSurfPos * 3.0), joint);`,
+};
+
+/**
+ * Recorta en el GPU todo lo que pase de uCut (sin deformar: los vértices altos
+ * bajan al corte) y, si se pide, pinta un acabado procedural.
+ */
+function cuttable<T extends THREE.Material>(mat: T, cut: { value: number }, surface?: Surface): T {
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.uCut = cut;
-    shader.vertexShader = `uniform float uCut;\n${shader.vertexShader}`.replace(
+    shader.vertexShader = `uniform float uCut;\nvarying vec3 vSurfPos;\nvarying vec3 vSurfNormal;\n${shader.vertexShader}`.replace(
       '#include <begin_vertex>',
-      '#include <begin_vertex>\n  transformed.y = min(transformed.y, uCut);',
+      '#include <begin_vertex>\n  transformed.y = min(transformed.y, uCut);\n  vSurfPos = transformed;\n  vSurfNormal = normal;',
     );
+    if (surface) {
+      shader.fragmentShader = `varying vec3 vSurfPos;\nvarying vec3 vSurfNormal;\n${NOISE}\n${shader.fragmentShader}`.replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>\n${SURFACE[surface]}`,
+      );
+    }
   };
-  mat.customProgramCacheKey = () => 'unit-cut';
+  mat.customProgramCacheKey = () => `unit-cut-${surface ?? 'plain'}`;
   return mat;
 }
+
+const surfaceFor = (type: SpaceType): Surface => (type === 'bano' || type === 'cocina' ? 'tile' : 'wood');
 
 export function UnitModel({
   plan,
@@ -61,9 +106,12 @@ export function UnitModel({
   reduced,
   shadows,
   cut,
+  interior = false,
   onHover,
   onSelect,
 }: {
+  /** recorrido por dentro (360° en vivo): el cielo raso hace sombra y la luz entra por las ventanas */
+  interior?: boolean;
   plan: PlanGeometry;
   spaces: UnitSpaceMeta[];
   position: [number, number, number];
@@ -83,6 +131,7 @@ export function UnitModel({
     () => () => {
       meshes.walls?.dispose();
       meshes.glass?.dispose();
+      meshes.doors?.dispose();
       meshes.floors.forEach((f) => f.geometry.dispose());
       meshes.furniture.forEach((f) => f.geometry.dispose());
     },
@@ -99,15 +148,23 @@ export function UnitModel({
   const depthMat = useMemo(() => cuttable(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), cutU), [cutU]);
 
   const mats = useMemo(() => {
-    const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
-      cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), cutU);
+    const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}, surface?: Surface) =>
+      cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), cutU, surface);
     return {
-      walls: m('#efe9df', { roughness: 0.92 }),
+      walls: m('#e3dacb', { roughness: 0.92 }, 'plaster'),
+      door: m(FURNITURE_COLORS.wood, { roughness: 0.6 }),
       // cielo raso: solo se ve desde abajo (recorrido por dentro); desde arriba no estorba
-      ceiling: new THREE.MeshStandardMaterial({ color: '#f4f1ea', roughness: 0.95, side: THREE.BackSide, transparent: true, opacity: 0 }),
+      ceiling: new THREE.MeshStandardMaterial({
+        color: '#f4f1ea',
+        roughness: 0.95,
+        side: THREE.BackSide,
+        shadowSide: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+      }),
       glass: m('#bcd3d6', { roughness: 0.05, metalness: 0.2, depthWrite: false }),
       floors: Object.fromEntries(
-        spaces.map((s) => [s.id, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 })]),
+        spaces.map((s) => [s.id, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 }, surfaceFor(s.type))]),
       ) as Record<string, THREE.MeshStandardMaterial>,
       furniture: Object.fromEntries(
         meshes.furniture.map((f) => [
@@ -126,6 +183,7 @@ export function UnitModel({
     if (visible && g) g.visible = true;
     const all: [THREE.Material, number][] = [
       [mats.walls, 1],
+      [mats.door, 1],
       [mats.ceiling, 1],
       [mats.glass, 0.35],
       ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
@@ -160,7 +218,8 @@ export function UnitModel({
 
   return (
     <group ref={group} position={position} visible={false}>
-      <hemisphereLight args={['#fff8ee', '#8a8070', 0.55]} />
+      {/* relleno de estudio para la maqueta; por dentro casi nada (la luz entra por las ventanas) */}
+      <hemisphereLight args={['#fff8ee', '#8a8070', interior ? 0.15 : 0.55]} />
       {shadows ? (
         <mesh rotation-x={-Math.PI / 2} position-y={-0.005} receiveShadow raycast={() => null}>
           <planeGeometry args={[meshes.size[0] + 4, meshes.size[1] + 4]} />
@@ -170,8 +229,18 @@ export function UnitModel({
       {meshes.walls ? (
         <mesh geometry={meshes.walls} material={mats.walls} customDepthMaterial={depthMat} castShadow={shadows} receiveShadow={shadows} />
       ) : null}
+      {meshes.doors ? (
+        <mesh geometry={meshes.doors} material={mats.door} customDepthMaterial={depthMat} castShadow={shadows} receiveShadow={shadows} raycast={() => null} />
+      ) : null}
       {meshes.floors.map((f) => (
-        <mesh key={`techo-${f.id}`} geometry={f.geometry} material={mats.ceiling} position-y={WALL_H} raycast={() => null} />
+        <mesh
+          key={`techo-${f.id}`}
+          geometry={f.geometry}
+          material={mats.ceiling}
+          position-y={WALL_H}
+          castShadow={shadows && interior}
+          raycast={() => null}
+        />
       ))}
       {meshes.glass ? <mesh geometry={meshes.glass} material={mats.glass} raycast={() => null} /> : null}
       {meshes.floors.map((f) => (

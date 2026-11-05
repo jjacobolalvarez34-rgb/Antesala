@@ -77,6 +77,7 @@ export function FloorPlanModel({
   useEffect(
     () => () => {
       meshes.walls?.dispose();
+      meshes.doors?.dispose();
       meshes.floors.forEach((f) => f.geometry.dispose());
       meshes.furniture.forEach((f) => f.geometry.dispose());
     },

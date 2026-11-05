@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
+import { pointInPolygon } from '@/lib/plan';
 import type { PlanGeometry, PlanOpening, PlanRect } from '@/lib/types';
 
 import { furnitureGeometry, type FurnitureMaterial } from './furniture';
@@ -22,6 +23,8 @@ const CM = 0.01;
 export interface UnitMeshes {
   walls: THREE.BufferGeometry | null;
   glass: THREE.BufferGeometry | null;
+  /** hoja cerrada de la puerta de entrada (la que da fuera de la unidad, al pasillo) */
+  doors: THREE.BufferGeometry | null;
   floors: { id: string; geometry: THREE.ShapeGeometry; center: [number, number] }[];
   /** muebles agrupados por material (components/plan/furniture.ts) */
   furniture: { material: FurnitureMaterial; geometry: THREE.BufferGeometry }[];
@@ -94,6 +97,30 @@ export function planToMesh(plan: PlanGeometry, { wallHeight = WALL_H }: { wallHe
     segment(cursor, end, 0, wallHeight);
   }
 
+  // puerta de entrada: a un lado del vano no hay ningún espacio del plano (es el pasillo).
+  // Por dentro (recorrido 360°) se ve una puerta cerrada y no la calle.
+  const inside = (x: number, y: number) => plan.spaces.some((s) => pointInPolygon([x, y], s.points));
+  const doorParts: THREE.BufferGeometry[] = [];
+  for (const o of plan.openings) {
+    if (o.type !== 'door') continue;
+    const horizontal = o.width >= o.height;
+    const cx = o.x + o.width / 2;
+    const cy = o.y + o.height / 2;
+    const reach = (horizontal ? o.height : o.width) / 2 + 30;
+    const [a, b] = horizontal
+      ? [inside(cx, cy - reach), inside(cx, cy + reach)]
+      : [inside(cx - reach, cy), inside(cx + reach, cy)];
+    if (a && b) continue;
+    const leaf = Math.min(DOOR_H, wallHeight) - 0.02;
+    doorParts.push(
+      horizontal
+        ? box(X(o.x + 2), X(o.x + o.width - 2), Z(cy) - 0.02, Z(cy) + 0.02, 0.01, leaf)
+        : box(X(cx) - 0.02, X(cx) + 0.02, Z(o.y + 2), Z(o.y + o.height - 2), 0.01, leaf),
+    );
+  }
+  const doors = doorParts.length ? mergeGeometries(doorParts, false) : null;
+  doorParts.forEach((p) => p.dispose());
+
   const floors = plan.spaces.map((s) => {
     const shape = new THREE.Shape(s.points.map(([x, y]) => new THREE.Vector2(X(x), -Z(y))));
     const geometry = new THREE.ShapeGeometry(shape);
@@ -116,5 +143,5 @@ export function planToMesh(plan: PlanGeometry, { wallHeight = WALL_H }: { wallHe
   wallParts.forEach((p) => p.dispose());
   glassParts.forEach((p) => p.dispose());
 
-  return { walls, glass, floors, furniture, size: [plan.width * CM, plan.height * CM] };
+  return { walls, glass, doors, floors, furniture, size: [plan.width * CM, plan.height * CM] };
 }
