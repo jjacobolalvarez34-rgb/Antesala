@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
 
+import { envIntensity, type LightUniforms } from './windows';
+
 /**
  * Render en dos capas (D-028). El entorno (calles, vecinos, árboles, cerros,
  * cielo) vive en su propia escena y NO se renderiza cada frame:
@@ -106,7 +108,10 @@ export function Backdrop({
   environment,
   studio = false,
   reduced = false,
+  light,
 }: {
+  /** hora del día: la intensidad del entorno del fondo sigue la del edificio */
+  light?: LightUniforms;
   children: ReactNode;
   apiRef: React.RefObject<BackdropApi | null>;
   environment: THREE.Texture | null;
@@ -121,22 +126,39 @@ export function Backdrop({
   const dpr = useThree((s) => s.viewport.dpr);
 
   const targets = useMemo(() => {
+    // MSAA sobre half float exige EXT_color_buffer_float: varios GPU de celular no lo
+    // tienen y devolvían la copia nítida en negro (se veía negro al quitarse el desenfoque)
+    const msaa = gl.extensions.has('EXT_color_buffer_float') ? 4 : 0;
     const opts = { type: THREE.HalfFloatType, colorSpace: THREE.LinearSRGBColorSpace };
     return {
       low: new THREE.WebGLRenderTarget(8, 8, { ...opts }),
-      high: new THREE.WebGLRenderTarget(8, 8, { ...opts, samples: 4 }),
+      high: new THREE.WebGLRenderTarget(8, 8, { ...opts, samples: msaa }),
     };
-  }, []);
+  }, [gl]);
   useEffect(() => () => {
     targets.low.dispose();
     targets.high.dispose();
   }, [targets]);
+
+  const state = useRef({
+    last: new THREE.Matrix4(),
+    lastProj: new THREE.Matrix4(),
+    still: 0,
+    captured: false,
+    mix: 0,
+    forced: 0,
+    wasStudio: false,
+  });
 
   useEffect(() => {
     const w = Math.max(2, Math.floor(size.width * dpr));
     const h = Math.max(2, Math.floor(size.height * dpr));
     targets.high.setSize(w, h);
     targets.low.setSize(Math.max(2, Math.floor(w * LOW_SCALE)), Math.max(2, Math.floor(h * LOW_SCALE)));
+    // al cambiar de tamaño (barra del navegador en celular, cambio de calidad) las copias
+    // quedan vacías: se vuelven a pintar aunque la cámara no se mueva
+    state.current.captured = false;
+    state.current.forced = Math.max(state.current.forced, 1);
   }, [size.width, size.height, dpr, targets]);
 
   useEffect(() => {
@@ -165,16 +187,6 @@ export function Backdrop({
     const u = quad.material.uniforms.uStudio!;
     gsap.to(u, { value: studio ? 1 : 0, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0, ease: 'power2.inOut', overwrite: true });
   }, [studio, reduced, quad]);
-
-  const state = useRef({
-    last: new THREE.Matrix4(),
-    lastProj: new THREE.Matrix4(),
-    still: 0,
-    captured: false,
-    mix: 0,
-    forced: 0,
-    wasStudio: false,
-  });
 
   useEffect(() => {
     apiRef.current = {
@@ -228,6 +240,7 @@ export function Backdrop({
 
   useFrame((root, delta) => {
     const s = state.current;
+    if (light) bgScene.environmentIntensity = envIntensity(light.uNight.value);
     camera.updateMatrixWorld();
     // la amortiguación de los controles mueve la cámara fracciones mínimas en cada cuadro:
     // con igualdad exacta el fondo nunca se quedaba quieto (y seguía desenfocado)

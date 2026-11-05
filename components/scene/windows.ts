@@ -226,3 +226,13 @@ export function createGlowMaterial(light: LightUniforms) {
     `,
   });
 }
+
+/**
+ * Intensidad del entorno (HDRI) según la hora: de día 1, de noche 0,5, con una
+ * caída suave en el crepúsculo. Ahí se cambia el HDRI de día por el de noche y
+ * el cambio no se nota.
+ */
+export function envIntensity(night: number): number {
+  return (1 - 0.5 * night) * (1 - 0.6 * Math.sin(Math.PI * night));
+}
+
