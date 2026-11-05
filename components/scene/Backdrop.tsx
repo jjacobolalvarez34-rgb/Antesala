@@ -162,7 +162,7 @@ export function Backdrop({
 
   useEffect(() => {
     const u = quad.material.uniforms.uStudio!;
-    gsap.to(u, { value: studio ? 1 : 0, duration: reduced ? 0 : 0.9, ease: 'power2.inOut', overwrite: true });
+    gsap.to(u, { value: studio ? 1 : 0, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0, ease: 'power2.inOut', overwrite: true });
   }, [studio, reduced, quad]);
 
   const state = useRef({

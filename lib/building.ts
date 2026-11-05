@@ -243,6 +243,10 @@ export function introPose(arrival: CameraPose): CameraPose {
 /** Separación del piso elegido hacia afuera de la fachada, en metros. */
 export const FLOOR_PULL = 5;
 
+/** Con movimiento reducido, los cambios de la escena esperan al punto más oscuro del fundido. */
+export const REDUCED_FADE_OUT = 0.45;
+export const REDUCED_FADE_IN = 0.6;
+
 /** Dirección (x, z) hacia afuera de una fachada. */
 export const facadeDir = (facade: Facade): [number, number] => [Math.sin(facade.azimuth), Math.cos(facade.azimuth)];
 

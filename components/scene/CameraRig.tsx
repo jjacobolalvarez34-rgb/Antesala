@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-import { introPose, type CameraPose } from '@/lib/building';
+import { introPose, REDUCED_FADE_IN, REDUCED_FADE_OUT, type CameraPose } from '@/lib/building';
 
 /**
  * Coreografía de cámara (DISENO.md §4): GSAP interpola coordenadas esféricas
@@ -151,12 +151,12 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
       if (reduced && !first) {
         const fade = gsap.timeline();
         fade
-          .to(canvas, { opacity: 0, duration: 0.18, ease: 'power1.in' })
+          .to(canvas, { opacity: 0, duration: REDUCED_FADE_OUT, ease: 'power1.in' })
           .add(() => {
             Object.assign(state, target);
             update();
           })
-          .to(canvas, { opacity: 1, duration: 0.3, ease: 'power1.out', onComplete: settle });
+          .to(canvas, { opacity: 1, duration: REDUCED_FADE_IN, ease: 'power1.out', onComplete: settle });
         return () => {
           fade.kill();
           canvas.style.opacity = '1';

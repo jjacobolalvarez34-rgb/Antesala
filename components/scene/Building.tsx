@@ -12,6 +12,7 @@ import {
   floorFootprint,
   FLOOR_PULL,
   frontEdgeIndex,
+  REDUCED_FADE_OUT,
   viewerBay,
   type BuildingFrame,
   type Edge,
@@ -399,6 +400,8 @@ function Floor({
     const selected = state === 'selected';
     const lifted = state === 'hovered' || selected;
     const d = reduced ? 0 : 1.2;
+    // con movimiento reducido, el cambio ocurre cuando el fundido está en negro (no antes)
+    const rd = reduced ? REDUCED_FADE_OUT : 0;
     const ease = 'power2.inOut';
     const g = group.current;
     if (g && !gone) g.visible = true;
@@ -408,7 +411,7 @@ function Floor({
         x: selected ? pullDir[0] * FLOOR_PULL : 0,
         z: selected ? pullDir[1] * FLOOR_PULL : 0,
         duration: reduced ? 0 : selected ? 1.05 : 0.55,
-        delay: selected && !reduced ? 0.35 : 0,
+        delay: reduced ? rd : selected ? 0.35 : 0,
         ease: selected ? 'power3.out' : 'power2.in',
         overwrite: true,
       });
@@ -418,7 +421,7 @@ function Floor({
       gsap.to(mat, {
         opacity: dim ? BASE_OPACITY[key] * fade : BASE_OPACITY[key],
         duration: gone ? d * 0.9 : d * 0.7,
-        delay: gone && !reduced ? 0.55 : 0,
+        delay: reduced ? rd : gone ? 0.55 : 0,
         ease,
         overwrite: true,
         onComplete: gone && key === 'clad' ? () => g && (g.visible = false) : undefined,
@@ -426,9 +429,13 @@ function Floor({
       if (key !== 'glass' && key !== 'rail') mat.depthWrite = !dim;
     }
     for (const m of [mats.windows, mats.glow]) {
-      gsap.to(m.uniforms.uOpacity!, { value: dim ? fade : 1, duration: d * 0.7, ease, overwrite: true });
+      gsap.to(m.uniforms.uOpacity!, { value: dim ? fade : 1, duration: d * 0.7, delay: rd, ease, overwrite: true });
       m.depthWrite = m === mats.windows ? !dim : false;
     }
+    // señal visible de "esto se puede tocar": el piso bajo el puntero se entibia
+    const hot = state === 'hovered';
+    mats.clad.emissive.set(hot ? '#5a3a1a' : '#000000');
+    mats.concrete.emissive.set(hot ? '#3a2a18' : '#000000');
     const slabColor = new THREE.Color(lifted ? colors.accent : '#d4cfc6');
     gsap.to(mats.slab.color, { r: slabColor.r, g: slabColor.g, b: slabColor.b, duration: 0.25, overwrite: true });
   }, [state, reduced, mats, colors, pullDir]);
@@ -816,7 +823,7 @@ export function BuildingModel({
       g.visible = true;
       return;
     }
-    const call = gsap.delayedCall(reduced ? 0 : 1.7, () => {
+    const call = gsap.delayedCall(reduced ? REDUCED_FADE_OUT : 1.7, () => {
       g.visible = false;
     });
     return () => {

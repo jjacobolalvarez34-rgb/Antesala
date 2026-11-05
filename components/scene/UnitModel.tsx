@@ -115,7 +115,7 @@ export function UnitModel({
       gsap.to(m, {
         opacity: visible ? base : 0,
         duration: d,
-        delay: visible && !reduced ? 0.9 : 0,
+        delay: reduced ? 0.45 : visible ? 0.9 : 0,
         ease: 'power2.out',
         overwrite: true,
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,

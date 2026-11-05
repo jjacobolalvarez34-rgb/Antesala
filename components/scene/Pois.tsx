@@ -125,16 +125,16 @@ export function PoiLayer({ pois, anchors, visible }: { pois: ScenePoi[]; anchors
               onClick={() => setOpen((o) => (o === p.id ? null : p.id))}
               aria-expanded={open === p.id}
               aria-label={p.name}
-              className="glass-dark group flex min-h-9 min-w-9 items-center justify-center gap-2 rounded-full px-2.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg transition-all duration-200 hover:pr-3.5"
+              className="glass-dark group flex min-h-10 min-w-10 items-center justify-center gap-2 rounded-full px-2.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg ring-2 ring-accent-on-dark/70 transition-all duration-200 hover:scale-110 hover:pr-3.5 hover:ring-accent-on-dark"
             >
               <span className="relative grid size-3 place-items-center">
-                <span className="absolute size-3 animate-ping rounded-full bg-accent-on-dark/50 motion-reduce:hidden" />
-                <span className="size-2 rounded-full bg-accent-on-dark" />
+                <span className="absolute size-5 animate-ping rounded-full bg-accent-on-dark/45 motion-reduce:hidden" />
+                <span className="size-3 rounded-full bg-accent-on-dark shadow-[0_0_10px_2px_rgb(184_154_106/0.7)]" />
               </span>
               <span className="hidden group-hover:inline group-focus-visible:inline">{p.name}</span>
             </button>
             {open === p.id ? (
-              <div className="glass-dark absolute top-full mt-2 w-60 animate-in rounded-2xl p-4 text-sm shadow-xl duration-200 fade-in slide-in-from-top-1">
+              <div className="glass-dark absolute bottom-full mb-3 w-60 animate-in rounded-2xl p-4 text-sm shadow-xl duration-200 fade-in slide-in-from-bottom-1">
                 <div className="flex items-start justify-between gap-2">
                   <p className="font-medium">
                     {p.name}
