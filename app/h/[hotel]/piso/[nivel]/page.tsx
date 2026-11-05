@@ -57,7 +57,6 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
         level={level}
         total={levels.length}
         units={units}
-        categories={hotel.categories}
         pois={pois}
         above={above}
         below={below}

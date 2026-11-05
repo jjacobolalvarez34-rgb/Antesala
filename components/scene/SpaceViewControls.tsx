@@ -21,7 +21,8 @@ export function SpaceSheetFrame({
 }) {
   const view360 = useTour((s) => s.view360);
   const setView360 = useTour((s) => s.setView360);
-  const [folded, setFolded] = useState(false);
+  // en móvil empieza recogido: el espacio (360° o maqueta) es el protagonista
+  const [folded, setFolded] = useState(true);
   const on360 = hasPano && view360;
 
   return (

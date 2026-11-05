@@ -1,20 +1,20 @@
 import Link from 'next/link';
-import { ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
-import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { formatCOP, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
-import type { Category, Level, Poi, Unit } from '@/lib/types';
+import type { Level, Poi, Unit } from '@/lib/types';
 
 /**
- * Panel de unidades del piso sobre la escena 3D (DISENO.md §3):
- * bottom sheet en móvil, panel lateral en escritorio. Solo se ve en modo escena.
+ * Panel del piso sobre la escena 3D (DISENO.md §3): bottom sheet en móvil,
+ * panel lateral en escritorio. Solo se ve en modo escena. Las habitaciones se
+ * eligen tocándolas en la planta (no hay lista): aquí solo el resumen.
  */
 export function FloorSheet({
   slug,
   level,
   total,
   units,
-  categories,
   pois,
   above,
   below,
@@ -23,11 +23,12 @@ export function FloorSheet({
   level: Level;
   total: number;
   units: Unit[];
-  categories: Category[];
   pois: Poi[];
   above?: Level;
   below?: Level;
 }) {
+  const prices = units.map(unitPrice).filter((p): p is number => p !== undefined);
+  const from = prices.length ? Math.min(...prices) : undefined;
   return (
     <section
       aria-label={`Unidades del ${level.name}`}
@@ -62,60 +63,28 @@ export function FloorSheet({
         </nav>
       </header>
 
-      <div className="scrollbar-none overflow-y-auto px-3 pb-3">
+      <div className="scrollbar-none overflow-y-auto px-5 pb-4">
         {units.length ? (
-          <ul className="flex flex-col gap-2">
-            {units.map((u) => {
-              const price = unitPrice(u);
-              const category = categories.find((c) => c.id === u.categoryId);
-              return (
-                <li key={u.id}>
-                  <Link
-                    href={routes.unidad(slug, u.id)}
-                    className="group flex items-center gap-3 rounded-2xl bg-bone/[0.07] p-4 transition-colors hover:bg-bone/[0.13]"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs tracking-[0.12em] text-bone/60 uppercase">{category?.name}</p>
-                      <p className="mt-0.5 font-display text-subtitle">{u.name}</p>
-                      <p className="mt-1 text-sm text-bone/75">
-                        {formatArea(u.areaM2)} · {pluralize(u.capacity, 'persona', 'personas')}
-                      </p>
-                      {price !== undefined ? (
-                        <p className="mt-2 text-sm">
-                          <span className="font-semibold">{formatCOP(price)}</span>
-                          <span className="text-bone/65"> / noche</span>
-                          {u.viewPremiumCOP ? (
-                            <span className="mt-0.5 block text-xs font-medium text-accent-on-dark">
-                              Incluye {formatCOP(u.viewPremiumCOP)} por vista
-                            </span>
-                          ) : null}
-                        </p>
-                      ) : null}
-                    </div>
-                    <ArrowRight
-                      aria-hidden
-                      className="size-5 shrink-0 text-bone/60 transition-transform group-hover:translate-x-1 group-hover:text-bone"
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <p className="text-sm text-bone/80">
+            {pluralize(units.length, 'habitación', 'habitaciones')}
+            {from !== undefined ? (
+              <>
+                {' · desde '}
+                <span className="font-semibold text-bone">{formatCOP(from)}</span>
+                <span className="text-bone/65"> / noche</span>
+              </>
+            ) : null}
+          </p>
         ) : null}
-
         {pois.length ? (
-          <ul className={units.length ? 'mt-3 flex flex-col gap-2' : 'flex flex-col gap-2'}>
+          <ul className={units.length ? 'mt-3 flex flex-col gap-2 border-t border-bone/10 pt-3' : 'flex flex-col gap-2'}>
             {pois.map((p) => (
-              <li key={p.id} className="rounded-2xl bg-bone/[0.07] p-4">
+              <li key={p.id} className="text-sm">
                 <p className="font-medium">{p.name}</p>
-                {p.description ? <p className="mt-1 text-sm text-pretty text-bone/75">{p.description}</p> : null}
+                {p.description ? <p className="mt-0.5 hidden text-pretty text-bone/70 md:block">{p.description}</p> : null}
               </li>
             ))}
           </ul>
-        ) : null}
-
-        {!units.length && !pois.length ? (
-          <p className="px-2 pb-2 text-sm text-bone/75">Este piso no tiene unidades de muestra en la demo.</p>
         ) : null}
       </div>
     </section>
