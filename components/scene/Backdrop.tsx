@@ -228,7 +228,11 @@ export function Backdrop({
   useFrame((root, delta) => {
     const s = state.current;
     camera.updateMatrixWorld();
-    const moved = !s.last.equals(camera.matrixWorld) || !s.lastProj.equals(camera.projectionMatrix);
+    // la amortiguación de los controles mueve la cámara fracciones mínimas en cada cuadro:
+    // con igualdad exacta el fondo nunca se quedaba quieto (y seguía desenfocado)
+    const differs = (a: THREE.Matrix4, b: THREE.Matrix4, eps: number) =>
+      a.elements.some((v, i) => Math.abs(v - b.elements[i]!) > eps);
+    const moved = differs(s.last, camera.matrixWorld, 1e-3) || differs(s.lastProj, camera.projectionMatrix, 1e-5);
     s.last.copy(camera.matrixWorld);
     s.lastProj.copy(camera.projectionMatrix);
 

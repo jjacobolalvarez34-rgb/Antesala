@@ -166,3 +166,29 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Vista desde la ventana: se abre y se cierra como el diafragma de una cámara (D-038) */
+@keyframes iris-open {
+  from {
+    clip-path: circle(0% at 50% 50%);
+    filter: brightness(1.8);
+  }
+  to {
+    clip-path: circle(80% at 50% 50%);
+    filter: brightness(1);
+  }
+}
+@keyframes iris-close {
+  from {
+    clip-path: circle(80% at 50% 50%);
+  }
+  to {
+    clip-path: circle(0% at 50% 50%);
+  }
+}
+.iris-open {
+  animation: iris-open 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.iris-close {
+  animation: iris-close 0.5s cubic-bezier(0.64, 0, 0.78, 0) both;
+}

@@ -34,6 +34,8 @@ interface TourState {
   view: { unitId: string; src: string } | null;
   /** en el detalle de un espacio: 360° (true) o maqueta (false) */
   view360: boolean;
+  /** unidad de la que se pidió la vista desde la ventana (la renderiza la escena) */
+  viewRequest: string | null;
   /** la escena se montó alguna vez (no se desmonta: Canvas persistente) */
   sceneMounted: boolean;
   /** la escena se montó entrando por /explorar → vuelo de entrada */
@@ -49,6 +51,7 @@ interface TourState {
   setSelectedUnit: (id: string | null) => void;
   setView: (v: TourState['view']) => void;
   setView360: (on: boolean) => void;
+  requestView: (unitId: string | null) => void;
   mountScene: (intro: boolean) => void;
 }
 
@@ -65,6 +68,7 @@ export const useTour = create<TourState>((set) => ({
   selectedUnit: null,
   view: null,
   view360: true,
+  viewRequest: null,
   sceneMounted: false,
   intro: false,
   init: (quality, { locked, ask }) => {
@@ -96,6 +100,7 @@ export const useTour = create<TourState>((set) => ({
   setSelectedUnit: (selectedUnit) => set({ selectedUnit }),
   setView: (view) => set({ view }),
   setView360: (view360) => set({ view360 }),
+  requestView: (viewRequest) => set({ viewRequest }),
   mountScene: (intro) => set((s) => (s.sceneMounted ? s : { sceneMounted: true, intro })),
 }));
 

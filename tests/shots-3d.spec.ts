@@ -82,12 +82,9 @@ for (const hotel of hotels) {
       test.setTimeout(180_000);
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
-      await openScene(page, `${h}/explorar`, NIGHT);
-      await page.getByRole('navigation', { name: 'Unidades en esta fachada' }).getByRole('button', { name: withView.name }).click();
-      await expect(page.getByRole('region', { name: withView.name })).toBeVisible();
-      await page.waitForTimeout(1500);
-      await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-unidad.png` });
-      await page.getByRole('button', { name: 'Ver la vista' }).click();
+      // la vista se pide desde el panel de la unidad (tocar la ventana en la fachada entra a la unidad)
+      await openScene(page, `${h}/unidad/${withView.id}`, NIGHT);
+      await page.getByRole('button', { name: 'Ver la vista desde la ventana' }).click();
       await expect(page.getByRole('img', { name: /Vista aproximada/ })).toBeVisible({ timeout: 60_000 });
       await page.waitForTimeout(500);
       await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-vista.png` });

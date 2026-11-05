@@ -32,7 +32,7 @@ export function FacadePicker({ building, className }: { building: Building; clas
         <ChevronLeft aria-hidden className="size-5" />
       </button>
       <div className="min-w-0 flex-1 text-center" aria-live="polite">
-        <p className="text-xs tracking-[0.12em] text-bone/60 uppercase">
+        <p className="hidden text-xs tracking-[0.12em] text-bone/60 uppercase md:block">
           Vista {index + 1} de {facades.length}
         </p>
         <p className="truncate text-sm font-medium">{current.label}</p>
@@ -45,23 +45,6 @@ export function FacadePicker({ building, className }: { building: Building; clas
       >
         <ChevronRight aria-hidden className="size-5" />
       </button>
-      <ul className="hidden gap-1 border-l border-bone/15 pl-1.5 lg:flex" aria-label="Fachadas">
-        {facades.map((f, i) => (
-          <li key={f.index}>
-            <button
-              type="button"
-              onClick={() => setFacade(i)}
-              aria-pressed={i === index}
-              className={cn(
-                'min-h-11 rounded-xl px-3 text-xs font-medium whitespace-nowrap transition-colors',
-                i === index ? 'bg-accent-on-dark text-ink' : 'hover:bg-bone/12',
-              )}
-            >
-              {f.label}
-            </button>
-          </li>
-        ))}
-      </ul>
       <button
         type="button"
         onClick={() => setNight(!night)}

@@ -14,7 +14,7 @@ export function HotelHeader({ slug, name, place }: { slug: string; name: string;
       </Link>
       <Link
         href={routes.lista(slug)}
-        className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
+        className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap scene:max-md:hidden border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
       >
         Pisos y unidades
       </Link>

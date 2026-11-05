@@ -124,13 +124,14 @@ export function PoiLayer({ pois, anchors, visible }: { pois: ScenePoi[]; anchors
               tabIndex={visible ? 0 : -1}
               onClick={() => setOpen((o) => (o === p.id ? null : p.id))}
               aria-expanded={open === p.id}
-              className="glass-dark flex min-h-9 items-center gap-2 rounded-full py-1.5 pr-3.5 pl-2.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg transition-transform duration-200 hover:scale-105"
+              aria-label={p.name}
+              className="glass-dark group flex min-h-9 min-w-9 items-center justify-center gap-2 rounded-full px-2.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg transition-all duration-200 hover:pr-3.5"
             >
               <span className="relative grid size-3 place-items-center">
                 <span className="absolute size-3 animate-ping rounded-full bg-accent-on-dark/50 motion-reduce:hidden" />
                 <span className="size-2 rounded-full bg-accent-on-dark" />
               </span>
-              {p.name}
+              <span className="hidden group-hover:inline group-focus-visible:inline">{p.name}</span>
             </button>
             {open === p.id ? (
               <div className="glass-dark absolute top-full mt-2 w-60 animate-in rounded-2xl p-4 text-sm shadow-xl duration-200 fade-in slide-in-from-top-1">

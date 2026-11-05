@@ -185,7 +185,7 @@ function UnitLights({ light, units }: { light: LightUniforms; units: SceneUnit[]
   const selected = useTour((s) => s.selectedUnit);
   useFrame((_, delta) => {
     const arr = light.uUnitLight.value;
-    const k = 1 - Math.exp(-delta * 7);
+    const k = 1 - Math.exp(-delta * 16);
     for (let i = 0; i < Math.min(units.length, MAX_UNITS); i++) {
       const id = units[i]!.id;
       const target = id === hovered || id === selected ? 1 : 0;
@@ -329,6 +329,25 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     backdrop.current?.invalidate(2);
   }, [environment]);
 
+  // vista desde la ventana: se pide desde el panel de la unidad y se renderiza aquí
+  const viewRequest = useTour((s) => s.viewRequest);
+  const requestView = useTour((s) => s.requestView);
+  const setView = useTour((s) => s.setView);
+  useEffect(() => {
+    if (!viewRequest) return;
+    const unit = data.units.find((u) => u.id === viewRequest);
+    const ext = unit?.exterior[0];
+    const order = unit ? data.floors.find((f) => f.id === unit.levelId)?.order : undefined;
+    const f = ext ? facades[ext.facade] : undefined;
+    requestView(null);
+    if (!unit || !ext || !f || order === undefined || !backdrop.current) return;
+    const vp = windowViewpoint(data.building, f.index, order, ext.windows[Math.floor(ext.windows.length / 2)]!);
+    if (!vp) return;
+    const from = new THREE.Vector3(...vp.position);
+    const dir = new THREE.Vector3(vp.normal[0], -0.08, vp.normal[1]).normalize();
+    setView({ unitId: unit.id, src: backdrop.current.snapshot(from, dir, 960, 600) });
+  }, [viewRequest, requestView, setView, data, facades]);
+
   // transición día/noche: el fondo se re-renderiza (desenfocado) mientras dura
   useEffect(() => {
     gsap.to(light.uNight, {
@@ -388,8 +407,12 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             document.body.style.cursor = u ? 'pointer' : '';
           }}
           onUnitSelect={(slot) => {
+            // tocar la habitación entra directo a su unidad (con la transición de cámara)
             const u = data.units[slot];
-            if (u) setSelectedUnit(u.id);
+            if (u) {
+              setHoveredUnit(null);
+              router.push(u.href);
+            }
           }}
         />
         <UnitLights light={light} units={data.units} />
@@ -460,21 +483,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         hovered={hoveredSpace}
         onHover={setHoveredSpace}
       />
-      <UnitOverlay
-        data={data}
-        visible={stage.kind === 'explorar' && active}
-        onView={(unit) => {
-          const ext = unit.exterior[0];
-          const order = data.floors.find((f) => f.id === unit.levelId)?.order;
-          const f = ext ? facades[ext.facade] : undefined;
-          if (!ext || !f || order === undefined || !backdrop.current) return null;
-          const vp = windowViewpoint(data.building, f.index, order, ext.windows[Math.floor(ext.windows.length / 2)]!);
-          if (!vp) return null;
-          const from = new THREE.Vector3(...vp.position);
-          const dir = new THREE.Vector3(vp.normal[0], -0.08, vp.normal[1]).normalize();
-          return backdrop.current.snapshot(from, dir, 960, 600);
-        }}
-      />
+      <UnitOverlay data={data} visible={(stage.kind === 'explorar' || stage.kind === 'piso') && active} />
     </div>
   );
 }

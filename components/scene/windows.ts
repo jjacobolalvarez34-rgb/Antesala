@@ -66,7 +66,7 @@ function buildQuads(specs: WindowSpec[], scale: number, outward: number) {
 }
 
 export const buildWindowGeometry = (specs: WindowSpec[]) => buildQuads(specs, 1, 0);
-export const buildGlowGeometry = (specs: WindowSpec[]) => buildQuads(specs, 1.9, 0.32);
+export const buildGlowGeometry = (specs: WindowSpec[]) => buildQuads(specs, 1.35, 0.25);
 
 const common = /* glsl */ `
   uniform float uNight;

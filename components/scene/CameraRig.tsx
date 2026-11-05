@@ -104,7 +104,11 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
     if (!controls) return;
     const target = toState(poseRef.current);
     const first = prev.current === null;
+    const prevKey = prev.current?.key ?? '';
     const back = !first && depth < prev.current!.depth;
+    // giro entre fachadas: largo y suave; saltos de etapa grandes (p. ej. a la unidad): vuelo más largo
+    const facadeTurn = prevKey.startsWith('explorar-') && stageKey.startsWith('explorar-');
+    const bigJump = !first && Math.abs(depth - (prev.current?.depth ?? depth)) >= 2;
     prev.current = { key: stageKey, depth };
 
     const from = first
@@ -116,7 +120,17 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
     dAz = Math.atan2(Math.sin(dAz), Math.cos(dAz));
     target.azimuth = from.azimuth + dAz;
 
-    const duration = reduced ? 0 : first ? (intro ? INTRO_DURATION : 0) : DURATION * (back ? BACK_FACTOR : 1);
+    const duration = reduced
+      ? 0
+      : first
+        ? intro
+          ? INTRO_DURATION
+          : 0
+        : facadeTurn
+          ? 2.6
+          : bigJump
+            ? 1.9
+            : DURATION * (back ? BACK_FACTOR : 1);
     const state = { ...from };
     tween.current?.kill();
     controls.enabled = false;
@@ -132,6 +146,22 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
     };
 
     if (duration === 0) {
+      // movimiento reducido (DISENO.md §4, regla 7): en vez de un salto seco, fundido corto
+      const canvas = gl.domElement;
+      if (reduced && !first) {
+        const fade = gsap.timeline();
+        fade
+          .to(canvas, { opacity: 0, duration: 0.18, ease: 'power1.in' })
+          .add(() => {
+            Object.assign(state, target);
+            update();
+          })
+          .to(canvas, { opacity: 1, duration: 0.3, ease: 'power1.out', onComplete: settle });
+        return () => {
+          fade.kill();
+          canvas.style.opacity = '1';
+        };
+      }
       Object.assign(state, target);
       update();
       settle();
@@ -140,7 +170,7 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
     tween.current = gsap.to(state, {
       ...target,
       duration,
-      ease: first ? 'power3.inOut' : 'power2.inOut',
+      ease: first || bigJump ? 'power3.inOut' : facadeTurn ? 'sine.inOut' : 'power2.inOut',
       onUpdate: update,
       onComplete: settle,
     });

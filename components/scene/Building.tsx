@@ -403,11 +403,13 @@ function Floor({
     const g = group.current;
     if (g && !gone) g.visible = true;
     if (g) {
+      // cajón: el piso elegido sale con desaceleración (después de que el anterior entra) y vuelve a entrar
       gsap.to(g.position, {
         x: selected ? pullDir[0] * FLOOR_PULL : 0,
         z: selected ? pullDir[1] * FLOOR_PULL : 0,
-        duration: d,
-        ease,
+        duration: reduced ? 0 : selected ? 1.05 : 0.55,
+        delay: selected && !reduced ? 0.35 : 0,
+        ease: selected ? 'power3.out' : 'power2.in',
         overwrite: true,
       });
     }
@@ -415,7 +417,8 @@ function Floor({
       const mat = mats[key];
       gsap.to(mat, {
         opacity: dim ? BASE_OPACITY[key] * fade : BASE_OPACITY[key],
-        duration: d * 0.7,
+        duration: gone ? d * 0.9 : d * 0.7,
+        delay: gone && !reduced ? 0.55 : 0,
         ease,
         overwrite: true,
         onComplete: gone && key === 'clad' ? () => g && (g.visible = false) : undefined,
@@ -813,7 +816,7 @@ export function BuildingModel({
       g.visible = true;
       return;
     }
-    const call = gsap.delayedCall(reduced ? 0 : 0.95, () => {
+    const call = gsap.delayedCall(reduced ? 0 : 1.7, () => {
       g.visible = false;
     });
     return () => {

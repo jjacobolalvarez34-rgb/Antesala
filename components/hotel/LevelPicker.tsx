@@ -63,7 +63,7 @@ export function LevelPicker({
 
   return (
     <nav aria-label="Pisos del edificio" className={className}>
-      <ol className="glass-dark flex flex-col gap-1 rounded-3xl p-1.5 shadow-2xl">
+      <ol className="glass-dark flex flex-col gap-0.5 rounded-3xl p-1 shadow-2xl md:gap-1 md:p-1.5">
         {sorted.map((l) => {
           const active = l.id === currentId;
           const hot = l.id === hovered;
@@ -78,12 +78,12 @@ export function LevelPicker({
                 onFocus={() => setHovered(l.id)}
                 onBlur={() => setHovered(null)}
                 className={cn(
-                  'flex min-h-11 min-w-11 items-center gap-3 rounded-2xl px-3 transition-colors duration-200',
+                  'group flex min-h-11 min-w-11 items-center gap-3 rounded-2xl px-3 transition-colors duration-200',
                   active ? 'bg-accent-on-dark text-ink' : hot ? 'bg-bone/16' : 'hover:bg-bone/10',
                 )}
               >
                 <span className="w-5 text-center font-display text-xl tabular-nums">{l.order}</span>
-                <span className="hidden min-w-0 pr-1 md:block">
+                <span className="hidden min-w-0 pr-1 group-hover:block group-focus-visible:block">
                   <span className="block text-sm font-medium">{l.name}</span>
                   <span className={cn('block max-w-44 truncate text-xs', active ? 'text-ink/75' : 'text-bone/65')}>
                     {l.summary}

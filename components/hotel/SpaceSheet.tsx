@@ -27,7 +27,7 @@ export function SpaceSheet({
   return (
     <section
       aria-label={space.name}
-      className="pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[52dvh] animate-in flex-col overflow-hidden rounded-3xl bg-card shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-28 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-10rem)] md:w-[420px] md:slide-in-from-right-4"
+      className="pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[44dvh] animate-in flex-col overflow-hidden rounded-3xl bg-card shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-28 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-10rem)] md:w-[420px] md:slide-in-from-right-4"
     >
       <SpaceSheetFrame hasPano={space.media.some((m) => m.kind === 'pano360')} title={space.name}>
       <div className="scrollbar-none p-4">

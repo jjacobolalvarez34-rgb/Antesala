@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Hand } from 'lucide-react';
 
 import { LevelPicker } from '@/components/hotel/LevelPicker';
 import { FacadePicker } from '@/components/scene/FacadePicker';
@@ -46,13 +45,8 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
       {/* Con escena: capas sobre el edificio */}
       <div className="pointer-events-none fixed inset-x-0 top-28 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.5rem)] hidden scene:block md:top-32">
         <div className="mx-auto flex h-full max-w-6xl items-start justify-between gap-4 px-4 md:px-10">
-          <div className="glass-dark pointer-events-auto max-w-[15rem] animate-in rounded-2xl px-4 py-3 duration-500 fade-in slide-in-from-top-2 md:max-w-xs md:px-5 md:py-4">
-            <h1 className="font-display text-subtitle md:text-title">Elige un piso</h1>
-            <p className="mt-1 flex items-start gap-1.5 text-xs text-pretty text-bone/75 md:text-sm">
-              <Hand aria-hidden className="mt-0.5 size-3.5 shrink-0" />
-              Toca un piso del edificio o usa la lista. Cambia de fachada abajo.
-            </p>
-          </div>
+          {/* el edificio es el protagonista: solo el selector de pisos, compacto */}
+          <span />
           <LevelPicker
             slug={hotel.slug}
             levels={levels}

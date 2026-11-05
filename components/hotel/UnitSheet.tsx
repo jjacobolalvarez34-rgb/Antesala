@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
 import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Category, Level, Unit } from '@/lib/types';
@@ -23,7 +24,7 @@ export function UnitSheet({
   return (
     <section
       aria-label={unit.name}
-      className="glass-dark pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[44dvh] animate-in flex-col overflow-hidden rounded-3xl shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-32 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-11rem)] md:w-[380px] md:slide-in-from-right-4"
+      className="glass-dark pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[38dvh] animate-in flex-col overflow-hidden rounded-3xl shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-32 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-11rem)] md:w-[380px] md:slide-in-from-right-4"
     >
       <div className="scrollbar-none overflow-y-auto p-5">
         <p className="text-xs tracking-[0.12em] text-bone/60 uppercase">
@@ -45,6 +46,7 @@ export function UnitSheet({
           </p>
         ) : null}
         {unit.view ? <p className="mt-2 text-sm text-pretty text-bone/75">{unit.view}</p> : null}
+        {unit.exterior?.length ? <ViewFromWindowButton unitId={unit.id} /> : null}
 
         <h2 className="mt-5 text-xs tracking-[0.12em] text-bone/60 uppercase">Espacios · toca uno en la maqueta</h2>
         <ul className="mt-2 flex flex-wrap gap-2">

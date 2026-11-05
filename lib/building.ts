@@ -241,7 +241,7 @@ export function introPose(arrival: CameraPose): CameraPose {
 }
 
 /** Separación del piso elegido hacia afuera de la fachada, en metros. */
-export const FLOOR_PULL = 3.2;
+export const FLOOR_PULL = 5;
 
 /** Dirección (x, z) hacia afuera de una fachada. */
 export const facadeDir = (facade: Facade): [number, number] => [Math.sin(facade.azimuth), Math.cos(facade.azimuth)];
