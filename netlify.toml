@@ -1,5 +1,5 @@
 # Despliegue en Netlify (alternativa a Vercel para la demo; ver ARQUITECTURA.md §9).
-# Netlify detecta Next.js y usa su adaptador oficial (OpenNext) sin configuración extra.
+# Usa el adaptador oficial de Next.js (declarado abajo en [[plugins]]).
 # pnpm se instala con la versión del campo "packageManager" de package.json.
 
 [build]
@@ -8,6 +8,12 @@
 
 [build.environment]
   NODE_VERSION = "22"
+
+# Adaptador oficial de Next.js para Netlify. Se declara explícito porque el
+# proyecto de Netlify se creó cuando el repo no tenía app y no lo activó solo:
+# sin él, Netlify sube .next tal cual y todo responde 404.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Los assets del visor (HDRI y texturas) cambian poco: caché larga en el navegador.
 [[headers]]
