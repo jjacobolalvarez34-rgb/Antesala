@@ -20,7 +20,13 @@ test.use({ reducedMotion: 'reduce' });
 const DAY = 15;
 const NIGHT = 21;
 
-async function openScene(page: Page, url: string, hour: number) {
+async function openScene(page: Page, url: string, hour: number, guide = false) {
+  // la guía (D-048) se captura aparte; aquí se da por vista
+  if (!guide) {
+    await page.addInitScript(() => {
+      for (const s of ['explorar', 'piso', 'unidad', 'espacio', 'mirar']) sessionStorage.setItem(`antesala:guia:${s}`, '1');
+    });
+  }
   await page.goto(`${url}?calidad=medio&hora=${hour}`);
   await page.waitForSelector('html[data-scene="on"]', { state: 'attached', timeout: 90_000 });
   await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
@@ -39,7 +45,7 @@ for (const hotel of hotels) {
     { name: 'explorar', url: `${h}/explorar` },
     ...hotel.levels.map((l) => ({ name: `piso-${l.id}`, url: `${h}/piso/${l.id}` })),
     // maqueta de cada unidad (bloque 3) y un espacio de muestra
-    ...hotel.units.map((u) => ({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}` })),
+    ...hotel.units.filter((u) => !('sameAs' in u)).map((u) => ({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}` })),
     ...hotel.units.slice(0, 1).flatMap((u) =>
       u.spaces.slice(0, 1).map((s) => ({ name: `unidad-${u.id}-${s.id}`, url: `${h}/unidad/${u.id}/${s.id}` })),
     ),
@@ -56,6 +62,45 @@ for (const hotel of hotels) {
     });
   }
 
+  test(`${hotel.slug} · 3d · guia`, async ({ page }, info) => {
+    test.setTimeout(150_000);
+    await openScene(page, `${h}/explorar`, DAY, true);
+    await expect(page.getByRole('heading', { name: 'Así se recorre el hotel' })).toBeVisible({ timeout: 30_000 });
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-guia.png` });
+    await page.getByRole('button', { name: 'Empezar' }).click();
+    await expect(page.getByRole('heading', { name: 'Así se recorre el hotel' })).toBeHidden();
+  });
+
+  // un espacio en modo maqueta: muros recortados para verlo desde arriba
+  const suite = hotel.units.find((u) => !('sameAs' in u) && u.spaces.some((s) => s.type === 'cocina'));
+  const kitchen = suite?.spaces.find((s) => s.type === 'cocina');
+  if (suite && kitchen) {
+    test(`${hotel.slug} · 3d · espacio-maqueta`, async ({ page }, info) => {
+      test.setTimeout(300_000);
+      await openScene(page, `${h}/unidad/${suite.id}/${kitchen.id}`, DAY);
+      await page.getByRole('button', { name: 'Maqueta' }).click();
+      await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+      // el corte de los muros es una animación GSAP: con WebGL por software avanza lento
+      await page.waitForTimeout(20_000);
+      await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-espacio-maqueta.png` });
+    });
+  }
+
+  const typical = hotel.levels.find((l) => l.order === 3);
+  if (typical) {
+    test(`${hotel.slug} · 3d · piso-noche`, async ({ page }, info) => {
+      test.setTimeout(150_000);
+      const errors: string[] = [];
+      page.on('pageerror', (e) => errors.push(e.message));
+      page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+      await openScene(page, `${h}/piso/${typical.id}`, NIGHT);
+      // de noche (faroles) el WebGL por software tarda segundos por cuadro y GSAP avanza ~33 ms por cuadro lento
+      await page.waitForTimeout(40_000);
+      await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-piso-noche.png` });
+      expect(errors).toEqual([]);
+    });
+  }
+
   test(`${hotel.slug} · 3d · noche`, async ({ page }, info) => {
     test.setTimeout(150_000);
     const errors: string[] = [];
@@ -67,11 +112,12 @@ for (const hotel of hotels) {
   });
 
   test(`${hotel.slug} · 3d · fachada-siguiente`, async ({ page }, info) => {
-    test.setTimeout(150_000);
+    test.setTimeout(300_000);
     await openScene(page, `${h}/explorar`, DAY);
     await page.getByRole('button', { name: 'Fachada siguiente' }).click();
     await expect(page.getByText('Vista 2 de')).toBeVisible();
-    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+    // con WebGL por software el fundido de 1 s tarda ~45 s (GSAP avanza ~33 ms por cuadro lento)
+    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 120_000 });
     await page.waitForTimeout(2500);
     await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-fachada-2.png` });
   });

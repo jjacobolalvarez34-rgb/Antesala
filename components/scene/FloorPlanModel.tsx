@@ -1,6 +1,6 @@
 'use client';
 
-import type { ThreeEvent } from '@react-three/fiber';
+import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -8,6 +8,8 @@ import * as THREE from 'three';
 import { FURNITURE_COLORS } from '@/components/plan/furniture';
 import { planToMesh } from '@/components/plan/planToMesh';
 import type { PlanGeometry } from '@/lib/types';
+
+import type { LightUniforms } from './windows';
 
 /**
  * Planta del piso dentro del cajón (D-041): al sacar el piso, la fachada se
@@ -40,6 +42,8 @@ const FINISH: Record<string, string> = {
   deck: '#8f7259',
 };
 
+const WARM = new THREE.Color('#ffb46b');
+
 const colorFor = (s: FloorPlanSpace | undefined, finish: string | undefined) => {
   if (s?.kind === 'unit') return COLORS.unit;
   return (finish && FINISH[finish]) ?? COLORS.other;
@@ -53,9 +57,12 @@ export function FloorPlanModel({
   hovered,
   reduced,
   shadows,
+  light,
   onHover,
   onSelect,
 }: {
+  /** día/noche de la escena: de noche las habitaciones se encienden por dentro */
+  light: LightUniforms;
   plan: PlanGeometry;
   spaces: FloorPlanSpace[];
   position: [number, number, number];
@@ -81,7 +88,8 @@ export function FloorPlanModel({
     const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
       new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra });
     return {
-      walls: m('#f1ece3'),
+      // muros en corte oscuros (como el relleno de un plano): la planta se lee de día y de noche
+      walls: m('#57504a', { roughness: 0.9 }),
       floors: Object.fromEntries(meshes.floors.map((f) => [f.id, m(colorFor(meta.get(f.id), finishes.get(f.id)), { roughness: 0.75 })])),
       furniture: Object.fromEntries(
         meshes.furniture.map((f) => [
@@ -93,6 +101,19 @@ export function FloorPlanModel({
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
   }, [meshes, meta, finishes]);
+
+  // de noche, luz interior cálida: pisos y muebles brillan un poco con su propio color
+  const lit = useMemo(
+    () => [...Object.values(mats.floors), ...Object.entries(mats.furniture).filter(([k]) => k !== 'glass').map(([, m]) => m)],
+    [mats],
+  );
+  useFrame(() => {
+    const k = light.uNight.value * 0.42;
+    for (const m of lit) {
+      m.emissiveIntensity = k;
+      if (k > 0) m.emissive.copy(m.color).lerp(WARM, 0.25);
+    }
+  });
 
   // entra cuando el cajón ya salió (la fachada se retira al mismo tiempo); cerrado, no se dibuja
   const group = useRef<THREE.Group>(null);
@@ -122,8 +143,7 @@ export function FloorPlanModel({
       if (s?.kind !== 'unit') continue;
       const c = new THREE.Color(s.unitId === hovered ? COLORS.unitHot : COLORS.unit);
       const mat = mats.floors[f.id]!;
-      gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.2, overwrite: true });
-      mat.emissive.set(s.unitId === hovered ? '#3a2410' : '#000000');
+      mat.color.copy(c);
     }
   }, [hovered, meshes, meta, mats]);
 

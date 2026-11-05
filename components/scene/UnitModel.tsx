@@ -6,7 +6,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 import { FURNITURE_COLORS } from '@/components/plan/furniture';
-import { planToMesh } from '@/components/plan/planToMesh';
+import { planToMesh, WALL_H } from '@/components/plan/planToMesh';
 import { polygonLabelPoint } from '@/lib/plan';
 import type { PlanGeometry, SpaceType } from '@/lib/types';
 
@@ -34,6 +34,23 @@ const FLOOR_COLOR: Partial<Record<SpaceType, string>> = {
 const WOOD = '#a57f5c';
 
 
+/** Altura de corte de muros y muebles (m): completa, o maqueta abierta al ver un espacio. */
+const FULL_CUT = 3;
+const SPACE_CUT = 1.15;
+
+/** Recorta en el GPU todo lo que pase de uCut (sin deformar: los vértices altos bajan al corte). */
+function cuttable<T extends THREE.Material>(mat: T, cut: { value: number }): T {
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uCut = cut;
+    shader.vertexShader = `uniform float uCut;\n${shader.vertexShader}`.replace(
+      '#include <begin_vertex>',
+      '#include <begin_vertex>\n  transformed.y = min(transformed.y, uCut);',
+    );
+  };
+  mat.customProgramCacheKey = () => 'unit-cut';
+  return mat;
+}
+
 export function UnitModel({
   plan,
   spaces,
@@ -43,6 +60,7 @@ export function UnitModel({
   hoveredSpace,
   reduced,
   shadows,
+  cut,
   onHover,
   onSelect,
 }: {
@@ -54,6 +72,8 @@ export function UnitModel({
   hoveredSpace: string | null;
   reduced: boolean;
   shadows: boolean;
+  /** maqueta abierta (muros bajos) para ver un espacio desde arriba sin que estorben */
+  cut: boolean;
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
 }) {
@@ -69,11 +89,22 @@ export function UnitModel({
     [meshes],
   );
 
+  const cutU = useMemo(() => ({ value: FULL_CUT }), []);
+  useEffect(() => {
+    const t = gsap.to(cutU, { value: cut ? SPACE_CUT : FULL_CUT, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0.2, ease: 'power2.inOut', overwrite: true });
+    return () => {
+      t.kill();
+    };
+  }, [cut, reduced, cutU]);
+  const depthMat = useMemo(() => cuttable(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), cutU), [cutU]);
+
   const mats = useMemo(() => {
     const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
-      new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra });
+      cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), cutU);
     return {
       walls: m('#efe9df', { roughness: 0.92 }),
+      // cielo raso: solo se ve desde abajo (recorrido por dentro); desde arriba no estorba
+      ceiling: new THREE.MeshStandardMaterial({ color: '#f4f1ea', roughness: 0.95, side: THREE.BackSide, transparent: true, opacity: 0 }),
       glass: m('#bcd3d6', { roughness: 0.05, metalness: 0.2, depthWrite: false }),
       floors: Object.fromEntries(
         spaces.map((s) => [s.id, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 })]),
@@ -87,7 +118,7 @@ export function UnitModel({
         ]),
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
-  }, [spaces, meshes]);
+  }, [spaces, meshes, cutU]);
 
   // aparece y desaparece con fundido
   useLayoutEffect(() => {
@@ -95,6 +126,7 @@ export function UnitModel({
     if (visible && g) g.visible = true;
     const all: [THREE.Material, number][] = [
       [mats.walls, 1],
+      [mats.ceiling, 1],
       [mats.glass, 0.35],
       ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
       ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
@@ -135,7 +167,12 @@ export function UnitModel({
           <shadowMaterial transparent opacity={visible ? 0.22 : 0} />
         </mesh>
       ) : null}
-      {meshes.walls ? <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows} receiveShadow={shadows} /> : null}
+      {meshes.walls ? (
+        <mesh geometry={meshes.walls} material={mats.walls} customDepthMaterial={depthMat} castShadow={shadows} receiveShadow={shadows} />
+      ) : null}
+      {meshes.floors.map((f) => (
+        <mesh key={`techo-${f.id}`} geometry={f.geometry} material={mats.ceiling} position-y={WALL_H} raycast={() => null} />
+      ))}
       {meshes.glass ? <mesh geometry={meshes.glass} material={mats.glass} raycast={() => null} /> : null}
       {meshes.floors.map((f) => (
         <mesh
@@ -176,6 +213,7 @@ export function UnitModel({
           key={f.material}
           geometry={f.geometry}
           material={mats.furniture[f.material]}
+          customDepthMaterial={depthMat}
           castShadow={shadows && f.material !== 'glass'}
           receiveShadow={shadows}
           raycast={() => null}

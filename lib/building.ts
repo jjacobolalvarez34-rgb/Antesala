@@ -269,7 +269,8 @@ export function unitPose(
     polar: 40 * DEG,
     azimuth: facade.azimuth + 24 * DEG,
     shiftX: layout === 'side' ? 0.16 : 0,
-    shiftY: layout === 'sheet' ? 0.2 : 0,
+    // en móvil el panel recogido ocupa poco: la maqueta casi centrada
+    shiftY: layout === 'sheet' ? 0.1 : 0,
   };
 }
 
@@ -283,11 +284,12 @@ export function spacePose(
 ): CameraPose {
   return {
     target,
-    radius: fitDistance(3.2, fov, aspect, 1.2),
-    polar: 52 * DEG,
+    // desde más arriba: con la maqueta abierta (muros bajos) nada tapa el espacio
+    radius: fitDistance(3.8, fov, aspect, 1.2),
+    polar: 38 * DEG,
     azimuth: facade.azimuth + 30 * DEG,
     shiftX: layout === 'side' ? 0.2 : 0,
-    shiftY: layout === 'sheet' ? 0.24 : 0,
+    shiftY: layout === 'sheet' ? 0.04 : 0,
   };
 }
 
@@ -304,12 +306,12 @@ export function floorPose(
   const [dx, dz] = facadeDir(facade);
   return {
     target: [f.center[0] + dx * FLOOR_PULL * 0.6, y, f.center[1] + dz * FLOOR_PULL * 0.6],
-    radius: fitDistance(floorRadius, fov, aspect, aspect < 1 ? 1.4 : 1.45),
+    radius: fitDistance(floorRadius, fov, aspect, aspect < 1 ? 1.2 : 1.45),
     // más desde arriba: la planta del piso tiene que leerse
     polar: 46 * DEG,
     azimuth: facade.azimuth + 22 * DEG,
     shiftX: layout === 'side' ? 0.16 : 0,
     // en móvil el panel ocupa la parte baja: subimos el piso en la imagen
-    shiftY: layout === 'sheet' ? 0.17 : 0,
+    shiftY: layout === 'sheet' ? 0.07 : 0,
   };
 }

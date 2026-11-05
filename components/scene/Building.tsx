@@ -548,6 +548,7 @@ function Floor({
             hovered={planHovered}
             reduced={reduced}
             shadows={shadows}
+            light={light}
             onHover={onPlanHover}
             onSelect={onPlanSelect}
           />

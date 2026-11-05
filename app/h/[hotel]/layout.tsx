@@ -73,6 +73,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         })),
         colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
         brandName: tokens.brand.name,
+        liveInterior: hotel.isDemo === true,
         units: hotel.units.map((u) => ({
           id: u.id,
           name: u.name,

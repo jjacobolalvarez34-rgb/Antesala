@@ -35,6 +35,7 @@ import { CameraRig } from './CameraRig';
 import { Context, DayNightLights } from './Context';
 import { PanoSphere, panoDirection } from './PanoSphere';
 import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
+import { TourGuide, type GuideStep } from './TourGuide';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
@@ -64,6 +65,11 @@ export interface SceneData {
   colors: BuildingColors;
   /** planta de cada piso (D-041) */
   levelPlans: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
+  /**
+   * Demo (D-046): el 360° de cada espacio se recorre por dentro de la maqueta
+   * amoblada, en vivo. Un hotel real muestra sus fotos 360° capturadas.
+   */
+  liveInterior: boolean;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
   unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
 }
@@ -142,9 +148,11 @@ function Rig({
   intro,
   pano,
   vp,
+  in360,
 }: Pick<Props, 'data' | 'stage' | 'reduced' | 'intro'> & {
   facade: Facade;
-  pano: { yaw: number } | null;
+  in360: boolean;
+  pano: { yaw: number; eye: [number, number, number]; live: boolean } | null;
   vp: { key: string; position: [number, number, number]; yaw: number } | null;
 }) {
   const frame = useMemo(() => buildingFrame(data.building), [data.building]);
@@ -179,11 +187,12 @@ function Rig({
       const c = stage.spaceId ? spaceCenter(plan, stage.spaceId) : null;
       if (c && pano) {
         // 360°: la cámara se para en el punto de vista y mira hacia la ventana
+        // (por dentro de la maqueta, un poco hacia abajo para ver también los muebles)
         const look = pano.yaw;
         pose = {
-          target: [anchor[0] + c[0], anchor[1] + 1.5, anchor[2] + c[1]],
+          target: pano.eye,
           radius: 0.05,
-          polar: Math.PI / 2,
+          polar: pano.live ? Math.PI / 2 - 0.2 : Math.PI / 2,
           azimuth: Math.atan2(-Math.cos(look), -Math.sin(look)),
           shiftX: 0,
           shiftY: 0,
@@ -201,15 +210,24 @@ function Rig({
       }
     }
   }
+  // límites alrededor del encuadre de cada vista: se puede acercar, alejar e inclinar
+  // un poco, pero no tanto como para perder el edificio o ver el vacío del fondo
   return (
-    <CameraRig
-      pose={pose}
-      stageKey={stageKey}
-      depth={depth}
-      intro={intro}
-      reduced={reduced}
-      autoRotate={false}
-    />
+    <>
+      <OrbitControls
+        makeDefault
+        enablePan={false}
+        enableDamping
+        dampingFactor={0.08}
+        enableZoom={!in360}
+        minDistance={in360 ? 0.04 : pose.radius * 0.65}
+        maxDistance={in360 ? 0.06 : pose.radius * 1.3}
+        minPolarAngle={in360 ? 0.35 : Math.max(0.2, pose.polar - 0.55)}
+        maxPolarAngle={in360 ? 2.8 : Math.min(1.48, pose.polar + 0.14)}
+        rotateSpeed={in360 ? -0.35 : 0.6}
+      />
+      <CameraRig pose={pose} stageKey={stageKey} depth={depth} intro={intro} reduced={reduced} autoRotate={false} />
+    </>
   );
 }
 
@@ -308,13 +326,31 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   useEffect(() => {
     document.documentElement.dataset.viewpoint = vpData ? 'on' : 'off';
   }, [vpData]);
-  // punto de vista del 360: centro del espacio a 1,5 m del piso
+  // punto de vista del 360: centro del espacio a 1,5 m del piso. Por dentro de la
+  // maqueta (demo) retrocede hacia el muro opuesto a la ventana: se ve el cuarto y la ventana
   const eye = useMemo<[number, number, number] | null>(() => {
     if (!unitId || !spaceId) return null;
     const entry = data.unitPlans[unitId];
     const anchor = unitAnchor(data, frame, unitId);
     const c = entry ? spaceCenter(entry.plan, spaceId) : null;
-    return anchor && c ? [anchor[0] + c[0], anchor[1] + 1.5, anchor[2] + c[1]] : null;
+    if (!anchor || !c || !entry) return null;
+    let [x, z] = c;
+    const yaw = entry.spaces.find((s) => s.id === spaceId)?.pano?.yaw;
+    const poly = entry.plan.spaces.find((s) => s.id === spaceId);
+    if (data.liveInterior && yaw !== undefined && poly) {
+      const [dx, , dz] = panoDirection(yaw, 0);
+      const xs = poly.points.map((p) => p[0] / 100 - entry.plan.width / 200);
+      const zs = poly.points.map((p) => p[1] / 100 - entry.plan.height / 200);
+      const m = 0.45;
+      const [x0, x1, z0, z1] = [Math.min(...xs) + m, Math.max(...xs) - m, Math.min(...zs) + m, Math.max(...zs) - m];
+      for (let t = 0; t < 3; t += 0.05) {
+        const nx = c[0] - dx * t;
+        const nz = c[1] - dz * t;
+        if (nx < x0 || nx > x1 || nz < z0 || nz > z1) break;
+        [x, z] = [nx, nz];
+      }
+    }
+    return [anchor[0] + x, anchor[1] + 1.5, anchor[2] + z];
   }, [unitId, spaceId, data, frame]);
   const panoAnchors = useRef(new Map<string, HTMLElement>());
   const panoLinks = useMemo(() => {
@@ -348,6 +384,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         : [];
     });
   }, [unitId, data, frame]);
+  const guideStep: GuideStep =
+    in360 ? 'mirar' : stage.kind === 'piso' ? 'piso' : stage.kind === 'unidad' ? (spaceId ? 'espacio' : 'unidad') : 'explorar';
   const backdrop = useRef<BackdropApi | null>(null);
   const showPois = stage.kind === 'explorar' && active && !useTour.getState().viewpoint;
   const facade = facades[facadeIndex % facades.length]!;
@@ -448,7 +486,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           setSelectedUnit(null);
         }}
       >
-        <Backdrop apiRef={backdrop} environment={environment} studio={inUnit} reduced={reduced}>
+        {/* por dentro (recorrido en vivo) por las ventanas se ve la ciudad, no el estudio */}
+        <Backdrop apiRef={backdrop} environment={environment} studio={inUnit && !(in360Pano && data.liveInterior)} reduced={reduced}>
           <Context frame={frame} facades={facades} shadows={shadows} high={high} light={light} />
         </Backdrop>
 
@@ -510,30 +549,19 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             hoveredSpace={hoveredSpace}
             reduced={reduced}
             shadows={shadows}
+            cut={spaceId !== null && !in360}
             onHover={setHoveredSpace}
             onSelect={(sid) => router.push(routes.espacio(data.slug, unitId, sid))}
           />
         ) : null}
         <PoiProjector pois={spaceLabels} anchors={spaceAnchors} />
         <PoiProjector pois={floorLabels} anchors={floorAnchors} />
-        {currentPano && eye ? (
+        {currentPano && eye && !data.liveInterior ? (
           <PanoSphere key={spaceId} url={currentPano.url} position={eye} visible={in360} reduced={reduced} />
         ) : null}
         <PoiProjector pois={panoLinks} anchors={panoAnchors} />
 
-        <OrbitControls
-          makeDefault
-          enablePan={false}
-          enableDamping
-          dampingFactor={0.08}
-          enableZoom={!in360}
-          minDistance={in360 ? 0.04 : 4}
-          maxDistance={in360 ? 0.06 : 260}
-          minPolarAngle={in360 ? 0.35 : 0.3}
-          maxPolarAngle={in360 ? 2.8 : 1.5}
-          rotateSpeed={in360 ? -0.35 : 0.6}
-        />
-        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} pano={in360Pano && currentPano ? currentPano : null}
+        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} in360={in360} pano={in360Pano && currentPano && eye ? { yaw: currentPano.yaw, eye, live: data.liveInterior } : null}
           vp={vpData && vpPoi ? { key: `${vpPoi.id}-${vpData.id}`, position: vpData.position, yaw: vpData.yaw } : null}
         />
 
@@ -559,6 +587,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         hovered={planHovered}
         onHover={setPlanHovered}
         ariaLabel="Unidades del piso"
+        reveal
       />
       <SpaceLabelLayer
         labels={panoLinks}
@@ -578,6 +607,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         onHover={setHoveredSpace}
       />
       <UnitOverlay data={data} visible={(stage.kind === 'explorar' || stage.kind === 'piso') && active} />
+      <TourGuide step={guideStep} active={active} />
     </div>
   );
 }

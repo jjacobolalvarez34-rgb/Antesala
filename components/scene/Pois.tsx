@@ -53,7 +53,10 @@ export function SpaceLabelLayer({
   hovered,
   onHover,
   ariaLabel = 'Espacios de la unidad',
+  reveal = false,
 }: {
+  /** solo se ve la etiqueta bajo el puntero (o con foco del teclado): la planta queda limpia */
+  reveal?: boolean;
   labels: { id: string; name: string; href: Route }[];
   anchors: PoiAnchors;
   visible: boolean;
@@ -76,7 +79,7 @@ export function SpaceLabelLayer({
                 if (el) anchors.current.set(l.id, el);
                 else anchors.current.delete(l.id);
               }}
-              className={`absolute top-0 left-0 ${visible ? 'pointer-events-auto' : ''}`}
+              className={`absolute top-0 left-0 ${visible && !reveal ? 'pointer-events-auto' : ''}`}
               style={{ visibility: 'hidden' }}
             >
               <Link
@@ -87,9 +90,9 @@ export function SpaceLabelLayer({
                 onPointerLeave={() => onHover(null)}
                 onFocus={() => onHover(l.id)}
                 onBlur={() => onHover(null)}
-                className={`flex min-h-9 items-center rounded-full px-3.5 text-[0.8125rem] font-medium whitespace-nowrap shadow-lg transition-colors duration-200 ${
+                className={`flex min-h-8 items-center rounded-full px-3 text-xs font-medium whitespace-nowrap shadow-lg transition-[color,background-color,opacity] duration-200 md:min-h-9 md:px-3.5 md:text-[0.8125rem] ${
                   active ? 'bg-accent-on-dark text-ink' : 'glass-dark'
-                }`}
+                } ${reveal && !active ? 'opacity-0 focus-visible:opacity-100' : ''}`}
               >
                 {l.name}
               </Link>

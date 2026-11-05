@@ -75,10 +75,11 @@ const quadShader = {
       vec3 low = uBlur > 0.5 ? blurLow(vUv) : texture2D(tLow, vUv).rgb;
       vec3 high = texture2D(tHigh, vUv).rgb;
       vec3 c = aces(mix(low, high, uMix));
-      // fondo de estudio para la maqueta (bloque 3): degradé neutro y cálido
+      // fondo de estudio para la maqueta: carbón cálido con un foco al centro, para que
+      // los muros claros se lean (lineal; en sRGB va de #5b554d a #2a2723)
       if (uStudio > 0.001) {
         float r = length((vUv - vec2(0.5, 0.58)) * vec2(1.25, 1.0));
-        vec3 studio = mix(vec3(0.93, 0.91, 0.87), vec3(0.74, 0.71, 0.66), smoothstep(0.1, 0.95, r));
+        vec3 studio = mix(vec3(0.105, 0.091, 0.075), vec3(0.023, 0.020, 0.017), smoothstep(0.05, 0.9, r));
         c = mix(c, studio, uStudio);
       }
       if (uGamma > 0.5) {
