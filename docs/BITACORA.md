@@ -25,6 +25,25 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-05 · Bloque 7 · Entrada de marca, amoblado y lobby
+
+**Hecho**
+- Entrada de marca (D-043): el nombre letra por letra sobre niebla, una vez por sesión, con "Saltar", sin parpadeo al volver. Solo CSS.
+- Amoblado (D-044): muebles armados por piezas y agrupados por material, con `data-back` y `data-finish` en la convención de planos. Están amoblados todos los pisos (unidades tipo con baño, cocineta, cama, sala y mesa; pasillo con alfombra; escalera y ascensores), el penthouse con su terraza y las maquetas de las unidades 201, 402 y 601.
+- El piso 1 ya no repite la retícula: es un lobby con entrada y vitrinas, recepción, sala, café con barra, cowork con cabinas, baños y equipaje.
+- La planta 2D dibuja tapetes punteados, escaleras con huellas y piezas redondas.
+- La tarjeta de la terraza se abre hacia abajo cuando el punto está en la mitad superior (antes se cortaba).
+- Inglés aparcado (D-045).
+
+**Problemas / bloqueos**
+- `PLAYWRIGHT_BROWSERS_PATH` del equipo apunta a `D:\Repositorios\Prodigia\compilacion\ms-playwright`, que no tiene el Chromium 1248. Se instaló en la ruta por defecto (`%LOCALAPPDATA%\ms-playwright`) y las pruebas se corren con esa variable apuntando allí.
+
+**Mediciones**
+- JS inicial máximo: 159,7 KB gzip. Capturas de lista (82) en verde; 3D de los pisos 1, 2 y 6 y de las unidades 201, 402 y 601 revisadas.
+
+**Siguiente sesión**
+- Empezar por: Lighthouse contra Netlify y prueba en un Android de gama media y un iPhone. Luego revisar los criterios de `PRODUCTO.md` y pasar al bloque 8.
+
 ## 2026-11-04 · Planta del piso y miradores de la terraza
 
 **Hecho**

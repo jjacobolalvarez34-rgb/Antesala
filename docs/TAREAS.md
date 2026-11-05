@@ -102,9 +102,11 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 ## Bloque 7 — Pulido y despliegue
 
-- [ ] Entrada de marca (Rive opcional)
-- [ ] `prefers-reduced-motion` y botón Saltar
-- [ ] i18n con ES y EN básico
+- [x] Entrada de marca (solo CSS, D-043)
+- [x] `prefers-reduced-motion` y botón Saltar
+- [x] ~~i18n con ES y EN básico~~ aparcado (D-045)
+- [x] Muebles por piezas, acabados de piso y lobby propio en el piso 1 (D-044)
+- [x] Tarjeta de zona común que se abre hacia abajo si el punto está arriba (terraza)
 - [ ] Lighthouse y pruebas en un Android de gama media y un iPhone
 - [ ] Despliegue en Vercel; assets en R2 si hace falta
 - [ ] Revisar todos los criterios de `PRODUCTO.md`

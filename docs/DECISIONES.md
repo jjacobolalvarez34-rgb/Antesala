@@ -187,3 +187,15 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-042 · 2026-11-04 · Miradores en 360° en vivo (terraza)**
 - Decisión: las zonas comunes pueden tener `viewpoints` (posición y mirada inicial). Desde la ficha de la terraza, "Mirar desde aquí (360°)" lleva la cámara al punto, a la altura de los ojos, con gran angular y controles de mirar alrededor. Se ve en vivo, de día o de noche, y los vecinos del corredor de vista aparecen. Las flechas pasan entre los miradores (cerros, ciudad, occidente). Los demás controles se ocultan (variante `viewpoint:`).
 - Por qué: pedido de Jacobo ("la terraza con vista 360° desde puntos estratégicos"). No requiere renders: usa la misma escena. Con el cliente real se suman sus 360° capturados.
+
+**D-043 · 2026-11-05 · Entrada de marca solo con CSS, una vez por sesión**
+- Decisión: al llegar a la portada del hotel, el nombre sube letra por letra sobre una niebla en movimiento, aparece el lema y la cortina se abre (2,9 s). Solo CSS, sin Rive ni GSAP en el JS inicial. Se ve una vez por sesión (`sessionStorage`); un script en línea la oculta antes de pintar si ya se vio, así que no parpadea. Botón "Saltar" siempre visible y, con movimiento reducido, un fundido corto. Vive en el layout, encima de la barra de reserva y debajo del banner de hotel ficticio, y solo aparece si se entra por la portada.
+- Por qué: el JS inicial está en 159 KB de 180 y Rive sumaría su runtime. El efecto es tipográfico y CSS alcanza.
+
+**D-044 · 2026-11-05 · Muebles armados por piezas, acabados de piso y lobby propio**
+- Decisión: cada `data-item` del plano se arma con varias piezas low-poly agrupadas por material (`components/plan/furniture.ts`): la cama con base, colchón, cabecero, almohadas y pie de cama; el sofá con espaldar, brazos y cojines; las mesas y sillas con patas; además materas, lámparas, tapetes, escalera y ascensores. `data-back="n|s|e|w"` indica el lado del respaldo; si falta, se deduce de la pared más cercana. Los polígonos de espacios aceptan `data-finish` (madera, piedra, baldosa, alfombra, concreto, deck). El piso 1 deja de repetir la retícula de los pisos tipo: es un lobby abierto con recepción, sala, café con barra, cowork con cabinas, baños y equipaje. Todos los pisos y las tres unidades de la demo quedan amoblados.
+- Por qué: pedido de Jacobo ("más diseño y un pequeño amoblado"; "la portería se ve igual a los demás pisos"). Los muebles son contenido (SVG por hotel), no código. Se dibujan en unas 11 llamadas por planta y la planta cerrada no se dibuja.
+
+**D-045 · 2026-11-05 · Inglés aparcado**
+- Decisión: no se hace i18n en la Fase 0. La interfaz sigue solo en español.
+- Por qué: todos los prospectos son colombianos, y traducir solo la interfaz dejaría el contenido del hotel en español. Se retoma cuando un cliente tenga huéspedes extranjeros y entregue su contenido en inglés.
