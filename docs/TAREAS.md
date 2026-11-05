@@ -83,7 +83,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Prueba con 2–3 personas ajenas al proyecto (punto de decisión del bloque 4) — pendiente de Jacobo
 - [ ] Giroscopio del celular para mirar alrededor en 360°
 
-## Bloque 5 — Contenido
+## Bloque 5 — Contenido (aplazado hasta el primer cliente, D-040)
 
 - [ ] Escena de Blender con los interiores de las 3 unidades
 - [ ] Renders 360° por espacio

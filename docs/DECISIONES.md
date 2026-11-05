@@ -174,3 +174,8 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-039 · 2026-11-04 · Ganchos de venta del bloque 6**
 - Decisión: (1) Reservar abre una hoja con llegada, salida y huéspedes; calcula noches × tarifa (marcada como simulada) y arma el WhatsApp con todo. (2) "Elige tu unidad exacta": las unidades de la misma categoría con un alzado esquemático, la diferencia de precio y la vista. (3) `/comparar`: una columna por categoría con plano, datos comparables y la mejor en cada fila destacada. (4) `/panel`: métricas simuladas y deterministas para el gerente, con la comisión de OTA ahorrada como cifra principal; sin barra de reserva.
 - Por qué: PRODUCTO.md, el argumento principal es la reserva directa y el ahorro de comisión, y el extra por vista como ingreso.
+
+**D-040 · 2026-11-04 · Renders del bloque 5 aplazados hasta el primer cliente**
+- Decisión: no se hacen renders de Blender para la demo. Las fotos siguen como ilustraciones de línea y los 360° como placeholders con geometría real (D-037). Con el primer cliente se capturan fotos y 360° reales (cámara alquilada, CONTENIDO.md §8) y solo se reemplazan los archivos de `media/`; el visor no cambia.
+- Por qué: Blender no corre en el equipo de Jacobo. El edificio, la fachada y la maqueta ya muestran el valor; las fotos reales del cliente son las que más convencen.
+- Pendiente: el pipeline de compresión (`optimize-images`, `tile-pano`) se hace cuando lleguen las primeras capturas reales.
