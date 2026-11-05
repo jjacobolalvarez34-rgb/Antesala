@@ -32,7 +32,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] `pnpm budget` (JS inicial vs. presupuesto) y chequeo de imágenes rotas en `pnpm shots`
 - [x] Generador de placeholders `pipeline/placeholders.mjs`
 - [ ] Probar el recorrido en un celular real (iPhone y Android) — pendiente de Jacobo
-- [ ] Revisar con Jacobo si se suman unidades en los pisos 3 y 5 (ver propuesta en la bitácora)
+- [x] ~~Revisar con Jacobo si se suman unidades en los pisos 3 y 5~~ resuelto: las 21 habitaciones son unidades (D-047)
 
 ## Bloque 2 — Escena exterior
 
@@ -50,7 +50,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Preguntar antes del 3D en equipos justos; la calidad nunca baja a lista sola (D-025)
 - [x] Cámara a las fachadas: vuelo de entrada y selector de fachada (D-027)
 - [x] Realismo v1: escena de día, fachada de ladrillo con ventanas reales, calles, árboles, vecinos y cerros (D-026)
-- [ ] Prefetch del chunk 3D desde la entrada (hoy se descarga al abrir `/explorar`)
+- [x] Prefetch del chunk 3D desde la entrada (precarga en ocio, D-029)
 - [x] Realismo v2: HDRI y texturas PBR CC0 (Poly Haven), balcones en las suites, faroles, entrada de hotel con letrero (D-031, D-032)
 - [x] Render en dos capas: fondo congelado con desenfoque en movimiento y edificio en vivo (D-028)
 - [x] Carga escalonada: precarga en tiempo ocioso, texturas reales progresivas y noche en poscarga (D-029)
@@ -62,7 +62,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Vista desde la ventana en el panel de la unidad
 - [x] Planta del piso dentro del cajón (D-041) y en 2D en modo lista
 - [x] Miradores 360° en vivo en la terraza (D-042)
-- [ ] Mostrar las unidades sobre la planta del piso seleccionado (puente con el bloque 3)
+- [x] Mostrar las unidades sobre la planta del piso seleccionado (D-041, D-047)
 
 ## Bloque 3 — Maqueta de unidad
 
@@ -71,7 +71,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Muebles low-poly desde `<g id="furniture">`
 - [x] Transición de cámara piso → unidad → espacio (la maqueta aparece dentro del edificio, D-034)
 - [x] Probar con las 3 unidades (capturas 3D de las 5 unidades y de un espacio)
-- [ ] Muebles con algo más de forma (cabecero en camas, cojines en sofás); hoy son cajas de color
+- [x] Muebles con algo más de forma (D-044)
 - [ ] Prueba en celular real de la maqueta
 
 ## Bloque 4 — Detalle de espacio
