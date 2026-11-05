@@ -36,6 +36,8 @@ interface TourState {
   view360: boolean;
   /** unidad de la que se pidió la vista desde la ventana (la renderiza la escena) */
   viewRequest: string | null;
+  /** mirador activo (360° en vivo desde un punto de una zona común, p. ej. la terraza) */
+  viewpoint: { poiId: string; index: number } | null;
   /** la escena se montó alguna vez (no se desmonta: Canvas persistente) */
   sceneMounted: boolean;
   /** la escena se montó entrando por /explorar → vuelo de entrada */
@@ -52,6 +54,7 @@ interface TourState {
   setView: (v: TourState['view']) => void;
   setView360: (on: boolean) => void;
   requestView: (unitId: string | null) => void;
+  setViewpoint: (v: TourState['viewpoint']) => void;
   mountScene: (intro: boolean) => void;
 }
 
@@ -69,6 +72,7 @@ export const useTour = create<TourState>((set) => ({
   view: null,
   view360: true,
   viewRequest: null,
+  viewpoint: null,
   sceneMounted: false,
   intro: false,
   init: (quality, { locked, ask }) => {
@@ -101,6 +105,7 @@ export const useTour = create<TourState>((set) => ({
   setView: (view) => set({ view }),
   setView360: (view360) => set({ view360 }),
   requestView: (viewRequest) => set({ viewRequest }),
+  setViewpoint: (viewpoint) => set({ viewpoint }),
   mountScene: (intro) => set((s) => (s.sceneMounted ? s : { sceneMounted: true, intro })),
 }));
 

@@ -68,6 +68,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           position: p.position,
           levelName: p.levelId ? findLevel(hotel, p.levelId)?.name : undefined,
           href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
+          viewpoints: p.viewpoints,
         })),
         colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
         brandName: tokens.brand.name,

@@ -59,7 +59,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Vista desde la ventana de cada unidad (D-033)
 - [x] `netlify.toml` para desplegar la demo en Netlify
 - [ ] Árboles con follaje más natural (copas con textura de hojas) y algún carro quieto en la calle
-- [ ] Vista desde la ventana en el detalle de la unidad (no solo en la fachada)
+- [x] Vista desde la ventana en el panel de la unidad
+- [x] Planta del piso dentro del cajón (D-041) y en 2D en modo lista
+- [x] Miradores 360° en vivo en la terraza (D-042)
 - [ ] Mostrar las unidades sobre la planta del piso seleccionado (puente con el bloque 3)
 
 ## Bloque 3 — Maqueta de unidad

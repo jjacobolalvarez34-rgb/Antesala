@@ -92,3 +92,25 @@ for (const hotel of hotels) {
     });
   }
 }
+
+for (const hotel of hotels) {
+  const poi = hotel.site.pois.find((p) => p.viewpoints?.length);
+  if (!poi) continue;
+  test(`${hotel.slug} · 3d · mirador`, async ({ page }, info) => {
+    test.setTimeout(300_000);
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await openScene(page, `/h/${hotel.slug}/explorar`, 17);
+    await page.getByRole('button', { name: poi.name, exact: true }).click();
+    await page.getByRole('button', { name: /Mirar desde aquí/ }).click();
+    await page.waitForSelector('html[data-viewpoint="on"]', { state: 'attached' });
+    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+    await page.waitForTimeout(4000);
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-mirador-1.png` });
+    await page.getByRole('button', { name: 'Mirador siguiente' }).click({ force: true, timeout: 30_000 });
+    await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+    await page.waitForTimeout(4000);
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-mirador-2.png` });
+    expect(errors).toEqual([]);
+  });
+}

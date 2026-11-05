@@ -183,3 +183,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-041 · 2026-11-04 · Planta del piso dentro del cajón**
 - Decisión: cada piso tiene su plano SVG (`Level.plan`: pasillo, núcleo, unidades; `data-label` para lo que no es unidad ni zona común). Al elegir el piso, el cajón sale y luego la fachada de ese piso se retira (queda la losa) y aparece la planta en corte (muros de 1,1 m). Las unidades de la demo van en madera, con su nombre y precio, y se pueden tocar para entrar; las demás van en gris. En modo lista, la página del piso muestra la misma planta en 2D. La validación exige que cada unidad del piso tenga su polígono.
 - Por qué: pedido de Jacobo ("las paredes de los pasillos... una visión del piso"). Es el "elige tu unidad exacta" sobre el mapa del piso (PRODUCTO.md, paso 7).
+
+**D-042 · 2026-11-04 · Miradores en 360° en vivo (terraza)**
+- Decisión: las zonas comunes pueden tener `viewpoints` (posición y mirada inicial). Desde la ficha de la terraza, "Mirar desde aquí (360°)" lleva la cámara al punto, a la altura de los ojos, con gran angular y controles de mirar alrededor. Se ve en vivo, de día o de noche, y los vecinos del corredor de vista aparecen. Las flechas pasan entre los miradores (cerros, ciudad, occidente). Los demás controles se ocultan (variante `viewpoint:`).
+- Por qué: pedido de Jacobo ("la terraza con vista 360° desde puntos estratégicos"). No requiere renders: usa la misma escena. Con el cliente real se suman sus 360° capturados.

@@ -3,13 +3,16 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import Link from 'next/link';
 import type { Route } from 'next';
-import { X } from 'lucide-react';
+import { Orbit, X } from 'lucide-react';
 import { useRef, useState, type RefObject } from 'react';
 import * as THREE from 'three';
+
+import { useTour } from '@/lib/store';
 
 export interface ScenePoi {
   id: string;
   name: string;
+  viewpoints?: { id: string; name: string; position: [number, number, number]; yaw: number }[];
   description?: string;
   position: [number, number, number];
   levelName?: string;
@@ -104,6 +107,7 @@ export function SpaceLabelLayer({
  */
 export function PoiLayer({ pois, anchors, visible }: { pois: ScenePoi[]; anchors: PoiAnchors; visible: boolean }) {
   const [open, setOpen] = useState<string | null>(null);
+  const setViewpoint = useTour((s) => s.setViewpoint);
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
@@ -150,6 +154,19 @@ export function PoiLayer({ pois, anchors, visible }: { pois: ScenePoi[]; anchors
                   </button>
                 </div>
                 {p.description ? <p className="mt-1.5 text-pretty text-bone/80">{p.description}</p> : null}
+                {p.viewpoints?.length ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(null);
+                      setViewpoint({ poiId: p.id, index: 0 });
+                    }}
+                    className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-accent-on-dark px-3 text-[0.8125rem] font-medium text-ink transition-colors hover:bg-bone"
+                  >
+                    <Orbit aria-hidden className="size-4" />
+                    Mirar desde aquí (360°)
+                  </button>
+                ) : null}
                 {p.href ? (
                   <Link
                     href={p.href}

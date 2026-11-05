@@ -28,7 +28,7 @@ import { useTour } from '@/lib/store';
 import type { Building, PlanGeometry } from '@/lib/types';
 
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
-import { Backdrop, type BackdropApi } from './Backdrop';
+import { Backdrop, VIEW_ONLY_LAYER, type BackdropApi } from './Backdrop';
 import { BuildingModel, type BuildingColors, type FacadeUnit, type SceneFloor } from './Building';
 import type { FloorPlanSpace } from './FloorPlanModel';
 import { CameraRig } from './CameraRig';
@@ -37,6 +37,7 @@ import { PanoSphere, panoDirection } from './PanoSphere';
 import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
+import { ViewpointOverlay } from './ViewpointOverlay';
 import { createLightUniforms, MAX_UNITS, type LightUniforms } from './windows';
 
 export interface SceneUnit {
@@ -112,6 +113,16 @@ function FovController({ wide, reduced }: { wide: boolean; reduced: boolean }) {
   return null;
 }
 
+/** En un mirador se ven también los vecinos del corredor de vista (capa VIEW_ONLY). */
+function ViewLayerController({ on }: { on: boolean }) {
+  const camera = useThree((s) => s.camera);
+  useEffect(() => {
+    if (on) camera.layers.enable(VIEW_ONLY_LAYER);
+    else camera.layers.disable(VIEW_ONLY_LAYER);
+  }, [on, camera]);
+  return null;
+}
+
 function ReadySignal() {
   const frames = useRef(0);
   const setSceneReady = useTour((s) => s.setSceneReady);
@@ -130,7 +141,12 @@ function Rig({
   reduced,
   intro,
   pano,
-}: Pick<Props, 'data' | 'stage' | 'reduced' | 'intro'> & { facade: Facade; pano: { yaw: number } | null }) {
+  vp,
+}: Pick<Props, 'data' | 'stage' | 'reduced' | 'intro'> & {
+  facade: Facade;
+  pano: { yaw: number } | null;
+  vp: { key: string; position: [number, number, number]; yaw: number } | null;
+}) {
   const frame = useMemo(() => buildingFrame(data.building), [data.building]);
   const size = useThree((s) => s.size);
   const aspect = size.width / Math.max(size.height, 1);
@@ -140,7 +156,19 @@ function Rig({
   let pose = facadePose(frame, facade, FOV, aspect, wide);
   let stageKey = `explorar-${facade.index}`;
   let depth = 1;
-  if (floorOrder !== undefined) {
+  if (vp && stage.kind === 'explorar') {
+    // mirador: la cámara se para en el punto y mira hacia yaw, un poco hacia abajo
+    pose = {
+      target: vp.position,
+      radius: 0.05,
+      polar: Math.PI / 2 - 0.1,
+      azimuth: Math.atan2(-Math.cos(vp.yaw), -Math.sin(vp.yaw)),
+      shiftX: 0,
+      shiftY: 0,
+    };
+    stageKey = `vp-${vp.key}`;
+    depth = 3;
+  } else if (floorOrder !== undefined) {
     pose = floorPose(frame, floorOrder, facade, FOV, aspect, layout);
     stageKey = `piso-${floorOrder}`;
     depth = 2;
@@ -268,7 +296,18 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const view360 = useTour((s) => s.view360);
   const currentPano =
     unitId && spaceId ? (data.unitPlans[unitId]?.spaces.find((s) => s.id === spaceId)?.pano ?? null) : null;
-  const in360 = view360 && currentPano !== null && active;
+  const in360Pano = view360 && currentPano !== null && active;
+  const viewpoint = useTour((s) => s.viewpoint);
+  const setViewpoint = useTour((s) => s.setViewpoint);
+  const vpPoi = viewpoint && stage.kind === 'explorar' ? data.pois.find((p) => p.id === viewpoint.poiId) : undefined;
+  const vpData = vpPoi?.viewpoints?.[viewpoint!.index] ?? null;
+  const in360 = in360Pano || (vpData !== null && active);
+  useEffect(() => {
+    if (stage.kind !== 'explorar' && viewpoint) setViewpoint(null);
+  }, [stage.kind, viewpoint, setViewpoint]);
+  useEffect(() => {
+    document.documentElement.dataset.viewpoint = vpData ? 'on' : 'off';
+  }, [vpData]);
   // punto de vista del 360: centro del espacio a 1,5 m del piso
   const eye = useMemo<[number, number, number] | null>(() => {
     if (!unitId || !spaceId) return null;
@@ -310,7 +349,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     });
   }, [unitId, data, frame]);
   const backdrop = useRef<BackdropApi | null>(null);
-  const showPois = stage.kind === 'explorar' && active;
+  const showPois = stage.kind === 'explorar' && active && !useTour.getState().viewpoint;
   const facade = facades[facadeIndex % facades.length]!;
   const pullDir = facadeDir(facade);
   const light = useMemo(() => createLightUniforms(), []);
@@ -494,7 +533,9 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           maxPolarAngle={in360 ? 2.8 : 1.5}
           rotateSpeed={in360 ? -0.35 : 0.6}
         />
-        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} pano={in360 && currentPano ? currentPano : null} />
+        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} pano={in360Pano && currentPano ? currentPano : null}
+          vp={vpData && vpPoi ? { key: `${vpPoi.id}-${vpData.id}`, position: vpData.position, yaw: vpData.yaw } : null}
+        />
 
         {!qualityLocked ? (
           <PerformanceMonitor
@@ -505,9 +546,11 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           />
         ) : null}
         <FovController wide={in360} reduced={reduced} />
+        <ViewLayerController on={vpData !== null} />
         <ReadySignal />
       </Canvas>
       <PoiLayer pois={data.pois} anchors={anchors} visible={showPois} />
+      {stage.kind === 'explorar' && active ? <ViewpointOverlay pois={data.pois} /> : null}
       <SpaceLabelLayer
         labels={floorLabels}
         anchors={floorAnchors}

@@ -43,7 +43,7 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
       </div>
 
       {/* Con escena: capas sobre el edificio */}
-      <div className="pointer-events-none fixed inset-x-0 top-28 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.5rem)] hidden scene:block md:top-32">
+      <div className="pointer-events-none fixed inset-x-0 top-28 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.5rem)] hidden scene:block viewpoint:hidden md:top-32">
         <div className="mx-auto flex h-full max-w-6xl items-start justify-between gap-4 px-4 md:px-10">
           {/* el edificio es el protagonista: solo el selector de pisos, compacto */}
           <span />
@@ -56,7 +56,7 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
         </div>
       </div>
       {hotel.site.building ? (
-        <div className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-20 hidden justify-center scene:flex">
+        <div className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-20 hidden justify-center scene:flex viewpoint:hidden">
           <FacadePicker
             building={hotel.site.building}
             className="pointer-events-auto w-full max-w-sm animate-in duration-500 fade-in slide-in-from-bottom-2 lg:max-w-none lg:w-auto"
