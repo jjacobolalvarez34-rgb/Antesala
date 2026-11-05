@@ -2187,6 +2187,370 @@
           ]
         }
       ]
+    },
+    {
+      "sameAs": "201",
+      "id": "203",
+      "name": "Estudio 203",
+      "levelId": "2",
+      "basePriceCOP": 260000,
+      "view": "Hacia la calle, sobre la entrada del edificio.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "202",
+      "name": "Suite 202",
+      "levelId": "2",
+      "basePriceCOP": 410000,
+      "view": "Hacia la calle y los cerros orientales.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "204",
+      "name": "Suite 204",
+      "levelId": "2",
+      "basePriceCOP": 390000,
+      "view": "Hacia el interior de la manzana: la más silenciosa del piso.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "205",
+      "name": "Suite 205",
+      "levelId": "2",
+      "basePriceCOP": 390000,
+      "view": "Hacia el interior de la manzana, con los cerros de lado.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "201",
+      "id": "303",
+      "name": "Estudio 303",
+      "levelId": "3",
+      "basePriceCOP": 270000,
+      "view": "Hacia la calle, sobre la entrada del edificio.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "302",
+      "name": "Suite 302",
+      "levelId": "3",
+      "basePriceCOP": 420000,
+      "view": "Hacia la calle y los cerros orientales.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "304",
+      "name": "Suite 304",
+      "levelId": "3",
+      "basePriceCOP": 400000,
+      "view": "Hacia el interior de la manzana: la más silenciosa del piso.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "305",
+      "name": "Suite 305",
+      "levelId": "3",
+      "basePriceCOP": 400000,
+      "view": "Hacia el interior de la manzana, con los cerros de lado.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "201",
+      "id": "401",
+      "name": "Estudio 401",
+      "levelId": "4",
+      "basePriceCOP": 300000,
+      "view": "Hacia la calle, en la esquina con más luz de la tarde.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "201",
+      "id": "403",
+      "name": "Estudio 403",
+      "levelId": "4",
+      "basePriceCOP": 280000,
+      "view": "Hacia la calle, sobre la entrada del edificio.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "404",
+      "name": "Suite 404",
+      "levelId": "4",
+      "basePriceCOP": 410000,
+      "view": "Hacia el interior de la manzana: la más silenciosa del piso.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "405",
+      "name": "Suite 405",
+      "levelId": "4",
+      "basePriceCOP": 410000,
+      "view": "Hacia el interior de la manzana, con los cerros de lado.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "201",
+      "id": "501",
+      "name": "Estudio 501",
+      "levelId": "5",
+      "basePriceCOP": 310000,
+      "view": "Hacia la calle, en la esquina con más luz de la tarde.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "201",
+      "id": "503",
+      "name": "Estudio 503",
+      "levelId": "5",
+      "basePriceCOP": 290000,
+      "view": "Hacia la calle, sobre la entrada del edificio.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "504",
+      "name": "Suite 504",
+      "levelId": "5",
+      "basePriceCOP": 420000,
+      "view": "Hacia el interior de la manzana: la más silenciosa del piso.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "402",
+      "id": "505",
+      "name": "Suite 505",
+      "levelId": "5",
+      "basePriceCOP": 420000,
+      "view": "Hacia el interior de la manzana, con los cerros de lado.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
     }
   ]
 }

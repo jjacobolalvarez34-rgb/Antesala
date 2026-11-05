@@ -26,10 +26,10 @@
     <polygon id="pasillo" data-label="Pasillo" data-finish="alfombra" points="25,610 1775,610 1775,790 25,790"/>
     <polygon id="nucleo" data-label="Escalera y ascensor" data-finish="concreto" points="707,25 1092,25 1092,595 707,595"/>
     <polygon id="201" data-finish="madera" points="25,805 592,805 592,1375 25,1375"/>
-    <polygon id="u-202" data-label="Unidad 202" data-finish="madera" points="607,805 1092,805 1092,1375 607,1375"/>
-    <polygon id="u-203" data-label="Unidad 203" data-finish="madera" points="1107,805 1775,805 1775,1375 1107,1375"/>
-    <polygon id="u-204" data-label="Unidad 204" data-finish="madera" points="25,25 692,25 692,595 25,595"/>
-    <polygon id="u-205" data-label="Unidad 205" data-finish="madera" points="1107,25 1775,25 1775,595 1107,595"/>
+    <polygon id="203" data-finish="madera" points="607,805 1092,805 1092,1375 607,1375"/>
+    <polygon id="202" data-finish="madera" points="1107,805 1775,805 1775,1375 1107,1375"/>
+    <polygon id="204" data-finish="madera" points="25,25 692,25 692,595 25,595"/>
+    <polygon id="205" data-finish="madera" points="1107,25 1775,25 1775,595 1107,595"/>
   </g>
   <g id="openings">
     <rect data-type="door" x="250" y="790" width="90" height="15"/>

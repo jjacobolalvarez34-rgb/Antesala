@@ -165,10 +165,43 @@ async function exists(file: string): Promise<boolean> {
   }
 }
 
+/** Lo que una unidad copia puede cambiar de su tipo; el resto (plano, espacios, fotos) se hereda. */
+const COPY_KEYS = ['id', 'name', 'levelId', 'exterior', 'view', 'viewPremiumCOP', 'basePriceCOP', 'featured'] as const;
+
+/**
+ * Unidades tipo (D-047): `{ "sameAs": "201", "id": "202", ... }` hereda todo de la
+ * unidad 201 y solo cambia número, piso, ventanas, vista y precio. Así un hotel
+ * con 40 habitaciones iguales describe una y lista las demás.
+ */
+function expandCopies(raw: unknown, problems: string[]): unknown {
+  if (!raw || typeof raw !== 'object' || !Array.isArray((raw as { units?: unknown }).units)) return raw;
+  const units = (raw as { units: Record<string, unknown>[] }).units;
+  const templates = new Map(units.filter((u) => !('sameAs' in u)).map((u) => [u.id as string, u]));
+  return {
+    ...raw,
+    units: units.map((u) => {
+      if (!('sameAs' in u)) return u;
+      const template = templates.get(String(u.sameAs));
+      if (!template) {
+        problems.push(`unidad "${String(u.id)}" → sameAs "${String(u.sameAs)}" no es una unidad completa`);
+        return u;
+      }
+      const extra = Object.keys(u).filter((k) => k !== 'sameAs' && !(COPY_KEYS as readonly string[]).includes(k));
+      if (extra.length) problems.push(`unidad "${String(u.id)}" (copia) no puede cambiar: ${extra.join(', ')}`);
+      const copy: Record<string, unknown> = { ...template, exterior: undefined, view: undefined, viewPremiumCOP: undefined, featured: undefined };
+      for (const k of COPY_KEYS) if (k in u) copy[k] = u[k];
+      return structuredClone(copy);
+    }),
+  };
+}
+
 async function loadBundle(slug: string): Promise<HotelBundle> {
   const dir = path.join(CONTENT_DIR, slug);
 
-  const hotelParsed = hotelSchema.safeParse(await readJson(path.join(dir, 'hotel.json')));
+  const copyProblems: string[] = [];
+  const hotelRaw = expandCopies(await readJson(path.join(dir, 'hotel.json')), copyProblems);
+  if (copyProblems.length) fail(slug, copyProblems);
+  const hotelParsed = hotelSchema.safeParse(hotelRaw);
   const tokensParsed = tokensSchema.safeParse(await readJson(path.join(dir, 'tokens.json')));
   const problems: string[] = [];
   if (!hotelParsed.success) problems.push(...formatZod('hotel.json', hotelParsed.error));

@@ -18,6 +18,8 @@ function routesFor(hotel: Hotel): { name: string; url: string }[] {
   ];
   for (const u of hotel.units) {
     list.push({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}` });
+    // las copias de una unidad tipo (sameAs, D-047) tienen los mismos espacios que su plantilla
+    if ('sameAs' in u) continue;
     for (const s of u.spaces) list.push({ name: `unidad-${u.id}-${s.id}`, url: `${h}/unidad/${u.id}/${s.id}` });
   }
   return list;

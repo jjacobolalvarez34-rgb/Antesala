@@ -7,10 +7,14 @@ import type { Hotel, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 /**
- * "Elige tu unidad exacta" (bloque 6): las unidades de la misma categoría en
- * el edificio, con un alzado esquemático que las marca por piso, la
- * diferencia de precio y la vista. Es el argumento del extra por vista.
+ * "Elige tu unidad exacta" (bloque 6): la misma unidad en los otros pisos (la
+ * misma columna del edificio: mismas ventanas, misma vista, otra altura), con
+ * un alzado esquemático, la diferencia de precio y la vista. Es el argumento
+ * del extra por vista. Las del mismo tipo en otras fachadas se cuentan aparte.
  */
+
+/** Misma columna: ocupa las mismas ventanas en la fachada (en otro piso). */
+const columnKey = (u: Unit) => JSON.stringify(u.exterior ?? []);
 export function ExactUnitPicker({
   hotel,
   unit,
@@ -22,9 +26,11 @@ export function ExactUnitPicker({
   tone?: 'light' | 'dark';
   className?: string;
 }) {
-  const siblings = hotel.units
-    .filter((u) => u.categoryId === unit.categoryId)
+  const sameType = hotel.units.filter((u) => u.categoryId === unit.categoryId);
+  const siblings = sameType
+    .filter((u) => columnKey(u) === columnKey(unit))
     .sort((a, b) => (findLevel(hotel, b.levelId)?.order ?? 0) - (findLevel(hotel, a.levelId)?.order ?? 0));
+  const others = sameType.length - siblings.length;
   if (siblings.length < 2) return null;
   const base = unitPrice(unit) ?? 0;
   const levels = sortedLevels(hotel).reverse();
@@ -119,6 +125,14 @@ export function ExactUnitPicker({
           })}
         </ul>
       </div>
+      {others > 0 ? (
+        <p className={cn('mt-3 text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>
+          Y {others} más de este tipo hacia otras fachadas.{' '}
+          <Link href={routes.lista(hotel.slug)} className={cn('font-medium underline-offset-4 hover:underline', dark ? 'text-accent-on-dark' : 'text-accent')}>
+            Ver todas
+          </Link>
+        </p>
+      ) : null}
     </section>
   );
 }
