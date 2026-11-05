@@ -39,7 +39,7 @@ import { TourGuide, type GuideStep } from './TourGuide';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
-import { createLightUniforms, MAX_UNITS, type LightUniforms } from './windows';
+import { createLightUniforms, envIntensity, MAX_UNITS, type LightUniforms } from './windows';
 
 export interface SceneUnit {
   id: string;
@@ -248,10 +248,13 @@ function UnitLights({ light, units }: { light: LightUniforms; units: SceneUnit[]
 }
 
 /** Entorno del edificio: HDRI real cuando llega; mientras tanto, luces de estudio. */
-function BuildingEnvironment({ map, light }: { map: THREE.Texture | null; light: LightUniforms }) {
+function BuildingEnvironment({ map, light, interior }: { map: THREE.Texture | null; light: LightUniforms; interior: boolean }) {
   const scene = useThree((s) => s.scene);
-  useFrame(() => {
-    scene.environmentIntensity = THREE.MathUtils.lerp(1, 0.5, light.uNight.value);
+  const k = useRef(1);
+  useFrame((_, delta) => {
+    // por dentro de la unidad el cielo no ilumina todo por igual: baja y deja ver el pañete
+    k.current += ((interior ? 0.55 : 1) - k.current) * (1 - Math.exp(-delta * 4));
+    scene.environmentIntensity = envIntensity(light.uNight.value) * k.current;
   });
   if (map) return <Environment map={map} />;
   return (
@@ -386,6 +389,34 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   }, [unitId, data, frame]);
   const guideStep: GuideStep =
     in360 ? 'mirar' : stage.kind === 'piso' ? 'piso' : stage.kind === 'unidad' ? (spaceId ? 'espacio' : 'unidad') : 'explorar';
+  /**
+   * Entrar a una habitación (D-050): la luz se enciende y se queda un momento
+   * (en celular no hay hover: es la única vez que se ve), con su nombre; luego
+   * empieza la transición de cámara. La página ya se precargó al tocar.
+   */
+  const holdTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(holdTimer.current), []);
+  const enterUnit = (u: SceneUnit, at?: { x: number; y: number }) => {
+    router.prefetch(u.href);
+    setSelectedUnit(u.id);
+    setPlanHovered(u.id);
+    if (at) setHoveredUnit({ id: u.id, x: at.x, y: at.y });
+    document.body.style.cursor = '';
+    window.clearTimeout(holdTimer.current);
+    holdTimer.current = window.setTimeout(
+      () => {
+        setHoveredUnit(null);
+        router.push(u.href);
+      },
+      reduced ? 450 : 750,
+    );
+  };
+  // ya dentro de la unidad, la luz de su ventana se apaga (el edificio ya se fue)
+  useEffect(() => {
+    if (stage.kind !== 'unidad') return;
+    const t = window.setTimeout(() => setSelectedUnit(null), 2500);
+    return () => window.clearTimeout(t);
+  }, [stage.kind, setSelectedUnit]);
   const backdrop = useRef<BackdropApi | null>(null);
   const showPois = stage.kind === 'explorar' && active && !useTour.getState().viewpoint;
   const facade = facades[facadeIndex % facades.length]!;
@@ -435,7 +466,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       alive = false;
     };
   }, [night, envs.noche]);
-  const environment = night ? (envs.noche ?? envs.dia ?? null) : (envs.dia ?? null);
+  // el HDRI cambia a mitad del crepúsculo (no al tocar el botón): ver envIntensity
+  const [envNight, setEnvNight] = useState(night);
+  const envNightRef = useRef(night);
+  const environment = envNight ? (envs.noche ?? envs.dia ?? null) : (envs.dia ?? null);
   useEffect(() => {
     backdrop.current?.invalidate(2);
   }, [environment]);
@@ -461,13 +495,26 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
 
   // transición día/noche: el fondo se re-renderiza (desenfocado) mientras dura
   useEffect(() => {
+    const syncEnv = () => {
+      const n = light.uNight.value >= 0.5;
+      if (n !== envNightRef.current) {
+        envNightRef.current = n;
+        setEnvNight(n);
+      }
+    };
     gsap.to(light.uNight, {
       value: night ? 1 : 0,
       duration: reduced ? 0 : 2.2,
       ease: 'power2.inOut',
       overwrite: true,
-      onUpdate: () => backdrop.current?.invalidate(1),
-      onComplete: () => backdrop.current?.invalidate(1),
+      onUpdate: () => {
+        syncEnv();
+        backdrop.current?.invalidate(1);
+      },
+      onComplete: () => {
+        syncEnv();
+        backdrop.current?.invalidate(1);
+      },
     });
   }, [night, reduced, light]);
 
@@ -482,18 +529,20 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: FOV, near: 0.5, far: 3000, position: [cx + 60, 60, cz + 80] }}
         onPointerMissed={() => {
+          // tocar el vacío cancela la entrada a una habitación
+          window.clearTimeout(holdTimer.current);
           setHoveredLevel(null);
           setSelectedUnit(null);
         }}
       >
         {/* por dentro (recorrido en vivo) por las ventanas se ve la ciudad, no el estudio */}
-        <Backdrop apiRef={backdrop} environment={environment} studio={inUnit && !(in360Pano && data.liveInterior)} reduced={reduced}>
+        <Backdrop apiRef={backdrop} environment={environment} light={light} studio={inUnit && !(in360Pano && data.liveInterior)} reduced={reduced}>
           <Context frame={frame} facades={facades} shadows={shadows} high={high} light={light} />
         </Backdrop>
 
         {/* escena del edificio (en vivo) */}
         <DayNightLights frame={frame} light={light} shadows={shadows} high={high} />
-        <BuildingEnvironment map={environment} light={light} />
+        <BuildingEnvironment map={environment} light={light} interior={in360Pano && data.liveInterior} />
         <BuildingModel
           building={data.building}
           frame={frame}
@@ -510,7 +559,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           onPlanHover={setPlanHovered}
           onPlanSelect={(id) => {
             const u = data.units.find((x) => x.id === id);
-            if (u) router.push(u.href);
+            if (u) enterUnit(u);
           }}
           hoveredId={hoveredLevelId}
           pullDir={pullDir}
@@ -525,13 +574,9 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             setHoveredUnit(u ? { id: u.id, x, y } : null);
             document.body.style.cursor = u ? 'pointer' : '';
           }}
-          onUnitSelect={(slot) => {
-            // tocar la habitación entra directo a su unidad (con la transición de cámara)
+          onUnitSelect={(slot, x, y) => {
             const u = data.units[slot];
-            if (u) {
-              setHoveredUnit(null);
-              router.push(u.href);
-            }
+            if (u) enterUnit(u, { x, y });
           }}
         />
         <UnitLights light={light} units={data.units} />
@@ -550,6 +595,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             reduced={reduced}
             shadows={shadows}
             cut={spaceId !== null && !in360}
+            interior={in360Pano && data.liveInterior}
             onHover={setHoveredSpace}
             onSelect={(sid) => router.push(routes.espacio(data.slug, unitId, sid))}
           />

@@ -82,7 +82,8 @@ interface Props {
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
   onUnitHover: (slot: number | null, clientX: number, clientY: number) => void;
-  onUnitSelect: (slot: number) => void;
+  /** x, y: punto del toque en pantalla (para mostrar el nombre mientras se enciende la luz) */
+  onUnitSelect: (slot: number, x: number, y: number) => void;
   /** plantas de piso (D-041) por id de nivel */
   floorPlans?: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
   planHovered?: string | null;
@@ -528,7 +529,7 @@ function Floor({
                     const slot = slotAt(e);
                     if (slot >= 0) {
                       e.stopPropagation();
-                      onUnitSelect(slot);
+                      onUnitSelect(slot, e.nativeEvent.clientX, e.nativeEvent.clientY);
                     }
                   }
                 : undefined
