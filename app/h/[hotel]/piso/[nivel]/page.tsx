@@ -107,7 +107,7 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
       {level.plan && plans[level.plan] ? (
         <section aria-labelledby="planta" className="mt-8 rounded-3xl border border-border bg-secondary p-4 sm:p-8 md:mt-12">
           <h2 id="planta" className="eyebrow">
-            Planta del piso · toca una unidad
+            {units.length ? 'Planta del piso · toca una unidad' : 'Planta del piso'}
           </h2>
           <PlanSvg
             geometry={plans[level.plan]!}

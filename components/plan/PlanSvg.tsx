@@ -95,18 +95,39 @@ export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive',
                   strokeDasharray={s.id === selectedId ? undefined : '10 8'}
                 />
               ))}
-            {geometry.furniture.map((f, i) => (
-              <rect
-                key={i}
-                x={f.x + 3}
-                y={f.y + 3}
-                width={Math.max(f.width - 6, 1)}
-                height={Math.max(f.height - 6, 1)}
-                rx={Math.min(8, f.width / 6, f.height / 6)}
-                className="fill-ink/[0.035] stroke-ink/30"
-                strokeWidth={Math.max(1.5, width / 520)}
-              />
-            ))}
+            {geometry.furniture.map((f, i) => {
+              const sw = Math.max(1.5, width / 520);
+              if (f.item === 'stairs') {
+                // escalera: huellas perpendiculares al sentido de subida
+                const vertical = f.height >= f.width;
+                const n = 12;
+                return (
+                  <g key={i} className="stroke-ink/30" strokeWidth={sw}>
+                    <rect x={f.x} y={f.y} width={f.width} height={f.height} className="fill-ink/[0.035]" />
+                    {Array.from({ length: n - 1 }, (_, k) =>
+                      vertical ? (
+                        <line key={k} x1={f.x} x2={f.x + f.width} y1={f.y + ((k + 1) * f.height) / n} y2={f.y + ((k + 1) * f.height) / n} />
+                      ) : (
+                        <line key={k} y1={f.y} y2={f.y + f.height} x1={f.x + ((k + 1) * f.width) / n} x2={f.x + ((k + 1) * f.width) / n} />
+                      ),
+                    )}
+                  </g>
+                );
+              }
+              return (
+                <rect
+                  key={i}
+                  x={f.x + 3}
+                  y={f.y + 3}
+                  width={Math.max(f.width - 6, 1)}
+                  height={Math.max(f.height - 6, 1)}
+                  rx={f.item === 'plant' || f.item === 'stool' || f.item === 'lamp' ? Math.min(f.width, f.height) / 2 : Math.min(8, f.width / 6, f.height / 6)}
+                  className={f.item === 'rug' ? 'fill-accent/[0.05] stroke-ink/20' : 'fill-ink/[0.035] stroke-ink/30'}
+                  strokeDasharray={f.item === 'rug' ? `${sw * 4} ${sw * 3}` : undefined}
+                  strokeWidth={sw}
+                />
+              );
+            })}
             {geometry.walls.map((w, i) => (
               <rect key={i} {...w} className="fill-ink" />
             ))}

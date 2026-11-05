@@ -34,10 +34,22 @@
     <rect data-item="sink" x="25" y="620" width="55" height="85"/>
     <rect data-item="toilet" x="170" y="650" width="40" height="55"/>
     <rect data-item="sofa" x="440" y="215" width="90" height="220"/>
-    <rect data-item="table" x="570" y="270" width="70" height="110"/>
+    <rect data-item="coffee" x="570" y="270" width="70" height="110"/>
     <rect data-item="table" x="690" y="380" width="110" height="75"/>
     <rect data-item="counter" x="765" y="480" width="60" height="225"/>
     <rect data-item="counter" x="620" y="645" width="145" height="60"/>
     <rect data-item="table" x="700" y="50" width="60" height="60"/>
+    <rect data-item="rug" x="130" y="212" width="200" height="196"/>
+    <rect data-item="chair" data-back="s" x="332" y="238" width="48" height="45"/>
+    <rect data-item="rug" x="545" y="228" width="125" height="205"/>
+    <rect data-item="chair" data-back="n" x="702" y="330" width="46" height="46"/>
+    <rect data-item="chair" data-back="n" x="752" y="330" width="46" height="46"/>
+    <rect data-item="chair" data-back="w" x="640" y="395" width="46" height="46"/>
+    <rect data-item="plant" x="775" y="190" width="45" height="45"/>
+    <rect data-item="lamp" x="447" y="445" width="40" height="40"/>
+    <rect data-item="chair" data-back="w" x="652" y="58" width="44" height="44"/>
+    <rect data-item="chair" data-back="e" x="764" y="58" width="44" height="44"/>
+    <rect data-item="plant" x="470" y="30" width="50" height="50"/>
+    <rect data-item="plant" x="775" y="100" width="45" height="45"/>
   </g>
 </svg>

@@ -2,31 +2,132 @@
   <title>Piso 5 · planta</title>
   <g id="walls">
     <rect x="0" y="0" width="1800" height="25"/>
-    <rect x="0" y="1375" width="1800" height="25"/>
     <rect x="0" y="0" width="25" height="1400"/>
     <rect x="1775" y="0" width="25" height="1400"/>
+    <rect x="0" y="1375" width="1800" height="25"/>
     <rect x="25" y="595" width="1750" height="15"/>
     <rect x="25" y="790" width="1750" height="15"/>
     <rect x="592" y="805" width="15" height="570"/>
     <rect x="1092" y="805" width="15" height="570"/>
     <rect x="692" y="25" width="15" height="570"/>
     <rect x="1092" y="25" width="15" height="570"/>
+    <rect x="210" y="805" width="10" height="240"/>
+    <rect x="25" y="1035" width="185" height="10"/>
+    <rect x="785" y="805" width="10" height="240"/>
+    <rect x="607" y="1035" width="178" height="10"/>
+    <rect x="1292" y="805" width="10" height="240"/>
+    <rect x="1107" y="1035" width="185" height="10"/>
+    <rect x="210" y="355" width="10" height="240"/>
+    <rect x="25" y="355" width="185" height="10"/>
+    <rect x="1292" y="355" width="10" height="240"/>
+    <rect x="1107" y="355" width="185" height="10"/>
   </g>
   <g id="spaces">
-    <polygon id="pasillo" data-label="Pasillo" points="25,610 1775,610 1775,790 25,790"/>
-    <polygon id="nucleo" data-label="Escalera y ascensor" points="707,25 1092,25 1092,595 707,595"/>
-    <polygon id="u-501" data-label="Unidad 501" points="25,805 592,805 592,1375 25,1375"/>
-    <polygon id="u-502" data-label="Unidad 502" points="607,805 1092,805 1092,1375 607,1375"/>
-    <polygon id="502" points="1107,805 1775,805 1775,1375 1107,1375"/>
-    <polygon id="u-504" data-label="Unidad 504" points="25,25 692,25 692,595 25,595"/>
-    <polygon id="u-505" data-label="Unidad 505" points="1107,25 1775,25 1775,595 1107,595"/>
+    <polygon id="pasillo" data-label="Pasillo" data-finish="alfombra" points="25,610 1775,610 1775,790 25,790"/>
+    <polygon id="nucleo" data-label="Escalera y ascensor" data-finish="concreto" points="707,25 1092,25 1092,595 707,595"/>
+    <polygon id="u-501" data-label="Unidad 501" data-finish="madera" points="25,805 592,805 592,1375 25,1375"/>
+    <polygon id="u-502" data-label="Unidad 502" data-finish="madera" points="607,805 1092,805 1092,1375 607,1375"/>
+    <polygon id="502" data-finish="madera" points="1107,805 1775,805 1775,1375 1107,1375"/>
+    <polygon id="u-504" data-label="Unidad 504" data-finish="madera" points="25,25 692,25 692,595 25,595"/>
+    <polygon id="u-505" data-label="Unidad 505" data-finish="madera" points="1107,25 1775,25 1775,595 1107,595"/>
   </g>
   <g id="openings">
     <rect data-type="door" x="250" y="790" width="90" height="15"/>
+    <rect data-type="door" x="70" y="1035" width="80" height="10"/>
+    <rect data-type="window" x="138.4" y="1375" width="340.2" height="25"/>
     <rect data-type="door" x="800" y="790" width="90" height="15"/>
+    <rect data-type="door" x="652" y="1035" width="80" height="10"/>
+    <rect data-type="window" x="704.0" y="1375" width="291.0" height="25"/>
     <rect data-type="door" x="1350" y="790" width="90" height="15"/>
+    <rect data-type="door" x="1152" y="1035" width="80" height="10"/>
+    <rect data-type="window" x="1240.6" y="1375" width="400.8" height="25"/>
     <rect data-type="door" x="300" y="595" width="90" height="15"/>
-    <rect data-type="door" x="840" y="595" width="120" height="15"/>
+    <rect data-type="door" x="70" y="355" width="80" height="10"/>
+    <rect data-type="window" x="158.4" y="0" width="400.2" height="25"/>
     <rect data-type="door" x="1400" y="595" width="90" height="15"/>
+    <rect data-type="door" x="1152" y="355" width="80" height="10"/>
+    <rect data-type="window" x="1240.6" y="0" width="400.8" height="25"/>
+    <rect data-type="door" x="840" y="595" width="120" height="15"/>
+    <rect data-type="window" x="0" y="640" width="25" height="120"/>
+    <rect data-type="window" x="1775" y="640" width="25" height="120"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="stairs" data-back="n" x="722" y="45" width="170" height="530"/>
+    <rect data-item="elevator" data-back="e" x="912" y="60" width="165" height="150"/>
+    <rect data-item="elevator" data-back="e" x="912" y="240" width="165" height="150"/>
+    <rect data-item="shower" data-back="n" x="29" y="809" width="96" height="96"/>
+    <rect data-item="toilet" data-back="n" x="148" y="811" width="54" height="66"/>
+    <rect data-item="sink" data-back="e" x="152" y="925" width="54" height="90"/>
+    <rect data-item="kitchen" data-back="n" x="355" y="809" width="233" height="62"/>
+    <rect data-item="bed" data-back="e" x="382" y="1075" width="206" height="160"/>
+    <rect data-item="nightstand" x="540" y="1027" width="46" height="42"/>
+    <rect data-item="nightstand" x="540" y="1241" width="46" height="42"/>
+    <rect data-item="rug" x="140" y="1105" width="130" height="200"/>
+    <rect data-item="sofa" data-back="w" x="31" y="1095" width="90" height="220"/>
+    <rect data-item="coffee" x="155" y="1160" width="80" height="90"/>
+    <rect data-item="lamp" x="37" y="1321" width="40" height="40"/>
+    <rect data-item="table" x="347" y="1293" width="70" height="70"/>
+    <rect data-item="chair" data-back="w" x="297" y="1305" width="44" height="46"/>
+    <rect data-item="chair" data-back="e" x="423" y="1305" width="44" height="46"/>
+    <rect data-item="shower" data-back="n" x="611" y="809" width="96" height="96"/>
+    <rect data-item="toilet" data-back="n" x="723" y="811" width="54" height="66"/>
+    <rect data-item="sink" data-back="e" x="727" y="925" width="54" height="90"/>
+    <rect data-item="kitchen" data-back="n" x="905" y="809" width="183" height="62"/>
+    <rect data-item="bed" data-back="e" x="882" y="1075" width="206" height="160"/>
+    <rect data-item="nightstand" x="1040" y="1027" width="46" height="42"/>
+    <rect data-item="nightstand" x="1040" y="1241" width="46" height="42"/>
+    <rect data-item="rug" x="722" y="1105" width="130" height="200"/>
+    <rect data-item="armchair" data-back="w" x="615" y="1135" width="88" height="90"/>
+    <rect data-item="coffee" x="737" y="1160" width="80" height="90"/>
+    <rect data-item="lamp" x="619" y="1321" width="40" height="40"/>
+    <rect data-item="table" x="847" y="1293" width="70" height="70"/>
+    <rect data-item="chair" data-back="w" x="797" y="1305" width="44" height="46"/>
+    <rect data-item="chair" data-back="e" x="923" y="1305" width="44" height="46"/>
+    <rect data-item="shower" data-back="n" x="1111" y="809" width="96" height="96"/>
+    <rect data-item="toilet" data-back="n" x="1230" y="811" width="54" height="66"/>
+    <rect data-item="sink" data-back="e" x="1234" y="925" width="54" height="90"/>
+    <rect data-item="kitchen" data-back="n" x="1455" y="809" width="316" height="62"/>
+    <rect data-item="bed" data-back="e" x="1565" y="1075" width="206" height="160"/>
+    <rect data-item="nightstand" x="1723" y="1027" width="46" height="42"/>
+    <rect data-item="nightstand" x="1723" y="1241" width="46" height="42"/>
+    <rect data-item="rug" x="1222" y="1105" width="130" height="200"/>
+    <rect data-item="sofa" data-back="w" x="1113" y="1095" width="90" height="220"/>
+    <rect data-item="coffee" x="1237" y="1160" width="80" height="90"/>
+    <rect data-item="lamp" x="1119" y="1321" width="40" height="40"/>
+    <rect data-item="table" x="1530" y="1293" width="70" height="70"/>
+    <rect data-item="chair" data-back="w" x="1480" y="1305" width="44" height="46"/>
+    <rect data-item="chair" data-back="e" x="1606" y="1305" width="44" height="46"/>
+    <rect data-item="shower" data-back="s" x="29" y="495" width="96" height="96"/>
+    <rect data-item="toilet" data-back="s" x="148" y="523" width="54" height="66"/>
+    <rect data-item="sink" data-back="e" x="152" y="385" width="54" height="90"/>
+    <rect data-item="kitchen" data-back="s" x="405" y="529" width="283" height="62"/>
+    <rect data-item="bed" data-back="e" x="482" y="165" width="206" height="160"/>
+    <rect data-item="nightstand" x="640" y="331" width="46" height="42"/>
+    <rect data-item="nightstand" x="640" y="117" width="46" height="42"/>
+    <rect data-item="rug" x="140" y="95" width="130" height="200"/>
+    <rect data-item="sofa" data-back="w" x="31" y="85" width="90" height="220"/>
+    <rect data-item="coffee" x="155" y="150" width="80" height="90"/>
+    <rect data-item="lamp" x="37" y="39" width="40" height="40"/>
+    <rect data-item="table" x="447" y="37" width="70" height="70"/>
+    <rect data-item="chair" data-back="w" x="397" y="49" width="44" height="46"/>
+    <rect data-item="chair" data-back="e" x="523" y="49" width="44" height="46"/>
+    <rect data-item="shower" data-back="s" x="1111" y="495" width="96" height="96"/>
+    <rect data-item="toilet" data-back="s" x="1230" y="523" width="54" height="66"/>
+    <rect data-item="sink" data-back="e" x="1234" y="385" width="54" height="90"/>
+    <rect data-item="kitchen" data-back="s" x="1505" y="529" width="266" height="62"/>
+    <rect data-item="bed" data-back="e" x="1565" y="165" width="206" height="160"/>
+    <rect data-item="nightstand" x="1723" y="331" width="46" height="42"/>
+    <rect data-item="nightstand" x="1723" y="117" width="46" height="42"/>
+    <rect data-item="rug" x="1222" y="95" width="130" height="200"/>
+    <rect data-item="sofa" data-back="w" x="1113" y="85" width="90" height="220"/>
+    <rect data-item="coffee" x="1237" y="150" width="80" height="90"/>
+    <rect data-item="lamp" x="1119" y="39" width="40" height="40"/>
+    <rect data-item="table" x="1530" y="37" width="70" height="70"/>
+    <rect data-item="chair" data-back="w" x="1480" y="49" width="44" height="46"/>
+    <rect data-item="chair" data-back="e" x="1606" y="49" width="44" height="46"/>
+    <rect data-item="rug" x="110" y="668" width="1580" height="64"/>
+    <rect data-item="plant" x="40" y="625" width="55" height="55"/>
+    <rect data-item="plant" x="1705" y="625" width="55" height="55"/>
+    <rect data-item="console" data-back="n" x="1150" y="612" width="180" height="40"/>
   </g>
 </svg>

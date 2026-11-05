@@ -3,6 +3,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 
 import type { PlanGeometry, PlanOpening, PlanRect } from '@/lib/types';
 
+import { furnitureGeometry, type FurnitureMaterial } from './furniture';
+
 /**
  * Plano SVG (cm) → maqueta 3D (m), según CONTENIDO.md §4:
  * paredes de 2,6 m con vanos reales (puertas hasta 2,1 m; ventanas de 0,9 a
@@ -21,29 +23,11 @@ export interface UnitMeshes {
   walls: THREE.BufferGeometry | null;
   glass: THREE.BufferGeometry | null;
   floors: { id: string; geometry: THREE.ShapeGeometry; center: [number, number] }[];
-  furniture: { item: string; geometry: THREE.BufferGeometry }[];
+  /** muebles agrupados por material (components/plan/furniture.ts) */
+  furniture: { material: FurnitureMaterial; geometry: THREE.BufferGeometry }[];
   /** tamaño total en metros (ancho x, fondo z) */
   size: [number, number];
 }
-
-/** Alturas típicas de muebles low-poly (m). */
-const FURNITURE_H: Record<string, number> = {
-  bed: 0.5,
-  nightstand: 0.55,
-  wardrobe: 2.1,
-  desk: 0.75,
-  sofa: 0.8,
-  armchair: 0.8,
-  table: 0.75,
-  counter: 0.9,
-  island: 0.9,
-  shower: 0.08,
-  bathtub: 0.55,
-  sink: 0.85,
-  toilet: 0.45,
-  console: 0.8,
-  planter: 0.6,
-};
 
 function overlap1d(a0: number, a1: number, b0: number, b1: number) {
   return Math.max(0, Math.min(a1, b1) - Math.max(a0, b0));
@@ -119,19 +103,12 @@ export function planToMesh(plan: PlanGeometry, { wallHeight = WALL_H }: { wallHe
     return { id: s.id, geometry, center: [X(cx), Z(cy)] as [number, number] };
   });
 
-  const byItem = new Map<string, THREE.BufferGeometry[]>();
-  for (const f of plan.furniture) {
-    const h = FURNITURE_H[f.item] ?? 0.6;
-    const inset = 3;
-    const g = box(X(f.x + inset), X(f.x + f.width - inset), Z(f.y + inset), Z(f.y + f.height - inset), 0.02, h);
-    const list = byItem.get(f.item) ?? [];
-    list.push(g);
-    byItem.set(f.item, list);
-  }
-  const furniture = [...byItem.entries()].map(([item, parts]) => {
+  // en corte (planta de piso) lo alto se recorta un poco por debajo del muro
+  const maxH = wallHeight < WALL_H ? wallHeight - 0.04 : WALL_H;
+  const furniture = [...furnitureGeometry(plan.furniture, plan.walls, X, Z, maxH).entries()].map(([material, parts]) => {
     const geometry = mergeGeometries(parts, false);
     parts.forEach((p) => p.dispose());
-    return { item, geometry };
+    return { material, geometry };
   });
 
   const walls = wallParts.length ? mergeGeometries(wallParts, false) : null;

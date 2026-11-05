@@ -2,16 +2,18 @@
 
 import type { ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
-import { useEffect, useLayoutEffect, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
+import { FURNITURE_COLORS } from '@/components/plan/furniture';
 import { planToMesh } from '@/components/plan/planToMesh';
 import type { PlanGeometry } from '@/lib/types';
 
 /**
  * Planta del piso dentro del cajón (D-041): al sacar el piso, la fachada se
  * retira y queda la planta en corte (muros de 1,1 m) con el pasillo, el
- * núcleo y las unidades. Las de la demo se resaltan y se pueden tocar.
+ * núcleo y las unidades, con acabados de piso y muebles (D-044). Las
+ * unidades de la demo se resaltan y se pueden tocar.
  */
 
 export interface FloorPlanSpace {
@@ -26,19 +28,21 @@ const COLORS = {
   unit: '#b88d63',
   unitHot: '#d7b07f',
   other: '#cdc7bc',
-  poi: '#c9a77c',
-  pasillo: '#e6e2da',
-  nucleo: '#9a938a',
+};
+
+/** Color por acabado (data-finish del plano). */
+const FINISH: Record<string, string> = {
+  madera: '#bf9f7a',
+  piedra: '#cfc7b9',
+  baldosa: '#b98a68',
+  alfombra: '#7b7268',
+  concreto: '#a39b90',
   deck: '#8f7259',
 };
 
-const colorFor = (s: FloorPlanSpace | undefined, id: string) => {
+const colorFor = (s: FloorPlanSpace | undefined, finish: string | undefined) => {
   if (s?.kind === 'unit') return COLORS.unit;
-  if (s?.kind === 'poi') return COLORS.poi;
-  if (id === 'pasillo') return COLORS.pasillo;
-  if (id === 'nucleo') return COLORS.nucleo;
-  if (id.startsWith('terraza')) return COLORS.deck;
-  return COLORS.other;
+  return (finish && FINISH[finish]) ?? COLORS.other;
 };
 
 export function FloorPlanModel({
@@ -67,28 +71,47 @@ export function FloorPlanModel({
     () => () => {
       meshes.walls?.dispose();
       meshes.floors.forEach((f) => f.geometry.dispose());
+      meshes.furniture.forEach((f) => f.geometry.dispose());
     },
     [meshes],
   );
   const meta = useMemo(() => new Map(spaces.map((s) => [s.id, s])), [spaces]);
+  const finishes = useMemo(() => new Map(plan.spaces.map((s) => [s.id, s.finish])), [plan]);
   const mats = useMemo(() => {
-    const m = (color: string) => new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0 });
+    const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
+      new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra });
     return {
       walls: m('#f1ece3'),
-      floors: Object.fromEntries(meshes.floors.map((f) => [f.id, m(colorFor(meta.get(f.id), f.id))])),
+      floors: Object.fromEntries(meshes.floors.map((f) => [f.id, m(colorFor(meta.get(f.id), finishes.get(f.id)), { roughness: 0.75 })])),
+      furniture: Object.fromEntries(
+        meshes.furniture.map((f) => [
+          f.material,
+          f.material === 'glass'
+            ? m(FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
+            : m(FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
+        ]),
+      ) as Record<string, THREE.MeshStandardMaterial>,
     };
-  }, [meshes, meta]);
+  }, [meshes, meta, finishes]);
 
-  // entra cuando el cajón ya salió (la fachada se retira al mismo tiempo)
+  // entra cuando el cajón ya salió (la fachada se retira al mismo tiempo); cerrado, no se dibuja
+  const group = useRef<THREE.Group>(null);
   useLayoutEffect(() => {
-    const all = [mats.walls, ...Object.values(mats.floors)];
-    all.forEach((mat) =>
+    const g = group.current;
+    if (visible && g) g.visible = true;
+    const all: [THREE.Material, number][] = [
+      [mats.walls, 1],
+      ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
+      ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
+    ];
+    all.forEach(([mat, base], i) =>
       gsap.to(mat, {
-        opacity: visible ? 1 : 0,
+        opacity: visible ? base : 0,
         duration: reduced ? 0 : visible ? 0.6 : 0.25,
         delay: visible ? (reduced ? 0.45 : 1.15) : 0,
         ease: 'power2.out',
         overwrite: true,
+        onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
   }, [visible, mats, reduced]);
@@ -105,7 +128,7 @@ export function FloorPlanModel({
   }, [hovered, meshes, meta, mats]);
 
   return (
-    <group position={position}>
+    <group ref={group} position={position} visible={false}>
       {meshes.walls ? (
         <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows && visible} receiveShadow={shadows} raycast={visible ? undefined : () => null} />
       ) : null}
@@ -148,6 +171,17 @@ export function FloorPlanModel({
           />
         );
       })}
+      {meshes.furniture.map((f) => (
+        <mesh
+          key={f.material}
+          geometry={f.geometry}
+          material={mats.furniture[f.material]}
+          position-y={0.02}
+          castShadow={shadows && visible && f.material !== 'glass'}
+          receiveShadow={shadows}
+          raycast={() => null}
+        />
+      ))}
     </group>
   );
 }

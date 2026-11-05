@@ -37,7 +37,7 @@
     <rect data-item="sink" x="25" y="790" width="55" height="130"/>
     <rect data-item="toilet" x="200" y="870" width="40" height="55"/>
     <rect data-item="sofa" x="470" y="260" width="240" height="95"/>
-    <rect data-item="table" x="530" y="390" width="120" height="70"/>
+    <rect data-item="coffee" x="530" y="390" width="120" height="70"/>
     <rect data-item="armchair" x="760" y="280" width="85" height="85"/>
     <rect data-item="table" x="760" y="480" width="180" height="95"/>
     <rect data-item="console" x="455" y="700" width="40" height="120"/>
@@ -47,5 +47,21 @@
     <rect data-item="planter" x="20" y="20" width="960" height="40"/>
     <rect data-item="sofa" x="120" y="80" width="180" height="80"/>
     <rect data-item="table" x="620" y="80" width="120" height="80"/>
+    <rect data-item="rug" x="140" y="280" width="240" height="240"/>
+    <rect data-item="lamp" x="360" y="360" width="40" height="40"/>
+    <rect data-item="rug" x="490" y="250" width="260" height="200"/>
+    <rect data-item="chair" data-back="n" x="777" y="430" width="46" height="46"/>
+    <rect data-item="chair" data-back="n" x="837" y="430" width="46" height="46"/>
+    <rect data-item="chair" data-back="n" x="897" y="430" width="46" height="46"/>
+    <rect data-item="chair" data-back="s" x="777" y="580" width="46" height="46"/>
+    <rect data-item="chair" data-back="s" x="837" y="580" width="46" height="46"/>
+    <rect data-item="chair" data-back="s" x="897" y="580" width="46" height="46"/>
+    <rect data-item="stool" x="777" y="810" width="44" height="44"/>
+    <rect data-item="stool" x="837" y="810" width="44" height="44"/>
+    <rect data-item="plant" x="470" y="860" width="55" height="55"/>
+    <rect data-item="chair" data-back="w" x="574" y="98" width="44" height="44"/>
+    <rect data-item="chair" data-back="e" x="746" y="98" width="44" height="44"/>
+    <rect data-item="lounger" data-back="n" x="800" y="68" width="70" height="125"/>
+    <rect data-item="lounger" data-back="n" x="885" y="68" width="70" height="125"/>
   </g>
 </svg>

@@ -1,4 +1,7 @@
-import type { PlanFurniture, PlanGeometry, PlanOpening, PlanRect, PlanSpace } from './types';
+import type { PlanFurniture, PlanGeometry, PlanOpening, PlanRect, PlanSide, PlanSpace } from './types';
+
+const SIDES = ['n', 's', 'e', 'w'] as const;
+const FINISHES = ['madera', 'piedra', 'baldosa', 'alfombra', 'concreto', 'deck'] as const;
 
 /**
  * Parser mínimo de planos SVG con la convención de docs/CONTENIDO.md §4.
@@ -84,7 +87,11 @@ export function parsePlan(svg: string, file = 'plano.svg'): PlanGeometry {
 
   const spaces: PlanSpace[] = elements(bodies.spaces, 'polygon').map((a) => {
     if (!a.id) throw new PlanError(file, 'hay un polígono de espacio sin id');
-    return { id: a.id, label: a['data-label'], points: points(file, a.points, a.id) };
+    const finish = a['data-finish'];
+    if (finish && !(FINISHES as readonly string[]).includes(finish)) {
+      throw new PlanError(file, `acabado inválido en "${a.id}": "${finish}" (usa ${FINISHES.join(', ')})`);
+    }
+    return { id: a.id, label: a['data-label'], finish, points: points(file, a.points, a.id) };
   });
   const seen = new Set<string>();
   for (const s of spaces) {
@@ -100,10 +107,13 @@ export function parsePlan(svg: string, file = 'plano.svg'): PlanGeometry {
     return { ...rect(file, a), type };
   });
 
-  const furniture: PlanFurniture[] = elements(bodies.furniture, 'rect').map((a) => ({
-    ...rect(file, a),
-    item: a['data-item'] ?? 'otro',
-  }));
+  const furniture: PlanFurniture[] = elements(bodies.furniture, 'rect').map((a) => {
+    const back = a['data-back'];
+    if (back && !(SIDES as readonly string[]).includes(back)) {
+      throw new PlanError(file, `data-back inválido: "${back}" (usa n, s, e o w)`);
+    }
+    return { ...rect(file, a), item: a['data-item'] ?? 'otro', back: back as PlanSide | undefined };
+  });
 
   return { width, height, walls, spaces, openings, furniture };
 }

@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
+import { FURNITURE_COLORS } from '@/components/plan/furniture';
 import { planToMesh } from '@/components/plan/planToMesh';
 import { polygonLabelPoint } from '@/lib/plan';
 import type { PlanGeometry, SpaceType } from '@/lib/types';
@@ -32,23 +33,6 @@ const FLOOR_COLOR: Partial<Record<SpaceType, string>> = {
 };
 const WOOD = '#a57f5c';
 
-const FURNITURE_COLOR: Record<string, string> = {
-  bed: '#ebe5da',
-  nightstand: '#7a5d44',
-  wardrobe: '#b8a58b',
-  desk: '#6e543f',
-  sofa: '#8e877c',
-  armchair: '#9a8f80',
-  table: '#6b5240',
-  counter: '#dcd6cc',
-  island: '#dcd6cc',
-  shower: '#e8eef0',
-  bathtub: '#f3f3f0',
-  sink: '#f3f3f0',
-  toilet: '#f3f3f0',
-  console: '#6e543f',
-  planter: '#56704a',
-};
 
 export function UnitModel({
   plan,
@@ -95,7 +79,12 @@ export function UnitModel({
         spaces.map((s) => [s.id, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 })]),
       ) as Record<string, THREE.MeshStandardMaterial>,
       furniture: Object.fromEntries(
-        meshes.furniture.map((f) => [f.item, m(FURNITURE_COLOR[f.item] ?? '#bdb3a5')]),
+        meshes.furniture.map((f) => [
+          f.material,
+          f.material === 'glass'
+            ? m(FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
+            : m(FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
+        ]),
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
   }, [spaces, meshes]);
@@ -108,7 +97,7 @@ export function UnitModel({
       [mats.walls, 1],
       [mats.glass, 0.35],
       ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
-      ...Object.values(mats.furniture).map((m) => [m, 1] as [THREE.Material, number]),
+      ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
     ];
     const d = reduced ? 0 : 0.9;
     all.forEach(([m, base], i) =>
@@ -183,7 +172,14 @@ export function UnitModel({
         />
       ))}
       {meshes.furniture.map((f) => (
-        <mesh key={f.item} geometry={f.geometry} material={mats.furniture[f.item]} castShadow={shadows} receiveShadow={shadows} raycast={() => null} />
+        <mesh
+          key={f.material}
+          geometry={f.geometry}
+          material={mats.furniture[f.material]}
+          castShadow={shadows && f.material !== 'glass'}
+          receiveShadow={shadows}
+          raycast={() => null}
+        />
       ))}
     </group>
   );

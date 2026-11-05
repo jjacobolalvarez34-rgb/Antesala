@@ -193,14 +193,21 @@ export interface PlanOpening extends PlanRect {
   type: 'door' | 'window';
 }
 
+/** Lado de la planta (norte = arriba del SVG). */
+export type PlanSide = 'n' | 's' | 'e' | 'w';
+
 export interface PlanFurniture extends PlanRect {
   item: string;
+  /** contra qué lado va el respaldo (data-back); si falta, se deduce de la pared más cercana */
+  back?: PlanSide;
 }
 
 export interface PlanSpace {
   id: string;
   /** etiqueta opcional (data-label) para polígonos que no son espacios ni unidades */
   label?: string;
+  /** acabado del piso (data-finish): madera, piedra, baldosa, alfombra, concreto, deck */
+  finish?: string;
   /** puntos [x, y] en cm */
   points: [number, number][];
 }

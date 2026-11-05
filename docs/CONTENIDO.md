@@ -34,7 +34,8 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
   - `<g id="walls">`: paredes como `rect`, con grosor real (15 cm interiores, 25 cm exteriores). El parser aún no acepta `path` (ver Aparcado en `TAREAS.md`).
   - `<g id="spaces">`: un `<polygon id="<space.id>">` por espacio. El `id` debe coincidir con `Space.id`.
   - `<g id="openings">`: puertas (`data-type="door"`) y ventanas (`data-type="window"`) como `rect` que marcan los huecos.
-- Opcional: `<g id="furniture">` con `rect` y `data-item="bed|sofa|table|…"` para colocar muebles low-poly.
+- Opcional: `<g id="furniture">` con `rect` y `data-item` para colocar muebles low-poly armados por piezas (D-044): `bed`, `nightstand`, `wardrobe`, `desk`, `table`, `coffee`, `chair`, `stool`, `sofa`, `armchair`, `lounger`, `counter`/`kitchen`, `island`, `bar`, `reception`, `shower`, `bathtub`, `sink`, `toilet`, `console`, `shelf`, `bench`, `plant`/`planter` (larga = jardinera), `lamp`, `rug`, `stairs`, `elevator`, `booth`. `data-back="n|s|e|w"` es el lado del respaldo; si falta, se deduce de la pared más cercana.
+- Opcional en cada polígono de espacio: `data-finish="madera|piedra|baldosa|alfombra|concreto|deck"` (color del piso en la planta 3D).
 - Sin transformaciones, estilos en línea ni grupos anidados. La geometría va limpia. `lib/plan.ts` rechaza lo que se salga de la convención.
 - El `viewBox` empieza en `0 0`. Balcones y terrazas van fuera de los muros exteriores, como polígonos sin pared (por eso el `viewBox` incluye su franja).
 - `Unit.areaM2` es el área total (interior bruto + balcón o terraza); `Space.areaM2` es el área útil del polígono.
