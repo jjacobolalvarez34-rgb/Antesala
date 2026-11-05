@@ -70,6 +70,15 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
       context: base,
     };
   }
+  if (stage === 'comparar') {
+    return {
+      label: 'Comparar categorías',
+      detail: from,
+      back: routes.lista(data.slug),
+      backLabel: 'Volver a pisos y unidades',
+      context: base,
+    };
+  }
   if (stage === 'lista') {
     return {
       label: 'Pisos y unidades',
@@ -86,6 +95,8 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
 export function BookingBar({ data }: { data: BookingSummary }) {
   const segments = useSelectedLayoutSegments();
   const stage = resolveStage(data, segments);
+  // el panel es para el gerente del hotel: sin barra de reserva
+  if (segments[0] === 'panel') return null;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(0.75rem+var(--safe-bottom))] md:px-6">

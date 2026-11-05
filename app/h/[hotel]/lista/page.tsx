@@ -30,6 +30,12 @@ export default async function ListaPage({ params }: PageProps<'/h/[hotel]/lista'
         <p className="mt-4 max-w-lg text-pretty text-muted-foreground">
           El edificio de arriba hacia abajo. Toca una unidad para ver su plano y recorrer cada espacio.
         </p>
+        <Link
+          href={routes.comparar(hotel.slug)}
+          className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium underline-offset-4 hover:underline"
+        >
+          Comparar las categorías <ArrowRight aria-hidden className="size-4" />
+        </Link>
         <Suspense>
           <NoSceneNotice slug={hotel.slug} />
         </Suspense>

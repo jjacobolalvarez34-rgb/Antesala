@@ -41,6 +41,12 @@ export default async function Home() {
                   className="size-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </Link>
+              <Link
+                href={routes.panel(hotel.slug)}
+                className="-mt-2 mb-3 inline-flex min-h-9 items-center text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Panel del hotel (métricas simuladas)
+              </Link>
             </li>
           ))}
         </ul>

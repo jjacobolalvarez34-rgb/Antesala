@@ -93,10 +93,10 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 ## Bloque 6 — Ganchos de venta
 
-- [ ] Comparador de categorías
-- [ ] "Elige tu unidad exacta" con precios y extra por vista (requiere más de una unidad por categoría; ver propuesta del bloque 1)
-- [ ] WhatsApp prellenado con la unidad y las fechas
-- [ ] Panel de métricas simuladas, incluida la comisión de OTA ahorrada
+- [x] Comparador de categorías (`/comparar`)
+- [x] "Elige tu unidad exacta" con alzado, diferencia de precio y vista (ficha y panel de la unidad)
+- [x] WhatsApp prellenado con la unidad, las fechas, noches y huéspedes (hoja de reserva)
+- [x] Panel de métricas simuladas (`/panel`), incluida la comisión de OTA ahorrada
 
 ## Bloque 7 — Pulido y despliegue
 

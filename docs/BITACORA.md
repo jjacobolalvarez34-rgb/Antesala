@@ -25,6 +25,23 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-04 · Bloques 4 y 6 · 360°, ganchos de venta y revisión en Netlify
+
+**Hecho**
+- Bloque 4: 360° dentro de la misma escena (D-036), panoramas placeholder con geometría real (D-037), zoom progresivo en la galería e interruptor 360°/maqueta.
+- Demo publicada en Netlify (https://nieblaalta.netlify.app o https://sunny-smakager-11bfe7.netlify.app). Hubo que declarar `@netlify/plugin-nextjs`: sin él, Netlify subía `.next` tal cual y todo daba 404.
+- Revisión de Jacobo en la demo publicada (D-038): interfaz despejada, clic en la habitación entra a la unidad, cajón al elegir piso, giro de fachada de 2,6 s, vista con diafragma, fundido con movimiento reducido, señales de hover más visibles. Se corrigió el desenfoque que no se iba y el clic en ventanas desde un piso.
+- Bloque 6 (D-039): reservar con fechas, "elige tu unidad exacta", `/comparar` y `/panel`.
+
+**Mediciones**
+- JS inicial máximo: 159 KB gzip (límite 180). Capturas de lista: 80/80.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo revise la demo en Netlify (celular y escritorio) y la pruebe con 2–3 personas. Pendientes: bloque 5 (renders de Blender), bloque 7 (entrada de marca, i18n, Lighthouse) y bloque 8 (guion y mensajes).
+- La rama de producción en Netlify es `bloque-2-exterior`; cada cambio se sube a `main` y a esa rama. Conviene cambiarla a `main` en Netlify.
+
+---
+
 ## 2026-11-04 · Bloques 2 (v2) y 3 · Realismo, día/noche y maqueta de unidad
 
 **Hecho**

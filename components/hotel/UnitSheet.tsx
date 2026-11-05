@@ -1,25 +1,27 @@
 import Link from 'next/link';
 
+import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
 import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
-import type { Category, Level, Unit } from '@/lib/types';
+import type { Category, Hotel, Level, Unit } from '@/lib/types';
 
 /**
  * Panel de la unidad sobre su maqueta 3D (bloque 3): bottom sheet en móvil,
  * lateral en escritorio. Solo se ve en modo escena.
  */
 export function UnitSheet({
-  slug,
+  hotel,
   unit,
   category,
   level,
 }: {
-  slug: string;
+  hotel: Hotel;
   unit: Unit;
   category?: Category;
   level?: Level;
 }) {
+  const slug = hotel.slug;
   const price = unitPrice(unit);
   return (
     <section
@@ -47,6 +49,7 @@ export function UnitSheet({
         ) : null}
         {unit.view ? <p className="mt-2 text-sm text-pretty text-bone/75">{unit.view}</p> : null}
         {unit.exterior?.length ? <ViewFromWindowButton unitId={unit.id} /> : null}
+        <ExactUnitPicker hotel={hotel} unit={unit} tone="dark" className="mt-5" />
 
         <h2 className="mt-5 text-xs tracking-[0.12em] text-bone/60 uppercase">Espacios · toca uno en la maqueta</h2>
         <ul className="mt-2 flex flex-wrap gap-2">

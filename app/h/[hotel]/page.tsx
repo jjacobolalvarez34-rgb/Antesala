@@ -97,6 +97,12 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
           >
             Ver por pisos <ArrowRight aria-hidden className="size-4" />
           </Link>
+          <Link
+            href={routes.comparar(hotel.slug)}
+            className="inline-flex min-h-11 items-center gap-1 text-sm font-medium underline-offset-4 hover:underline"
+          >
+            Comparar <ArrowRight aria-hidden className="size-4" />
+          </Link>
         </div>
         <ul className="mt-6 grid gap-4 md:grid-cols-3 md:gap-6">
           {showcase.map((u) => (

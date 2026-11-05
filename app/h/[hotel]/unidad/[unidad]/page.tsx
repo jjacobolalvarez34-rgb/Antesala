@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, Check, Eye } from 'lucide-react';
 
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
+import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { UnitSheet } from '@/components/hotel/UnitSheet';
 import { Facts } from '@/components/hotel/Facts';
 import { WhatsAppButton } from '@/components/booking/WhatsAppButton';
@@ -41,7 +42,7 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
 
   return (
     <main>
-      <UnitSheet slug={hotel.slug} unit={unit} category={category} level={level} />
+      <UnitSheet hotel={hotel} unit={unit} category={category} level={level} />
       {/* Modo lista (sin escena) */}
       <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
@@ -141,6 +142,8 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
           ) : null}
         </aside>
       </div>
+
+      <ExactUnitPicker hotel={hotel} unit={unit} className="mt-12 max-w-2xl md:mt-16" />
 
       <section aria-labelledby="espacios" className="mt-12 md:mt-16">
         <h2 id="espacios" className="font-display text-title md:text-4xl">

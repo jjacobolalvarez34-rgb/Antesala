@@ -12,6 +12,8 @@ function routesFor(hotel: Hotel): { name: string; url: string }[] {
     { name: 'entrada', url: h },
     { name: 'explorar', url: `${h}/explorar` },
     { name: 'lista', url: `${h}/lista` },
+    { name: 'comparar', url: `${h}/comparar` },
+    { name: 'panel', url: `${h}/panel` },
     ...hotel.levels.map((l) => ({ name: `piso-${l.id}`, url: `${h}/piso/${l.id}` })),
   ];
   for (const u of hotel.units) {
@@ -43,7 +45,10 @@ for (const hotel of hotels) {
       await page.waitForLoadState('networkidle');
 
       // Reservar siempre visible (regla 4 de CLAUDE.md)
-      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
+      // Reservar siempre visible para el huésped (el panel es para el gerente)
+      if (r.name !== 'panel') {
+        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
+      }
       if (hotel.isDemo) await expect(page.getByText('Hotel ficticio · imágenes ilustrativas')).toBeVisible();
 
       // Ninguna imagen cargada puede estar rota (las lazy sin cargar se ignoran)
