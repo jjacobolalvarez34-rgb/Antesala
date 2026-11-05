@@ -34,12 +34,30 @@ test('raíz', async ({ page }, info) => {
 });
 
 for (const hotel of hotels) {
+  test(`${hotel.slug} · entrada de marca`, async ({ page }, info) => {
+    const skip = page.getByRole('button', { name: 'Saltar' });
+    await page.goto(`/h/${hotel.slug}`);
+    await skip.click();
+    await expect(skip).toBeHidden();
+    // una vez por sesión: al volver ya no aparece
+    await page.reload();
+    await expect(skip).toBeHidden();
+    // captura a mitad de la entrada (dura 2,9 s), en una sesión limpia
+    await page.evaluate(() => sessionStorage.clear());
+    await page.reload();
+    await expect(skip).toBeVisible();
+    await page.waitForTimeout(1400);
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/00-intro.png` });
+  });
+
   for (const [i, r] of routesFor(hotel).entries()) {
     test(`${hotel.slug} · ${r.name}`, async ({ page }, info) => {
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
 
+      // la entrada de marca (D-043) se captura aparte; aquí se da por vista
+      await page.addInitScript(() => sessionStorage.setItem('antesala:intro', '1'));
       const res = await page.goto(r.url);
       expect(res?.status(), r.url).toBe(200);
       await page.waitForLoadState('networkidle');

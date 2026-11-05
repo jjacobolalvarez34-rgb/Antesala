@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { BookingBar, type BookingSummary } from '@/components/booking/BookingBar';
+import { BrandIntro } from '@/components/hotel/BrandIntro';
 import { DemoBanner } from '@/components/hotel/DemoBanner';
 import { HotelHeader } from '@/components/hotel/HotelHeader';
 import { PoweredBy } from '@/components/hotel/PoweredBy';
@@ -141,6 +142,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       />
       <div className="relative z-10 flex-1">{children}</div>
       <BookingBar data={summary} />
+      <BrandIntro name={tokens.brand.name} tagline={tokens.brand.tagline} home={`/h/${hotel.slug}`} />
       <PoweredBy />
     </div>
   );

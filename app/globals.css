@@ -194,3 +194,63 @@
 .iris-close {
   animation: iris-close 0.5s cubic-bezier(0.64, 0, 0.78, 0) both;
 }
+
+/* Entrada de marca (D-043): letras que suben desde la niebla y cortina que se abre */
+@keyframes intro-letter {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes intro-fog {
+  from {
+    transform: translate3d(-8%, 0, 0) scale(1.1);
+  }
+  to {
+    transform: translate3d(8%, -3%, 0) scale(1.25);
+  }
+}
+@keyframes intro-leave {
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+.brand-intro-name span {
+  display: inline-block;
+  opacity: 0;
+  animation: intro-letter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.brand-intro-tagline {
+  opacity: 0;
+  animation: intro-fade 1s ease-out 1.2s both;
+}
+.brand-intro-fog {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(40% 30% at 30% 60%, color-mix(in oklab, var(--hotel-base) 16%, transparent), transparent 70%),
+    radial-gradient(35% 25% at 70% 40%, color-mix(in oklab, var(--hotel-accent-on-dark) 18%, transparent), transparent 70%),
+    radial-gradient(50% 35% at 50% 85%, color-mix(in oklab, var(--hotel-base) 10%, transparent), transparent 70%);
+  filter: blur(30px);
+  animation: intro-fog 6s ease-in-out infinite alternate;
+}
+.brand-intro-leave {
+  animation: intro-leave 0.75s cubic-bezier(0.64, 0, 0.36, 1) forwards;
+}
+[data-intro='seen'] .brand-intro {
+  display: none;
+}
