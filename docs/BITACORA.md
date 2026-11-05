@@ -25,6 +25,21 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-04 · Planta del piso y miradores de la terraza
+
+**Hecho**
+- Planta de cada piso (D-041): 6 planos SVG (pasillo, núcleo, unidades; el piso 1 con lobby, cowork y local; el 6 con el penthouse y su terraza). Al sacar el cajón, la fachada del piso se retira y aparece la planta en corte; las unidades de la demo se tocan y muestran su precio. En modo lista, la planta 2D en la página del piso.
+- Miradores de la terraza (D-042): tres puntos (cerros, ciudad, occidente) con 360° en vivo.
+- Bloque 5 aplazado hasta el primer cliente (D-040).
+
+**Mediciones**
+- JS inicial máximo: 159 KB gzip. Capturas 3D del piso 4 y del mirador en verde.
+
+**Siguiente sesión**
+- Empezar por: revisión de Jacobo en Netlify. Luego bloque 7 (entrada de marca, inglés, Lighthouse) y bloque 8 (guion y mensajes).
+
+---
+
 ## 2026-11-04 · Bloques 4 y 6 · 360°, ganchos de venta y revisión en Netlify
 
 **Hecho**
