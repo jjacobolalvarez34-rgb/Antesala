@@ -48,18 +48,32 @@ export function SceneLayer({ data }: { data: SceneData }) {
   const allowed = can3d({ quality, askConsent, consent });
   const wants3d = stage !== null && allowed;
 
-  // precarga (D-029): desde cualquier etapa, en tiempo ocioso, el JS del 3D y lo del día
+  // precarga (D-029): desde cualquier etapa, el JS del 3D y lo del día.
+  // Escritorio: en tiempo ocioso. Táctil (D-051): por intención, con el primer toque o
+  // desplazamiento; evaluar three.js en ocio bloqueaba el hilo de un celular lento ~1 s
   useEffect(() => {
     if (!allowed || sceneMounted) return;
+    let done = false;
     const run = () => {
+      if (done) return;
+      done = true;
       loadScene().catch(() => {});
       prefetch('dia');
     };
+    if (window.matchMedia('(pointer: coarse)').matches && stageName !== 'explorar') {
+      const opts = { once: true, passive: true } as const;
+      window.addEventListener('pointerdown', run, opts);
+      window.addEventListener('scroll', run, opts);
+      return () => {
+        window.removeEventListener('pointerdown', run);
+        window.removeEventListener('scroll', run);
+      };
+    }
     // Safari no tiene requestIdleCallback
     const idle = 'requestIdleCallback' in window;
     const id = idle ? window.requestIdleCallback(run, { timeout: 4000 }) : window.setTimeout(run, 2500);
     return () => (idle ? window.cancelIdleCallback(id) : window.clearTimeout(id));
-  }, [allowed, sceneMounted]);
+  }, [allowed, sceneMounted, stageName]);
 
   useEffect(() => {
     if (wants3d) mountScene(stage?.kind === 'explorar');
