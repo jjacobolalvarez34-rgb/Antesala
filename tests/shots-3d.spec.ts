@@ -79,7 +79,8 @@ for (const hotel of hotels) {
       test.setTimeout(300_000);
       await openScene(page, `${h}/unidad/${suite.id}/${kitchen.id}`, DAY);
       await page.getByRole('button', { name: 'Maqueta' }).click();
-      await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 60_000 });
+      // salir del 360° es un salto de etapa con fundido: en WebGL por software tarda ~1 min
+      await page.waitForSelector('html[data-camera="idle"]', { state: 'attached', timeout: 180_000 });
       // el corte de los muros es una animación GSAP: con WebGL por software avanza lento
       await page.waitForTimeout(20_000);
       await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-espacio-maqueta.png` });

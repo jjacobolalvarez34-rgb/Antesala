@@ -40,7 +40,8 @@ for (const hotel of hotels) {
     const skip = page.getByRole('button', { name: 'Saltar' });
     await page.goto(`/h/${hotel.slug}`);
     await skip.click();
-    await expect(skip).toBeHidden();
+    // la cortina tarda 0,75 s; con el equipo cargado, bastante más
+    await expect(skip).toBeHidden({ timeout: 20_000 });
     // una vez por sesión: al volver ya no aparece
     await page.reload();
     await expect(skip).toBeHidden();
