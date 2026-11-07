@@ -25,6 +25,29 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-07 · Bloque 7 y 8 · Estabilidad en celular, precarga por intención, criterios y venta
+
+**Hecho**
+- Estabilidad del 3D en celular (D-051). Causas encontradas de lo que vio Jacobo:
+  - **Piso que "se rompe":** las ventanas de la fachada retirada seguían escribiendo profundidad con opacidad 0 y tapaban a ratos la planta. Ahora la fachada se oculta del todo al retirarse.
+  - **Tirones, colores dañados y fondo negro:** el monitor de rendimiento prendía y apagaba sombras y resolución en plena animación. Ahora sombras y detalle se deciden al montar y en marcha solo baja la resolución, con la cámara quieta.
+  - **Desenfoque negro:** píxeles NaN/Inf se regaban con el blur. Ahora se limpian, se comprueba que el GPU dibuje en half float (si no, 8 bits) y el fondo se repinta si se reinicia el contexto.
+  - **Trabas al abrir piso o unidad:** los shaders se compilaban en plena animación. Ahora se compilan con la escena quieta.
+- Velocidad en celular (D-051): en táctil, three.js y el HDRI se precargan con el primer toque o desplazamiento, no en ocio. Las 6 plantas amobladas se arman en tiempo libre, no en la carga.
+- Bloque 8: `docs/VENTA.md` con el guion de 3 minutos, las preguntas típicas, la verificación web de Monir y Nico (ninguno tiene tour 360°; Monir no tiene sitio propio; Nico usa el motor Mirai) y los mensajes de primer contacto.
+
+**Revisión de los criterios de éxito (`PRODUCTO.md`)**
+- Recorrido completo sin errores en iPhone y Android de gama media: **pendiente** de la prueba de Jacobo. En las pruebas automáticas (escritorio y 390 px) el recorrido pasa sin errores de consola.
+- Contenido útil en < 2,5 s con 4G: **casi**. Lighthouse móvil (antes de la precarga por intención): primer contenido en 1,2-1,3 s en todas las páginas y LCP de 1,2 a 2,8 s (la entrada en 2,5 s y el piso 1 en 2,8 s se pasan). Hay que volver a medir con lo de hoy.
+- Un tercero entiende el producto sin explicación: **en curso**. Varias personas lo vieron y les gustó, pero la mamá de Jacobo no supo usarlo: se agregó la guía (D-048). Falta repetir la prueba con 2-3 personas.
+- Se ve premium, sin pantallas que parezcan placeholder: **no del todo**. Las galerías de fotos de cada espacio siguen con imágenes de muestra (el bloque 5 está aplazado, D-040). Propuesta: generar esas fotos desde la maqueta amoblada en vivo (como la vista desde la ventana), hasta que haya renders o fotos reales.
+
+**Problemas / bloqueos**
+- El equipo estaba compartiendo CPU con un build de Android de otro proyecto (calibra-proyecto): las pruebas 3D tardaron el doble y alguna se cayó por tiempo.
+
+**Siguiente sesión**
+- Empezar por: la prueba de Jacobo en el celular (piso, fondo negro, colores). Luego la propuesta de fotos de galería desde la maqueta y volver a medir Lighthouse.
+
 ## 2026-11-05 · Bloque 7 · Retroalimentación de las primeras personas: luz, cámara, guía y todas las habitaciones
 
 **Hecho**

@@ -110,15 +110,18 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Lighthouse contra Netlify (accesibilidad 100, buenas prácticas 100; rendimiento 56-73)
 - [ ] Pruebas en un Android de gama media y un iPhone
 - [x] Retroalimentación de las primeras personas: luz de la planta, maqueta abierta, zoom, fondo de la unidad, guía, todas las habitaciones, recorrido amoblado (D-046 a D-049)
-- [ ] Rendimiento móvil: precarga por intención en táctil y medir el armado de la escena en un teléfono
+- [x] Rendimiento móvil: precarga por intención en táctil y plantas en tiempo libre (D-051)
+- [x] Estabilidad del 3D en celular: piso que se rompe, fondo negro, colores, trabas (D-051)
+- [ ] Volver a medir Lighthouse con la precarga por intención
+- [ ] Fotos de galería generadas desde la maqueta amoblada (para que nada parezca placeholder)
 - [ ] Despliegue en Vercel; assets en R2 si hace falta
-- [ ] Revisar todos los criterios de `PRODUCTO.md`
+- [x] Revisar todos los criterios de `PRODUCTO.md` (bitácora 2026-11-07)
 
 ## Bloque 8 — Salida a vender
 
-- [ ] Guion de demo de 3 minutos
-- [ ] Verificar que los prospectos no tengan ya un tour 360°
-- [ ] Mensajes de primer contacto para Monir, Nico y KingDome
+- [x] Guion de demo de 3 minutos (`docs/VENTA.md`)
+- [x] Verificar en la web que los prospectos no tengan ya un tour 360° (confirmar en persona)
+- [x] Mensajes de primer contacto para Monir y Nico (KingDome aparcado)
 - [ ] Sección de dominios, hosting y transferencia en el documento maestro
 
 ## Aparcado (no construir sin que Jacobo lo pida)

@@ -229,3 +229,12 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - En el recorrido por dentro, el cielo raso hace sombra y bajan el relleno y el entorno: la luz entra por las ventanas.
 - Por qué: retroalimentación de Jacobo después de probarlo en el celular.
 
+**D-051 · 2026-11-07 · Estabilidad del 3D en celular y precarga por intención**
+- Decisión:
+  - Sombras y detalle se deciden una vez al montar la escena. En marcha solo baja la resolución (DPR), nunca vuelve a subir y nunca durante una transición. Antes el monitor de rendimiento prendía y apagaba sombras y resolución en plena animación: tirones, colores dañados y el fondo vaciado (negro).
+  - La fachada del piso abierto se oculta del todo cuando termina de retirarse. Las ventanas, con opacidad 0, seguían escribiendo profundidad y tapaban a ratos la planta ("el piso se rompe").
+  - Fondo: se comprueba que el GPU pueda dibujar en half float (si no, 8 bits), los píxeles NaN/Inf se limpian antes del desenfoque (salían manchas negras) y el fondo se vuelve a pintar si el contexto WebGL se reinicia.
+  - Los shaders de la planta y de la maqueta se compilan con la escena quieta, no en plena animación. Las plantas amobladas se arman en tiempo libre después del arranque.
+  - En táctil, el JS del 3D y el HDRI se precargan con el primer toque o desplazamiento, no en tiempo ocioso (evaluar three.js bloqueaba ~1 s el hilo de un celular lento). En escritorio sigue en ocio.
+- Por qué: Jacobo vio en su celular el piso trabado, partes de la planta que desaparecían, colores dañados y el desenfoque que se volvía negro.
+
