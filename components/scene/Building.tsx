@@ -371,7 +371,21 @@ function Floor({
   onUnitSelect: Props['onUnitSelect'];
 }) {
   const group = useRef<THREE.Group>(null);
+  /** la fachada del piso (todo menos la losa y la planta): se oculta del todo cuando se retira */
+  const facadeRef = useRef<THREE.Group>(null);
   const hasPlan = Boolean(floorPlan);
+  // la planta amoblada se arma en tiempo libre después del arranque (no en la carga inicial)
+  const [planIdle, setPlanIdle] = useState(false);
+  useEffect(() => {
+    if (!hasPlan) return;
+    const run = () => setPlanIdle(true);
+    const idle = 'requestIdleCallback' in window;
+    const id = idle
+      ? window.requestIdleCallback(run, { timeout: 2500 + floor.order * 600 })
+      : window.setTimeout(run, 2000 + floor.order * 400);
+    return () => (idle ? window.cancelIdleCallback(id) : window.clearTimeout(id));
+  }, [hasPlan, floor.order]);
+  const planMounted = planIdle || state === 'selected';
   const yBase = (floor.order - 1) * frame.floorHeight;
   const parts = useMemo(
     () => floorParts(building, floor.order, frame.floorHeight, unitAt, balconyAt),
@@ -432,8 +446,11 @@ function Floor({
         overwrite: true,
       });
     }
-    // planta del piso: con el cajón afuera, la fachada de este piso se retira (queda la losa)
+    // planta del piso: con el cajón afuera, la fachada de este piso se retira (queda la losa).
+    // Retirada, se oculta: con opacidad 0 seguía escribiendo profundidad y tapaba a ratos la planta
     const cutaway = selected && hasPlan;
+    const fg = facadeRef.current;
+    if (fg && !cutaway) fg.visible = true;
     for (const key of Object.keys(BASE_OPACITY) as (keyof typeof BASE_OPACITY)[]) {
       const mat = mats[key];
       const keep = key === 'slab';
@@ -443,7 +460,12 @@ function Floor({
         delay: reduced ? rd : gone ? 0.55 : cutaway ? 1.1 : 0,
         ease,
         overwrite: true,
-        onComplete: gone && key === 'clad' ? () => g && (g.visible = false) : undefined,
+        onComplete:
+          gone && key === 'clad'
+            ? () => g && (g.visible = false)
+            : cutaway && key === 'clad'
+              ? () => fg && (fg.visible = false)
+              : undefined,
       });
       if (key !== 'glass' && key !== 'rail') mat.depthWrite = !dim && !(cutaway && !keep);
     }
@@ -455,7 +477,7 @@ function Floor({
         ease,
         overwrite: true,
       });
-      m.depthWrite = m === mats.windows ? !dim : false;
+      m.depthWrite = m === mats.windows ? !dim && !cutaway : false;
     }
     // señal visible de "esto se puede tocar": el piso bajo el puntero se entibia
     const hot = state === 'hovered';
@@ -505,42 +527,44 @@ function Floor({
     >
       <group position={[0, yBase, 0]}>
         <mesh geometry={slab} material={mats.slab} castShadow={shadows} receiveShadow={shadows} />
-        {clad ? <mesh geometry={clad} material={mats.clad} castShadow={shadows} receiveShadow={shadows} /> : null}
-        {concrete ? (
-          <mesh geometry={concrete} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
-        ) : null}
-        {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={shadows} /> : null}
-        {windowGeo ? (
-          <mesh
-            geometry={windowGeo}
-            material={mats.windows}
-            onPointerMove={
-              interactive
-                ? (e: ThreeEvent<PointerEvent>) => {
-                    const slot = slotAt(e);
-                    onUnitHover(slot >= 0 ? slot : null, e.nativeEvent.clientX, e.nativeEvent.clientY);
-                  }
-                : undefined
-            }
-            onPointerLeave={interactive ? () => onUnitHover(null, 0, 0) : undefined}
-            onClick={
-              interactive
-                ? (e: ThreeEvent<MouseEvent>) => {
-                    const slot = slotAt(e);
-                    if (slot >= 0) {
-                      e.stopPropagation();
-                      onUnitSelect(slot, e.nativeEvent.clientX, e.nativeEvent.clientY);
+        <group ref={facadeRef}>
+          {clad ? <mesh geometry={clad} material={mats.clad} castShadow={shadows} receiveShadow={shadows} /> : null}
+          {concrete ? (
+            <mesh geometry={concrete} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
+          ) : null}
+          {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={shadows} /> : null}
+          {windowGeo ? (
+            <mesh
+              geometry={windowGeo}
+              material={mats.windows}
+              onPointerMove={
+                interactive
+                  ? (e: ThreeEvent<PointerEvent>) => {
+                      const slot = slotAt(e);
+                      onUnitHover(slot >= 0 ? slot : null, e.nativeEvent.clientX, e.nativeEvent.clientY);
                     }
-                  }
-                : undefined
-            }
-          />
-        ) : null}
-        {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} raycast={noRaycast} /> : null}
-        {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
-        {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
-        {green ? <mesh geometry={green} material={mats.green} castShadow={shadows} /> : null}
-        {floorPlan ? (
+                  : undefined
+              }
+              onPointerLeave={interactive ? () => onUnitHover(null, 0, 0) : undefined}
+              onClick={
+                interactive
+                  ? (e: ThreeEvent<MouseEvent>) => {
+                      const slot = slotAt(e);
+                      if (slot >= 0) {
+                        e.stopPropagation();
+                        onUnitSelect(slot, e.nativeEvent.clientX, e.nativeEvent.clientY);
+                      }
+                    }
+                  : undefined
+              }
+            />
+          ) : null}
+          {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} raycast={noRaycast} /> : null}
+          {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
+          {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
+          {green ? <mesh geometry={green} material={mats.green} castShadow={shadows} /> : null}
+        </group>
+        {floorPlan && planMounted ? (
           <FloorPlanModel
             plan={floorPlan.plan}
             spaces={floorPlan.spaces}

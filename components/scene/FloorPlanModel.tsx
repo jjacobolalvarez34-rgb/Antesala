@@ -1,6 +1,6 @@
 'use client';
 
-import { useFrame, type ThreeEvent } from '@react-three/fiber';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
@@ -118,6 +118,7 @@ export function FloorPlanModel({
 
   // entra cuando el cajón ya salió (la fachada se retira al mismo tiempo); cerrado, no se dibuja
   const group = useRef<THREE.Group>(null);
+  usePrecompile(group);
   useLayoutEffect(() => {
     const g = group.current;
     if (visible && g) g.visible = true;
@@ -205,4 +206,28 @@ export function FloorPlanModel({
       ))}
     </group>
   );
+}
+
+/**
+ * Compila los shaders de un grupo oculto cuando la escena está quieta: si no, el
+ * celular los compilaba en plena animación (el cajón o la maqueta se trababan).
+ */
+export function usePrecompile(group: React.RefObject<THREE.Group | null>, delay = 1200) {
+  const gl = useThree((s) => s.gl);
+  const camera = useThree((s) => s.camera);
+  const scene = useThree((s) => s.scene);
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      const g = group.current;
+      if (!g) return;
+      const was = g.visible;
+      g.visible = true;
+      try {
+        gl.compileAsync(g, camera, scene).catch(() => {});
+      } finally {
+        g.visible = was;
+      }
+    }, delay);
+    return () => window.clearTimeout(t);
+  }, [gl, camera, scene, group, delay]);
 }

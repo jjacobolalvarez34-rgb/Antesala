@@ -56,4 +56,3 @@ export function detectCapability(): Capability {
 
 /** Nunca baja a lista: el peor caso del 3D es "bajo". */
 export const lowerQuality = (q: Quality): Quality => (q === 'alto' ? 'medio' : q === 'medio' ? 'bajo' : q);
-export const higherQuality = (q: Quality): Quality => (q === 'bajo' ? 'medio' : q === 'medio' ? 'alto' : q);

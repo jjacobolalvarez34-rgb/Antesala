@@ -10,6 +10,8 @@ import { planToMesh, WALL_H } from '@/components/plan/planToMesh';
 import { polygonLabelPoint } from '@/lib/plan';
 import type { PlanGeometry, SpaceType } from '@/lib/types';
 
+import { usePrecompile } from './FloorPlanModel';
+
 /**
  * Maqueta de la unidad (bloque 3, D-034): el plano SVG extruido, sin techo,
  * a escala real y ubicado dentro del edificio a la altura de su piso. Cada
@@ -126,6 +128,7 @@ export function UnitModel({
   onSelect: (id: string) => void;
 }) {
   const group = useRef<THREE.Group>(null);
+  usePrecompile(group, 0);
   const meshes = useMemo(() => planToMesh(plan), [plan]);
   useEffect(
     () => () => {

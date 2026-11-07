@@ -67,7 +67,9 @@ const quadShader = {
       for (int x = -2; x <= 2; x++) {
         for (int y = -2; y <= 2; y++) {
           float k = 1.0 / (1.0 + float(x * x + y * y));
-          c += texture2D(tLow, uv + vec2(float(x), float(y)) * uTexel * 1.25).rgb * k;
+          vec3 t = clamp(texture2D(tLow, uv + vec2(float(x), float(y)) * uTexel * 1.25).rgb, 0.0, 64.0);
+      if (t.r != t.r || t.g != t.g || t.b != t.b) t = vec3(0.5);
+      c += t * k;
           w += k;
         }
       }
@@ -76,7 +78,11 @@ const quadShader = {
     void main() {
       vec3 low = uBlur > 0.5 ? blurLow(vUv) : texture2D(tLow, vUv).rgb;
       vec3 high = texture2D(tHigh, vUv).rgb;
-      vec3 c = aces(mix(low, high, uMix));
+      // un píxel NaN/Inf (half float desbordado) se regaba con el desenfoque en manchas negras
+      vec3 lh = mix(low, high, uMix);
+      lh = clamp(lh, 0.0, 64.0);
+      if (lh.r != lh.r || lh.g != lh.g || lh.b != lh.b) lh = vec3(0.5);
+      vec3 c = aces(lh);
       // fondo de estudio para la maqueta: carbón cálido con un foco al centro, para que
       // los muros claros se lean (lineal; en sRGB va de #5b554d a #2a2723)
       if (uStudio > 0.001) {
@@ -127,13 +133,28 @@ export function Backdrop({
 
   const targets = useMemo(() => {
     // MSAA sobre half float exige EXT_color_buffer_float: varios GPU de celular no lo
-    // tienen y devolvían la copia nítida en negro (se veía negro al quitarse el desenfoque)
+    // tienen y devolvían la copia nítida en negro (se veía negro al quitarse el desenfoque).
+    // Además se comprueba que el GPU pueda dibujar en half float; si no, 8 bits (sin negro).
     const msaa = gl.extensions.has('EXT_color_buffer_float') ? 4 : 0;
-    const opts = { type: THREE.HalfFloatType, colorSpace: THREE.LinearSRGBColorSpace };
-    return {
-      low: new THREE.WebGLRenderTarget(8, 8, { ...opts }),
-      high: new THREE.WebGLRenderTarget(8, 8, { ...opts, samples: msaa }),
+    const make = (type: THREE.TextureDataType, samples: number) =>
+      new THREE.WebGLRenderTarget(8, 8, { type, colorSpace: THREE.LinearSRGBColorSpace, samples });
+    const renderable = (t: THREE.WebGLRenderTarget) => {
+      const ctx = gl.getContext();
+      const prev = gl.getRenderTarget();
+      gl.setRenderTarget(t);
+      const ok = ctx.checkFramebufferStatus(ctx.FRAMEBUFFER) === ctx.FRAMEBUFFER_COMPLETE;
+      gl.setRenderTarget(prev);
+      return ok;
     };
+    let low = make(THREE.HalfFloatType, 0);
+    let high = make(THREE.HalfFloatType, msaa);
+    if (!renderable(low) || !renderable(high)) {
+      low.dispose();
+      high.dispose();
+      low = make(THREE.UnsignedByteType, 0);
+      high = make(THREE.UnsignedByteType, 0);
+    }
+    return { low, high };
   }, [gl]);
   useEffect(() => () => {
     targets.low.dispose();
@@ -187,6 +208,17 @@ export function Backdrop({
     const u = quad.material.uniforms.uStudio!;
     gsap.to(u, { value: studio ? 1 : 0, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0, ease: 'power2.inOut', overwrite: true });
   }, [studio, reduced, quad]);
+
+  // si el celular reinicia el contexto WebGL (memoria), las copias se pierden: volver a pintar
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const restored = () => {
+      state.current.captured = false;
+      state.current.forced = Math.max(state.current.forced, 2);
+    };
+    canvas.addEventListener('webglcontextrestored', restored);
+    return () => canvas.removeEventListener('webglcontextrestored', restored);
+  }, [gl]);
 
   useEffect(() => {
     apiRef.current = {

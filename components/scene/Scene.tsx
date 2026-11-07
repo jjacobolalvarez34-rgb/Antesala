@@ -20,7 +20,7 @@ import {
   windowViewpoint,
   type Facade,
 } from '@/lib/building';
-import { higherQuality, lowerQuality, type Quality } from '@/lib/capabilities';
+import { lowerQuality, type Quality } from '@/lib/capabilities';
 import { formatCOP } from '@/lib/hotel';
 import { polygonLabelPoint } from '@/lib/plan';
 import { routes } from '@/lib/routes';
@@ -279,8 +279,12 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const facadeIndex = useTour((s) => s.facade);
   const setHoveredUnit = useTour((s) => s.setHoveredUnit);
   const setSelectedUnit = useTour((s) => s.setSelectedUnit);
-  const high = quality === 'alto';
-  const shadows = quality !== 'bajo';
+  // sombras y detalle se deciden una vez (al montar): prenderlos y apagarlos en marcha obligaba
+  // a recompilar materiales y vaciaba el fondo (tirones, colores dañados, fondo negro en celular).
+  // En marcha solo baja la resolución (DPR), una vez y con la cámara quieta.
+  const [startQuality] = useState(quality);
+  const high = startQuality === 'alto';
+  const shadows = startQuality !== 'bajo';
   const selectedId = stage.kind === 'piso' ? stage.levelId : null;
   const inUnit = stage.kind === 'unidad';
   const unitId = stage.kind === 'unidad' ? stage.unitId : null;
@@ -525,7 +529,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         aria-hidden
         frameloop={active ? 'always' : 'never'}
         shadows={shadows ? 'soft' : false}
-        dpr={high ? [1, 2] : quality === 'medio' ? [1, 1.5] : 1}
+        dpr={quality === 'alto' ? [1, 2] : quality === 'medio' ? [1, 1.5] : 1}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: FOV, near: 0.5, far: 3000, position: [cx + 60, 60, cz + 80] }}
         onPointerMissed={() => {
@@ -613,10 +617,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
 
         {!qualityLocked ? (
           <PerformanceMonitor
-            flipflops={3}
-            onDecline={() => setQuality(lowerQuality(quality))}
-            onIncline={() => setQuality(higherQuality(quality))}
-            onFallback={() => setQuality('bajo')}
+            // durante una transición los cuadros bajan siempre: no cuenta. Nunca vuelve a subir.
+            onDecline={() => {
+              if (document.documentElement.dataset.camera !== 'moving') setQuality(lowerQuality(quality));
+            }}
           />
         ) : null}
         <FovController wide={in360} reduced={reduced} />
