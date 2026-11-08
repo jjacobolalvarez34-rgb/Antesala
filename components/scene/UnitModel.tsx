@@ -4,6 +4,7 @@ import type { ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import { FURNITURE_COLORS } from '@/components/plan/furniture';
 import { planToMesh, WALL_H } from '@/components/plan/planToMesh';
@@ -130,15 +131,18 @@ export function UnitModel({
   const group = useRef<THREE.Group>(null);
   usePrecompile(group, 0);
   const meshes = useMemo(() => planToMesh(plan), [plan]);
+  const railing = useMemo(() => railingFor(plan, spaces), [plan, spaces]);
   useEffect(
     () => () => {
+      railing.solid?.dispose();
+      railing.glass?.dispose();
       meshes.walls?.dispose();
       meshes.glass?.dispose();
       meshes.doors?.dispose();
       meshes.floors.forEach((f) => f.geometry.dispose());
       meshes.furniture.forEach((f) => f.geometry.dispose());
     },
-    [meshes],
+    [meshes, railing],
   );
 
   const cutU = useMemo(() => ({ value: FULL_CUT }), []);
@@ -156,6 +160,7 @@ export function UnitModel({
     return {
       walls: m('#e3dacb', { roughness: 0.92 }, 'plaster'),
       door: m(FURNITURE_COLORS.wood, { roughness: 0.6 }),
+      rail: m('#3b3733', { roughness: 0.5, metalness: 0.3 }),
       // cielo raso: solo se ve desde abajo (recorrido por dentro); desde arriba no estorba
       ceiling: new THREE.MeshStandardMaterial({
         color: '#f4f1ea',
@@ -187,6 +192,7 @@ export function UnitModel({
     const all: [THREE.Material, number][] = [
       [mats.walls, 1],
       [mats.door, 1],
+      [mats.rail, 1],
       [mats.ceiling, 1],
       [mats.glass, 0.35],
       ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
@@ -246,6 +252,10 @@ export function UnitModel({
         />
       ))}
       {meshes.glass ? <mesh geometry={meshes.glass} material={mats.glass} raycast={() => null} /> : null}
+      {railing.solid ? (
+        <mesh geometry={railing.solid} material={mats.rail} castShadow={shadows} receiveShadow={shadows} raycast={() => null} />
+      ) : null}
+      {railing.glass ? <mesh geometry={railing.glass} material={mats.glass} raycast={() => null} /> : null}
       {meshes.floors.map((f) => (
         <mesh
           key={f.id}
@@ -301,4 +311,46 @@ export function spaceCenter(plan: PlanGeometry, spaceId: string): [number, numbe
   if (!s) return null;
   const [cx, cy] = polygonLabelPoint(s.points);
   return [cx * 0.01 - (plan.width * 0.01) / 2, cy * 0.01 - (plan.height * 0.01) / 2];
+}
+
+/**
+ * Baranda de balcones y terrazas (D-052): en cada borde del polígono que no da
+ * contra un muro, sardinel de 12 cm, vidrio hasta 1 m y pasamanos. Sin ella, por
+ * dentro se veía el vacío al borde de la terraza.
+ */
+function railingFor(plan: PlanGeometry, spaces: UnitSpaceMeta[]) {
+  const outdoor = new Set(spaces.filter((s) => s.type === 'balcon' || s.type === 'terraza').map((s) => s.id));
+  const ox = plan.width / 2;
+  const oz = plan.height / 2;
+  const solid: THREE.BufferGeometry[] = [];
+  const glass: THREE.BufferGeometry[] = [];
+  const nearWall = (x: number, y: number) =>
+    plan.walls.some((w) => x >= w.x - 20 && x <= w.x + w.width + 20 && y >= w.y - 20 && y <= w.y + w.height + 20);
+  const strip = (x0: number, y0: number, x1: number, y1: number, t: number, h0: number, h1: number, out: THREE.BufferGeometry[]) => {
+    const len = Math.hypot(x1 - x0, y1 - y0) * 0.01;
+    const g = new THREE.BoxGeometry(len, h1 - h0, t);
+    g.rotateY(-Math.atan2(y1 - y0, x1 - x0));
+    g.translate(((x0 + x1) / 2 - ox) * 0.01, (h0 + h1) / 2, ((y0 + y1) / 2 - oz) * 0.01);
+    out.push(g);
+  };
+  for (const s of plan.spaces) {
+    if (!outdoor.has(s.id)) continue;
+    const pts = s.points;
+    for (let i = 0; i < pts.length; i++) {
+      const [ax, ay] = pts[i]!;
+      const [bx, by] = pts[(i + 1) % pts.length]!;
+      // un borde contra la fachada (muro) no lleva baranda
+      if (nearWall((ax + bx) / 2, (ay + by) / 2)) continue;
+      strip(ax, ay, bx, by, 0.1, 0, 0.12, solid);
+      strip(ax, ay, bx, by, 0.02, 0.12, 1.0, glass);
+      strip(ax, ay, bx, by, 0.06, 1.0, 1.05, solid);
+    }
+  }
+  const merge = (list: THREE.BufferGeometry[]) => {
+    if (!list.length) return null;
+    const g = mergeGeometries(list, false);
+    list.forEach((x) => x.dispose());
+    return g;
+  };
+  return { solid: merge(solid), glass: merge(glass) };
 }

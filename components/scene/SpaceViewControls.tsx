@@ -8,7 +8,8 @@ import { cn } from '@/lib/utils';
 
 /**
  * Marco del panel del espacio en modo escena: alterna entre el 360° y la
- * maqueta, y en móvil se puede plegar para dejar ver el panorama.
+ * maqueta, y se pliega (en celular y en escritorio) para dejar ver el espacio:
+ * empieza recogido, como un panel desplegable.
  */
 export function SpaceSheetFrame({
   hasPano,
@@ -54,18 +55,18 @@ export function SpaceSheetFrame({
             </button>
           </div>
         ) : null}
-        <p className="min-w-0 flex-1 truncate text-sm font-medium md:hidden">{folded ? title : ''}</p>
+        <p className="min-w-0 flex-1 truncate text-sm font-medium">{folded ? title : ''}</p>
         <button
           type="button"
           onClick={() => setFolded((f) => !f)}
           aria-expanded={!folded}
           aria-label={folded ? 'Mostrar detalles' : 'Ocultar detalles'}
-          className="ml-auto grid size-10 place-items-center rounded-full hover:bg-secondary md:hidden"
+          className="ml-auto grid size-10 place-items-center rounded-full hover:bg-secondary"
         >
           {folded ? <ChevronUp aria-hidden className="size-5" /> : <ChevronDown aria-hidden className="size-5" />}
         </button>
       </div>
-      <div className={cn('min-h-0 overflow-y-auto', folded && 'hidden md:block')}>{children}</div>
+      <div className={cn('min-h-0 overflow-y-auto', folded && 'hidden')}>{children}</div>
     </div>
   );
 }

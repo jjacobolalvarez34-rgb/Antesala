@@ -156,7 +156,9 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
             Object.assign(state, target);
             update();
           })
-          .to(canvas, { opacity: 1, duration: REDUCED_FADE_IN, ease: 'power1.out', onComplete: settle });
+          // se queda en negro un momento: el fondo nítido, el estudio y la maqueta terminan de
+          // cambiar antes de aparecer (si no, se veía el corte después del fundido)
+          .to(canvas, { opacity: 1, duration: REDUCED_FADE_IN, delay: 0.35, ease: 'power1.out', onComplete: settle });
         return () => {
           fade.kill();
           canvas.style.opacity = '1';

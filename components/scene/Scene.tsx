@@ -15,6 +15,7 @@ import {
   facadesOf,
   floorPose,
   FLOOR_PULL,
+  REDUCED_FADE_OUT,
   spacePose,
   unitPose,
   windowViewpoint,
@@ -107,6 +108,8 @@ function FovController({ wide, reduced }: { wide: boolean; reduced: boolean }) {
     const tween = gsap.to(camera, {
       fov: target,
       duration: reduced ? 0 : 0.9,
+      // con movimiento reducido, el cambio de lente espera al negro del fundido (no se ve el salto)
+      delay: reduced ? REDUCED_FADE_OUT : 0,
       ease: 'power2.inOut',
       overwrite: true,
       onUpdate: () => camera.updateProjectionMatrix(),

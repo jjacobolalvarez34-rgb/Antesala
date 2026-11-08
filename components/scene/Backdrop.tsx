@@ -19,7 +19,7 @@ import { envIntensity, type LightUniforms } from './windows';
 /** Capa de lo que solo ve la cámara de la ventana (vecinos y árboles del corredor de vista). */
 export const VIEW_ONLY_LAYER = 2;
 
-const LOW_SCALE = 0.2;
+const LOW_SCALE = 0.3;
 const FADE_S = 0.45;
 
 const quadShader = {
@@ -206,7 +206,15 @@ export function Backdrop({
 
   useEffect(() => {
     const u = quad.material.uniforms.uStudio!;
-    gsap.to(u, { value: studio ? 1 : 0, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0, ease: 'power2.inOut', overwrite: true });
+    // al entrar al estudio el fondo cambia ya, al empezar el vuelo (no al final): la cámara
+    // viaja sobre el estudio y no se ve primero la ciudad y luego otro fundido (D-052)
+    gsap.to(u, {
+      value: studio ? 1 : 0,
+      duration: reduced ? 0 : studio ? 0.4 : 0.7,
+      delay: reduced ? 0.45 : 0,
+      ease: studio ? 'power2.out' : 'power2.inOut',
+      overwrite: true,
+    });
   }, [studio, reduced, quad]);
 
   // si el celular reinicia el contexto WebGL (memoria), las copias se pierden: volver a pintar
