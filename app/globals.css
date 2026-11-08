@@ -274,3 +274,64 @@
   background: color-mix(in oklab, var(--hotel-base, #f4f1ea) 70%, transparent);
   animation: intro-progress 1.4s ease-in-out infinite;
 }
+
+/* Página de Antesala (D-055): el celular del hero pasa por los cuatro pasos */
+@keyframes phone-slide {
+  0% {
+    opacity: 0;
+  }
+  4%,
+  25% {
+    opacity: 1;
+  }
+  29%,
+  100% {
+    opacity: 0;
+  }
+}
+.phone-slides > img {
+  opacity: 0;
+  animation: phone-slide 14s infinite;
+}
+.phone-slides > img:nth-child(1) {
+  animation-delay: -0.6s;
+}
+.phone-slides > img:nth-child(2) {
+  animation-delay: 2.9s;
+}
+.phone-slides > img:nth-child(3) {
+  animation-delay: 6.4s;
+}
+.phone-slides > img:nth-child(4) {
+  animation-delay: 9.9s;
+}
+
+/* aparición suave al entrar en pantalla (solo CSS, donde el navegador lo soporta) */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-slides > img {
+    animation: none;
+  }
+  .phone-slides > img:nth-child(1) {
+    opacity: 1;
+  }
+}
