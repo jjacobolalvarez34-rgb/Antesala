@@ -251,6 +251,26 @@
 .brand-intro-leave {
   animation: intro-leave 0.75s cubic-bezier(0.64, 0, 0.36, 1) forwards;
 }
-[data-intro='seen'] .brand-intro {
-  display: none;
+/* ya vista en la sesión: el telón de carga muestra el nombre quieto (D-052) */
+[data-intro='seen'] .brand-intro-name span,
+[data-intro='seen'] .brand-intro-tagline {
+  animation: none;
+  opacity: 1;
+}
+/* línea de progreso indeterminada del telón */
+@keyframes intro-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+.brand-intro-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 60%;
+  background: color-mix(in oklab, var(--hotel-base, #f4f1ea) 70%, transparent);
+  animation: intro-progress 1.4s ease-in-out infinite;
 }

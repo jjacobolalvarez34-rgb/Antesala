@@ -143,7 +143,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       />
       <div className="relative z-10 flex-1">{children}</div>
       <BookingBar data={summary} />
-      <BrandIntro name={tokens.brand.name} tagline={tokens.brand.tagline} home={`/h/${hotel.slug}`} />
+      <BrandIntro name={tokens.brand.name} tagline={tokens.brand.tagline} base={`/h/${hotel.slug}`} />
       <PoweredBy />
     </div>
   );
