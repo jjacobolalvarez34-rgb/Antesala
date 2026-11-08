@@ -1,13 +1,14 @@
 'use client';
 
 import { useFrame, useThree } from '@react-three/fiber';
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 import type { BuildingFrame, Facade } from '@/lib/building';
 
 import { VIEW_ONLY_LAYER } from './Backdrop';
 import { mergeBoxes, type Box } from './geometry';
+import { RealNeighbors, streetSpots, type LampSpot, type RealContextData } from './RealContext';
 import { neighborFacadeTexture, neighborLitTexture } from './textures';
 import type { LightUniforms } from './windows';
 
@@ -246,9 +247,21 @@ interface TreeSpot {
 }
 
 /** Árboles de calle; los del corredor de vista solo aparecen en la vista desde la ventana. */
-function Trees({ frame, facades, shadows }: { frame: BuildingFrame; facades: Facade[]; shadows: boolean }) {
+function Trees({
+  frame,
+  facades,
+  shadows,
+  spots,
+}: {
+  frame: BuildingFrame;
+  facades: Facade[];
+  shadows: boolean;
+  /** árboles ya ubicados (contexto real, a lo largo de las calles) */
+  spots?: TreeSpot[];
+}) {
   const [cx, cz] = frame.center;
   const all = useMemo(() => {
+    if (spots) return spots;
     const rand = mulberry32(77);
     const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
     const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
@@ -266,7 +279,7 @@ function Trees({ frame, facades, shadows }: { frame: BuildingFrame; facades: Fac
         !(Math.abs(p.z - cz) < frame.depth / 2 + 5 && p.x < sideStreet && p.x > cx) &&
         !(Math.abs(p.x - sideStreet) < STREET && Math.abs(p.z - frontStreet) < STREET),
     );
-  }, [cx, cz, frame]);
+  }, [cx, cz, frame, spots]);
   const main = useMemo(() => all.filter((p) => !inViewCorridor(p.x, p.z, frame, facades, -2)), [all, frame, facades]);
   const viewOnly = useMemo(() => all.filter((p) => inViewCorridor(p.x, p.z, frame, facades, -2)), [all, frame, facades]);
   return (
@@ -377,14 +390,18 @@ function StreetLamps({
   facades,
   light,
   shadows,
+  custom,
 }: {
   frame: BuildingFrame;
   facades: Facade[];
   light: LightUniforms;
   shadows: boolean;
+  /** postes ya ubicados (contexto real) */
+  custom?: LampSpot[];
 }) {
   const [cx, cz] = frame.center;
   const spots = useMemo(() => {
+    if (custom) return custom.filter((p) => !inViewCorridor(p.x, p.z, frame, facades, -7));
     const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
     const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
     const out: { x: number; z: number; rot: number }[] = [];
@@ -395,7 +412,7 @@ function StreetLamps({
       out.push({ x: sideStreet + STREET / 2 + 0.5, z: cz + t + 8, rot: Math.PI / 2 });
     }
     return out.filter((p) => !inViewCorridor(p.x, p.z, frame, facades, -7));
-  }, [cx, cz, frame, facades]);
+  }, [cx, cz, frame, facades, custom]);
   const posts = useRef<THREE.InstancedMesh>(null);
   const heads = useRef<THREE.InstancedMesh>(null);
   const pools = useRef<THREE.InstancedMesh>(null);
@@ -517,13 +534,20 @@ export function Context({
   shadows,
   high,
   light,
+  real,
+  footprint,
 }: {
   frame: BuildingFrame;
   facades: Facade[];
   shadows: boolean;
   high: boolean;
   light: LightUniforms;
+  /** contexto real (catastro + OpenStreetMap, D-056); sin él, vecinos y calles inventados */
+  real?: RealContextData | null;
+  footprint: [number, number][];
 }) {
+  const realSpots = useMemo(() => (real ? streetSpots(real, footprint) : null), [real, footprint]);
+  const inCorridor = useCallback((x: number, z: number, pad: number) => inViewCorridor(x, z, frame, facades, pad), [frame, facades]);
   const [cx, cz] = frame.center;
   const sky = useMemo(
     () =>
@@ -560,10 +584,20 @@ export function Context({
         <circleGeometry args={[480, 48]} />
         <meshStandardMaterial color="#8a867e" roughness={1} />
       </mesh>
-      <Streets frame={frame} shadows={shadows} />
-      <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} />
-      <Trees frame={frame} facades={facades} shadows={shadows} />
-      <NeighborBlocks frame={frame} facades={facades} shadows={shadows} light={light} />
+      {real && realSpots ? (
+        <>
+          <RealNeighbors data={real} frame={frame} facades={facades} inCorridor={inCorridor} shadows={shadows} light={light} />
+          <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} custom={realSpots.lamps} />
+          <Trees frame={frame} facades={facades} shadows={shadows} spots={realSpots.trees} />
+        </>
+      ) : (
+        <>
+          <Streets frame={frame} shadows={shadows} />
+          <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} />
+          <Trees frame={frame} facades={facades} shadows={shadows} />
+          <NeighborBlocks frame={frame} facades={facades} shadows={shadows} light={light} />
+        </>
+      )}
       <Ridge frame={frame} />
     </group>
   );

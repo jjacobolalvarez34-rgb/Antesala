@@ -233,6 +233,8 @@ for (const slug of slugs) {
   const file = path.join(dir, 'hotel.json');
   const hotel = JSON.parse(readFileSync(file, 'utf8'));
   for (const u of hotel.units) {
+    // las copias de una unidad tipo (sameAs) comparten los panoramas de su plantilla
+    if ('sameAs' in u) continue;
     const plan = parsePlan(readFileSync(path.join(dir, u.plan), 'utf8'));
     const centers = Object.fromEntries(plan.spaces.map((s) => [s.id, labelPoint(s.pts)]));
     for (const s of u.spaces) {

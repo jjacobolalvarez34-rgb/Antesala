@@ -18,7 +18,8 @@
     "placeholders": "node pipeline/placeholders.mjs",
     "budget": "node tests/budget.mjs",
     "renders": "playwright test -c pipeline/renders.config.ts renders.spec",
-    "producto": "playwright test -c pipeline/renders.config.ts producto.spec"
+    "producto": "playwright test -c pipeline/renders.config.ts producto.spec",
+    "catastro": "node pipeline/catastro.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

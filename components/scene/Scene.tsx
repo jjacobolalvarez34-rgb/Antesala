@@ -22,11 +22,11 @@ import {
   type Facade,
 } from '@/lib/building';
 import { lowerQuality, type Quality } from '@/lib/capabilities';
-import { formatCOP } from '@/lib/hotel';
+import { formatCOP, OFFER } from '@/lib/hotel';
 import { polygonLabelPoint } from '@/lib/plan';
 import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
-import type { Building, PlanGeometry } from '@/lib/types';
+import type { Building, Offer, PlanGeometry } from '@/lib/types';
 
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
 import { Backdrop, VIEW_ONLY_LAYER, type BackdropApi } from './Backdrop';
@@ -36,6 +36,7 @@ import { CameraRig } from './CameraRig';
 import { Context, DayNightLights } from './Context';
 import { PanoSphere, panoDirection } from './PanoSphere';
 import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
+import { useRealContext } from './RealContext';
 import { TourGuide, type GuideStep } from './TourGuide';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
@@ -73,6 +74,10 @@ export interface SceneData {
    * amoblada, en vivo. Un hotel real muestra sus fotos 360° capturadas.
    */
   liveInterior: boolean;
+  /** contexto real (vecinos del catastro y calles de OpenStreetMap, D-056) */
+  contextUrl?: string;
+  /** qué se ofrece: noche, mes o venta (D-057) */
+  offer?: Offer;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
   unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
 }
@@ -317,7 +322,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         {
           id: sp.unitId,
           name: unit.occupied
-            ? `${unit.name} · Ocupada`
+            ? `${unit.name} · ${OFFER[data.offer ?? 'noche'].takenShort}`
             : unit.price !== undefined
               ? `${unit.name} · ${formatCOP(unit.price)}`
               : unit.name,
@@ -430,6 +435,11 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     const t = window.setTimeout(() => setSelectedUnit(null), 2500);
     return () => window.clearTimeout(t);
   }, [stage.kind, setSelectedUnit]);
+  const realContext = useRealContext(data.contextUrl);
+  // el fondo es una foto fija: cuando llega el contexto real hay que volver a tomarla
+  useEffect(() => {
+    if (realContext) backdrop.current?.invalidate(2);
+  }, [realContext]);
   const backdrop = useRef<BackdropApi | null>(null);
   const showPois = stage.kind === 'explorar' && active && !useTour.getState().viewpoint;
   const facade = facades[facadeIndex % facades.length]!;
@@ -556,7 +566,15 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       >
         {/* por dentro (recorrido en vivo) por las ventanas se ve la ciudad, no el estudio */}
         <Backdrop apiRef={backdrop} environment={environment} light={light} studio={inUnit && !(in360Pano && data.liveInterior)} reduced={reduced}>
-          <Context frame={frame} facades={facades} shadows={shadows} high={high} light={light} />
+          <Context
+            frame={frame}
+            facades={facades}
+            shadows={shadows}
+            high={high}
+            light={light}
+            real={realContext}
+            footprint={data.building.footprint as [number, number][]}
+          />
         </Backdrop>
 
         {/* escena del edificio (en vivo) */}

@@ -108,7 +108,7 @@ function jobsFor(hotel) {
     list.forEach((m, i) => jobs.push({ m, title, subtitle, type, variant: i % 3 }));
   push(hotel.site.exterior, hotel.name, hotel.city, 'otro');
   for (const p of hotel.site.pois) push(p.media, p.name, `${hotel.name} · zona común`, 'poi');
-  for (const u of hotel.units) for (const s of u.spaces) push(s.media, s.name, u.name, s.type);
+  for (const u of hotel.units) for (const s of u.spaces ?? []) push(s.media, s.name, u.name, s.type);
   return jobs;
 }
 

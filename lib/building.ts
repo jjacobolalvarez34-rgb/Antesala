@@ -82,7 +82,7 @@ export const frontEdgeIndex = (pts: Pt[]) => {
 /** Planta de un piso: igual al footprint, salvo el último, con el frente retranqueado. */
 export function floorFootprint(b: Building, order: number): Pt[] {
   const pts = b.footprint as Pt[];
-  if (order !== b.floors) return pts;
+  if (order !== b.floors || b.topSetback === false) return pts;
   const front = frontEdgeIndex(pts);
   const n = edgesOf(pts)[front]!.normal;
   return pts.map((q, i) =>
