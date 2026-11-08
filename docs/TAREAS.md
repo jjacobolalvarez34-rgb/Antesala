@@ -144,4 +144,6 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] `pnpm renders akuare` y revisar capturas 2D y 3D
 - [ ] Registrar D-056 a D-059 en DECISIONES.md
 - [ ] Llevar el generador de planos de Akuare al repo (`pipeline/`) si se va a reutilizar
+- [ ] **El piso abierto sigue fallando (reporte de Jacobo, 2026-11-08, en Vercel).** Reproducir en su equipo antes de tocar código. Revisar: profundidad de las fachadas retiradas, pisos atenuados encima de la planta y orden de dibujo de la planta frente a los vidrios.
+- [ ] Propuesta de Jacobo: sin sombras mientras un piso está abierto (no aportan y cuestan). Opción: apagar el mapa de sombras del sol en la etapa de piso, o congelarlo, y volver a encenderlo en la vista del edificio.
 

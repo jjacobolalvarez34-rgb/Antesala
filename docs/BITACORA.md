@@ -44,6 +44,7 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - Planta del piso 1 de Akuare alineada con esa fachada: parqueaderos, local y portería al frente; salón social atrás a la derecha (piso 1 queda con 101 a 103). Ya regenerados `hotel.json`, `plans/piso-1.svg`, placeholders y panoramas. El generador está en el scratchpad de la sesión (`gen_akuare.py`), no en el repo.
 
 **Pendiente**
+- El piso abierto sigue fallando según Jacobo (en Vercel, después del arreglo de sombras y clics). Reproducirlo primero. Además, Jacobo propone no calcular sombras al abrir piso por piso: no se notan y cuestan rendimiento.
 - Página de Antesala: sección "Elige una demo" con Niebla Alta y Akuare (hoy solo enlaza a Niebla Alta).
 - `pnpm renders akuare` (fotos de fachada e interiores) para la portada de Akuare y la tarjeta de la demo.
 - Lint y capturas 2D y 3D de Akuare, mirar las capturas; `pnpm renders akuare`; registrar D-056 a D-058 en DECISIONES.
