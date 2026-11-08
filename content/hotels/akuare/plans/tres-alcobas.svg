@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1040">
+  <title>Apartamento esquinero de 3 alcobas · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="800" height="15"/>
+    <rect x="0" y="905" width="800" height="15"/>
+    <rect x="0" y="0" width="15" height="920"/>
+    <rect x="785" y="0" width="15" height="920"/>
+    <rect x="290" y="15" width="10" height="285"/>
+    <rect x="15" y="290" width="275" height="10"/>
+    <rect x="385" y="15" width="10" height="230"/>
+    <rect x="385" y="235" width="135" height="10"/>
+    <rect x="520" y="15" width="10" height="545"/>
+    <rect x="530" y="300" width="255" height="10"/>
+    <rect x="440" y="560" width="345" height="10"/>
+    <rect x="440" y="570" width="10" height="335"/>
+  </g>
+  <g id="spaces">
+    <polygon id="cocina" points="15,15 290,15 290,290 15,290"/>
+    <polygon id="bano" points="395,15 520,15 520,235 395,235"/>
+    <polygon id="alcoba-3" points="530,15 785,15 785,300 530,300"/>
+    <polygon id="alcoba-2" points="530,310 785,310 785,560 530,560"/>
+    <polygon id="sala" points="300,15 385,15 385,245 520,245 520,560 440,560 440,905 15,905 15,300 300,300"/>
+    <polygon id="alcoba" points="450,570 785,570 785,905 450,905"/>
+    <polygon id="balcon" points="60,920 400,920 400,1040 60,1040"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="302" y="0" width="80" height="15"/>
+    <rect data-type="door" x="290" y="200" width="10" height="80"/>
+    <rect data-type="door" x="420" y="235" width="80" height="10"/>
+    <rect data-type="door" x="520" y="200" width="10" height="80"/>
+    <rect data-type="door" x="520" y="420" width="10" height="80"/>
+    <rect data-type="door" x="440" y="600" width="10" height="80"/>
+    <rect data-type="door" x="110" y="905" width="230" height="15"/>
+    <rect data-type="window" x="0" y="60" width="15" height="180"/>
+    <rect data-type="window" x="0" y="380" width="15" height="480"/>
+    <rect data-type="window" x="490" y="905" width="260" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="kitchen" data-back="n" x="18" y="18" width="267" height="62"/>
+    <rect data-item="counter" data-back="w" x="18" y="80" width="62" height="205"/>
+    <rect data-item="table" x="120" y="160" width="100" height="80"/>
+    <rect data-item="shower" data-back="n" x="398" y="18" width="90" height="90"/>
+    <rect data-item="toilet" data-back="e" x="455" y="120" width="60" height="55"/>
+    <rect data-item="sink" data-back="w" x="398" y="170" width="52" height="62"/>
+    <rect data-item="bed" data-back="e" x="680" y="30" width="102" height="200"/>
+    <rect data-item="desk" data-back="n" x="540" y="30" width="100" height="55"/>
+    <rect data-item="chair" data-back="s" x="565" y="90" width="45" height="45"/>
+    <rect data-item="bed" data-back="e" x="680" y="330" width="102" height="200"/>
+    <rect data-item="wardrobe" data-back="w" x="540" y="320" width="60" height="160"/>
+    <rect data-item="rug" x="90" y="560" width="290" height="280"/>
+    <rect data-item="sofa" data-back="w" x="18" y="560" width="90" height="280"/>
+    <rect data-item="coffee" x="150" y="650" width="100" height="110"/>
+    <rect data-item="armchair" data-back="e" x="300" y="640" width="85" height="85"/>
+    <rect data-item="table" x="200" y="360" width="160" height="100"/>
+    <rect data-item="chair" data-back="n" x="210" y="315" width="45" height="40"/>
+    <rect data-item="chair" data-back="s" x="210" y="465" width="45" height="40"/>
+    <rect data-item="chair" data-back="n" x="290" y="315" width="45" height="40"/>
+    <rect data-item="chair" data-back="s" x="290" y="465" width="45" height="40"/>
+    <rect data-item="lamp" x="30" y="860" width="40" height="40"/>
+    <rect data-item="bed" data-back="e" x="560" y="650" width="222" height="180"/>
+    <rect data-item="nightstand" x="735" y="600" width="47" height="45"/>
+    <rect data-item="nightstand" x="735" y="835" width="47" height="45"/>
+    <rect data-item="wardrobe" data-back="w" x="455" y="575" width="65" height="185"/>
+    <rect data-item="plant" x="70" y="930" width="50" height="50"/>
+    <rect data-item="lounger" data-back="s" x="150" y="950" width="180" height="70"/>
+    <rect data-item="plant" x="345" y="930" width="50" height="50"/>
+  </g>
+</svg>

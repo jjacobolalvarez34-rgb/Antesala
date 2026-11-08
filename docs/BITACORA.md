@@ -25,6 +25,16 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-08 · Segundo demo: Edificio Akuare (en curso)
+
+**Hecho (sin pruebas completas todavía)**
+- `pnpm catastro` (D-056): de la dirección a la placa, al lote y a la torre del catastro de Bogotá (huella y pisos reales); vecinos con sus pisos y calles de OpenStreetMap en `media/context.json`. La escena dibuja ese contexto real en vez del inventado.
+- Oferta por hotel (D-057): noche, mes o venta (precio, "Agendar visita" por WhatsApp, "Vendido" o "Arrendado").
+- Akuare (Calle 158 # 93A-37, Suba Salitre): torre de 35 × 20 m y 5 pisos, 37 apartamentos (esquineros de 3 alcobas y medianeros de 2), planos de piso generados sobre la huella, 13 vendidos simulados, precios de referencia de avisos públicos. El banner dice "Demostración no oficial".
+
+**Pendiente**
+- Lint y capturas 2D y 3D de Akuare, mirar las capturas; `pnpm renders akuare`; registrar D-056 a D-058 en DECISIONES.
+
 ## 2026-11-08 · Bloque 8 · Página de Antesala y sitio completo del hotel
 
 **Hecho**

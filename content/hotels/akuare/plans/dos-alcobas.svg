@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1040">
+  <title>Apartamento de 2 alcobas · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="540" height="15"/>
+    <rect x="0" y="905" width="540" height="15"/>
+    <rect x="0" y="0" width="15" height="920"/>
+    <rect x="525" y="0" width="15" height="920"/>
+    <rect x="235" y="15" width="10" height="230"/>
+    <rect x="15" y="235" width="230" height="10"/>
+    <rect x="235" y="245" width="10" height="315"/>
+    <rect x="15" y="550" width="230" height="10"/>
+    <rect x="300" y="560" width="10" height="345"/>
+    <rect x="300" y="560" width="225" height="10"/>
+  </g>
+  <g id="spaces">
+    <polygon id="cocina" points="245,15 525,15 525,300 245,300"/>
+    <polygon id="bano" points="15,15 235,15 235,235 15,235"/>
+    <polygon id="alcoba-2" points="15,245 235,245 235,550 15,550"/>
+    <polygon id="sala" points="245,300 525,300 525,560 300,560 300,905 15,905 15,560 245,560"/>
+    <polygon id="alcoba" points="310,570 525,570 525,905 310,905"/>
+    <polygon id="balcon" points="110,920 430,920 430,1040 110,1040"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="395" y="0" width="90" height="15"/>
+    <rect data-type="door" x="235" y="120" width="10" height="75"/>
+    <rect data-type="door" x="235" y="400" width="10" height="80"/>
+    <rect data-type="door" x="400" y="560" width="80" height="10"/>
+    <rect data-type="door" x="80" y="905" width="190" height="15"/>
+    <rect data-type="window" x="345" y="905" width="155" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="kitchen" data-back="n" x="260" y="18" width="260" height="62"/>
+    <rect data-item="stool" x="300" y="150" width="45" height="45"/>
+    <rect data-item="stool" x="360" y="150" width="45" height="45"/>
+    <rect data-item="counter" x="280" y="120" width="160" height="30"/>
+    <rect data-item="shower" data-back="n" x="18" y="18" width="90" height="90"/>
+    <rect data-item="toilet" data-back="n" x="160" y="18" width="55" height="67"/>
+    <rect data-item="sink" data-back="w" x="18" y="150" width="57" height="80"/>
+    <rect data-item="bed" data-back="w" x="18" y="300" width="100" height="200"/>
+    <rect data-item="nightstand" x="18" y="255" width="42" height="40"/>
+    <rect data-item="wardrobe" data-back="e" x="170" y="255" width="60" height="165"/>
+    <rect data-item="rug" x="60" y="640" width="180" height="220"/>
+    <rect data-item="sofa" data-back="w" x="18" y="640" width="90" height="220"/>
+    <rect data-item="coffee" x="140" y="700" width="80" height="100"/>
+    <rect data-item="table" x="340" y="380" width="110" height="80"/>
+    <rect data-item="chair" data-back="n" x="345" y="335" width="45" height="40"/>
+    <rect data-item="chair" data-back="n" x="400" y="335" width="45" height="40"/>
+    <rect data-item="chair" data-back="s" x="345" y="465" width="45" height="40"/>
+    <rect data-item="chair" data-back="s" x="400" y="465" width="45" height="40"/>
+    <rect data-item="bed" data-back="e" x="330" y="650" width="190" height="160"/>
+    <rect data-item="nightstand" x="470" y="600" width="48" height="45"/>
+    <rect data-item="nightstand" x="470" y="815" width="48" height="45"/>
+    <rect data-item="wardrobe" data-back="n" x="315" y="575" width="140" height="55"/>
+    <rect data-item="plant" x="120" y="930" width="50" height="50"/>
+    <rect data-item="chair" data-back="e" x="300" y="960" width="45" height="45"/>
+    <rect data-item="chair" data-back="w" x="360" y="960" width="45" height="45"/>
+  </g>
+</svg>

@@ -1,0 +1,1945 @@
+{
+  "slug": "akuare",
+  "name": "Akuare",
+  "city": "Bogotá",
+  "neighborhood": "Suba Salitre",
+  "intro": "Dos torres de cinco pisos en Suba Salitre, sobre la Calle 158. Apartamentos de dos y tres alcobas con balcón, ascensor y salón social con BBQ, a pocas cuadras de TransMilenio.",
+  "locale": "es",
+  "contact": {
+    "whatsapp": "573204871882"
+  },
+  "isDemo": true,
+  "demoNote": "Demostración no oficial · edificio desde el catastro de Bogotá · interiores ilustrativos",
+  "site": {
+    "kind": "edificio",
+    "building": {
+      "footprint": [
+        [
+          0,
+          20
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          35,
+          0
+        ],
+        [
+          35,
+          20
+        ]
+      ],
+      "floors": 5,
+      "floorHeightM": 2.7,
+      "style": {
+        "cladding": "ladrillo"
+      },
+      "topSetback": false
+    },
+    "exterior": [],
+    "pois": [
+      {
+        "id": "lobby",
+        "name": "Lobby y portería",
+        "levelId": "1",
+        "description": "Portería las 24 horas, con ascensor al fondo del pasillo.",
+        "position": [
+          17.5,
+          1.5,
+          15.4
+        ],
+        "media": []
+      },
+      {
+        "id": "salon-social",
+        "name": "Salón social y BBQ",
+        "levelId": "1",
+        "description": "Salón para reuniones con zona de BBQ, en el primer piso.",
+        "position": [
+          4,
+          1.5,
+          15.4
+        ],
+        "media": []
+      }
+    ],
+    "context": "media/context.json"
+  },
+  "levels": [
+    {
+      "id": "1",
+      "name": "Piso 1",
+      "kind": "piso",
+      "order": 1,
+      "plan": "plans/piso-1.svg"
+    },
+    {
+      "id": "2",
+      "name": "Piso 2",
+      "kind": "piso",
+      "order": 2,
+      "plan": "plans/piso-2.svg"
+    },
+    {
+      "id": "3",
+      "name": "Piso 3",
+      "kind": "piso",
+      "order": 3,
+      "plan": "plans/piso-3.svg"
+    },
+    {
+      "id": "4",
+      "name": "Piso 4",
+      "kind": "piso",
+      "order": 4,
+      "plan": "plans/piso-4.svg"
+    },
+    {
+      "id": "5",
+      "name": "Piso 5",
+      "kind": "piso",
+      "order": 5,
+      "plan": "plans/piso-5.svg"
+    }
+  ],
+  "categories": [
+    {
+      "id": "tres-alcobas",
+      "name": "Tres alcobas",
+      "tagline": "Esquinero, con dos fachadas y balcón.",
+      "highlights": [
+        "3 alcobas y 2 baños",
+        "Dos fachadas",
+        "Balcón"
+      ]
+    },
+    {
+      "id": "dos-alcobas",
+      "name": "Dos alcobas",
+      "tagline": "Compacto y bien distribuido, con balcón.",
+      "highlights": [
+        "2 alcobas",
+        "Cocina abierta con barra",
+        "Balcón"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "101",
+      "name": "Apartamento 101",
+      "categoryId": "tres-alcobas",
+      "levelId": "1",
+      "capacity": 6,
+      "beds": "3 alcobas · 2 baños",
+      "areaM2": 73,
+      "basePriceCOP": 252000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "plan": "plans/tres-alcobas.svg",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "cocina",
+          "name": "Cocina",
+          "type": "cocina",
+          "areaM2": 7.6,
+          "description": "Cocina abierta con barra, estufa y horno.",
+          "features": [
+            "Barra para dos",
+            "Estufa y horno",
+            "Espacio para nevera"
+          ],
+          "media": [
+            {
+              "id": "pano-101-cocina",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/cocina-360.svg",
+              "alt": "Cocina en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -3.1244,
+              "hotspots": [
+                {
+                  "id": "a-bano",
+                  "yaw": -0.0899,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": 0.0099,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": 0.51,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 1.5622,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 0.8992,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.4774,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-cocina-1",
+              "kind": "photo",
+              "src": "media/units/101/cocina-amplia.svg",
+              "alt": "Cocina: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 2.8,
+          "description": "Baño con ducha y mueble de lavamanos.",
+          "features": [
+            "Ducha",
+            "Mueble de lavamanos"
+          ],
+          "media": [
+            {
+              "id": "pano-101-bano",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": 3.0517,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": 0.1611,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": 0.9978,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 2.0295,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 1.3153,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.8309,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-bano-1",
+              "kind": "photo",
+              "src": "media/units/101/bano-amplia.svg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "alcoba-3",
+          "name": "Alcoba 3",
+          "type": "dormitorio",
+          "areaM2": 7.3,
+          "description": "Alcoba sencilla, sirve de estudio.",
+          "features": [
+            "Cama sencilla",
+            "Escritorio"
+          ],
+          "media": [
+            {
+              "id": "pano-101-alcoba-3",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/alcoba-3-360.svg",
+              "alt": "Alcoba 3 en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -3.1317,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -2.9805,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": 1.5708,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 2.2865,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 1.6397,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 2.0501,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-alcoba-3-1",
+              "kind": "photo",
+              "src": "media/units/101/alcoba-3-amplia.svg",
+              "alt": "Alcoba 3: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "alcoba-2",
+          "name": "Alcoba 2",
+          "type": "dormitorio",
+          "areaM2": 6.4,
+          "description": "Alcoba sencilla con clóset.",
+          "features": [
+            "Cama sencilla",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "pano-101-alcoba-2",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/alcoba-2-360.svg",
+              "alt": "Alcoba 2 en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -2.6316,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -2.1438,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": -1.5708,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 2.6049,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 1.7023,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 2.236,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-alcoba-2-1",
+              "kind": "photo",
+              "src": "media/units/101/alcoba-2-amplia.svg",
+              "alt": "Alcoba 2: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala y comedor",
+          "type": "sala",
+          "areaM2": 31,
+          "description": "Sala comedor con salida al balcón.",
+          "features": [
+            "Comedor para cuatro",
+            "Salida al balcón"
+          ],
+          "media": [
+            {
+              "id": "pano-101-sala",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/sala-360.svg",
+              "alt": "Sala y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -2.4981,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -1.5794,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.1121,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": -0.8551,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -0.5367,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 0.0109,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.2858,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-sala-1",
+              "kind": "photo",
+              "src": "media/units/101/sala-amplia.svg",
+              "alt": "Sala y comedor: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "alcoba",
+          "name": "Alcoba principal",
+          "type": "dormitorio",
+          "areaM2": 11.2,
+          "description": "Alcoba principal con clóset y ventana a la fachada.",
+          "features": [
+            "Cama doble",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "pano-101-alcoba",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/alcoba-360.svg",
+              "alt": "Alcoba principal en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 1.5565,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -2.2424,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.8263,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": -1.5019,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -1.4393,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -3.1307,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 2.5824,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-101-alcoba-1",
+              "kind": "photo",
+              "src": "media/units/101/alcoba-amplia.svg",
+              "alt": "Alcoba principal: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "balcon",
+          "name": "Balcón",
+          "type": "balcon",
+          "areaM2": 4.1,
+          "description": "Balcón con baranda de vidrio.",
+          "features": [
+            "Baranda de vidrio",
+            "Espacio para dos"
+          ],
+          "media": [
+            {
+              "id": "pano-101-balcon",
+              "kind": "pano360",
+              "src": "media/panos/tres-alcobas/balcon-360.svg",
+              "alt": "Balcón en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -1.6447,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -1.6642,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.3107,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-3",
+                  "yaw": -1.0915,
+                  "pitch": -0.12,
+                  "label": "Alcoba 3",
+                  "target": "alcoba-3"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -0.9056,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -1.8558,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": -0.5592,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                }
+              ]
+            },
+            {
+              "id": "units-101-balcon-1",
+              "kind": "photo",
+              "src": "media/units/101/balcon-amplia.svg",
+              "alt": "Balcón: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "name": "Apartamento 102",
+      "categoryId": "dos-alcobas",
+      "levelId": "1",
+      "capacity": 4,
+      "beds": "2 alcobas · 1 baño",
+      "areaM2": 50,
+      "basePriceCOP": 158000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "plan": "plans/dos-alcobas.svg",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "cocina",
+          "name": "Cocina",
+          "type": "cocina",
+          "areaM2": 8,
+          "description": "Cocina abierta con barra, estufa y horno.",
+          "features": [
+            "Barra para dos",
+            "Estufa y horno",
+            "Espacio para nevera"
+          ],
+          "media": [
+            {
+              "id": "pano-102-cocina",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/cocina-360.svg",
+              "alt": "Cocina en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-bano",
+                  "yaw": -3.0172,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": 2.3962,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 1.9882,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 1.5148,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.7097,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-102-cocina-1",
+              "kind": "photo",
+              "src": "media/units/102/cocina-amplia.svg",
+              "alt": "Cocina: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 4.8,
+          "description": "Baño con ducha y mueble de lavamanos.",
+          "features": [
+            "Ducha",
+            "Mueble de lavamanos"
+          ],
+          "media": [
+            {
+              "id": "pano-102-bano",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/bano-360.svg",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": 0.1244,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": 1.5708,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 1.5626,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 1.1253,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.4028,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-102-bano-1",
+              "kind": "photo",
+              "src": "media/units/102/bano-amplia.svg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "alcoba-2",
+          "name": "Alcoba 2",
+          "type": "dormitorio",
+          "areaM2": 6.7,
+          "description": "Alcoba sencilla con clóset.",
+          "features": [
+            "Cama sencilla",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "pano-102-alcoba-2",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/alcoba-2-360.svg",
+              "alt": "Alcoba 2 en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 0,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -0.7454,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.5708,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": 1.5559,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 0.8604,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.3268,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-102-alcoba-2-1",
+              "kind": "photo",
+              "src": "media/units/102/alcoba-2-amplia.svg",
+              "alt": "Alcoba 2: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala y comedor",
+          "type": "sala",
+          "areaM2": 17.1,
+          "description": "Sala comedor con salida al balcón.",
+          "features": [
+            "Comedor para cuatro",
+            "Salida al balcón"
+          ],
+          "media": [
+            {
+              "id": "pano-102-sala",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/sala-360.svg",
+              "alt": "Sala y comedor en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 1.3258,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -1.1534,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.579,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -1.5857,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": 0.0174,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 1.056,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-102-sala-1",
+              "kind": "photo",
+              "src": "media/units/102/sala-amplia.svg",
+              "alt": "Sala y comedor: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "alcoba",
+          "name": "Alcoba principal",
+          "type": "dormitorio",
+          "areaM2": 7.2,
+          "description": "Alcoba principal con clóset y ventana a la fachada.",
+          "features": [
+            "Cama doble",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "pano-102-alcoba",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/alcoba-360.svg",
+              "alt": "Alcoba principal en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": 1.5422,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -1.6268,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -2.0163,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -2.2812,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -3.1242,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-balcon",
+                  "yaw": 2.1173,
+                  "pitch": -0.12,
+                  "label": "Balcón",
+                  "target": "balcon"
+                }
+              ]
+            },
+            {
+              "id": "units-102-alcoba-1",
+              "kind": "photo",
+              "src": "media/units/102/alcoba-amplia.svg",
+              "alt": "Alcoba principal: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        },
+        {
+          "id": "balcon",
+          "name": "Balcón",
+          "type": "balcon",
+          "areaM2": 3.8,
+          "description": "Balcón con baranda de vidrio.",
+          "features": [
+            "Baranda de vidrio",
+            "Espacio para dos"
+          ],
+          "media": [
+            {
+              "id": "pano-102-balcon",
+              "kind": "pano360",
+              "src": "media/panos/dos-alcobas/balcon-360.svg",
+              "alt": "Balcón en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 4096,
+              "height": 2048,
+              "yaw": -2.5238,
+              "hotspots": [
+                {
+                  "id": "a-cocina",
+                  "yaw": -1.4319,
+                  "pitch": -0.12,
+                  "label": "Cocina",
+                  "target": "cocina"
+                },
+                {
+                  "id": "a-bano",
+                  "yaw": -1.7388,
+                  "pitch": -0.12,
+                  "label": "Baño",
+                  "target": "bano"
+                },
+                {
+                  "id": "a-alcoba-2",
+                  "yaw": -1.8148,
+                  "pitch": -0.12,
+                  "label": "Alcoba 2",
+                  "target": "alcoba-2"
+                },
+                {
+                  "id": "a-sala",
+                  "yaw": -2.0856,
+                  "pitch": -0.12,
+                  "label": "Sala y comedor",
+                  "target": "sala"
+                },
+                {
+                  "id": "a-alcoba",
+                  "yaw": -1.0243,
+                  "pitch": -0.12,
+                  "label": "Alcoba principal",
+                  "target": "alcoba"
+                }
+              ]
+            },
+            {
+              "id": "units-102-balcon-1",
+              "kind": "photo",
+              "src": "media/units/102/balcon-amplia.svg",
+              "alt": "Balcón: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1067
+            }
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "103",
+      "name": "Apartamento 103",
+      "levelId": "1",
+      "basePriceCOP": 158000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "104",
+      "name": "Apartamento 104",
+      "levelId": "1",
+      "basePriceCOP": 252000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "105",
+      "name": "Apartamento 105",
+      "levelId": "1",
+      "basePriceCOP": 252000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "201",
+      "name": "Apartamento 201",
+      "levelId": "2",
+      "basePriceCOP": 255000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "202",
+      "name": "Apartamento 202",
+      "levelId": "2",
+      "basePriceCOP": 160000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "203",
+      "name": "Apartamento 203",
+      "levelId": "2",
+      "basePriceCOP": 160000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "204",
+      "name": "Apartamento 204",
+      "levelId": "2",
+      "basePriceCOP": 255000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "205",
+      "name": "Apartamento 205",
+      "levelId": "2",
+      "basePriceCOP": 255000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "206",
+      "name": "Apartamento 206",
+      "levelId": "2",
+      "basePriceCOP": 160000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "207",
+      "name": "Apartamento 207",
+      "levelId": "2",
+      "basePriceCOP": 160000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "208",
+      "name": "Apartamento 208",
+      "levelId": "2",
+      "basePriceCOP": 255000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "301",
+      "name": "Apartamento 301",
+      "levelId": "3",
+      "basePriceCOP": 258000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "302",
+      "name": "Apartamento 302",
+      "levelId": "3",
+      "basePriceCOP": 162000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "303",
+      "name": "Apartamento 303",
+      "levelId": "3",
+      "basePriceCOP": 162000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "304",
+      "name": "Apartamento 304",
+      "levelId": "3",
+      "basePriceCOP": 258000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "305",
+      "name": "Apartamento 305",
+      "levelId": "3",
+      "basePriceCOP": 258000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "306",
+      "name": "Apartamento 306",
+      "levelId": "3",
+      "basePriceCOP": 162000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "307",
+      "name": "Apartamento 307",
+      "levelId": "3",
+      "basePriceCOP": 162000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "308",
+      "name": "Apartamento 308",
+      "levelId": "3",
+      "basePriceCOP": 258000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "401",
+      "name": "Apartamento 401",
+      "levelId": "4",
+      "basePriceCOP": 261000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "402",
+      "name": "Apartamento 402",
+      "levelId": "4",
+      "basePriceCOP": 164000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "403",
+      "name": "Apartamento 403",
+      "levelId": "4",
+      "basePriceCOP": 164000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "404",
+      "name": "Apartamento 404",
+      "levelId": "4",
+      "basePriceCOP": 261000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "405",
+      "name": "Apartamento 405",
+      "levelId": "4",
+      "basePriceCOP": 261000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "406",
+      "name": "Apartamento 406",
+      "levelId": "4",
+      "basePriceCOP": 164000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "407",
+      "name": "Apartamento 407",
+      "levelId": "4",
+      "basePriceCOP": 164000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "408",
+      "name": "Apartamento 408",
+      "levelId": "4",
+      "basePriceCOP": 261000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "501",
+      "name": "Apartamento 501",
+      "levelId": "5",
+      "basePriceCOP": 264000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "502",
+      "name": "Apartamento 502",
+      "levelId": "5",
+      "basePriceCOP": 166000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "503",
+      "name": "Apartamento 503",
+      "levelId": "5",
+      "basePriceCOP": 166000000,
+      "view": "Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "101",
+      "id": "504",
+      "name": "Apartamento 504",
+      "levelId": "5",
+      "basePriceCOP": 264000000,
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "505",
+      "name": "Apartamento 505",
+      "levelId": "5",
+      "basePriceCOP": 264000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "102",
+      "id": "506",
+      "name": "Apartamento 506",
+      "levelId": "5",
+      "basePriceCOP": 166000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "102",
+      "id": "507",
+      "name": "Apartamento 507",
+      "levelId": "5",
+      "basePriceCOP": 166000000,
+      "view": "Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "101",
+      "id": "508",
+      "name": "Apartamento 508",
+      "levelId": "5",
+      "basePriceCOP": 264000000,
+      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        }
+      ]
+    }
+  ],
+  "offer": "venta",
+  "info": {
+    "address": "Calle 158 # 93A-37, Suba Salitre, Bogotá.",
+    "nearby": [
+      {
+        "name": "Supermercados Olímpica, D1 y Ara",
+        "time": "sobre la Carrera 92"
+      },
+      {
+        "name": "Rutas del SITP y TransMilenio",
+        "time": "a pocas cuadras"
+      }
+    ],
+    "amenities": [
+      "Portería las 24 horas",
+      "Ascensor",
+      "Salón social con BBQ",
+      "Parqueadero",
+      "Depósito",
+      "Balcón en todos los apartamentos"
+    ],
+    "policies": [
+      "Precios de referencia simulados para la demostración.",
+      "Los interiores son ilustrativos: la distribución real puede cambiar.",
+      "El edificio (forma y pisos) viene del catastro de Bogotá."
+    ],
+    "faq": [
+      {
+        "q": "¿Este es el sitio oficial del edificio?",
+        "a": "No. Es una demostración de Antesala hecha con datos públicos: la forma y los pisos del catastro de Bogotá y las calles de OpenStreetMap."
+      },
+      {
+        "q": "¿Puedo ver el apartamento exacto?",
+        "a": "Sí. En el recorrido eliges el piso y el apartamento, con su fachada, su vista y su precio de referencia."
+      },
+      {
+        "q": "¿Cómo agendo una visita?",
+        "a": "Con el botón \"Agendar visita\": el mensaje de WhatsApp ya dice qué apartamento te interesa."
+      }
+    ]
+  }
+}

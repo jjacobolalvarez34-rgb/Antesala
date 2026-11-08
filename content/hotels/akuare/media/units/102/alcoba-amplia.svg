@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#EEE8DD"/>
+      <stop offset="1" stop-color="#CDBFAC"/>
+    </linearGradient>
+    <radialGradient id="f" cx="0.3" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1067" fill="url(#g)"/>
+  <rect width="1600" height="1067" fill="url(#f)"/>
+  <rect x="560" y="300" width="480" height="400" fill="none" stroke="#18201F" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M0 0 L560 300 M1600 0 L1040 300 M0 1067 L560 700 M1600 1067 L1040 700" fill="none" stroke="#18201F" stroke-opacity="0.28" stroke-width="2"/>
+  <rect x="680" y="380" width="240" height="190" fill="#fff" fill-opacity="0.35" stroke="#18201F" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M800 380 V570" fill="none" stroke="#18201F" stroke-opacity="0.28" stroke-width="2"/>
+  <rect x="600" y="600" width="400" height="70" fill="#2F6B6E" fill-opacity="0.16"/>
+  <text x="800" y="917" text-anchor="middle" font-family="'Instrument Serif', Georgia, 'Times New Roman', serif" font-size="76" fill="#18201F" fill-opacity="0.82">Alcoba principal</text>
+  <text x="800" y="971" text-anchor="middle" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="28" letter-spacing="4" fill="#18201F" fill-opacity="0.55">APARTAMENTO 102</text>
+</svg>
