@@ -23,7 +23,7 @@ import {
 } from '@/lib/building';
 import { lowerQuality, type Quality } from '@/lib/capabilities';
 import { formatCOP, OFFER } from '@/lib/hotel';
-import { polygonLabelPoint } from '@/lib/plan';
+import { parsePlan, polygonLabelPoint } from '@/lib/plan';
 import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, Offer, PlanGeometry } from '@/lib/types';
@@ -68,7 +68,8 @@ export interface SceneData {
   units: SceneUnit[];
   colors: BuildingColors;
   /** planta de cada piso (D-041) */
-  levelPlans: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
+  /** plantas de piso: el SVG se pide y se interpreta en el cliente (D-058) */
+  levelPlanSources: Record<string, { url: string; spaces: FloorPlanSpace[] }>;
   /**
    * Demo (D-046): el 360° de cada espacio se recorre por dentro de la maqueta
    * amoblada, en vivo. Un hotel real muestra sus fotos 360° capturadas.
@@ -80,6 +81,15 @@ export interface SceneData {
   offer?: Offer;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
   unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
+}
+
+/**
+ * Lo que manda el servidor (D-058): cada plano de unidad una sola vez y, por
+ * unidad, cuál le toca. SceneLayer lo expande a unitPlans en el cliente.
+ */
+export type SceneDataWire = Omit<SceneData, 'unitPlans'> & {
+  unitPlanTypes: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
+  unitPlanOf: Record<string, string>;
 }
 
 export type SceneStage =
@@ -302,9 +312,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
   const [planHovered, setPlanHovered] = useState<string | null>(null);
   const floorAnchors = useRef(new Map<string, HTMLElement>());
+  const levelPlans = useLevelPlans(data.levelPlanSources, stage.kind === 'piso' ? stage.levelId : null);
   const floorLabels = useMemo(() => {
     if (stage.kind !== 'piso') return [];
-    const entry = data.levelPlans[stage.levelId];
+    const entry = levelPlans[stage.levelId];
     const order = data.floors.find((f) => f.id === stage.levelId)?.order;
     if (!entry || order === undefined) return [];
     const fc = facadesOf(data.building);
@@ -331,7 +342,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         },
       ];
     });
-  }, [stage, data, frame, facadeIndex]);
+  }, [stage, data, frame, facadeIndex, levelPlans]);
   const view360 = useTour((s) => s.view360);
   const currentPano =
     unitId && spaceId ? (data.unitPlans[unitId]?.spaces.find((s) => s.id === spaceId)?.pano ?? null) : null;
@@ -591,7 +602,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           linen={linen}
           selectedId={selectedId}
           gone={inUnit}
-          floorPlans={data.levelPlans}
+          floorPlans={levelPlans}
           planHovered={planHovered}
           onPlanHover={setPlanHovered}
           onPlanSelect={(id) => {
@@ -693,4 +704,39 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       <TourGuide step={guideStep} active={active} />
     </div>
   );
+}
+
+/**
+ * Plantas de piso pedidas aparte (D-058): primero la del piso abierto y, en tiempo
+ * libre, las demás. Así no viajan dentro de cada página.
+ */
+function useLevelPlans(sources: SceneData['levelPlanSources'], priority: string | null) {
+  const [plans, setPlans] = useState<Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>>({});
+  const asked = useRef(new Set<string>());
+  useEffect(() => {
+    let alive = true;
+    const load = (id: string) => {
+      const src = sources[id];
+      if (!src || asked.current.has(id)) return;
+      asked.current.add(id);
+      fetch(src.url)
+        .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
+        .then((svg) => {
+          if (!alive) return;
+          const plan = parsePlan(svg, src.url);
+          setPlans((p) => ({ ...p, [id]: { plan, spaces: src.spaces } }));
+        })
+        .catch(() => asked.current.delete(id));
+    };
+    if (priority) load(priority);
+    const rest = () => Object.keys(sources).forEach(load);
+    const idle = 'requestIdleCallback' in window;
+    const h = idle ? window.requestIdleCallback(rest, { timeout: 4000 }) : window.setTimeout(rest, 2500);
+    return () => {
+      alive = false;
+      if (idle) window.cancelIdleCallback(h);
+      else window.clearTimeout(h);
+    };
+  }, [sources, priority]);
+  return plans;
 }

@@ -5,7 +5,7 @@ import { ArrowRight, Check, Minus } from 'lucide-react';
 
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
-import { formatArea, formatCOP, formatPrice, pluralize, unitPrice } from '@/lib/hotel';
+import { formatArea, formatPrice, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';

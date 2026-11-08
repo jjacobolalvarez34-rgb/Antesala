@@ -374,6 +374,8 @@ function Floor({
   // con un piso abierto, solo su planta recibe toques: la fachada oculta y los pisos de encima
   // (casi transparentes) se quedaban con el clic y la habitación no abría
   const live = interactive && (state === 'idle' || state === 'hovered');
+  // atenuado o retirado no proyecta sombra: con opacidad baja igual oscurecía la planta abierta
+  const castsShadow = shadows && state !== 'dimmed' && state !== 'gone';
   /** la fachada del piso (todo menos la losa y la planta): se oculta del todo cuando se retira */
   const facadeRef = useRef<THREE.Group>(null);
   const hasPlan = Boolean(floorPlan);
@@ -503,8 +505,10 @@ function Floor({
       ref={group}
       name={`piso-${floor.id}`}
       onPointerOver={
-        live
+        interactive
           ? (e: ThreeEvent<PointerEvent>) => {
+              // sobre la planta del piso abierto manda la planta (sus habitaciones)
+              if (!live && overOpenPlan(e)) return;
               e.stopPropagation();
               onHover(floor.id);
               document.body.style.cursor = 'pointer';
@@ -512,7 +516,7 @@ function Floor({
           : undefined
       }
       onPointerOut={
-        live
+        interactive
           ? () => {
               onHover(null);
               document.body.style.cursor = '';
@@ -520,8 +524,9 @@ function Floor({
           : undefined
       }
       onClick={
-        live
+        interactive
           ? (e: ThreeEvent<MouseEvent>) => {
+              if (!live && overOpenPlan(e)) return;
               e.stopPropagation();
               onSelect(floor.id);
             }
@@ -529,13 +534,13 @@ function Floor({
       }
     >
       <group position={[0, yBase, 0]}>
-        <mesh geometry={slab} material={mats.slab} castShadow={shadows} receiveShadow={shadows} />
+        <mesh geometry={slab} material={mats.slab} castShadow={castsShadow} receiveShadow={shadows} />
         <group ref={facadeRef}>
-          {clad ? <mesh geometry={clad} material={mats.clad} castShadow={shadows} receiveShadow={shadows} /> : null}
+          {clad ? <mesh geometry={clad} material={mats.clad} castShadow={castsShadow} receiveShadow={shadows} /> : null}
           {concrete ? (
-            <mesh geometry={concrete} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
+            <mesh geometry={concrete} material={mats.concrete} castShadow={castsShadow} receiveShadow={shadows} />
           ) : null}
-          {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={shadows} /> : null}
+          {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={castsShadow} /> : null}
           {windowGeo ? (
             <mesh
               geometry={windowGeo}
@@ -565,7 +570,7 @@ function Floor({
           {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} raycast={noRaycast} /> : null}
           {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
           {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
-          {green ? <mesh geometry={green} material={mats.green} castShadow={shadows} /> : null}
+          {green ? <mesh geometry={green} material={mats.green} castShadow={castsShadow} /> : null}
         </group>
         {floorPlan && planMounted ? (
           <FloorPlanModel
@@ -824,11 +829,11 @@ function Roof({
 
   return (
     <group position={[0, frame.height, 0]}>
-      <mesh geometry={roof} material={mats.roof} castShadow={shadows} receiveShadow={shadows} />
+      <mesh geometry={roof} material={mats.roof} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
       {parapetGeo ? (
-        <mesh geometry={parapetGeo} material={mats.concrete} castShadow={shadows} receiveShadow={shadows} />
+        <mesh geometry={parapetGeo} material={mats.concrete} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
       ) : null}
-      {beamGeo ? <mesh geometry={beamGeo} material={mats.wood} castShadow={shadows} /> : null}
+      {beamGeo ? <mesh geometry={beamGeo} material={mats.wood} castShadow={shadows && !dimmed && !gone} /> : null}
       {railGeo ? <mesh geometry={railGeo} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
     </group>
   );
@@ -944,3 +949,12 @@ export function BuildingModel({
     </group>
   );
 }
+
+/** El puntero está sobre la planta del piso abierto (marcada con userData.floorPlan). */
+function overOpenPlan(e: ThreeEvent<PointerEvent | MouseEvent>) {
+  return e.intersections.some((i) => {
+    for (let o: THREE.Object3D | null = i.object; o; o = o.parent) if (o.userData.floorPlan === true) return true;
+    return false;
+  });
+}
+

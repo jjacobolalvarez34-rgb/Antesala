@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
 import { detectCapability, qualityOverride } from '@/lib/capabilities';
@@ -11,7 +11,7 @@ import { routes } from '@/lib/routes';
 import { can3d, useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
-import type { SceneData, SceneStage } from './Scene';
+import type { SceneData, SceneDataWire, SceneStage } from './Scene';
 
 /** El JS de three.js se descarga solo cuando hace falta (ARQUITECTURA.md §6). */
 const loadScene = () => import('./Scene');
@@ -23,7 +23,16 @@ const Scene = dynamic(loadScene, { ssr: false });
  * Marca <html data-scene="on"> cuando la escena está visible y lista; las
  * páginas usan la variante `scene:` para pasar de lista a paneles sobre el 3D.
  */
-export function SceneLayer({ data }: { data: SceneData }) {
+export function SceneLayer({ data: wire }: { data: SceneDataWire }) {
+  const data = useMemo<SceneData>(() => {
+    const { unitPlanTypes, unitPlanOf, ...rest } = wire;
+    const unitPlans: SceneData['unitPlans'] = {};
+    for (const [unit, key] of Object.entries(unitPlanOf)) {
+      const t = unitPlanTypes[key];
+      if (t) unitPlans[unit] = t;
+    }
+    return { ...rest, unitPlans };
+  }, [wire]);
   const router = useRouter();
   const [stageName, param, spaceParam] = useSelectedLayoutSegments();
   const reduced = useReducedMotion();

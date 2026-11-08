@@ -6,7 +6,7 @@ import { BrandIntro } from '@/components/hotel/BrandIntro';
 import { DemoBanner } from '@/components/hotel/DemoBanner';
 import { HotelHeader } from '@/components/hotel/HotelHeader';
 import { PoweredBy } from '@/components/hotel/PoweredBy';
-import type { SceneData } from '@/components/scene/Scene';
+import type { SceneDataWire } from '@/components/scene/Scene';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
 import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice, freeAlternative } from '@/lib/hotel';
@@ -60,7 +60,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
   };
 
   const building = hotel.site.kind === 'edificio' ? hotel.site.building : undefined;
-  const scene: SceneData | null = building
+  const scene: SceneDataWire | null = building
     ? {
         slug: hotel.slug,
         building,
@@ -93,10 +93,11 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           balcony: u.spaces.some((s) => s.type === 'balcon'),
           occupied: u.occupied === true,
         })),
-        levelPlans: Object.fromEntries(
+        // las plantas de piso (pesadas, con muebles) se piden aparte desde la escena (D-058)
+        levelPlanSources: Object.fromEntries(
           hotel.levels.flatMap((l) => {
             const plan = l.plan ? bundle.plans[l.plan] : undefined;
-            if (!plan) return [];
+            if (!plan || !l.plan) return [];
             const spaces = plan.spaces.map((s) => {
               const unit = hotel.units.find((u) => u.id === s.id && u.levelId === l.id);
               const poi = hotel.site.pois.find((p) => p.id === s.id);
@@ -108,11 +109,13 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
                 occupied: unit?.occupied === true,
               };
             });
-            return [[l.id, { plan, spaces }]];
+            return [[l.id, { url: mediaUrl(hotel.slug, l.plan), spaces }]];
           }),
         ),
-        unitPlans: Object.fromEntries(
-          hotel.units.flatMap((u) => {
+        // cada plano viaja una vez (D-058): las copias de una unidad tipo lo comparten
+        unitPlanOf: Object.fromEntries(hotel.units.filter((u) => bundle.plans[u.plan]).map((u) => [u.id, u.plan])),
+        unitPlanTypes: Object.fromEntries(
+          [...new Map(hotel.units.map((u) => [u.plan, u])).values()].flatMap((u) => {
             const plan = bundle.plans[u.plan];
             if (!plan) return [];
             const spaces = u.spaces.map(({ id, name, type, media }) => {
@@ -130,7 +133,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
                   : undefined,
               };
             });
-            return [[u.id, { plan, spaces }]];
+            return [[u.plan, { plan, spaces }]];
           }),
         ),
       }

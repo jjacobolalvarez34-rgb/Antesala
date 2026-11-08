@@ -168,7 +168,7 @@ export function FloorPlanModel({
   }, [hovered, meshes, meta, mats]);
 
   return (
-    <group ref={group} position={position} visible={false}>
+    <group ref={group} position={position} visible={false} userData={{ floorPlan: true }}>
       {meshes.walls ? (
         <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows && visible} receiveShadow={shadows} raycast={visible ? undefined : () => null} />
       ) : null}
