@@ -128,6 +128,17 @@ const hotelSchema = z.object({
   categories: z.array(z.object({ id, name: z.string(), tagline: z.string(), highlights: z.array(z.string()) })).min(1),
   units: z.array(unit),
   isDemo: z.boolean(),
+  info: z
+    .object({
+      address: z.string().optional(),
+      nearby: z.array(z.object({ name: z.string().min(1), time: z.string().min(1) })).optional(),
+      checkIn: z.string().optional(),
+      checkOut: z.string().optional(),
+      amenities: z.array(z.string().min(1)).optional(),
+      policies: z.array(z.string().min(1)).optional(),
+      faq: z.array(z.object({ q: z.string().min(1), a: z.string().min(1) })).optional(),
+    })
+    .optional(),
 }) satisfies z.ZodType<Hotel>;
 
 const tokensSchema = z.object({

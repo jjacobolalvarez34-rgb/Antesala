@@ -36,7 +36,35 @@
         "cladding": "ladrillo"
       }
     },
-    "exterior": [],
+    "exterior": [
+      {
+        "id": "render-exterior-1",
+        "kind": "photo",
+        "src": "media/renders/fachada-dia.jpg",
+        "alt": "Fachada de Niebla Alta en la tarde (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-2",
+        "kind": "photo",
+        "src": "media/renders/fachada-noche.jpg",
+        "alt": "Fachada de Niebla Alta de noche (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-3",
+        "kind": "photo",
+        "src": "media/renders/piso-6.jpg",
+        "alt": "Piso 6 abierto, con la planta amoblada (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      }
+    ],
     "pois": [
       {
         "id": "lobby",
@@ -316,6 +344,15 @@
               ]
             },
             {
+              "id": "render-201-descanso",
+              "kind": "photo",
+              "src": "media/renders/201-descanso.jpg",
+              "alt": "Zona de descanso de Estudio 201, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-201-descanso-1",
               "kind": "photo",
               "src": "media/units/201/descanso-amplia.svg",
@@ -389,6 +426,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "render-201-sala",
+              "kind": "photo",
+              "src": "media/renders/201-sala.jpg",
+              "alt": "Sala de Estudio 201, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-201-sala-1",
@@ -467,6 +513,15 @@
               ]
             },
             {
+              "id": "render-201-cocina",
+              "kind": "photo",
+              "src": "media/renders/201-cocina.jpg",
+              "alt": "Cocineta y comedor de Estudio 201, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-201-cocina-1",
               "kind": "photo",
               "src": "media/units/201/cocina-amplia.svg",
@@ -539,6 +594,15 @@
                   "target": "cocina"
                 }
               ]
+            },
+            {
+              "id": "render-201-bano",
+              "kind": "photo",
+              "src": "media/renders/201-bano.jpg",
+              "alt": "Baño de Estudio 201, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-201-bano-1",
@@ -636,6 +700,15 @@
               ]
             },
             {
+              "id": "render-301-descanso",
+              "kind": "photo",
+              "src": "media/renders/301-descanso.jpg",
+              "alt": "Zona de descanso de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-301-descanso-1",
               "kind": "photo",
               "src": "media/units/201/descanso-amplia.svg",
@@ -709,6 +782,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "render-301-sala",
+              "kind": "photo",
+              "src": "media/renders/301-sala.jpg",
+              "alt": "Sala de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-301-sala-1",
@@ -787,6 +869,15 @@
               ]
             },
             {
+              "id": "render-301-cocina",
+              "kind": "photo",
+              "src": "media/renders/301-cocina.jpg",
+              "alt": "Cocineta y comedor de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-301-cocina-1",
               "kind": "photo",
               "src": "media/units/201/cocina-amplia.svg",
@@ -859,6 +950,15 @@
                   "target": "cocina"
                 }
               ]
+            },
+            {
+              "id": "render-301-bano",
+              "kind": "photo",
+              "src": "media/renders/301-bano.jpg",
+              "alt": "Baño de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-301-bano-1",
@@ -966,6 +1066,15 @@
               ]
             },
             {
+              "id": "render-402-sala",
+              "kind": "photo",
+              "src": "media/renders/402-sala.jpg",
+              "alt": "Sala y comedor de Suite 402, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-402-sala-1",
               "kind": "photo",
               "src": "media/units/402/sala-amplia.svg",
@@ -1044,6 +1153,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "render-402-balcon",
+              "kind": "photo",
+              "src": "media/renders/402-balcon.jpg",
+              "alt": "Balcón de Suite 402, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-402-balcon-1",
@@ -1128,6 +1246,15 @@
               ]
             },
             {
+              "id": "render-402-cocina",
+              "kind": "photo",
+              "src": "media/renders/402-cocina.jpg",
+              "alt": "Cocina de Suite 402, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-402-cocina-1",
               "kind": "photo",
               "src": "media/units/402/cocina-amplia.svg",
@@ -1210,6 +1337,15 @@
               ]
             },
             {
+              "id": "render-402-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/402-dormitorio.jpg",
+              "alt": "Dormitorio de Suite 402, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-402-dormitorio-1",
               "kind": "photo",
               "src": "media/units/402/dormitorio-amplia.svg",
@@ -1289,6 +1425,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "render-402-bano",
+              "kind": "photo",
+              "src": "media/renders/402-bano.jpg",
+              "alt": "Baño de Suite 402, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-402-bano-1",
@@ -1396,6 +1541,15 @@
               ]
             },
             {
+              "id": "render-502-sala",
+              "kind": "photo",
+              "src": "media/renders/502-sala.jpg",
+              "alt": "Sala y comedor de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-502-sala-1",
               "kind": "photo",
               "src": "media/units/402/sala-amplia.svg",
@@ -1474,6 +1628,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "render-502-balcon",
+              "kind": "photo",
+              "src": "media/renders/502-balcon.jpg",
+              "alt": "Balcón de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-502-balcon-1",
@@ -1558,6 +1721,15 @@
               ]
             },
             {
+              "id": "render-502-cocina",
+              "kind": "photo",
+              "src": "media/renders/502-cocina.jpg",
+              "alt": "Cocina de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-502-cocina-1",
               "kind": "photo",
               "src": "media/units/402/cocina-amplia.svg",
@@ -1640,6 +1812,15 @@
               ]
             },
             {
+              "id": "render-502-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/502-dormitorio.jpg",
+              "alt": "Dormitorio de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-502-dormitorio-1",
               "kind": "photo",
               "src": "media/units/402/dormitorio-amplia.svg",
@@ -1719,6 +1900,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "render-502-bano",
+              "kind": "photo",
+              "src": "media/renders/502-bano.jpg",
+              "alt": "Baño de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-502-bano-1",
@@ -1828,6 +2018,15 @@
               ]
             },
             {
+              "id": "render-601-terraza",
+              "kind": "photo",
+              "src": "media/renders/601-terraza.jpg",
+              "alt": "Terraza de Penthouse 601, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-601-terraza-1",
               "kind": "photo",
               "src": "media/units/601/terraza-amplia.svg",
@@ -1909,6 +2108,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "render-601-sala",
+              "kind": "photo",
+              "src": "media/renders/601-sala.jpg",
+              "alt": "Sala y comedor de Penthouse 601, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-601-sala-1",
@@ -1994,6 +2202,15 @@
               ]
             },
             {
+              "id": "render-601-cocina",
+              "kind": "photo",
+              "src": "media/renders/601-cocina.jpg",
+              "alt": "Cocina de Penthouse 601, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-601-cocina-1",
               "kind": "photo",
               "src": "media/units/601/cocina-amplia.svg",
@@ -2076,6 +2293,15 @@
               ]
             },
             {
+              "id": "render-601-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/601-dormitorio.jpg",
+              "alt": "Dormitorio principal de Penthouse 601, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-601-dormitorio-1",
               "kind": "photo",
               "src": "media/units/601/dormitorio-amplia.svg",
@@ -2156,6 +2382,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "render-601-bano",
+              "kind": "photo",
+              "src": "media/renders/601-bano.jpg",
+              "alt": "Baño de Penthouse 601, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-601-bano-1",
@@ -2552,5 +2787,62 @@
         }
       ]
     }
-  ]
+  ],
+  "info": {
+    "address": "A dos cuadras de la Circunvalar, entre la Zona G y Quinta Camacho.",
+    "nearby": [
+      {
+        "name": "Zona G y sus restaurantes",
+        "time": "8 min a pie"
+      },
+      {
+        "name": "Quinta Camacho",
+        "time": "12 min a pie"
+      },
+      {
+        "name": "Parque de la 93",
+        "time": "15 min en carro"
+      },
+      {
+        "name": "Aeropuerto El Dorado",
+        "time": "40 min en carro"
+      }
+    ],
+    "checkIn": "3:00 p. m.",
+    "checkOut": "12:00 m.",
+    "amenities": [
+      "Wifi de fibra en todo el edificio",
+      "Cocina equipada en cada unidad",
+      "Recepción de 7 a. m. a 11 p. m.",
+      "Entrada con código las 24 horas",
+      "Cowork con cabinas para llamadas",
+      "Terraza común en la cubierta",
+      "Lavandería por encargo",
+      "Aseo diario o a pedido"
+    ],
+    "policies": [
+      "Estadías desde una noche, con tarifa especial por semana y por mes.",
+      "Cancelación sin costo hasta 48 horas antes de la llegada.",
+      "Mascotas pequeñas con aviso previo.",
+      "No se fuma dentro del edificio ni en las terrazas."
+    ],
+    "faq": [
+      {
+        "q": "¿Puedo elegir la habitación exacta?",
+        "a": "Sí. En el recorrido ves cada piso y cada habitación, con su vista y su precio. Al reservar, el mensaje ya dice cuál elegiste."
+      },
+      {
+        "q": "¿Cómo reservo?",
+        "a": "Por WhatsApp, directo con el hotel. Respondemos con la disponibilidad y el valor total de la estadía."
+      },
+      {
+        "q": "¿Tienen parqueadero?",
+        "a": "No dentro del edificio. Hay un parqueadero en convenio a una cuadra, con tarifa por noche."
+      },
+      {
+        "q": "¿Sirve para quedarse a trabajar?",
+        "a": "Sí. Todas las unidades tienen escritorio o mesa junto a la ventana, y el cowork del primer piso tiene cabinas para llamadas."
+      }
+    ]
+  }
 }

@@ -159,6 +159,24 @@ export interface Hotel {
   units: Unit[];
   /** true → banner "Hotel ficticio · imágenes ilustrativas" */
   isDemo: boolean;
+  /**
+   * Lo que necesita la portada para servir de sitio web completo (D-053), para
+   * hoteles que no tienen página propia. Todo opcional: lo que falte no se muestra.
+   */
+  info?: HotelInfo;
+}
+
+export interface HotelInfo {
+  /** dirección o referencia ("Chapinero Alto, a dos cuadras de la Circunvalar") */
+  address?: string;
+  /** lugares cercanos y cuánto se tarda ("8 min a pie") */
+  nearby?: { name: string; time: string }[];
+  /** "3:00 p. m." */
+  checkIn?: string;
+  checkOut?: string;
+  amenities?: string[];
+  policies?: string[];
+  faq?: { q: string; a: string }[];
 }
 
 /** Tokens visuales por hotel: content/hotels/<slug>/tokens.json */
