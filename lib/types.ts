@@ -85,6 +85,11 @@ export interface Unit {
   exterior?: { facade: number; windows: number[] }[];
   spaces: Space[];
   featured?: boolean;
+  /**
+   * Ocupada en las fechas de la demo (simulado, D-054): se puede ver por dentro
+   * pero no reservar; de noche su ventana está encendida.
+   */
+  occupied?: boolean;
 }
 
 export interface Category {

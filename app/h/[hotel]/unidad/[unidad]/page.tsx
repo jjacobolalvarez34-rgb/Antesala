@@ -8,6 +8,7 @@ import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
 import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { UnitSheet } from '@/components/hotel/UnitSheet';
 import { Facts } from '@/components/hotel/Facts';
+import { OccupiedNotice } from '@/components/hotel/OccupiedNotice';
 import { WhatsAppButton } from '@/components/booking/WhatsAppButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
@@ -122,11 +123,15 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
                   {unit.view}
                 </p>
               ) : null}
-              <WhatsAppButton
-                context={{ phone: hotel.contact.whatsapp, hotelName: hotel.name, unitName: unit.name }}
-                label="Reservar esta unidad"
-                className="mt-5 w-full"
-              />
+              {unit.occupied ? (
+                <OccupiedNotice hotel={hotel} unit={unit} className="mt-5" />
+              ) : (
+                <WhatsAppButton
+                  context={{ phone: hotel.contact.whatsapp, hotelName: hotel.name, unitName: unit.name }}
+                  label="Reservar esta unidad"
+                  className="mt-5 w-full"
+                />
+              )}
             </div>
           ) : null}
 

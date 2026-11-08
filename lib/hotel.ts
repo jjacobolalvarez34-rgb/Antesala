@@ -42,3 +42,17 @@ export const levelSummary = (hotel: Hotel, levelId: string): string => {
   ];
   return parts.length ? parts.join(' · ') : 'Sin unidades de muestra';
 };
+
+/**
+ * La alternativa libre más parecida a una unidad ocupada (D-054): mismo tipo,
+ * mismas ventanas (misma columna del edificio) y el piso más cercano; si no hay,
+ * cualquiera libre del mismo tipo.
+ */
+export function freeAlternative(hotel: Hotel, unit: Unit): Unit | undefined {
+  const order = (u: Unit) => findLevel(hotel, u.levelId)?.order ?? 0;
+  const column = (u: Unit) => JSON.stringify(u.exterior ?? []);
+  const free = hotel.units.filter((u) => u.id !== unit.id && !u.occupied && u.categoryId === unit.categoryId);
+  const score = (u: Unit) => (column(u) === column(unit) ? 0 : 100) + Math.abs(order(u) - order(unit));
+  return [...free].sort((a, b) => score(a) - score(b))[0];
+}
+

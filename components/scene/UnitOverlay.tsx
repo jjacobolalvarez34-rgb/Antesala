@@ -23,7 +23,8 @@ export function UnitOverlay({ data, visible }: { data: SceneData; visible: boole
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const hoverUnit = hovered ? data.units.find((u) => u.id === hovered.id) : undefined;
-  const price = (u: SceneUnit) => (u.price !== undefined ? `${formatCOP(u.price)} / noche` : undefined);
+  const price = (u: SceneUnit) =>
+    u.occupied ? 'Ocupada en estas fechas' : u.price !== undefined ? `${formatCOP(u.price)} / noche` : undefined;
 
   useEffect(() => {
     const d = dialogRef.current;

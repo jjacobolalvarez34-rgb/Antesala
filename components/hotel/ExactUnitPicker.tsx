@@ -106,6 +106,8 @@ export function ExactUnitPicker({
                     {price !== undefined ? <span className="block font-semibold">{formatCOP(price)}</span> : null}
                     {current ? (
                       <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>la que ves</span>
+                    ) : s.occupied ? (
+                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>ocupada</span>
                     ) : diff !== 0 ? (
                       <span className={cn('text-xs font-medium', dark ? 'text-accent-on-dark' : 'text-accent')}>
                         {diff > 0 ? '+' : '−'}

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { formatCOP } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
@@ -16,7 +16,18 @@ export interface BookingSummary {
   whatsapp: string;
   priceFrom?: number;
   levels: { id: string; name: string }[];
-  units: { id: string; name: string; levelId: string; price?: number; capacity?: number; spaces: { id: string; name: string }[] }[];
+  units: {
+    id: string;
+    name: string;
+    levelId: string;
+    price?: number;
+    capacity?: number;
+    spaces: { id: string; name: string }[];
+    /** ocupada en las fechas de la demo (D-054) */
+    occupied?: boolean;
+    /** id de la alternativa libre más parecida */
+    alternative?: string;
+  }[];
 }
 
 interface Stage {
@@ -27,6 +38,8 @@ interface Stage {
   context: WhatsAppContext;
   price?: number;
   capacity?: number;
+  /** unidad ocupada: en vez de reservar, ir a la alternativa libre */
+  occupied?: { href?: ReturnType<typeof routes.unidad>; name?: string };
 }
 
 function resolveStage(data: BookingSummary, segments: string[]): Stage {
@@ -39,9 +52,15 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
     if (unit) {
       const space = b ? unit.spaces.find((s) => s.id === b) : undefined;
       const level = data.levels.find((l) => l.id === unit.levelId);
+      const alt = unit.occupied ? data.units.find((u) => u.id === unit.alternative) : undefined;
       return {
+        occupied: unit.occupied ? { href: alt ? routes.unidad(data.slug, alt.id) : undefined, name: alt?.name } : undefined,
         label: space ? `${unit.name} · ${space.name}` : unit.name,
-        detail: unit.price !== undefined ? `${formatCOP(unit.price)} / noche` : undefined,
+        detail: unit.occupied
+          ? 'Ocupada en estas fechas'
+          : unit.price !== undefined
+            ? `${formatCOP(unit.price)} / noche`
+            : undefined,
         back: space ? routes.unidad(data.slug, unit.id) : routes.piso(data.slug, unit.levelId),
         backLabel: space ? `Volver a ${unit.name}` : `Volver a ${level?.name ?? 'el piso'}`,
         context: { ...base, unitName: unit.name, spaceName: space?.name },
@@ -121,7 +140,20 @@ export function BookingBar({ data }: { data: BookingSummary }) {
               {stage.detail ? <p className="truncate text-xs text-muted-foreground">{stage.detail}</p> : null}
           </div>
         </div>
-        <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} className="shrink-0 rounded-xl" />
+        {stage.occupied ? (
+          stage.occupied.href ? (
+            <Link
+              href={stage.occupied.href}
+              className="inline-flex min-h-12 shrink-0 items-center gap-1.5 rounded-xl bg-ink px-4 text-sm font-medium text-bone transition-colors hover:bg-ink/85"
+            >
+              <span className="hidden sm:inline">Ver la {stage.occupied.name}, libre</span>
+              <span className="sm:hidden">Ver una libre</span>
+              <ArrowRight aria-hidden className="size-4" />
+            </Link>
+          ) : null
+        ) : (
+          <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} className="shrink-0 rounded-xl" />
+        )}
       </nav>
     </div>
   );

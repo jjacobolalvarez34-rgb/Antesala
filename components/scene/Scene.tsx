@@ -54,6 +54,8 @@ export interface SceneUnit {
   href: Route;
   exterior: { facade: number; windows: number[] }[];
   balcony: boolean;
+  /** ocupada en las fechas de la demo (D-054) */
+  occupied?: boolean;
 }
 
 export interface SceneData {
@@ -314,7 +316,11 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       return [
         {
           id: sp.unitId,
-          name: unit.price !== undefined ? `${unit.name} · ${formatCOP(unit.price)}` : unit.name,
+          name: unit.occupied
+            ? `${unit.name} · Ocupada`
+            : unit.price !== undefined
+              ? `${unit.name} · ${formatCOP(unit.price)}`
+              : unit.name,
           position: [x, y, z] as [number, number, number],
           href: unit.href,
         },
@@ -428,7 +434,13 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const showPois = stage.kind === 'explorar' && active && !useTour.getState().viewpoint;
   const facade = facades[facadeIndex % facades.length]!;
   const pullDir = facadeDir(facade);
-  const light = useMemo(() => createLightUniforms(), []);
+  const light = useMemo(() => {
+    const l = createLightUniforms();
+    data.units.forEach((u, i) => {
+      if (i < l.uOccupied.value.length) l.uOccupied.value[i] = u.occupied ? 1 : 0;
+    });
+    return l;
+  }, [data.units]);
 
   // unidades en la fachada (slot = índice en data.units)
   const facadeUnits = useMemo<FacadeUnit[]>(

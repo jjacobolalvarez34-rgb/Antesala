@@ -27,7 +27,8 @@ export function FloorSheet({
   above?: Level;
   below?: Level;
 }) {
-  const prices = units.map(unitPrice).filter((p): p is number => p !== undefined);
+  const free = units.filter((u) => !u.occupied);
+  const prices = free.map(unitPrice).filter((p): p is number => p !== undefined);
   const from = prices.length ? Math.min(...prices) : undefined;
   return (
     <section
@@ -67,6 +68,7 @@ export function FloorSheet({
         {units.length ? (
           <p className="text-sm text-bone/80">
             {pluralize(units.length, 'habitación', 'habitaciones')}
+            {free.length < units.length ? ` · ${pluralize(free.length, 'libre', 'libres')}` : null}
             {from !== undefined ? (
               <>
                 {' · desde '}

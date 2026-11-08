@@ -25,10 +25,13 @@ export interface FloorPlanSpace {
   name: string;
   /** solo unidades de la demo */
   unitId?: string;
+  /** ocupada en las fechas de la demo: color apagado, pero se puede abrir (D-054) */
+  occupied?: boolean;
 }
 
 const COLORS = {
   unit: '#b88d63',
+  occupied: '#9d958b',
   unitHot: '#d7b07f',
   other: '#cdc7bc',
 };
@@ -47,7 +50,7 @@ const WARM = new THREE.Color('#ffb46b');
 const GLOW = new THREE.Color('#ffc98a');
 
 const colorFor = (s: FloorPlanSpace | undefined, finish: string | undefined) => {
-  if (s?.kind === 'unit') return COLORS.unit;
+  if (s?.kind === 'unit') return s.occupied ? COLORS.occupied : COLORS.unit;
   return (finish && FINISH[finish]) ?? COLORS.other;
 };
 
@@ -158,7 +161,7 @@ export function FloorPlanModel({
     for (const f of meshes.floors) {
       const s = meta.get(f.id);
       if (s?.kind !== 'unit') continue;
-      const c = new THREE.Color(s.unitId === hovered ? COLORS.unitHot : COLORS.unit);
+      const c = new THREE.Color(s.unitId === hovered ? COLORS.unitHot : s.occupied ? COLORS.occupied : COLORS.unit);
       const mat = mats.floors[f.id]!;
       mat.color.copy(c);
     }

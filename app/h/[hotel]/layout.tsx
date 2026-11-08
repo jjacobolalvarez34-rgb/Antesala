@@ -9,7 +9,7 @@ import { PoweredBy } from '@/components/hotel/PoweredBy';
 import type { SceneData } from '@/components/scene/Scene';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
-import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice } from '@/lib/hotel';
+import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice, freeAlternative } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 import { tokensToStyle } from '@/lib/tokens';
@@ -53,6 +53,8 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       price: unitPrice(u),
       capacity: u.capacity,
       spaces: u.spaces.map(({ id, name }) => ({ id, name })),
+      occupied: u.occupied === true,
+      alternative: u.occupied ? freeAlternative(hotel, u)?.id : undefined,
     })),
   };
 
@@ -86,6 +88,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
           href: routes.unidad(hotel.slug, u.id),
           exterior: u.exterior ?? [],
           balcony: u.spaces.some((s) => s.type === 'balcon'),
+          occupied: u.occupied === true,
         })),
         levelPlans: Object.fromEntries(
           hotel.levels.flatMap((l) => {
@@ -99,6 +102,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
                 kind: unit ? ('unit' as const) : poi ? ('poi' as const) : ('other' as const),
                 name: unit?.name ?? poi?.name ?? s.label ?? s.id,
                 unitId: unit?.id,
+                occupied: unit?.occupied === true,
               };
             });
             return [[l.id, { plan, spaces }]];

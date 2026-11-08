@@ -1,5 +1,6 @@
 import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { MobileCollapse } from '@/components/hotel/MobileCollapse';
+import { OccupiedNotice } from '@/components/hotel/OccupiedNotice';
 import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
 import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
 import type { Category, Hotel, Level, Unit } from '@/lib/types';
@@ -42,6 +43,7 @@ export function UnitSheet({
             ) : null}
           </p>
         ) : null}
+        <OccupiedNotice hotel={hotel} unit={unit} tone="dark" className="mt-3" />
         <MobileCollapse>
           <p className="mt-3 text-sm text-bone/80">
             {formatArea(unit.areaM2)} · {pluralize(unit.capacity, 'persona', 'personas')} · {unit.beds}

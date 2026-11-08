@@ -76,6 +76,7 @@ const unit = z.object({
     .optional(),
   spaces: z.array(space).min(1),
   featured: z.boolean().optional(),
+  occupied: z.boolean().optional(),
 });
 
 const hotelSchema = z.object({
@@ -177,7 +178,7 @@ async function exists(file: string): Promise<boolean> {
 }
 
 /** Lo que una unidad copia puede cambiar de su tipo; el resto (plano, espacios, fotos) se hereda. */
-const COPY_KEYS = ['id', 'name', 'levelId', 'exterior', 'view', 'viewPremiumCOP', 'basePriceCOP', 'featured'] as const;
+const COPY_KEYS = ['id', 'name', 'levelId', 'exterior', 'view', 'viewPremiumCOP', 'basePriceCOP', 'featured', 'occupied'] as const;
 
 /**
  * Unidades tipo (D-047): `{ "sameAs": "201", "id": "202", ... }` hereda todo de la
@@ -199,7 +200,14 @@ function expandCopies(raw: unknown, problems: string[]): unknown {
       }
       const extra = Object.keys(u).filter((k) => k !== 'sameAs' && !(COPY_KEYS as readonly string[]).includes(k));
       if (extra.length) problems.push(`unidad "${String(u.id)}" (copia) no puede cambiar: ${extra.join(', ')}`);
-      const copy: Record<string, unknown> = { ...template, exterior: undefined, view: undefined, viewPremiumCOP: undefined, featured: undefined };
+      const copy: Record<string, unknown> = {
+        ...template,
+        exterior: undefined,
+        view: undefined,
+        viewPremiumCOP: undefined,
+        featured: undefined,
+        occupied: undefined,
+      };
       for (const k of COPY_KEYS) if (k in u) copy[k] = u[k];
       return structuredClone(copy);
     }),

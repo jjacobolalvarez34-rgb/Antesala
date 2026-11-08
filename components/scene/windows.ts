@@ -33,10 +33,16 @@ export interface WindowSpec {
 export interface LightUniforms {
   uNight: { value: number };
   uUnitLight: { value: Float32Array };
+  /** 1 = unidad ocupada (D-054): de noche su ventana está encendida */
+  uOccupied: { value: Float32Array };
 }
 
 export function createLightUniforms(): LightUniforms {
-  return { uNight: { value: 0 }, uUnitLight: { value: new Float32Array(MAX_UNITS) } };
+  return {
+    uNight: { value: 0 },
+    uUnitLight: { value: new Float32Array(MAX_UNITS) },
+    uOccupied: { value: new Float32Array(MAX_UNITS) },
+  };
 }
 
 function buildQuads(specs: WindowSpec[], scale: number, outward: number) {
@@ -71,17 +77,29 @@ export const buildGlowGeometry = (specs: WindowSpec[]) => buildQuads(specs, 1.35
 const common = /* glsl */ `
   uniform float uNight;
   uniform float uUnitLight[${MAX_UNITS}];
+  uniform float uOccupied[${MAX_UNITS}];
   varying vec4 vRoom;
   float hash1(float n) { return fract(sin(n) * 43758.5453123); }
   float roomLight() {
     float slot = vRoom.z;
     float unitL = 0.0;
+    float occupied = 0.0;
     if (slot > -0.5) {
       int i = int(slot + 0.5);
-      for (int k = 0; k < ${MAX_UNITS}; k++) { if (k == i) unitL = uUnitLight[k]; }
+      for (int k = 0; k < ${MAX_UNITS}; k++) {
+        if (k == i) {
+          unitL = uUnitLight[k];
+          occupied = uOccupied[k];
+        }
+      }
     }
     if (vRoom.w > 1.5) return max(unitL, 0.95); // lobby
-    float nightLit = step(0.48, hash1(vRoom.y * 91.7)) * uNight * (0.7 + 0.3 * hash1(vRoom.y * 13.3));
+    float dim = 0.7 + 0.3 * hash1(vRoom.y * 13.3);
+    // ventanas de habitaciones del hotel: de noche, encendidas solo si están ocupadas (D-054);
+    // las demás ventanas (sin unidad) siguen al azar para que el edificio se vea habitado
+    float nightLit = slot > -0.5
+      ? occupied * uNight * dim
+      : step(0.48, hash1(vRoom.y * 91.7)) * uNight * dim;
     return max(unitL, nightLit);
   }
 `;

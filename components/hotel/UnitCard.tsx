@@ -62,7 +62,11 @@ export function UnitCard({
           {formatArea(unit.areaM2)} · {pluralize(unit.capacity, 'persona', 'personas')}
         </p>
         <div className={cn('mt-auto flex items-end justify-between gap-3', feature ? 'pt-2' : 'pt-1')}>
-          {price !== undefined ? (
+          {unit.occupied ? (
+            <p className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
+              Ocupada en estas fechas
+            </p>
+          ) : price !== undefined ? (
             <p className="text-sm">
               <span className="font-semibold text-foreground">{formatCOP(price)}</span>
               <span className="text-muted-foreground"> / noche</span>
