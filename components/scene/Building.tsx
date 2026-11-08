@@ -371,6 +371,9 @@ function Floor({
   onUnitSelect: Props['onUnitSelect'];
 }) {
   const group = useRef<THREE.Group>(null);
+  // con un piso abierto, solo su planta recibe toques: la fachada oculta y los pisos de encima
+  // (casi transparentes) se quedaban con el clic y la habitación no abría
+  const live = interactive && (state === 'idle' || state === 'hovered');
   /** la fachada del piso (todo menos la losa y la planta): se oculta del todo cuando se retira */
   const facadeRef = useRef<THREE.Group>(null);
   const hasPlan = Boolean(floorPlan);
@@ -500,7 +503,7 @@ function Floor({
       ref={group}
       name={`piso-${floor.id}`}
       onPointerOver={
-        interactive
+        live
           ? (e: ThreeEvent<PointerEvent>) => {
               e.stopPropagation();
               onHover(floor.id);
@@ -509,7 +512,7 @@ function Floor({
           : undefined
       }
       onPointerOut={
-        interactive
+        live
           ? () => {
               onHover(null);
               document.body.style.cursor = '';
@@ -517,7 +520,7 @@ function Floor({
           : undefined
       }
       onClick={
-        interactive
+        live
           ? (e: ThreeEvent<MouseEvent>) => {
               e.stopPropagation();
               onSelect(floor.id);
@@ -538,16 +541,16 @@ function Floor({
               geometry={windowGeo}
               material={mats.windows}
               onPointerMove={
-                interactive
+                live
                   ? (e: ThreeEvent<PointerEvent>) => {
                       const slot = slotAt(e);
                       onUnitHover(slot >= 0 ? slot : null, e.nativeEvent.clientX, e.nativeEvent.clientY);
                     }
                   : undefined
               }
-              onPointerLeave={interactive ? () => onUnitHover(null, 0, 0) : undefined}
+              onPointerLeave={live ? () => onUnitHover(null, 0, 0) : undefined}
               onClick={
-                interactive
+                live
                   ? (e: ThreeEvent<MouseEvent>) => {
                       const slot = slotAt(e);
                       if (slot >= 0) {

@@ -7,6 +7,7 @@ import * as THREE from 'three';
 
 import { FURNITURE_COLORS } from '@/components/plan/furniture';
 import { planToMesh } from '@/components/plan/planToMesh';
+import { useTour } from '@/lib/store';
 import type { PlanGeometry } from '@/lib/types';
 
 import type { LightUniforms } from './windows';
@@ -43,6 +44,7 @@ const FINISH: Record<string, string> = {
 };
 
 const WARM = new THREE.Color('#ffb46b');
+const GLOW = new THREE.Color('#ffc98a');
 
 const colorFor = (s: FloorPlanSpace | undefined, finish: string | undefined) => {
   if (s?.kind === 'unit') return COLORS.unit;
@@ -108,11 +110,24 @@ export function FloorPlanModel({
     () => [...Object.values(mats.floors), ...Object.entries(mats.furniture).filter(([k]) => k !== 'glass').map(([, m]) => m)],
     [mats],
   );
-  useFrame(() => {
+  // brillo al tocar una habitación (D-052): su piso pulsa en cálido mientras se sostiene antes de entrar
+  const chosen = useTour((s) => s.selectedUnit);
+  const chosenMat = useMemo(() => {
+    const sp = spaces.find((s) => s.kind === 'unit' && s.unitId === chosen);
+    return sp ? (mats.floors[sp.id] ?? null) : null;
+  }, [chosen, spaces, mats]);
+  const pulse = useRef(0);
+  useFrame((state, delta) => {
     const k = light.uNight.value * 0.42;
     for (const m of lit) {
       m.emissiveIntensity = k;
       if (k > 0) m.emissive.copy(m.color).lerp(WARM, 0.25);
+    }
+    pulse.current = chosenMat ? Math.min(1, pulse.current + delta * 5) : 0;
+    if (chosenMat && visible) {
+      const wave = 0.75 + 0.25 * Math.sin(state.clock.elapsedTime * 9);
+      chosenMat.emissive.copy(GLOW);
+      chosenMat.emissiveIntensity = Math.max(k, 1.3 * pulse.current * wave);
     }
   });
 
