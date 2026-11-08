@@ -262,3 +262,11 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   "Elige tu unidad exacta" la marca como ocupada. En la demo hay 8 de 21 ocupadas.
 - Por qué: pedido de Jacobo ("¿por qué están prendidas algunas? deberían ser las vendidas o alquiladas"). Así la luz de noche dice algo y la demo muestra cómo se maneja la disponibilidad, sin quitarle al huésped la posibilidad de mirar.
 
+**D-055 · 2026-11-08 · Rediseño de la página de Antesala**
+- Decisión:
+  - Hero oscuro a pantalla completa con el edificio de noche y un celular que pasa solo por los cuatro pasos (CSS; quieto con movimiento reducido). Navegación flotante en cápsula de vidrio, que se lee sobre fondo claro y oscuro.
+  - Secciones numeradas (01 a 07) que alternan claro y oscuro: el problema con "hoy en la plataforma / con Antesala", cómo funciona, una galería tipo bento con las fotos del hotel, comparador día/noche, lo que gana el hotel, calculadora de ahorro de comisión, sin página web, cómo empezamos, preguntas y cierre.
+  - Aparición suave al hacer scroll con `animation-timeline: view()` (solo CSS; sin efecto donde no se soporta o con movimiento reducido).
+  - La calculadora es una estimación con los datos del gerente y se dice así en pantalla.
+- Por qué: Jacobo quería que la página se viera mejor en general. Lo que más pesa es mostrar el producto real (fotos y capturas) con más presencia, y el argumento económico (la calculadora).
+

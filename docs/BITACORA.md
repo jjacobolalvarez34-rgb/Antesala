@@ -37,6 +37,8 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - Habitaciones ocupadas simuladas (D-054): de noche solo se encienden las ventanas de las ocupadas; se recorren, pero proponen la alternativa libre más parecida. 8 de 21 ocupadas.
 - Revisé la sala de la Suite 202 por dentro, de noche, desde cuatro ángulos: muros, balcón y puertas completos. No pude reproducir la vista "sin muro" de la captura de Jacobo; hay que preguntarle cómo llegó.
 
+- Rediseño de la página de Antesala (D-055): hero cinematográfico de noche, secciones numeradas, galería bento, comparador día/noche y calculadora de ahorro. La foto de la fachada de noche se regeneró con las luces de las ocupadas.
+
 **Mediciones**
 - JS inicial máximo: 160 KB gzip. 112 capturas de lista en verde; las dos páginas revisadas completas en 390 px y 1440 px.
 
