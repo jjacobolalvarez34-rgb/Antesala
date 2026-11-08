@@ -36,23 +36,6 @@ test('raíz', async ({ page }, info) => {
 });
 
 for (const hotel of hotels) {
-  test(`${hotel.slug} · entrada de marca`, async ({ page }, info) => {
-    const skip = page.getByRole('button', { name: 'Saltar' });
-    await page.goto(`/h/${hotel.slug}`);
-    await skip.click();
-    // la cortina tarda 0,75 s; con el equipo cargado, bastante más
-    await expect(skip).toBeHidden({ timeout: 20_000 });
-    // una vez por sesión: al volver ya no aparece
-    await page.reload();
-    await expect(skip).toBeHidden();
-    // captura a mitad de la entrada (dura 2,9 s), en una sesión limpia
-    await page.evaluate(() => sessionStorage.clear());
-    await page.reload();
-    await expect(skip).toBeVisible();
-    await page.waitForTimeout(1400);
-    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/00-intro.png` });
-  });
-
   for (const [i, r] of routesFor(hotel).entries()) {
     test(`${hotel.slug} · ${r.name}`, async ({ page }, info) => {
       const errors: string[] = [];

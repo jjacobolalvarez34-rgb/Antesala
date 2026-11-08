@@ -62,6 +62,35 @@ for (const hotel of hotels) {
     });
   }
 
+  // telón de carga (D-052): la presentación tapa la carga del edificio y se abre sobre él
+  test(`${hotel.slug} · 3d · telon`, async ({ page }, info) => {
+    test.setTimeout(240_000);
+    const skip = page.getByRole('button', { name: 'Saltar' });
+    await page.goto(`${h}/explorar?calidad=medio&hora=${DAY}`);
+    await expect(skip).toBeVisible();
+    await page.waitForTimeout(1400);
+    await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/00-telon.png` });
+    await page.waitForSelector('html[data-scene="on"]', { state: 'attached', timeout: 180_000 });
+    await expect(skip).toBeHidden({ timeout: 30_000 });
+  });
+
+  // cualquier habitación de la planta abre su unidad (también las copias de una unidad tipo)
+  const typicalLevel = hotel.levels.find((l) => l.order === 3);
+  const onLevel = typicalLevel ? hotel.units.filter((u) => u.levelId === typicalLevel.id) : [];
+  const picks = [onLevel.find((u) => !('sameAs' in u)), onLevel.find((u) => 'sameAs' in u)].filter(Boolean) as typeof onLevel;
+  for (const u of picks) {
+    test(`${hotel.slug} · 3d · entrar-${u.id}`, async ({ page }) => {
+      test.setTimeout(300_000);
+      await openScene(page, `${h}/piso/${typicalLevel!.id}`, DAY);
+      // la etiqueta (invisible hasta el hover) está proyectada sobre la habitación: se toca ahí
+      const label = page.getByRole('list', { name: 'Unidades del piso' }).getByRole('link', { name: new RegExp(u.name) });
+      const box = await label.boundingBox();
+      expect(box, `etiqueta de ${u.name}`).not.toBeNull();
+      await page.mouse.click(box!.x + box!.width / 2, box!.y + box!.height / 2 + 24);
+      await page.waitForURL(new RegExp(`/unidad/${u.id}$`), { timeout: 60_000 });
+    });
+  }
+
   test(`${hotel.slug} · 3d · guia`, async ({ page }, info) => {
     test.setTimeout(150_000);
     await openScene(page, `${h}/explorar`, DAY, true);
@@ -84,6 +113,18 @@ for (const hotel of hotels) {
       // el corte de los muros es una animación GSAP: con WebGL por software avanza lento
       await page.waitForTimeout(20_000);
       await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-espacio-maqueta.png` });
+    });
+  }
+
+  // terraza del penthouse por dentro: con baranda en los bordes (D-052)
+  const terraceUnit = hotel.units.find((u) => !('sameAs' in u) && u.spaces.some((s) => s.type === 'terraza'));
+  const terrace = terraceUnit?.spaces.find((s) => s.type === 'terraza');
+  if (terraceUnit && terrace) {
+    test(`${hotel.slug} · 3d · terraza`, async ({ page }, info) => {
+      test.setTimeout(240_000);
+      await openScene(page, `${h}/unidad/${terraceUnit.id}/${terrace.id}`, DAY);
+      await page.waitForTimeout(6000);
+      await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-terraza.png` });
     });
   }
 

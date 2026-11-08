@@ -238,3 +238,12 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - En táctil, el JS del 3D y el HDRI se precargan con el primer toque o desplazamiento, no en tiempo ocioso (evaluar three.js bloqueaba ~1 s el hilo de un celular lento). En escritorio sigue en ocio.
 - Por qué: Jacobo vio en su celular el piso trabado, partes de la planta que desaparecían, colores dañados y el desenfoque que se volvía negro.
 
+**D-052 · 2026-11-07 · Telón de carga, cualquier habitación, transiciones sin corte, panel plegable y barandas**
+- Decisión:
+  - La entrada de marca deja la portada y pasa a ser el telón de carga del 3D (edificio, piso y unidad). El nombre sube sobre la niebla mientras carga y la cortina se abre cuando la escena está lista: ya no se ve la lista de respaldo "a medio cargar". Se anima la primera vez de la sesión; después muestra el nombre quieto. Como máximo dura 20 s. No tapa si no hay 3D o mientras se pregunta si se quiere.
+  - Con un piso abierto, solo su planta recibe toques. La fachada oculta y los pisos de encima, casi transparentes, se quedaban con el clic y la habitación no abría. Al tocarla, su piso pulsa con un brillo cálido mientras se sostiene antes de entrar.
+  - Transiciones: el fondo de estudio entra al empezar el vuelo, no al final (antes se veía la ciudad pixelada y luego otro fundido). El desenfoque usa más resolución. Con movimiento reducido, el lente y todo lo demás cambian en el negro del fundido, que se sostiene 0,35 s.
+  - El panel del espacio se pliega también en escritorio y empieza recogido, como un panel desplegable.
+  - Balcones y terrazas de la maqueta llevan baranda (sardinel, vidrio y pasamanos) en los bordes que no dan contra un muro.
+- Por qué: retroalimentación de Jacobo probando la demo publicada (incluido un PC con las animaciones del sistema apagadas).
+

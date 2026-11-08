@@ -36,6 +36,8 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - Velocidad en celular (D-051): en táctil, three.js y el HDRI se precargan con el primer toque o desplazamiento, no en ocio. Las 6 plantas amobladas se arman en tiempo libre, no en la carga.
 - Bloque 8: `docs/VENTA.md` con el guion de 3 minutos, las preguntas típicas, la verificación web de Monir y Nico (ninguno tiene tour 360°; Monir no tiene sitio propio; Nico usa el motor Mirai) y los mensajes de primer contacto.
 
+- Ronda con la demo publicada (D-052): la presentación es ahora el telón de carga del 3D (ya no se ve la lista a medio cargar); cualquier habitación de la planta abre su unidad (antes los pisos de encima se quedaban con el clic) y brilla al tocarla; el fondo de estudio entra al empezar el vuelo y el fundido de movimiento reducido se sostiene en negro; el panel del espacio se pliega en escritorio y empieza recogido; barandas en balcones y terrazas. Pruebas nuevas: telón, entrar a la 301 y a la 303 (copia) y terraza.
+
 **Revisión de los criterios de éxito (`PRODUCTO.md`)**
 - Recorrido completo sin errores en iPhone y Android de gama media: **pendiente** de la prueba de Jacobo. En las pruebas automáticas (escritorio y 390 px) el recorrido pasa sin errores de consola.
 - Contenido útil en < 2,5 s con 4G: **casi**. Lighthouse móvil (antes de la precarga por intención): primer contenido en 1,2-1,3 s en todas las páginas y LCP de 1,2 a 2,8 s (la entrada en 2,5 s y el piso 1 en 2,8 s se pasan). Hay que volver a medir con lo de hoy.
