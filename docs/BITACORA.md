@@ -25,6 +25,21 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-08 · Bloque 8 · Página de Antesala y sitio completo del hotel
+
+**Hecho**
+- Página de Antesala en `/` (D-053): problema de la comisión, cómo funciona con capturas reales del recorrido, lo que gana el hotel, la sección para hoteles sin página web, cómo empezamos el piloto, preguntas y WhatsApp.
+- Portada del hotel como sitio web completo (D-053): portada con el edificio, datos clave, invitación al recorrido, habitaciones por categoría, edificio y servicios, ubicación, estadía y políticas, preguntas y reserva directa. Nuevo `hotel.info` opcional.
+- `pnpm renders`: 26 fotos ilustrativas tomadas de la escena 3D (fachada de día y de noche, piso abierto y cada espacio por dentro), 1,9 MB en total. Son la portada, las tarjetas y la primera foto de cada galería.
+- `pnpm producto`: capturas del recorrido en celular y del sitio del hotel para la página de Antesala (224 KB en WebP). `sharp` pasa a ser dependencia de desarrollo.
+- La galería del espacio se salía de la pantalla en móvil (faltaba `min-w-0` en la grilla).
+
+**Mediciones**
+- JS inicial máximo: 160 KB gzip. 112 capturas de lista en verde; las dos páginas revisadas completas en 390 px y 1440 px.
+
+**Siguiente sesión**
+- Empezar por: la revisión de Jacobo de las dos páginas en Netlify. Pendiente: las fotos 2 a 4 de cada galería siguen siendo de muestra (se pueden sacar más ángulos con `pnpm renders`) y volver a medir Lighthouse.
+
 ## 2026-11-07 · Bloque 7 y 8 · Estabilidad en celular, precarga por intención, criterios y venta
 
 **Hecho**

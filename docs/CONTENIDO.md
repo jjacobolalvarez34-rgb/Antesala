@@ -40,6 +40,10 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
 - El `viewBox` empieza en `0 0`. Balcones y terrazas van fuera de los muros exteriores, como polígonos sin pared (por eso el `viewBox` incluye su franja).
 - `Unit.areaM2` es el área total (interior bruto + balcón o terraza); `Space.areaM2` es el área útil del polígono.
 
+**Datos del sitio** (D-053): `hotel.info` es opcional y alimenta la portada como sitio web: `address`, `nearby` (`{name, time}`), `checkIn`, `checkOut`, `amenities`, `policies` y `faq` (`{q, a}`). Lo que falte no se muestra.
+
+**Fotos desde la escena** (D-053): `pnpm build && pnpm renders` toma fotos ilustrativas del 3D (fachada de día y de noche, un piso abierto y cada espacio con 360° de las unidades completas), las guarda en `media/renders/` y las registra en `hotel.json` (`site.exterior` y la primera foto de cada espacio). Cuando haya fotos reales se reemplazan con `fidelity: "exacta"`.
+
 **Unidades tipo** (D-047): en `hotel.json`, una unidad puede ser copia de otra completa: `{"sameAs": "201", "id": "202", "name": "Estudio 202", "levelId": "2", "basePriceCOP": 260000, "view": "…", "exterior": […]}`. Hereda categoría, capacidad, camas, área, plano y espacios (con sus medios). Solo puede cambiar `id`, `name`, `levelId`, `exterior`, `view`, `viewPremiumCOP`, `basePriceCOP` y `featured`. Las ventanas y la vista no se heredan.
 
 **Extrusión a 3D** (`components/plan/planToMesh`):

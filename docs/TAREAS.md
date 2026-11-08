@@ -113,7 +113,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Rendimiento móvil: precarga por intención en táctil y plantas en tiempo libre (D-051)
 - [x] Estabilidad del 3D en celular: piso que se rompe, fondo negro, colores, trabas (D-051)
 - [ ] Volver a medir Lighthouse con la precarga por intención
-- [ ] Fotos de galería generadas desde la maqueta amoblada (para que nada parezca placeholder)
+- [x] Fotos de galería generadas desde la escena 3D: primera foto de cada espacio, fachada y piso (D-053)
+- [x] Página de Antesala y portada del hotel como sitio web completo (D-053)
+- [ ] Más ángulos por espacio con `pnpm renders` para reemplazar las fotos 2 a 4 de muestra
 - [ ] Despliegue en Vercel; assets en R2 si hace falta
 - [x] Revisar todos los criterios de `PRODUCTO.md` (bitácora 2026-11-07)
 

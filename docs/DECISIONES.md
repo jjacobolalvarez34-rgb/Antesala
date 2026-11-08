@@ -247,3 +247,10 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Balcones y terrazas de la maqueta llevan baranda (sardinel, vidrio y pasamanos) en los bordes que no dan contra un muro.
 - Por qué: retroalimentación de Jacobo probando la demo publicada (incluido un PC con las animaciones del sistema apagadas).
 
+**D-053 · 2026-11-08 · Página de Antesala, sitio completo del hotel y fotos desde la escena 3D**
+- Decisión:
+  - La raíz (`/`) es la página comercial de Antesala para gerentes: el problema de la comisión, cómo funciona con capturas reales del recorrido en celular, lo que gana el hotel, "¿tu hotel no tiene página?", cómo empezamos el piloto, preguntas y WhatsApp. No publica precios del piloto. Los datos de contacto de Antesala viven en `lib/antesala.ts`.
+  - La portada del hotel (`/h/<slug>`) es un sitio web completo para quien no tiene página propia: portada con el edificio, datos clave, invitación al recorrido, habitaciones por categoría (precio desde, área, capacidad), edificio y servicios, ubicación, estadía y políticas, preguntas y cierre de reserva. Todo sale del contenido; el nuevo `hotel.info` (opcional) trae dirección, alrededores, horarios, servicios, políticas y preguntas. Cada sección aparece solo si hay con qué llenarla.
+  - Fotos ilustrativas tomadas de la propia escena 3D (`pnpm renders`): fachada de día y de noche, un piso abierto y cada espacio de las unidades completas visto por dentro. Se registran en `hotel.json` como `fidelity: "ilustrativa"` y pasan a ser la primera foto de cada galería. `pnpm producto` saca las capturas del recorrido para la página de Antesala.
+- Por qué: pedido de Jacobo ("que se vea profesional, también para los que no tienen página web"). Las galerías con imágenes de muestra eran lo único que seguía pareciendo placeholder (criterio "se ve premium"). Usar la escena evita depender de Blender (D-040) y es honesto: es el mismo hotel ilustrativo.
+
