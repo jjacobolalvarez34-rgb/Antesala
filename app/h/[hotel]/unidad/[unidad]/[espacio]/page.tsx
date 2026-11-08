@@ -71,7 +71,7 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
       </div>
 
       <div className="mt-4 grid gap-8 md:grid-cols-12 md:gap-12">
-        <Gallery items={photos} title={space.name} className="-mx-5 sm:mx-0 md:col-span-7" />
+        <Gallery items={photos} title={space.name} className="-mx-5 min-w-0 sm:mx-0 md:col-span-7" />
 
         <div className="md:col-span-5">
           <p className="eyebrow">
