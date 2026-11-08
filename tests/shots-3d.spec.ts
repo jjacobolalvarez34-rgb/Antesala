@@ -143,6 +143,17 @@ for (const hotel of hotels) {
     });
   }
 
+  // unidad ocupada (D-054): se recorre, pero la barra propone una libre en vez de reservar
+  const busy = hotel.units.find((u) => u.occupied);
+  if (busy) {
+    test(`${hotel.slug} · 3d · ocupada`, async ({ page }, info) => {
+      test.setTimeout(240_000);
+      await openScene(page, `${h}/unidad/${busy.id}`, DAY);
+      await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /libre/ })).toBeVisible();
+      await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-ocupada.png` });
+    });
+  }
+
   test(`${hotel.slug} · 3d · noche`, async ({ page }, info) => {
     test.setTimeout(150_000);
     const errors: string[] = [];

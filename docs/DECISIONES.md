@@ -254,3 +254,11 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Fotos ilustrativas tomadas de la propia escena 3D (`pnpm renders`): fachada de día y de noche, un piso abierto y cada espacio de las unidades completas visto por dentro. Se registran en `hotel.json` como `fidelity: "ilustrativa"` y pasan a ser la primera foto de cada galería. `pnpm producto` saca las capturas del recorrido para la página de Antesala.
 - Por qué: pedido de Jacobo ("que se vea profesional, también para los que no tienen página web"). Las galerías con imágenes de muestra eran lo único que seguía pareciendo placeholder (criterio "se ve premium"). Usar la escena evita depender de Blender (D-040) y es honesto: es el mismo hotel ilustrativo.
 
+**D-054 · 2026-11-08 · Habitaciones ocupadas (simulado en la demo)**
+- Decisión: una unidad puede marcarse `"occupied": true` en `hotel.json` (también las copias de una unidad tipo). De noche, las ventanas de las habitaciones del hotel están encendidas solo si están ocupadas; las ventanas que no son habitaciones siguen encendidas al azar. Una ocupada se puede recorrer completa, pero:
+  - en la planta tiene un color apagado y su etiqueta dice "Ocupada";
+  - en el panel y en su página aparece "Ocupada en estas fechas" con la alternativa libre más parecida (mismo tipo, misma columna de ventanas, piso más cercano);
+  - la barra cambia "Reservar" por "Ver la … libre".
+  "Elige tu unidad exacta" la marca como ocupada. En la demo hay 8 de 21 ocupadas.
+- Por qué: pedido de Jacobo ("¿por qué están prendidas algunas? deberían ser las vendidas o alquiladas"). Así la luz de noche dice algo y la demo muestra cómo se maneja la disponibilidad, sin quitarle al huésped la posibilidad de mirar.
+

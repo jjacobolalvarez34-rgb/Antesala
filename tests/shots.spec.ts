@@ -6,9 +6,9 @@ import { expect, test } from '@playwright/test';
 import type { Hotel } from '../lib/types';
 
 /** Todas las rutas del recorrido de cada hotel, derivadas del contenido. */
-function routesFor(hotel: Hotel): { name: string; url: string }[] {
+function routesFor(hotel: Hotel): { name: string; url: string; occupied?: boolean }[] {
   const h = `/h/${hotel.slug}`;
-  const list = [
+  const list: { name: string; url: string; occupied?: boolean }[] = [
     { name: 'entrada', url: h },
     { name: 'explorar', url: `${h}/explorar` },
     { name: 'lista', url: `${h}/lista` },
@@ -17,7 +17,7 @@ function routesFor(hotel: Hotel): { name: string; url: string }[] {
     ...hotel.levels.map((l) => ({ name: `piso-${l.id}`, url: `${h}/piso/${l.id}` })),
   ];
   for (const u of hotel.units) {
-    list.push({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}` });
+    list.push({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}`, occupied: u.occupied });
     // las copias de una unidad tipo (sameAs, D-047) tienen los mismos espacios que su plantilla
     if ('sameAs' in u) continue;
     for (const s of u.spaces) list.push({ name: `unidad-${u.id}-${s.id}`, url: `${h}/unidad/${u.id}/${s.id}` });
@@ -50,7 +50,10 @@ for (const hotel of hotels) {
 
       // Reservar siempre visible (regla 4 de CLAUDE.md)
       // Reservar siempre visible para el huésped (el panel es para el gerente)
-      if (r.name !== 'panel') {
+      // (en una unidad ocupada, D-054, la barra propone la alternativa libre)
+      if (r.occupied) {
+        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /libre/ })).toBeVisible();
+      } else if (r.name !== 'panel') {
         await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
       }
       if (hotel.isDemo) await expect(page.getByText('Hotel ficticio · imágenes ilustrativas')).toBeVisible();

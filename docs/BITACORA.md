@@ -34,6 +34,9 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - `pnpm producto`: capturas del recorrido en celular y del sitio del hotel para la página de Antesala (224 KB en WebP). `sharp` pasa a ser dependencia de desarrollo.
 - La galería del espacio se salía de la pantalla en móvil (faltaba `min-w-0` en la grilla).
 
+- Habitaciones ocupadas simuladas (D-054): de noche solo se encienden las ventanas de las ocupadas; se recorren, pero proponen la alternativa libre más parecida. 8 de 21 ocupadas.
+- Revisé la sala de la Suite 202 por dentro, de noche, desde cuatro ángulos: muros, balcón y puertas completos. No pude reproducir la vista "sin muro" de la captura de Jacobo; hay que preguntarle cómo llegó.
+
 **Mediciones**
 - JS inicial máximo: 160 KB gzip. 112 capturas de lista en verde; las dos páginas revisadas completas en 390 px y 1440 px.
 
