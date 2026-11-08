@@ -133,3 +133,15 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Supabase, panel administrativo y dominios por hotel (Fase 1)
 - [ ] Analytics reales
 - [ ] Paredes con `<path>` en `lib/plan.ts` (hoy solo `<rect>`); hace falta para plantas no ortogonales
+
+## Segundo demo — Edificio Akuare (Suba)
+
+- [x] Edificio y barrio reales desde el catastro y OpenStreetMap (`pnpm catastro`, D-056)
+- [x] Oferta por hotel: noche, mes o venta (D-057)
+- [x] 37 apartamentos sobre la huella real, modo venta (D-058)
+- [ ] Fachada con primer piso residencial y planta del piso 1 alineada (hecho sin subir; falta build y revisar)
+- [ ] Sección "Elige una demo" en la página de Antesala
+- [ ] `pnpm renders akuare` y revisar capturas 2D y 3D
+- [ ] Registrar D-056 a D-059 en DECISIONES.md
+- [ ] Llevar el generador de planos de Akuare al repo (`pipeline/`) si se va a reutilizar
+
