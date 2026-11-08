@@ -1,4 +1,4 @@
-import type { Hotel, Level, Unit } from './types';
+import type { Hotel, Level, Offer, Unit } from './types';
 
 /** Selectores puros sobre el modelo. Sirven en servidor y cliente. */
 
@@ -55,4 +55,61 @@ export function freeAlternative(hotel: Hotel, unit: Unit): Unit | undefined {
   const score = (u: Unit) => (column(u) === column(unit) ? 0 : 100) + Math.abs(order(u) - order(unit));
   return [...free].sort((a, b) => score(a) - score(b))[0];
 }
+
+/** Textos según lo que se ofrece (D-057). */
+export const OFFER: Record<
+  Offer,
+  {
+    suffix: string;
+    priceLabel: string;
+    cta: string;
+    taken: string;
+    takenShort: string;
+    fromHint: string;
+    /** texto del aviso cuando la unidad no está disponible */
+    takenText: string;
+    /** "libre" / "disponible" */
+    free: string;
+    freePlural: string;
+  }
+> = {
+  noche: {
+    suffix: ' / noche',
+    priceLabel: 'Precio por noche',
+    cta: 'Reservar',
+    taken: 'Ocupada en estas fechas',
+    takenShort: 'Ocupada',
+    fromHint: 'por noche',
+    takenText: 'Puedes recorrerla igual. Para reservar, hay una igual libre.',
+    free: 'libre',
+    freePlural: 'libres',
+  },
+  mes: {
+    suffix: ' / mes',
+    priceLabel: 'Arriendo por mes',
+    cta: 'Agendar visita',
+    taken: 'Arrendado',
+    takenShort: 'Arrendado',
+    fromHint: 'por mes',
+    takenText: 'Puedes recorrerlo igual. Hay uno igual disponible.',
+    free: 'disponible',
+    freePlural: 'disponibles',
+  },
+  venta: {
+    suffix: '',
+    priceLabel: 'Precio de venta',
+    cta: 'Agendar visita',
+    taken: 'Vendido',
+    takenShort: 'Vendido',
+    fromHint: 'precio de venta',
+    takenText: 'Puedes recorrerlo igual. Hay uno igual disponible.',
+    free: 'disponible',
+    freePlural: 'disponibles',
+  },
+};
+
+export const offerOf = (hotel: Pick<Hotel, 'offer'>) => OFFER[hotel.offer ?? 'noche'];
+
+/** "$ 270.000 / noche", "$ 1.800.000 / mes" o "$ 255.000.000". */
+export const formatPrice = (value: number, offer: Offer = 'noche') => `${formatCOP(value)}${OFFER[offer].suffix}`;
 

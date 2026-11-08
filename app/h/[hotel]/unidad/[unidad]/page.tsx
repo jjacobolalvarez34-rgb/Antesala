@@ -12,7 +12,7 @@ import { OccupiedNotice } from '@/components/hotel/OccupiedNotice';
 import { WhatsAppButton } from '@/components/booking/WhatsAppButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
-import { findCategory, findLevel, findUnit, formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { findCategory, findLevel, findUnit, formatArea, formatCOP, offerOf, pluralize, unitPrice } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 
@@ -100,10 +100,10 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
 
           {price !== undefined ? (
             <div className="rounded-2xl border border-border bg-card p-5">
-              <p className="eyebrow">Precio por noche</p>
+              <p className="eyebrow">{offerOf(hotel).priceLabel}</p>
               <p className="mt-2">
                 <span className="font-display text-title">{formatCOP(price)}</span>
-                <span className="text-sm text-muted-foreground"> · tarifa simulada</span>
+                <span className="text-sm text-muted-foreground"> · {hotel.offer === 'venta' ? 'precio de referencia' : 'tarifa simulada'}</span>
               </p>
               {unit.viewPremiumCOP && unit.basePriceCOP !== undefined ? (
                 <dl className="mt-4 space-y-1.5 border-t border-border pt-4 text-sm">
@@ -127,8 +127,13 @@ export default async function UnidadPage({ params }: PageProps<'/h/[hotel]/unida
                 <OccupiedNotice hotel={hotel} unit={unit} className="mt-5" />
               ) : (
                 <WhatsAppButton
-                  context={{ phone: hotel.contact.whatsapp, hotelName: hotel.name, unitName: unit.name }}
-                  label="Reservar esta unidad"
+                  context={{
+                    phone: hotel.contact.whatsapp,
+                    hotelName: hotel.name,
+                    unitName: unit.name,
+                    visit: (hotel.offer ?? 'noche') !== 'noche',
+                  }}
+                  label={(hotel.offer ?? 'noche') === 'noche' ? 'Reservar esta unidad' : offerOf(hotel).cta}
                   className="mt-5 w-full"
                 />
               )}

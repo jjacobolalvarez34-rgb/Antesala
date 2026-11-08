@@ -2,7 +2,7 @@ import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { MobileCollapse } from '@/components/hotel/MobileCollapse';
 import { OccupiedNotice } from '@/components/hotel/OccupiedNotice';
 import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
-import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { formatArea, formatCOP, offerOf, pluralize, unitPrice } from '@/lib/hotel';
 import type { Category, Hotel, Level, Unit } from '@/lib/types';
 
 /**
@@ -35,7 +35,7 @@ export function UnitSheet({
         {price !== undefined ? (
           <p className="mt-2 text-sm md:mt-3">
             <span className="text-lg font-semibold">{formatCOP(price)}</span>
-            <span className="text-bone/65"> / noche</span>
+            <span className="text-bone/65">{offerOf(hotel).suffix}</span>
             {unit.viewPremiumCOP ? (
               <span className="block text-xs font-medium text-accent-on-dark">
                 Incluye {formatCOP(unit.viewPremiumCOP)} por vista

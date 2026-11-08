@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { findLevel, formatCOP, sortedLevels, unitPrice } from '@/lib/hotel';
+import { findLevel, formatCOP, offerOf, sortedLevels, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Hotel, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -107,7 +107,7 @@ export function ExactUnitPicker({
                     {current ? (
                       <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>la que ves</span>
                     ) : s.occupied ? (
-                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>ocupada</span>
+                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>{offerOf(hotel).takenShort.toLowerCase()}</span>
                     ) : diff !== 0 ? (
                       <span className={cn('text-xs font-medium', dark ? 'text-accent-on-dark' : 'text-accent')}>
                         {diff > 0 ? '+' : '−'}

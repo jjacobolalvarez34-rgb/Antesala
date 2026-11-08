@@ -45,6 +45,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
     name: hotel.name,
     whatsapp: hotel.contact.whatsapp,
     priceFrom: priceFrom(hotel),
+    offer: hotel.offer,
     levels: sortedLevels(hotel).map(({ id, name }) => ({ id, name })),
     units: hotel.units.map((u) => ({
       id: u.id,
@@ -75,6 +76,8 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         })),
         colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
         brandName: tokens.brand.name,
+        offer: hotel.offer,
+        contextUrl: hotel.site.context ? mediaUrl(hotel.slug, hotel.site.context) : undefined,
         liveInterior: hotel.isDemo === true,
         units: hotel.units.map((u) => ({
           id: u.id,
@@ -139,7 +142,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       className="relative flex min-h-dvh flex-col bg-background text-foreground scene:pointer-events-none scene:bg-transparent"
     >
       {scene ? <SceneLayer data={scene} /> : null}
-      {hotel.isDemo ? <DemoBanner /> : null}
+      {hotel.isDemo ? <DemoBanner note={hotel.demoNote} /> : null}
       <HotelHeader
         slug={hotel.slug}
         name={tokens.brand.name}

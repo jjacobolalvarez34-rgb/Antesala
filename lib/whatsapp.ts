@@ -14,9 +14,15 @@ export interface WhatsAppContext {
   checkOut?: string;
   nights?: number;
   guests?: number;
+  /** venta o arriendo: el mensaje pide una visita en vez de fechas (D-057) */
+  visit?: boolean;
 }
 
 export function buildWhatsAppMessage(ctx: WhatsAppContext): string {
+  if (ctx.visit) {
+    const what = ctx.unitName ? `el apartamento ${ctx.unitName} de ${ctx.hotelName}` : ctx.hotelName;
+    return `Hola, me interesa ${what}.${ctx.spaceName && ctx.unitName ? ` Estuve mirando: ${ctx.spaceName}.` : ''} ¿Podemos agendar una visita?`;
+  }
   let first = ctx.unitName
     ? `Hola, me interesa reservar la unidad ${ctx.unitName} de ${ctx.hotelName}`
     : `Hola, quiero reservar en ${ctx.hotelName}`;

@@ -9,17 +9,7 @@ import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { FloorSheet } from '@/components/hotel/FloorSheet';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
-import {
-  findCategory,
-  findLevel,
-  formatArea,
-  formatCOP,
-  pluralize,
-  poisOnLevel,
-  sortedLevels,
-  unitPrice,
-  unitsOnLevel,
-} from '@/lib/hotel';
+import { findCategory, findLevel, formatArea, formatCOP, offerOf, pluralize, poisOnLevel, sortedLevels, unitPrice, unitsOnLevel } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 
@@ -53,6 +43,7 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
   return (
     <main>
       <FloorSheet
+        offer={hotel.offer}
         slug={hotel.slug}
         level={level}
         total={levels.length}
@@ -171,7 +162,7 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
                     {price !== undefined ? (
                       <p>
                         <span className="text-lg font-semibold">{formatCOP(price)}</span>
-                        <span className="text-sm text-muted-foreground"> / noche</span>
+                        <span className="text-sm text-muted-foreground">{offerOf(hotel).suffix}</span>
                         {u.viewPremiumCOP ? (
                           <span className="block text-xs font-medium text-accent">
                             Incluye {formatCOP(u.viewPremiumCOP)} por vista

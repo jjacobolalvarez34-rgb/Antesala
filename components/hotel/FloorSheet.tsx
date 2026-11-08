@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
-import { formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { formatCOP, OFFER, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
-import type { Level, Poi, Unit } from '@/lib/types';
+import type { Level, Offer, Poi, Unit } from '@/lib/types';
 
 /**
  * Panel del piso sobre la escena 3D (DISENO.md §3): bottom sheet en móvil,
@@ -18,7 +18,9 @@ export function FloorSheet({
   pois,
   above,
   below,
+  offer = 'noche',
 }: {
+  offer?: Offer;
   slug: string;
   level: Level;
   total: number;
@@ -68,12 +70,12 @@ export function FloorSheet({
         {units.length ? (
           <p className="text-sm text-bone/80">
             {pluralize(units.length, 'habitación', 'habitaciones')}
-            {free.length < units.length ? ` · ${pluralize(free.length, 'libre', 'libres')}` : null}
+            {free.length < units.length ? ` · ${pluralize(free.length, OFFER[offer].free, OFFER[offer].freePlural)}` : null}
             {from !== undefined ? (
               <>
                 {' · desde '}
                 <span className="font-semibold text-bone">{formatCOP(from)}</span>
-                <span className="text-bone/65"> / noche</span>
+                <span className="text-bone/65">{OFFER[offer].suffix}</span>
               </>
             ) : null}
           </p>

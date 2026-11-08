@@ -5,7 +5,7 @@
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { formatCOP } from '@/lib/hotel';
+import { formatPrice, OFFER } from '@/lib/hotel';
 import { useTour } from '@/lib/store';
 
 import type { SceneData, SceneUnit } from './Scene';
@@ -24,7 +24,7 @@ export function UnitOverlay({ data, visible }: { data: SceneData; visible: boole
 
   const hoverUnit = hovered ? data.units.find((u) => u.id === hovered.id) : undefined;
   const price = (u: SceneUnit) =>
-    u.occupied ? 'Ocupada en estas fechas' : u.price !== undefined ? `${formatCOP(u.price)} / noche` : undefined;
+    u.occupied ? OFFER[data.offer ?? 'noche'].taken : u.price !== undefined ? formatPrice(u.price, data.offer) : undefined;
 
   useEffect(() => {
     const d = dialogRef.current;

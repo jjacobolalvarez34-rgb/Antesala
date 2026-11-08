@@ -98,9 +98,11 @@ const hotelSchema = z.object({
         floors: z.number().int().positive(),
         floorHeightM: z.number().positive(),
         style: z.object({ cladding: z.enum(['ladrillo', 'estuco', 'concreto']) }).optional(),
+        topSetback: z.boolean().optional(),
       })
       .optional(),
     exterior: z.array(media),
+    context: relPath.regex(/\.json$/, 'el contexto es un .json').optional(),
     pois: z.array(
       z.object({
         id,
@@ -129,6 +131,8 @@ const hotelSchema = z.object({
   categories: z.array(z.object({ id, name: z.string(), tagline: z.string(), highlights: z.array(z.string()) })).min(1),
   units: z.array(unit),
   isDemo: z.boolean(),
+  demoNote: z.string().min(1).optional(),
+  offer: z.enum(['noche', 'mes', 'venta']).optional(),
   info: z
     .object({
       address: z.string().optional(),

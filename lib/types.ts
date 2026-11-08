@@ -138,6 +138,8 @@ export interface Building {
   floorHeightM: number;
   /** acabado del edificio procedural; sin style se usa estuco */
   style?: { cladding: Cladding };
+  /** el último piso se retranquea con terraza al frente (por defecto sí) */
+  topSetback?: boolean;
 }
 
 export interface Site {
@@ -146,6 +148,8 @@ export interface Site {
   /** glb | splat | foto aérea; si está vacío se usa el procedural */
   exterior: Media[];
   pois: Poi[];
+  /** contexto real (vecinos y calles) generado con pnpm catastro (D-056): ruta relativa a un JSON */
+  context?: string;
 }
 
 export interface Hotel {
@@ -164,12 +168,22 @@ export interface Hotel {
   units: Unit[];
   /** true → banner "Hotel ficticio · imágenes ilustrativas" */
   isDemo: boolean;
+  /** texto del banner de demostración, si no es un hotel ficticio (p. ej. un edificio real) */
+  demoNote?: string;
+  /**
+   * Qué se ofrece (D-057): estadía por noche (hotel, por defecto), arriendo por
+   * mes o venta. Cambia el precio, el botón (reservar o agendar visita) y cómo se
+   * llama una unidad no disponible.
+   */
+  offer?: Offer;
   /**
    * Lo que necesita la portada para servir de sitio web completo (D-053), para
    * hoteles que no tienen página propia. Todo opcional: lo que falte no se muestra.
    */
   info?: HotelInfo;
 }
+
+export type Offer = 'noche' | 'mes' | 'venta';
 
 export interface HotelInfo {
   /** dirección o referencia ("Chapinero Alto, a dos cuadras de la Circunvalar") */

@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { formatCOP } from '@/lib/hotel';
+import { formatCOP, OFFER } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
+import type { Offer } from '@/lib/types';
 import type { WhatsAppContext } from '@/lib/whatsapp';
 
 import { ReserveButton } from './ReserveSheet';
@@ -15,6 +16,7 @@ export interface BookingSummary {
   name: string;
   whatsapp: string;
   priceFrom?: number;
+  offer?: Offer;
   levels: { id: string; name: string }[];
   units: {
     id: string;
@@ -44,7 +46,8 @@ interface Stage {
 
 function resolveStage(data: BookingSummary, segments: string[]): Stage {
   const base: WhatsAppContext = { phone: data.whatsapp, hotelName: data.name };
-  const from = data.priceFrom !== undefined ? `Desde ${formatCOP(data.priceFrom)} / noche` : undefined;
+  const t = OFFER[data.offer ?? 'noche'];
+  const from = data.priceFrom !== undefined ? `Desde ${formatCOP(data.priceFrom)}${t.suffix}` : undefined;
   const [stage, a, b] = segments;
 
   if (stage === 'unidad' && a) {
@@ -56,11 +59,7 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
       return {
         occupied: unit.occupied ? { href: alt ? routes.unidad(data.slug, alt.id) : undefined, name: alt?.name } : undefined,
         label: space ? `${unit.name} · ${space.name}` : unit.name,
-        detail: unit.occupied
-          ? 'Ocupada en estas fechas'
-          : unit.price !== undefined
-            ? `${formatCOP(unit.price)} / noche`
-            : undefined,
+        detail: unit.occupied ? t.taken : unit.price !== undefined ? `${formatCOP(unit.price)}${t.suffix}` : undefined,
         back: space ? routes.unidad(data.slug, unit.id) : routes.piso(data.slug, unit.levelId),
         backLabel: space ? `Volver a ${unit.name}` : `Volver a ${level?.name ?? 'el piso'}`,
         context: { ...base, unitName: unit.name, spaceName: space?.name },
@@ -74,7 +73,7 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
     const prices = data.units.filter((u) => u.levelId === a && u.price !== undefined).map((u) => u.price!);
     return {
       label: level?.name ?? 'Piso',
-      detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))} / noche` : from,
+      detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))}${t.suffix}` : from,
       back: routes.explorar(data.slug),
       backLabel: 'Volver al edificio',
       context: base,
@@ -146,13 +145,22 @@ export function BookingBar({ data }: { data: BookingSummary }) {
               href={stage.occupied.href}
               className="inline-flex min-h-12 shrink-0 items-center gap-1.5 rounded-xl bg-ink px-4 text-sm font-medium text-bone transition-colors hover:bg-ink/85"
             >
-              <span className="hidden sm:inline">Ver la {stage.occupied.name}, libre</span>
-              <span className="sm:hidden">Ver una libre</span>
+              <span className="hidden sm:inline">
+                Ver {data.offer && data.offer !== 'noche' ? '' : 'la '}
+                {stage.occupied.name}, {OFFER[data.offer ?? 'noche'].free}
+              </span>
+              <span className="sm:hidden">Ver {data.offer && data.offer !== 'noche' ? 'uno disponible' : 'una libre'}</span>
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           ) : null
         ) : (
-          <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} className="shrink-0 rounded-xl" />
+          <ReserveButton
+            context={stage.context}
+            price={stage.price}
+            capacity={stage.capacity}
+            offer={data.offer}
+            className="shrink-0 rounded-xl"
+          />
         )}
       </nav>
     </div>

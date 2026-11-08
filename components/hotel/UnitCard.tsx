@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
-import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { formatArea, formatCOP, OFFER, pluralize, unitPrice } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
-import type { Category, Unit } from '@/lib/types';
+import type { Category, Offer, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 export function unitCover(unit: Unit) {
@@ -21,7 +21,9 @@ export function UnitCard({
   levelName,
   variant = 'row',
   className,
+  offer = 'noche',
 }: {
+  offer?: Offer;
   hotel: string;
   unit: Unit;
   category?: Category;
@@ -64,12 +66,12 @@ export function UnitCard({
         <div className={cn('mt-auto flex items-end justify-between gap-3', feature ? 'pt-2' : 'pt-1')}>
           {unit.occupied ? (
             <p className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
-              Ocupada en estas fechas
+              {OFFER[offer].taken}
             </p>
           ) : price !== undefined ? (
             <p className="text-sm">
               <span className="font-semibold text-foreground">{formatCOP(price)}</span>
-              <span className="text-muted-foreground"> / noche</span>
+              <span className="text-muted-foreground">{OFFER[offer].suffix}</span>
               {unit.viewPremiumCOP ? (
                 <span className="mt-0.5 block text-xs font-medium text-accent">
                   Incluye {formatCOP(unit.viewPremiumCOP)} por vista

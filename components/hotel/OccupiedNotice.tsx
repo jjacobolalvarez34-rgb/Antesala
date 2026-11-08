@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, CalendarX2 } from 'lucide-react';
 
-import { findLevel, formatCOP, freeAlternative, unitPrice } from '@/lib/hotel';
+import { findLevel, formatPrice, freeAlternative, offerOf, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Hotel, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -25,6 +25,7 @@ export function OccupiedNotice({
   const alt = freeAlternative(hotel, unit);
   const altPrice = alt ? unitPrice(alt) : undefined;
   const dark = tone === 'dark';
+  const t = offerOf(hotel);
   return (
     <div
       role="status"
@@ -32,10 +33,10 @@ export function OccupiedNotice({
     >
       <p className="flex items-center gap-2 font-medium">
         <CalendarX2 aria-hidden className={cn('size-4', dark ? 'text-accent-on-dark' : 'text-accent')} />
-        Ocupada en estas fechas
+        {t.taken}
       </p>
       <p className={cn('mt-1 text-pretty', dark ? 'text-bone/70' : 'text-muted-foreground')}>
-        Puedes recorrerla igual. Para reservar, hay una igual libre.
+        {t.takenText}
       </p>
       {alt ? (
         <Link
@@ -48,7 +49,7 @@ export function OccupiedNotice({
           <span>
             <span className="block font-medium">{alt.name}</span>
             <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>
-              {[findLevel(hotel, alt.levelId)?.name, altPrice !== undefined ? `${formatCOP(altPrice)} / noche` : null]
+              {[findLevel(hotel, alt.levelId)?.name, altPrice !== undefined ? formatPrice(altPrice, hotel.offer) : null]
                 .filter(Boolean)
                 .join(' · ')}
             </span>

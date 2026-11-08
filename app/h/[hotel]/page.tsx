@@ -6,7 +6,7 @@ import { ArrowRight, Check, Clock, MapPin, MessageCircle, Move3d, Plus } from 'l
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { unitCover } from '@/components/hotel/UnitCard';
 import { getHotelBundle } from '@/lib/content';
-import { findLevel, formatArea, formatCOP, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
+import { findLevel, formatArea, formatCOP, offerOf, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 import type { Media, Unit } from '@/lib/types';
@@ -48,11 +48,11 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
     };
   });
 
-  const whatsapp = buildWhatsAppUrl({ phone: hotel.contact.whatsapp, hotelName: tokens.brand.name });
+  const whatsapp = buildWhatsAppUrl({ phone: hotel.contact.whatsapp, hotelName: tokens.brand.name, visit: (hotel.offer ?? 'noche') !== 'noche' });
   const facts = [
     { label: 'Pisos', value: String(floors) },
     { label: 'Habitaciones', value: String(hotel.units.length) },
-    { label: 'Desde', value: from !== undefined ? formatCOP(from) : '—', hint: 'por noche' },
+    { label: 'Desde', value: from !== undefined ? formatCOP(from) : '—', hint: offerOf(hotel).fromHint },
     info.checkIn ? { label: 'Llegada', value: info.checkIn } : null,
   ].filter((f) => f !== null);
 
@@ -215,7 +215,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
                         <p>
                           <span className="block text-xs text-muted-foreground">Desde</span>
                           <span className="font-display text-[1.75rem] whitespace-nowrap">{formatCOP(c.from)}</span>
-                          <span className="text-xs text-muted-foreground"> / noche</span>
+                          <span className="text-xs text-muted-foreground">{offerOf(hotel).suffix}</span>
                         </p>
                       ) : null}
                       {c.show ? (

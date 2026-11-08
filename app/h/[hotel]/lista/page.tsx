@@ -73,7 +73,7 @@ export default async function ListaPage({ params }: PageProps<'/h/[hotel]/lista'
               </div>
               <div className="flex flex-col gap-3 md:col-span-9">
                 {units.map((u) => (
-                  <UnitCard key={u.id} hotel={hotel.slug} unit={u} category={findCategory(hotel, u.categoryId)} />
+                  <UnitCard key={u.id} hotel={hotel.slug} unit={u} category={findCategory(hotel, u.categoryId)} offer={hotel.offer} />
                 ))}
                 {pois.length ? (
                   <ul className="flex flex-wrap gap-2" aria-label={`Zonas comunes del ${level.name}`}>

@@ -5,7 +5,7 @@ import { ArrowRight, Check, Minus } from 'lucide-react';
 
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
-import { formatArea, formatCOP, pluralize, unitPrice } from '@/lib/hotel';
+import { formatArea, formatCOP, formatPrice, pluralize, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -46,7 +46,7 @@ export default async function CompararPage({ params }: PageProps<'/h/[hotel]/com
   const maxCapacity = Math.max(...columns.map((c) => c.capacity));
 
   const rows: { label: string; value: (c: (typeof columns)[number]) => React.ReactNode; best?: (c: (typeof columns)[number]) => boolean }[] = [
-    { label: 'Desde', value: (c) => (c.from !== undefined ? `${formatCOP(c.from)} / noche` : '—') },
+    { label: 'Desde', value: (c) => (c.from !== undefined ? formatPrice(c.from, hotel.offer) : '—') },
     { label: 'Área', value: (c) => formatArea(c.area), best: (c) => c.area === maxArea },
     { label: 'Capacidad', value: (c) => pluralize(c.capacity, 'persona', 'personas'), best: (c) => c.capacity === maxCapacity },
     { label: 'Camas', value: (c) => c.rep.beds },

@@ -3,8 +3,9 @@
 import { CalendarDays, MessageCircle, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import { formatCOP } from '@/lib/hotel';
 import { buildWhatsAppUrl, type WhatsAppContext } from '@/lib/whatsapp';
+import { formatCOP, OFFER } from '@/lib/hotel';
+import type { Offer } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 /**
@@ -26,11 +27,14 @@ export function ReserveButton({
   price,
   capacity,
   className,
+  offer = 'noche',
 }: {
   context: WhatsAppContext;
   price?: number;
   capacity?: number;
   className?: string;
+  /** venta o arriendo: en vez de fechas, WhatsApp para agendar una visita (D-057) */
+  offer?: Offer;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
@@ -57,6 +61,24 @@ export function ReserveButton({
     nights: valid ? nights : undefined,
     guests,
   });
+
+  if (offer !== 'noche') {
+    return (
+      <a
+        href={buildWhatsAppUrl({ ...context, visit: true })}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          'inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-medium text-accent-foreground',
+          'transition-[background-color,transform] duration-200 hover:bg-[color-mix(in_oklab,var(--accent),black_14%)] active:scale-[0.98]',
+          className,
+        )}
+      >
+        <MessageCircle aria-hidden className="size-4" />
+        {OFFER[offer].cta}
+      </a>
+    );
+  }
 
   return (
     <>
