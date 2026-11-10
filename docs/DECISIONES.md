@@ -290,3 +290,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión propuesta: agregar al visor un modo basado en imágenes (portada con render y puntos, video de transición, planta cenital como imagen con unidades disponibles y vendidas, 360°) que conviva con el 3D en vivo. Ofrecerlo primero a constructoras con proyectos sobre planos, que ya tienen renders.
 - Por qué: el referente que vio Jacobo (Urbania, cliente PROACO) se ve fotográfico porque usa renders de estudio, no 3D en tiempo real. El 3D por código no va a alcanzar esa calidad; el contenido sí. Las constructoras ya pagan por ese contenido. Pendiente de que Jacobo lo apruebe.
 
+**D-061 · 2026-11-10 · Página web como servicio y empresa MamutHerd S.A.S.**
+- Decisión: además del recorrido, se ofrece hacer la página web a quien no la tiene (tercer mercado). La página de Antesala lo dice como servicio ("Te hacemos tu página web"; se puede empezar solo con la página). Antesala es un producto de MamutHerd S.A.S.: aparece en el pie de la página de Antesala y en la documentación de contratos. En las páginas de los hoteles sigue solo el discreto "con tecnología de Antesala".
+- Por qué: pedido de Jacobo. Muchos prospectos venden solo por plataformas; la página es una venta más pequeña y más fácil que abre la puerta al recorrido.
+

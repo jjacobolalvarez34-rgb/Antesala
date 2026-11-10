@@ -92,6 +92,17 @@ Referente: Urbania (urbania3d.app) le vende a una constructora real (PROACO) un 
 
 **Precio de referencia:** el piloto de $12–15 millones COP es pequeño frente al costo de una sala de ventas física. Validar con las dos o tres primeras conversaciones.
 
+## Tercer mercado: página web para quien no la tiene (D-061)
+
+Muchos hoteles pequeños y apartahoteles (como Apartasuite Monir) venden solo por Booking y Expedia y no tienen página propia. **Se la hacemos**, con la misma plantilla de la portada del hotel: portada, habitaciones con precio, servicios y zonas comunes, ubicación, políticas, preguntas y reserva por WhatsApp, con su dominio.
+
+- Se vende sola, más barata que el recorrido 3D, y es la puerta de entrada: después se suma el recorrido.
+- Lo que hay que pedir: fotos (o las tomamos), textos básicos, precios, WhatsApp y el dominio (si no tiene, que lo compre a su nombre).
+- El precio está por definir; debe quedar claramente por debajo del piloto con 3D.
+
+**Mensaje de primer contacto (página web):**
+> Hola, soy Jacobo López, de Bogotá. Vi que [hotel] recibe reservas por las plataformas pero no tiene página propia. Hacemos páginas para hoteles con habitaciones, precios y reserva directa por WhatsApp, sin comisión. ¿Le muestro en 5 minutos cómo se vería la de [hotel]?
+
 ## Pendiente del bloque 8
 
 - Confirmar por teléfono o en persona lo de la tabla de prospectos (siguen operando igual y no tienen tour).

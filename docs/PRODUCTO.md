@@ -13,11 +13,15 @@ Que una persona pueda conocer y explorar un hotel digitalmente antes de hospedar
 
 ## Modelo de negocio (resumen)
 
+- **Empresa:** Antesala es un producto de **MamutHerd S.A.S.** Los contratos, facturas y la página del producto van a su nombre.
 - B2B para hoteles boutique, apartahoteles, glampings y resorts en Colombia.
 - Implementación inicial + mensualidad. El piloto sugerido cuesta $12–15M COP con alcance limitado.
 - **Argumento principal de venta:** impulsa la reserva directa y ahorra la comisión de las OTAs (Booking ~15 % o más), no solo "se ve bonito".
 - **Ángulo de ingresos para el hotel:** el huésped elige su unidad exacta (piso alto, mejor vista) y paga un extra por eso.
-- Plan B de mercado: constructoras de vivienda sobre planos (ya pagan por selectores 3D).
+- **Tres mercados (D-060, D-061):**
+  1. Hoteles y apartahoteles: recorrido y reserva directa.
+  2. Constructoras con proyectos sobre planos: showroom con renders y disponibilidad (ya pagan por esto).
+  3. **Página web para quien no la tiene:** se la hacemos (portada, habitaciones, servicios, ubicación, políticas, reserva por WhatsApp, con su dominio). Se puede vender sola, más barata, y sumar el recorrido 3D después. Es la puerta de entrada para hoteles pequeños que venden solo por plataformas.
 
 ## Fase actual: demo de venta (Fase 0)
 

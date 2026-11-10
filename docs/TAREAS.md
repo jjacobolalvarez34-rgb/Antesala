@@ -131,6 +131,8 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Lista de 5 constructoras con proyectos sobre planos en Bogotá y primer mensaje
 - [ ] Pasar Vercel a Pro antes de la primera factura (Hobby no permite uso comercial)
 - [ ] Definir precio de la mensualidad y tope de transferencia; revisión legal del contrato
+- [x] Página web como servicio para quien no la tiene; MamutHerd S.A.S. en la página de Antesala y en los docs (D-061)
+- [ ] Precio de la página web sola (por debajo del piloto con 3D)
 
 ## Bloque 9 — Modo renders (propuesta D-060, pendiente de aprobación)
 

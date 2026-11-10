@@ -1,12 +1,12 @@
 # Entrega — dominios, hosting y transferencia
 
-Cómo se publica el sitio de un cliente, quién es dueño de qué y qué pasa si el cliente se va. Es la sección del bloque 8 para el documento maestro; allí se copia este texto. Lo usan Jacobo y, resumido, el cliente en la propuesta.
+Cómo se publica el sitio de un cliente, quién es dueño de qué y qué pasa si el cliente se va. Antesala es un producto de **MamutHerd S.A.S.**: donde aquí dice "Antesala" como parte de un contrato, se entiende MamutHerd S.A.S. Es la sección del bloque 8 para el documento maestro; allí se copia este texto. Lo usan Jacobo y, resumido, el cliente en la propuesta.
 
 ## 1. Dónde vive cada cosa
 
 | Pieza | Dónde | Dueño |
 |---|---|---|
-| Código del visor (Antesala) | GitHub `jjacobolalvarez34-rgb/Antesala` | Antesala |
+| Código del visor (Antesala) | GitHub `jjacobolalvarez34-rgb/Antesala` | MamutHerd S.A.S. |
 | Contenido del cliente (textos, precios, planos, fotos, renders, 360°) | `content/hotels/<slug>/` y, si pesa, R2 | **El cliente** |
 | Sitio publicado | Vercel (proyecto `antesala`) | Antesala lo opera |
 | Dominio del cliente (`hotelx.com`) | Su registrador actual | **El cliente**, siempre |
@@ -38,7 +38,9 @@ Lo que se le entrega, sin costo adicional, en un plazo de 15 días hábiles:
 - Un export estático del sitio (HTML) para que lo aloje donde quiera, sin el visor 3D en vivo si no renueva la licencia.
 - El dominio sigue siendo suyo: solo borra el CNAME.
 
-Lo que no se entrega: el código del visor (es el producto de Antesala, licenciado mientras dure el contrato).
+Lo que no se entrega: el código del visor (es producto de MamutHerd S.A.S., licenciado mientras dure el contrato).
+
+Si el cliente solo contrató la página web (sin recorrido 3D), el export estático es su sitio completo.
 
 ## 5. Qué cubre la mensualidad
 
