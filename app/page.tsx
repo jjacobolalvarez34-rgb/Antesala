@@ -103,7 +103,7 @@ const faq = [
   },
   {
     q: '¿Y si no tengo página web?',
-    a: 'Antesala es también tu página: portada, habitaciones, servicios, ubicación, políticas y reserva, con tu dominio.',
+    a: 'Te la hacemos. Portada, habitaciones, servicios, ubicación, políticas y reserva por WhatsApp, con tu dominio. Puedes empezar solo con la página y sumar el recorrido 3D después.',
   },
   {
     q: '¿Cómo se ve la disponibilidad?',
@@ -384,11 +384,11 @@ export default function Home() {
                 ¿Tu hotel no tiene página?
               </Kicker>
               <h2 id="titulo-sin" className="mt-8 font-display text-[2.5rem] leading-[1.02] text-balance md:text-[3.75rem]">
-                Antesala también es tu sitio web.
+                Te hacemos tu página web.
               </h2>
               <p className="mt-6 text-pretty text-bone/70">
-                Muchos hoteles venden solo por las plataformas. Con Antesala tienes tu propia página, con tu dominio, lista para compartir en
-                Instagram, Google y WhatsApp.
+                Muchos hoteles venden solo por las plataformas. Nosotros te hacemos tu propia página, con tu dominio, lista para compartir en
+                Instagram, Google y WhatsApp. Puedes empezar solo con la página y sumar el recorrido 3D cuando quieras.
               </p>
               <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                 {['Portada con el edificio', 'Habitaciones y precios', 'Recorrido 3D', 'Servicios y zonas comunes', 'Ubicación y políticas', 'Reserva por WhatsApp'].map(
@@ -515,6 +515,7 @@ export default function Home() {
           <div>
             <p className="font-display text-4xl text-foreground">Antesala</p>
             <p className="mt-2">El hotel, antes de llegar. Hecho en {ANTESALA.city}.</p>
+            <p className="mt-1">Un producto de {ANTESALA.company}</p>
           </div>
           <nav aria-label="Pie de página" className="flex flex-wrap gap-x-6 gap-y-2">
             <Link href={demo} className="hover:text-foreground">

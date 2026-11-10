@@ -8,6 +8,8 @@ export const ANTESALA = {
   /** hotel de demostración que se enlaza desde la página del producto */
   demoSlug: 'niebla-alta',
   city: 'Bogotá',
+  /** empresa dueña del producto */
+  company: 'MamutHerd S.A.S.',
 } as const;
 
 export const antesalaWhatsApp = (text: string) =>
