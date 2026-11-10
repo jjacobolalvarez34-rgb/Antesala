@@ -270,3 +270,23 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - La calculadora es una estimación con los datos del gerente y se dice así en pantalla.
 - Por qué: Jacobo quería que la página se viera mejor en general. Lo que más pesa es mostrar el producto real (fotos y capturas) con más presencia, y el argumento económico (la calculadora).
 
+**D-056 · 2026-11-08 · Edificio real desde el catastro de Bogotá**
+- Decisión: `pnpm catastro <slug> --via "CL 158" --placa "93A 37"` encuentra la placa, el lote y la construcción en los servicios REST del catastro (UAECD, datos abiertos) y escribe la huella exacta (en metros, simplificada y ortogonalizada) y el número de pisos en `hotel.json`. Las construcciones vecinas, con sus pisos, y las calles de OpenStreetMap van a `media/context.json`, que la escena pide aparte y usa en lugar de los vecinos inventados.
+- Por qué: Google 3D Tiles prohíbe extraer o medir la geometría; el catastro es oficial, exacto, gratis y abierto.
+
+**D-057 · 2026-11-08 · Oferta por hotel: noche, mes o venta**
+- Decisión: `hotel.offer` cambia el precio ("/ noche", "/ mes" o nada), el botón ("Reservar" o "Agendar visita" por WhatsApp con la unidad escrita) y cómo se llama una unidad no disponible (ocupada, arrendado, vendido).
+- Por qué: el segundo demo (Akuare) es un edificio de apartamentos en venta, y abre el mercado de constructoras.
+
+**D-058 · 2026-11-08 · Demo Akuare y peso de la escena**
+- Decisión: segundo demo con el edificio real de la Calle 158 # 93A-37 (Suba Salitre): torre de 35 × 20 m y 5 pisos del catastro, 37 apartamentos ilustrativos (esquineros de 3 alcobas y medianeros de 2) sobre esa huella, modo venta, banner "Demostración no oficial". Para que una página no cargue todos los planos, cada plano de unidad viaja una vez y las plantas de piso se piden aparte desde la escena (página de 359 a 88 KB).
+- Por qué: pedido de Jacobo; un edificio que conoce, con datos públicos. Los interiores son inventados porque no hay planos públicos.
+
+**D-059 · 2026-11-08 · Primer piso residencial (en curso, sin subir)**
+- Decisión: `style.ground: "residencial"` dibuja hacia la calle garajes con persiana, un local con vitrina y una puerta pequeña con placa, sin marquesina de hotel; la planta del piso 1 de Akuare se alinea con eso (parqueaderos, local, portería; salón social atrás).
+- Por qué: la fachada real de Akuare (Street View, mostrada por Jacobo) no tiene lobby de hotel.
+
+**D-060 · 2026-11-10 · Modo renders y mercado de constructoras (propuesta)**
+- Decisión propuesta: agregar al visor un modo basado en imágenes (portada con render y puntos, video de transición, planta cenital como imagen con unidades disponibles y vendidas, 360°) que conviva con el 3D en vivo. Ofrecerlo primero a constructoras con proyectos sobre planos, que ya tienen renders.
+- Por qué: el referente que vio Jacobo (Urbania, cliente PROACO) se ve fotográfico porque usa renders de estudio, no 3D en tiempo real. El 3D por código no va a alcanzar esa calidad; el contenido sí. Las constructoras ya pagan por ese contenido. Pendiente de que Jacobo lo apruebe.
+

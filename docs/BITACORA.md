@@ -25,6 +25,27 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-10 · Bloque 8 · Entrega, constructoras y todo lo pendiente
+
+**Hecho**
+- `docs/ENTREGA.md`: dónde vive cada cosa, hosting (Vercel Pro para clientes; Hobby no permite uso comercial), dominio del cliente por CNAME sin pedir contraseñas, qué se entrega si el cliente se va y qué cubre la mensualidad.
+- `docs/VENTA.md`: segundo mercado, constructoras sobre planos (gancho, guion, qué pedir, cómo encontrar prospectos y mensaje).
+- DECISIONES D-056 a D-060. D-060 (modo renders y constructoras) queda como propuesta.
+- Análisis del referente que mostró Jacobo (Urbania): sus imágenes son renders y video pre-renderizados con botones encima, no 3D en tiempo real. La brecha visual es de contenido, no de código.
+
+**Problemas / bloqueos**
+- Se alcanzó el límite semanal durante la sesión; no se pudo abrir la página del referente.
+
+**Pendiente (todo en TAREAS)**
+- Sin subir en el árbol de trabajo: fachada residencial y piso 1 de Akuare (D-059); correr `pnpm build` y revisar antes de subir.
+- El piso abierto sigue fallando (reproducir primero) y quitar sombras con un piso abierto.
+- "Elige una demo" en la página de Antesala; `pnpm renders akuare`.
+- Bloque 9 (modo renders), si Jacobo lo aprueba.
+- Copiar ENTREGA al documento maestro; Vercel Pro; precio de la mensualidad; prospectos.
+
+**Siguiente sesión**
+- Empezar por: decidir si se aprueba el bloque 9. Si sí, empezar por la portada con imagen y puntos y la planta cenital con disponibilidad; si no, cerrar Akuare (build, fachada, piso abierto).
+
 ## 2026-11-08 · Segundo demo: Edificio Akuare (en curso)
 
 **Siguiente sesión**

@@ -69,8 +69,33 @@ Por WhatsApp o Instagram, al gerente o al dueño. Cortos, con una sola pregunta.
 **Nico Aparta-Suites**
 > Hola, buenas tardes. Soy Jacobo López, de Bogotá. Vi que en Nico ya reciben reservas directas en su página. Hice una herramienta que se suma a eso: el huésped recorre el edificio en 3D, ve la diferencia entre la Superior y el Grand Deluxe por dentro y llega a su motor de reservas con la habitación ya elegida. ¿Le puedo mostrar en 10 minutos cómo se vería con Nico?
 
+## Segundo mercado: constructoras con proyectos sobre planos (D-060)
+
+Referente: Urbania (urbania3d.app) le vende a una constructora real (PROACO) un showroom con renders, video de vuelo, planta con unidades disponibles y vendidas y tour 360°. **Ese mercado paga.** La constructora ya tiene renders y videos para su sala de ventas, así que no hay que producir contenido: se monta.
+
+**Gancho:** "Su sala de ventas, abierta las 24 horas en el celular del comprador. Ve la torre, elige el piso y el apartamento exacto, con lo que está vendido en rojo, y le escribe a su asesor por WhatsApp."
+
+**Guion corto (3 minutos, con la demo de Akuare o la de constructora cuando exista):**
+1. Portada con el edificio (render o 3D). "Así llega el comprador desde Instagram o el aviso."
+2. Tocar la torre: vuelo al piso. "Elige el piso."
+3. Planta con unidades en verde y rojo. "Lo vendido se actualiza; la gente ve qué queda y se apura."
+4. Tocar un apartamento: maqueta y 360°. "Lo recorre por dentro antes de ir a la sala de ventas."
+5. "Agendar visita" por WhatsApp con el apartamento ya escrito. "El asesor recibe un comprador que ya eligió."
+6. Panel: visitas, unidades más vistas, clics a WhatsApp.
+
+**Qué pedirle a la constructora:** planos arquitectónicos de la planta tipo, los renders y videos que ya tiene, la lista de unidades con precio y estado, y el WhatsApp del asesor.
+
+**Cómo encontrar prospectos:** proyectos sobre planos en Bogotá en portales como Metrocuadrado, Fincaraíz y Ciencuadras (sección "proyectos nuevos"), y en las vallas de los lotes en obra. Priorizar constructoras medianas con 1 a 3 proyectos activos: tienen renders pero no un equipo digital propio.
+
+**Mensaje de primer contacto (constructora):**
+> Hola, soy Jacobo López, de Bogotá. Vi el proyecto [nombre] en [portal]. Hice una herramienta para que el comprador recorra la torre en el celular, elija el apartamento exacto viendo cuáles están vendidos y le escriba al asesor con la unidad ya elegida. Se arma con los renders que ustedes ya tienen. ¿Le puedo mostrar en 10 minutos cómo se vería con [nombre]?
+
+**Precio de referencia:** el piloto de $12–15 millones COP es pequeño frente al costo de una sala de ventas física. Validar con las dos o tres primeras conversaciones.
+
 ## Pendiente del bloque 8
 
 - Confirmar por teléfono o en persona lo de la tabla de prospectos (siguen operando igual y no tienen tour).
-- Sección de dominios, hosting y transferencia en el documento maestro.
+- ~~Sección de dominios, hosting y transferencia~~: hecha en `docs/ENTREGA.md`; falta copiarla al documento maestro.
+- Hacer la lista de 5 constructoras con proyectos sobre planos en Bogotá y escribirles.
+- La demo de constructora necesita el "modo renders" (ver TAREAS, bloque 9).
 - KingDome queda aparcado hasta que exista la variante glamping.

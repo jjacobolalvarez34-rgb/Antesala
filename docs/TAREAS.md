@@ -124,7 +124,22 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Guion de demo de 3 minutos (`docs/VENTA.md`)
 - [x] Verificar en la web que los prospectos no tengan ya un tour 360° (confirmar en persona)
 - [x] Mensajes de primer contacto para Monir y Nico (KingDome aparcado)
-- [ ] Sección de dominios, hosting y transferencia en el documento maestro
+- [x] Sección de dominios, hosting y transferencia (`docs/ENTREGA.md`)
+- [ ] Copiar `docs/ENTREGA.md` al documento maestro (artifact del plan)
+- [x] Guion, gancho y mensaje para constructoras (`docs/VENTA.md`, D-060)
+- [ ] Confirmar por teléfono a Monir y Nico (siguen operando igual, sin tour 360°)
+- [ ] Lista de 5 constructoras con proyectos sobre planos en Bogotá y primer mensaje
+- [ ] Pasar Vercel a Pro antes de la primera factura (Hobby no permite uso comercial)
+- [ ] Definir precio de la mensualidad y tope de transferencia; revisión legal del contrato
+
+## Bloque 9 — Modo renders (propuesta D-060, pendiente de aprobación)
+
+- [ ] Portada con imagen (render o foto) y puntos tocables (torres, zonas)
+- [ ] Video de transición al tocar un punto (con alternativa sin video y respetando movimiento reducido)
+- [ ] Planta cenital como imagen, con las unidades encima en verde o rojo según disponibilidad
+- [ ] Unir con lo que existe: unidad, 360°, "Agendar visita", panel
+- [ ] Assets pesados en R2 (videos y 360° en alta)
+- [ ] Demo de constructora con contenido ilustrativo: render propio pasado por IA para acabado fotográfico y video de vuelo generado desde una imagen (etiqueta "ilustrativa"; revisar la licencia comercial de la herramienta)
 
 ## Aparcado (no construir sin que Jacobo lo pida)
 
