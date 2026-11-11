@@ -28,7 +28,7 @@ export function SavingsCalculator() {
   const round = (n: number) => Math.round(n / 10_000) * 10_000;
 
   return (
-    <div className="grid overflow-hidden rounded-[1.75rem] border border-border bg-card md:grid-cols-12">
+    <div className="grid overflow-hidden rounded-[2px] border border-border bg-card md:grid-cols-12">
       <form className="flex flex-col gap-6 p-7 md:col-span-7 md:p-10" onSubmit={(e) => e.preventDefault()}>
         {FIELDS.map((f) => (
           <div key={f.key}>

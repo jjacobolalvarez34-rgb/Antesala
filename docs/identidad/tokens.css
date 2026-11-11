@@ -1,0 +1,22 @@
+:root {
+  /* Antesala · identidad D-012 */
+  --noche: #111B33;      /* fondo principal ~60 % */
+  --noche-2: #1C2B4C;    /* segundo fondo */
+  --noche-hondo: #0B1224;/* sombras y pies */
+  --champan: #D2B88C;    /* logo, ranura, cifras ~10 % */
+  --bisel: #957C55;      /* cara lateral del símbolo */
+  --luz: #F2E8D6;        /* la ranura de luz */
+  --marfil: #F1EEE7;     /* papel ~30 % */
+  --marfil-2: #E6E0D4;   /* líneas sobre marfil */
+  --texto-oscuro-1: #ECE5D6; /* texto sobre azul */
+  --texto-oscuro-2: #A7AFC2; /* secundario sobre azul */
+  --texto-claro-1: #111B33;  /* texto sobre marfil */
+  --texto-claro-2: #4E566A;  /* secundario sobre marfil */
+  --font-display: "Cinzel", "Trajan Pro", Georgia, serif;          /* logo y titulares en MAYÚSCULAS */
+  --font-frase: "Cormorant Garamond", Georgia, serif;              /* frases en itálica */
+  --font-texto: "Jost", system-ui, sans-serif;                     /* textos, interfaz, datos */
+  --tracking-logo: 0.42em;
+  --tracking-etiqueta: 0.3em;
+  --radio: 2px;
+  --espacio: 8px;
+}

@@ -335,3 +335,53 @@
     opacity: 1;
   }
 }
+
+/*
+ * Identidad de Antesala (D-062): solo en las páginas de Antesala (la del producto),
+ * nunca en las de los hoteles, que usan la marca de cada hotel. Azul noche ≈60 %,
+ * marfil ≈30 %, champán ≈10 %; colores planos, esquinas de 2 px.
+ */
+.marca-antesala {
+  --hotel-base: #f1eee7;
+  --hotel-stone: #e6e0d4;
+  --hotel-ink: #111b33;
+  --hotel-accent: #957c55;
+  --hotel-accent-on-dark: #d2b88c;
+  --font-display-hotel: var(--font-cinzel);
+  --font-text: var(--font-jost);
+
+  --background: #f1eee7;
+  --foreground: #111b33;
+  --card: #f7f5f0;
+  --primary: #111b33;
+  --primary-foreground: #f1eee7;
+  --secondary: #e6e0d4;
+  --muted: #e6e0d4;
+  --muted-foreground: #4e566a;
+  --accent: #957c55;
+  --accent-foreground: #ffffff;
+  --accent-on-dark: #d2b88c;
+  --border: #d9d1c2;
+  --ring: #957c55;
+
+  font-family: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+}
+/* Cinzel: logo y titulares, siempre en mayúsculas */
+.marca-antesala .font-display {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+/* Cormorant Garamond itálica: frases de acompañamiento */
+.marca-antesala .frase {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+/* etiquetas: Jost en mayúsculas con tracking 0,3 em */
+.marca-antesala .eyebrow {
+  letter-spacing: 0.3em;
+}
+.marca-antesala ::selection {
+  background: color-mix(in oklab, #d2b88c 40%, transparent);
+}

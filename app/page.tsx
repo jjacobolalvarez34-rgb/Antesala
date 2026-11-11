@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- capturas y fotos estáticas livianas */
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react';
 
+import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
 import { DayNight } from '@/components/producto/DayNight';
 import { SavingsCalculator } from '@/components/producto/SavingsCalculator';
 import { ANTESALA, antesalaWhatsApp } from '@/lib/antesala';
@@ -28,6 +29,8 @@ export const metadata: Metadata = {
   description:
     'Recorrido 3D del edificio, cada piso y cada habitación para hoteles boutique y apartahoteles en Colombia. El huésped elige su habitación exacta y reserva directo.',
 };
+
+export const viewport: Viewport = { themeColor: '#111B33' };
 
 const demo = routes.hotel(ANTESALA.demoSlug);
 const contact = antesalaWhatsApp('Hola, vi Antesala y me interesa para mi hotel. ¿Podemos hablar?');
@@ -154,26 +157,26 @@ function Kicker({ n, children, dark = false }: { n: string; children: React.Reac
 
 export default function Home() {
   return (
-    <div className="bg-background text-foreground">
+    <div className="marca-antesala bg-background text-foreground">
       {/* Navegación flotante: se lee sobre el hero oscuro y sobre las secciones claras */}
       <header className="pointer-events-none fixed inset-x-0 top-0 z-30 px-3 pt-3 md:px-6 md:pt-5">
-        <div className="glass-dark pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-full py-2 pr-2 pl-5 shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)]">
-          <Link href="/" className="font-display text-2xl tracking-tight text-bone">
-            Antesala
+        <div className="glass-dark pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-[2px] py-2 pr-2 pl-5 shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)]">
+          <Link href="/" aria-label="Antesala, inicio" className="py-1">
+            <AntesalaLogo tone="oscuro" symbolClassName="h-8 w-auto" wordClassName="text-[0.95rem] max-sm:hidden" />
           </Link>
           <nav aria-label="Principal" className="flex items-center gap-1 text-sm text-bone/80 md:gap-2">
-            <a href="#como-funciona" className="hidden min-h-11 items-center rounded-full px-3 transition-colors hover:text-bone lg:inline-flex">
+            <a href="#como-funciona" className="hidden min-h-11 items-center rounded-[2px] px-3 transition-colors hover:text-bone lg:inline-flex">
               Cómo funciona
             </a>
-            <a href="#ahorro" className="hidden min-h-11 items-center rounded-full px-3 transition-colors hover:text-bone lg:inline-flex">
+            <a href="#ahorro" className="hidden min-h-11 items-center rounded-[2px] px-3 transition-colors hover:text-bone lg:inline-flex">
               Cuánto ahorras
             </a>
-            <a href="#sin-pagina" className="hidden min-h-11 items-center rounded-full px-3 transition-colors hover:text-bone lg:inline-flex">
+            <a href="#sin-pagina" className="hidden min-h-11 items-center rounded-[2px] px-3 transition-colors hover:text-bone lg:inline-flex">
               Sin página web
             </a>
             <Link
               href={demo}
-              className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-bone px-4 font-medium text-ink transition-colors hover:bg-bone/85"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-[2px] bg-bone px-4 font-medium text-ink transition-colors hover:bg-bone/85"
             >
               Ver la demo <ArrowRight aria-hidden className="size-4" />
             </Link>
@@ -196,16 +199,19 @@ export default function Home() {
           <div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 px-5 pt-32 pb-20 md:grid-cols-12 md:px-10 md:pt-36">
             <div className="md:col-span-7">
               <p className="text-xs tracking-[0.22em] text-bone/65 uppercase">Para hoteles boutique y apartahoteles</p>
-              <h1 className="mt-6 font-display text-[3.5rem] leading-[0.92] tracking-tight text-balance md:text-[6.25rem]">
-                Que el huésped elija su habitación <em className="text-accent-on-dark">antes</em> de reservar.
+              <h1 className="mt-6 font-display text-[2.6rem] leading-[1.05] text-balance md:text-[4.75rem]">
+                Su hotel, <span className="text-accent-on-dark">antes</span> de llegar.
               </h1>
-              <p className="mt-7 max-w-lg text-lg text-pretty text-bone/75">
-                El edificio en 3D, cada piso y cada habitación por dentro, desde el celular. Y la reserva te llega directo, sin comisión.
+              <p className="frase mt-6 max-w-lg text-[1.6rem] leading-snug text-pretty text-bone/85 md:text-[2rem]">
+                Su huésped recorre cada espacio antes de reservar.
+              </p>
+              <p className="mt-5 max-w-lg text-pretty text-bone/70">
+                El edificio en 3D, cada piso y cada habitación por dentro, desde el celular. Y la reserva le llega directo, sin comisión.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={demo}
-                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-accent-on-dark px-7 text-sm font-medium text-ink transition-[background-color,transform] duration-200 hover:bg-bone active:scale-[0.98]"
+                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-[2px] bg-accent-on-dark px-7 text-sm font-medium text-ink transition-[background-color,transform] duration-200 hover:bg-bone active:scale-[0.98]"
                 >
                   Recorrer el hotel de demostración <ArrowRight aria-hidden className="size-4" />
                 </Link>
@@ -213,7 +219,7 @@ export default function Home() {
                   href={contact}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-bone/30 px-7 text-sm font-medium transition-colors hover:bg-bone/10"
+                  className="inline-flex min-h-13 items-center justify-center gap-2 rounded-[2px] border border-bone/30 px-7 text-sm font-medium transition-colors hover:bg-bone/10"
                 >
                   <MessageCircle aria-hidden className="size-4" /> Hablemos
                 </a>
@@ -244,12 +250,12 @@ export default function Home() {
         <section id="problema" aria-labelledby="titulo-problema" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 md:px-10 md:py-36">
           <div className="reveal">
             <Kicker n="01">El problema</Kicker>
-            <h2 id="titulo-problema" className="mt-8 max-w-4xl font-display text-[2.25rem] leading-[1.08] text-balance md:text-[3.75rem]">
+            <h2 id="titulo-problema" className="frase mt-8 max-w-4xl text-[2.1rem] leading-[1.15] text-balance md:text-[3.4rem]">
               La plataforma se queda con <span className="text-accent">15 % o más</span> de cada reserva. Y el huésped reserva a ciegas.
             </h2>
           </div>
           <div className="reveal mt-14 grid gap-4 md:grid-cols-2">
-            <div className="rounded-[1.75rem] border border-border p-8 md:p-10">
+            <div className="rounded-[2px] border border-border p-8 md:p-10">
               <p className="eyebrow">Hoy, en la plataforma</p>
               <ul className="mt-7 flex flex-col gap-4">
                 {before.map((t) => (
@@ -259,7 +265,7 @@ export default function Home() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-[1.75rem] bg-ink p-8 text-bone md:p-10">
+            <div className="rounded-[2px] bg-ink p-8 text-bone md:p-10">
               <p className="text-xs tracking-[0.2em] text-accent-on-dark uppercase">Con Antesala</p>
               <ul className="mt-7 flex flex-col gap-4">
                 {after.map((t) => (
@@ -280,7 +286,7 @@ export default function Home() {
                 <Kicker n="02" dark>
                   Cómo funciona
                 </Kicker>
-                <h2 id="titulo-como" className="mt-8 max-w-2xl font-display text-[2.5rem] leading-[1.02] text-balance md:text-[4.25rem]">
+                <h2 id="titulo-como" className="mt-8 max-w-2xl font-display text-[1.85rem] leading-[1.12] text-balance md:text-[3rem]">
                   Del edificio a la reserva, en cuatro toques.
                 </h2>
               </div>
@@ -307,7 +313,7 @@ export default function Home() {
         <section aria-labelledby="titulo-galeria" className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-36">
           <div className="reveal">
             <Kicker n="03">Así se ve</Kicker>
-            <h2 id="titulo-galeria" className="mt-8 max-w-3xl font-display text-[2.5rem] leading-[1.02] text-balance md:text-[4.25rem]">
+            <h2 id="titulo-galeria" className="mt-8 max-w-3xl font-display text-[1.85rem] leading-[1.12] text-balance md:text-[3rem]">
               Tu hotel completo, por fuera y por dentro.
             </h2>
           </div>
@@ -315,7 +321,7 @@ export default function Home() {
             {gallery.map((g, i) => (
               <li
                 key={g.file}
-                className={`reveal group relative overflow-hidden rounded-[1.5rem] bg-ink ${i === 0 ? 'col-span-2 row-span-2' : ''} ${g.className}`}
+                className={`reveal group relative overflow-hidden rounded-[2px] bg-ink ${i === 0 ? 'col-span-2 row-span-2' : ''} ${g.className}`}
               >
                 <img
                   src={render(g.file)}
@@ -325,13 +331,13 @@ export default function Home() {
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                 />
-                <span className="absolute bottom-3 left-3 rounded-full bg-bone/90 px-3 py-1 text-xs font-medium text-ink">{g.label}</span>
+                <span className="absolute bottom-3 left-3 rounded-[2px] bg-bone/90 px-3 py-1 text-xs font-medium text-ink">{g.label}</span>
               </li>
             ))}
           </ul>
           <div className="reveal mt-20 md:mt-28">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <h3 className="font-display text-[2rem] leading-[1.05] md:text-5xl">De día y de noche.</h3>
+              <h3 className="font-display text-[1.6rem] leading-[1.1] md:text-[2.25rem]">De día y de noche.</h3>
               <p className="max-w-xs text-sm text-pretty text-muted-foreground">
                 Arrastra la línea. De noche se encienden las habitaciones ocupadas: la disponibilidad se ve.
               </p>
@@ -345,17 +351,17 @@ export default function Home() {
           <div className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-36">
             <div className="reveal">
               <Kicker n="04">Lo que gana tu hotel</Kicker>
-              <h2 id="titulo-gana" className="mt-8 max-w-2xl font-display text-[2.5rem] leading-[1.02] text-balance md:text-[4.25rem]">
+              <h2 id="titulo-gana" className="mt-8 max-w-2xl font-display text-[1.85rem] leading-[1.12] text-balance md:text-[3rem]">
                 No es solo que se vea bonito.
               </h2>
             </div>
-            <ul className="reveal mt-14 grid gap-px overflow-hidden rounded-[1.75rem] border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="reveal mt-14 grid gap-px overflow-hidden rounded-[2px] border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
               {gains.map(({ icon: Icon, title, text }) => (
                 <li key={title} className="bg-background p-8 transition-colors duration-300 hover:bg-card">
-                  <span className="grid size-11 place-items-center rounded-full bg-accent/10">
+                  <span className="grid size-11 place-items-center rounded-[2px] bg-accent/10">
                     <Icon aria-hidden className="size-5 text-accent" strokeWidth={1.6} />
                   </span>
-                  <h3 className="mt-6 font-display text-[1.75rem] leading-tight">{title}</h3>
+                  <h3 className="mt-6 font-display text-[1.3rem] leading-tight">{title}</h3>
                   <p className="mt-2 text-sm text-pretty text-muted-foreground">{text}</p>
                 </li>
               ))}
@@ -367,7 +373,7 @@ export default function Home() {
         <section id="ahorro" aria-labelledby="titulo-ahorro" className="mx-auto max-w-6xl scroll-mt-24 px-5 py-24 md:px-10 md:py-36">
           <div className="reveal">
             <Kicker n="05">Cuánto ahorras</Kicker>
-            <h2 id="titulo-ahorro" className="mt-8 max-w-2xl font-display text-[2.5rem] leading-[1.02] text-balance md:text-[4.25rem]">
+            <h2 id="titulo-ahorro" className="mt-8 max-w-2xl font-display text-[1.85rem] leading-[1.12] text-balance md:text-[3rem]">
               Haz la cuenta con tu hotel.
             </h2>
           </div>
@@ -383,7 +389,7 @@ export default function Home() {
               <Kicker n="06" dark>
                 ¿Tu hotel no tiene página?
               </Kicker>
-              <h2 id="titulo-sin" className="mt-8 font-display text-[2.5rem] leading-[1.02] text-balance md:text-[3.75rem]">
+              <h2 id="titulo-sin" className="mt-8 font-display text-[1.85rem] leading-[1.12] text-balance md:text-[2.75rem]">
                 Te hacemos tu página web.
               </h2>
               <p className="mt-6 text-pretty text-bone/70">
@@ -404,12 +410,12 @@ export default function Home() {
               </Link>
             </div>
             <figure className="reveal md:col-span-7">
-              <div className="overflow-hidden rounded-2xl border border-bone/10 bg-[#24221f] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)]">
+              <div className="overflow-hidden rounded-[2px] border border-bone/10 bg-[#24221f] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.8)]">
                 <div aria-hidden className="flex items-center gap-1.5 border-b border-bone/10 px-4 py-3">
                   <span className="size-2.5 rounded-full bg-bone/20" />
                   <span className="size-2.5 rounded-full bg-bone/20" />
                   <span className="size-2.5 rounded-full bg-bone/20" />
-                  <span className="ml-3 truncate rounded-full bg-bone/10 px-3 py-1 text-xs text-bone/60">tuhotel.com</span>
+                  <span className="ml-3 truncate rounded-[2px] bg-bone/10 px-3 py-1 text-xs text-bone/60">tuhotel.com</span>
                 </div>
                 <img
                   src="/producto/sitio-hotel.webp"
@@ -428,7 +434,7 @@ export default function Home() {
         <section aria-labelledby="titulo-empezar" className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-36">
           <div className="reveal">
             <Kicker n="07">Cómo empezamos</Kicker>
-            <h2 id="titulo-empezar" className="mt-8 max-w-2xl font-display text-[2.5rem] leading-[1.02] text-balance md:text-[4.25rem]">
+            <h2 id="titulo-empezar" className="mt-8 max-w-2xl font-display text-[1.85rem] leading-[1.12] text-balance md:text-[3rem]">
               Un piloto con tu edificio.
             </h2>
           </div>
@@ -443,7 +449,7 @@ export default function Home() {
                   <span className="font-display text-5xl text-accent">{i + 1}</span>
                   <Icon aria-hidden className="size-5 text-muted-foreground" strokeWidth={1.5} />
                 </div>
-                <h3 className="mt-5 font-display text-[1.75rem] leading-tight">{t}</h3>
+                <h3 className="mt-5 font-display text-[1.3rem] leading-tight">{t}</h3>
                 <p className="mt-2 text-sm text-pretty text-muted-foreground">{d}</p>
               </li>
             ))}
@@ -453,7 +459,7 @@ export default function Home() {
         {/* Preguntas */}
         <section aria-labelledby="titulo-preguntas" className="border-t border-border">
           <div className="mx-auto grid max-w-6xl gap-10 px-5 py-24 md:grid-cols-12 md:px-10 md:py-32">
-            <h2 id="titulo-preguntas" className="reveal font-display text-[2.5rem] leading-[1.02] md:col-span-4 md:text-6xl">
+            <h2 id="titulo-preguntas" className="reveal font-display text-[1.85rem] leading-[1.12] md:col-span-4 md:text-[2.75rem]">
               Preguntas
             </h2>
             <div className="reveal divide-y divide-border border-y border-border md:col-span-8">
@@ -461,7 +467,7 @@ export default function Home() {
                 <details key={f.q} className="group py-1">
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-3 text-lg [&::-webkit-details-marker]:hidden">
                     {f.q}
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-border transition-colors group-open:bg-ink group-open:text-bone">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-[2px] border border-border transition-colors group-open:bg-ink group-open:text-bone">
                       <Plus aria-hidden className="size-4 transition-transform duration-300 group-open:rotate-45" />
                     </span>
                   </summary>
@@ -474,7 +480,7 @@ export default function Home() {
 
         {/* Cierre */}
         <section className="px-3 pb-3 md:px-6 md:pb-6">
-          <div className="relative isolate overflow-hidden rounded-[2rem] bg-ink px-6 py-24 text-center text-bone md:rounded-[2.5rem] md:py-36">
+          <div className="relative isolate overflow-hidden rounded-[2px] bg-ink px-6 py-24 text-center text-bone md:py-36">
             <img
               src={render('402-balcon.jpg')}
               alt=""
@@ -484,7 +490,7 @@ export default function Home() {
               className="absolute inset-0 -z-20 size-full object-cover opacity-30"
             />
             <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/70 to-ink/40" />
-            <h2 className="reveal mx-auto max-w-3xl font-display text-[2.75rem] leading-[1] text-balance md:text-[5.5rem]">
+            <h2 className="reveal mx-auto max-w-3xl font-display text-[2rem] leading-[1.1] text-balance md:text-[3.75rem]">
               Muestra tu hotel como es.
             </h2>
             <p className="reveal mx-auto mt-6 max-w-md text-pretty text-bone/70">
@@ -493,7 +499,7 @@ export default function Home() {
             <div className="reveal mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href={demo}
-                className="inline-flex min-h-13 items-center gap-2 rounded-full bg-accent-on-dark px-7 text-sm font-medium text-ink transition-colors hover:bg-bone"
+                className="inline-flex min-h-13 items-center gap-2 rounded-[2px] bg-accent-on-dark px-7 text-sm font-medium text-ink transition-colors hover:bg-bone"
               >
                 Ver la demo <ArrowRight aria-hidden className="size-4" />
               </Link>
@@ -501,7 +507,7 @@ export default function Home() {
                 href={contact}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-13 items-center gap-2 rounded-full border border-bone/30 px-7 text-sm font-medium transition-colors hover:bg-bone/10"
+                className="inline-flex min-h-13 items-center gap-2 rounded-[2px] border border-bone/30 px-7 text-sm font-medium transition-colors hover:bg-bone/10"
               >
                 <MessageCircle aria-hidden className="size-4" /> Quiero un piloto
               </a>
@@ -513,9 +519,10 @@ export default function Home() {
       <footer>
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-12 text-sm text-muted-foreground md:flex-row md:items-end md:justify-between md:px-10">
           <div>
-            <p className="font-display text-4xl text-foreground">Antesala</p>
-            <p className="mt-2">El hotel, antes de llegar. Hecho en {ANTESALA.city}.</p>
-            <p className="mt-1">Un producto de {ANTESALA.company}</p>
+            <AntesalaLogo tone="claro" symbolClassName="h-12 w-auto" wordClassName="text-xl" />
+            <p className="frase mt-4 text-xl text-foreground">Explora el hotel antes de llegar.</p>
+            <p className="mt-3 text-xs tracking-[0.3em] uppercase">Un producto de {ANTESALA.brandOwner}</p>
+            <p className="mt-1 text-xs">© {ANTESALA.company} · {ANTESALA.city}</p>
           </div>
           <nav aria-label="Pie de página" className="flex flex-wrap gap-x-6 gap-y-2">
             <Link href={demo} className="hover:text-foreground">

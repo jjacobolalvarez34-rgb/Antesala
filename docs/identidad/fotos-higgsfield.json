@@ -1,0 +1,16 @@
+{
+  "nota": "Fotos de ambiente del hotel de ejemplo (ficticio) generadas con Higgsfield, GPT Image 2.6. Sin texto ni logos. Claude Code: descárgalas, conviértelas a AVIF/WebP (480/960/1600) y guárdalas en public/demo/ o en R2. Si una URL vence, búscala por job_id con el MCP de Higgsfield (show_generations).",
+  "fotos": [
+    {"archivo": "exterior-edificio", "uso": "Hero / paso Edificio", "ratio": "16:9", "job_id": "8d791c20-ad70-42c3-95c4-7d814a5cbd47", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173822_8d791c20-ad70-42c3-95c4-7d814a5cbd47.png"},
+    {"archivo": "lobby", "uso": "Zona común · lobby", "ratio": "16:9", "job_id": "a88a38db-ee35-413d-bbd4-73bab1a80309", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173822_a88a38db-ee35-413d-bbd4-73bab1a80309.png"},
+    {"archivo": "suite-dormitorio", "uso": "Espacio · dormitorio", "ratio": "4:3", "job_id": "b61164e6-7032-44ae-a7b1-cba50150fe88", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173822_b61164e6-7032-44ae-a7b1-cba50150fe88.png"},
+    {"archivo": "suite-bano", "uso": "Espacio · baño", "ratio": "4:3", "job_id": "1d926af5-f93c-43b9-8b6c-27fac1972408", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173822_1d926af5-f93c-43b9-8b6c-27fac1972408.png"},
+    {"archivo": "suite-sala", "uso": "Espacio · sala", "ratio": "4:3", "job_id": "9b1a171c-ce54-4f5d-a07c-04a6872d29b3", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173821_9b1a171c-ce54-4f5d-a07c-04a6872d29b3.png"},
+    {"archivo": "suite-cocina", "uso": "Espacio · cocina", "ratio": "4:3", "job_id": "8654567e-b55e-4554-9d35-89fffa82ea2f", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173819_8654567e-b55e-4554-9d35-89fffa82ea2f.png"},
+    {"archivo": "suite-balcon", "uso": "Espacio · balcón / vista", "ratio": "4:3", "job_id": "b508ef34-634d-4abf-a769-b56747cdcf4c", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173819_b508ef34-634d-4abf-a769-b56747cdcf4c.png"},
+    {"archivo": "penthouse-terraza", "uso": "Penthouse · terraza", "ratio": "16:9", "job_id": "d161c3b7-6f1f-4dbd-839d-490464c2f6c2", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_173821_d161c3b7-6f1f-4dbd-839d-490464c2f6c2.png"},
+    {"archivo": "pasillo-puerta-luz", "uso": "Intro / sección Mamut / post", "ratio": "4:5", "job_id": "15edd564-c210-4cdd-801e-32248ec497a4", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_172019_15edd564-c210-4cdd-801e-32248ec497a4.png"},
+    {"archivo": "suite-anochecer", "uso": "Paso Unidad / post", "ratio": "4:5", "job_id": "c9a34554-3b47-4fa6-8040-459a96986f02", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_172020_c9a34554-3b47-4fa6-8040-459a96986f02.png"},
+    {"archivo": "detalle-puerta", "uso": "Cotización / cierre", "ratio": "4:5", "job_id": "679d0b77-565e-4592-a544-84891a766cc0", "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_172018_679d0b77-565e-4592-a544-84891a766cc0.png"}
+  ]
+}

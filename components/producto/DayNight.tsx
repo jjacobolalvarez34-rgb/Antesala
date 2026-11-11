@@ -10,7 +10,7 @@ import { useState } from 'react';
 export function DayNight({ day, night, alt }: { day: string; night: string; alt: string }) {
   const [split, setSplit] = useState(55);
   return (
-    <figure className="relative overflow-hidden rounded-[1.75rem] bg-ink select-none">
+    <figure className="relative overflow-hidden rounded-[2px] bg-ink select-none">
       <img src={night} alt={`${alt}, de noche`} width={1600} height={1000} loading="lazy" className="block aspect-[16/10] w-full object-cover" />
       <img
         src={day}
@@ -29,8 +29,8 @@ export function DayNight({ day, night, alt }: { day: string; night: string; alt:
           </svg>
         </div>
       </div>
-      <span className="pointer-events-none absolute top-4 left-4 rounded-full bg-bone/90 px-3 py-1 text-xs font-medium text-ink">Día</span>
-      <span className="pointer-events-none absolute top-4 right-4 rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-bone">Noche</span>
+      <span className="pointer-events-none absolute top-4 left-4 rounded-[2px] bg-bone/90 px-3 py-1 text-xs font-medium text-ink">Día</span>
+      <span className="pointer-events-none absolute top-4 right-4 rounded-[2px] bg-ink/80 px-3 py-1 text-xs font-medium text-bone">Noche</span>
       <input
         type="range"
         min={0}

@@ -8,8 +8,10 @@ export const ANTESALA = {
   /** hotel de demostración que se enlaza desde la página del producto */
   demoSlug: 'niebla-alta',
   city: 'Bogotá',
-  /** empresa dueña del producto */
+  /** empresa dueña del producto (razón social) */
   company: 'MamutHerd S.A.S.',
+  /** firma de marca: "Un producto de Mamut Herd" (D-062) */
+  brandOwner: 'Mamut Herd',
 } as const;
 
 export const antesalaWhatsApp = (text: string) =>
