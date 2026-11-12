@@ -294,3 +294,14 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: además del recorrido, se ofrece hacer la página web a quien no la tiene (tercer mercado). La página de Antesala lo dice como servicio ("Te hacemos tu página web"; se puede empezar solo con la página). Antesala es un producto de MamutHerd S.A.S.: aparece en el pie de la página de Antesala y en la documentación de contratos. En las páginas de los hoteles sigue solo el discreto "con tecnología de Antesala".
 - Por qué: pedido de Jacobo. Muchos prospectos venden solo por plataformas; la página es una venta más pequeña y más fácil que abre la puerta al recorrido.
 
+**D-062 · 2026-11-11 · Identidad visual de Antesala**
+- Decisión: logo "ranura de luz" (dos pilares y una línea de luz) en `components/brand/AntesalaLogo.tsx` y `public/brand/`; favicon con el símbolo pequeño. Azul noche #111B33 (≈60 %), marfil #F1EEE7 (≈30 %), champán #D2B88C (≈10 %); Cinzel para el logo y los titulares en mayúsculas, Cormorant Garamond itálica para las frases y Jost para el texto; esquinas de 2 px; colores planos. Firma "Un producto de Mamut Herd" (razón social MamutHerd S.A.S.). Solo en las páginas de Antesala; las de los hoteles mantienen la marca de cada hotel. Manual y tokens en `docs/WEB-ANTESALA.md` y `docs/identidad/`.
+- Por qué: identidad definida por Jacobo en otra conversación (su D-012).
+
+**D-063 · 2026-11-11 · Web de Antesala desde el boceto, con dos modos**
+- Decisión: la raíz porta el boceto (`antesala-preview`): intro de los pilares, recorrido con escenario fijo (edificio, piso, unidad, plano, espacio, reserva) con datos reales de Niebla Alta (Suite 502), "Así se entra" (cuatro clips encadenados de la calle al balcón que avanzan con el scroll), demos (Niebla Alta y Akuare), para su hotel (con "se la hacemos" y la calculadora), cómo trabajamos, precios de referencia, Mamut Herd, preguntas y cotización por WhatsApp o correo (sin backend).
+  - **Modo cine:** edificio 3D (three.js cargado aparte) y video. Clips re-codificados con un cuadro clave por cuadro (720 y 1280 px) en `public/demo/video/`.
+  - **Modo ligero:** sin three.js ni video. El recorrido es un alzado sobre papel con cotas y trazos que se dibujan en cada paso, y la película pasa con fotos, acercamiento lento y trazos de plano. Se elige solo (ahorro de datos, 2G/3G, poca memoria) y se cambia con el botón del menú.
+  - El 3D del modo cine baja el azul: caras veladas, el edificio se lee por sus trazos champán.
+- Por qué: pedido de Jacobo; el boceto es la referencia y está sujeto a cambios. Los dos modos dejan que la página funcione con poca conexión.
+

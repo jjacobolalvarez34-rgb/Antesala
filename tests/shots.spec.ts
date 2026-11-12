@@ -20,7 +20,7 @@ function routesFor(hotel: Hotel): { name: string; url: string; occupied?: boolea
     list.push({ name: `unidad-${u.id}`, url: `${h}/unidad/${u.id}`, occupied: u.occupied });
     // las copias de una unidad tipo (sameAs, D-047) tienen los mismos espacios que su plantilla
     if ('sameAs' in u) continue;
-    for (const s of u.spaces) list.push({ name: `unidad-${u.id}-${s.id}`, url: `${h}/unidad/${u.id}/${s.id}` });
+    for (const s of u.spaces) list.push({ name: `unidad-${u.id}-${s.id}`, url: `${h}/unidad/${u.id}/${s.id}`, occupied: u.occupied });
   }
   return list;
 }
@@ -52,11 +52,13 @@ for (const hotel of hotels) {
       // Reservar siempre visible para el huésped (el panel es para el gerente)
       // (en una unidad ocupada, D-054, la barra propone la alternativa libre)
       if (r.occupied) {
-        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /libre/ })).toBeVisible();
+        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('link', { name: /libre|disponible/ })).toBeVisible();
       } else if (r.name !== 'panel') {
-        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
+        // hotel: "Reservar"; venta o arriendo (D-057): "Agendar visita"
+        const cta = (hotel.offer ?? 'noche') === 'noche' ? /Reservar/ : /Agendar visita/;
+        await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole((hotel.offer ?? 'noche') === 'noche' ? 'button' : 'link', { name: cta })).toBeVisible();
       }
-      if (hotel.isDemo) await expect(page.getByText('Hotel ficticio · imágenes ilustrativas')).toBeVisible();
+      if (hotel.isDemo) await expect(page.getByText(hotel.demoNote ?? 'Hotel ficticio · imágenes ilustrativas')).toBeVisible();
 
       // Ninguna imagen cargada puede estar rota (las lazy sin cargar se ignoran)
       const broken = await page.$$eval('img', (imgs) =>

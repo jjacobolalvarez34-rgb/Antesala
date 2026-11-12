@@ -164,3 +164,13 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] **El piso abierto sigue fallando (reporte de Jacobo, 2026-11-08, en Vercel).** Reproducir en su equipo antes de tocar código. Revisar: profundidad de las fachadas retiradas, pisos atenuados encima de la planta y orden de dibujo de la planta frente a los vidrios.
 - [ ] Propuesta de Jacobo: sin sombras mientras un piso está abierto (no aportan y cuestan). Opción: apagar el mapa de sombras del sol en la etapa de piso, o congelarlo, y volver a encenderlo en la vista del edificio.
 
+## Web de Antesala (D-062, D-063)
+
+- [x] Identidad aplicada: logo, colores, tipografías, favicon
+- [x] Web desde el boceto: intro, recorrido, así se entra (video), demos, precios, Mamut Herd, preguntas, cotización
+- [x] Modo cine (3D y video) y modo ligero (plano y fotos), con botón para cambiar
+- [ ] Revisar la web en celular real (sobre todo el video con el scroll en iPhone)
+- [ ] Videos en R2 cuando haya cliente (hoy en `public/`, unos 15 MB en total)
+- [ ] Ajustes del boceto que Jacobo vaya mandando (precios, textos, ejemplos)
+- [ ] Rutas `/demo` y `/cotizar` del plan de la web (hoy las demos y la cotización son secciones de la página)
+

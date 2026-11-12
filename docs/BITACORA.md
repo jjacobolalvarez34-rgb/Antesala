@@ -25,6 +25,18 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-11 · Identidad visual y web de Antesala con dos modos
+
+**Hecho**
+- Identidad (D-062): logo ranura de luz, paleta noche/marfil/champán, Cinzel/Cormorant/Jost, favicon, firma Mamut Herd.
+- Web desde el boceto (D-063) con los datos reales de Niebla Alta y las dos demos; fotos de Higgsfield en `public/demo/` (WebP) y cuatro clips re-codificados para el scroll en `public/demo/video/`.
+- Modo cine y modo ligero (plano sobre papel, menos azul, trazos que se dibujan).
+- Todo lo de trabajo pasa a D: (`.tmp/` en el proyecto). Playwright usa el Chromium de `D:\Repositorios\Prodigia\compilacion\ms-playwright` (se borró la copia en C:).
+- Generador de planos de Akuare llevado al repo (`pipeline/gen_akuare.py`); fachada residencial de Akuare (D-059) incluida.
+
+**Siguiente sesión**
+- Empezar por: la revisión de Jacobo de la web en su celular y los cambios del boceto que mande.
+
 ## 2026-11-10 · Bloque 8 · Entrega, constructoras y todo lo pendiente
 
 **Hecho**
