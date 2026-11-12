@@ -34,7 +34,8 @@
       "floors": 5,
       "floorHeightM": 2.7,
       "style": {
-        "cladding": "ladrillo"
+        "cladding": "ladrillo",
+        "ground": "residencial"
       },
       "topSetback": false
     },
@@ -42,13 +43,13 @@
     "pois": [
       {
         "id": "lobby",
-        "name": "Lobby y portería",
+        "name": "Portería",
         "levelId": "1",
-        "description": "Portería las 24 horas, con ascensor al fondo del pasillo.",
+        "description": "Entrada pequeña con portería las 24 horas; el ascensor queda al fondo del pasillo.",
         "position": [
-          17.5,
+          14.8,
           1.5,
-          15.4
+          17.5
         ],
         "media": []
       },
@@ -58,9 +59,9 @@
         "levelId": "1",
         "description": "Salón para reuniones con zona de BBQ, en el primer piso.",
         "position": [
-          4,
+          31,
           1.5,
-          15.4
+          4.6
         ],
         "media": []
       }
@@ -1144,59 +1145,6 @@
           "windows": [
             3,
             4
-          ]
-        }
-      ]
-    },
-    {
-      "sameAs": "101",
-      "id": "104",
-      "name": "Apartamento 104",
-      "levelId": "1",
-      "basePriceCOP": 252000000,
-      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
-      "exterior": [
-        {
-          "facade": 2,
-          "windows": [
-            0,
-            1,
-            2
-          ]
-        },
-        {
-          "facade": 1,
-          "windows": [
-            4,
-            5,
-            6
-          ]
-        }
-      ],
-      "occupied": true
-    },
-    {
-      "sameAs": "101",
-      "id": "105",
-      "name": "Apartamento 105",
-      "levelId": "1",
-      "basePriceCOP": 252000000,
-      "view": "Esquinero, con dos fachadas. Hacia la Calle 158.",
-      "exterior": [
-        {
-          "facade": 0,
-          "windows": [
-            10,
-            11,
-            12
-          ]
-        },
-        {
-          "facade": 1,
-          "windows": [
-            0,
-            1,
-            2
           ]
         }
       ]

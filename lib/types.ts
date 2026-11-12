@@ -137,7 +137,15 @@ export interface Building {
   floors: number;
   floorHeightM: number;
   /** acabado del edificio procedural; sin style se usa estuco */
-  style?: { cladding: Cladding };
+  style?: {
+    cladding: Cladding;
+    /**
+     * Primer piso (D-059): "lobby" = vitrinas y marquesina de hotel (por defecto);
+     * "residencial" = hacia la calle garajes con persiana, un local y una puerta
+     * pequeña con placa; en los demás lados, ventanas de apartamento.
+     */
+    ground?: 'lobby' | 'residencial';
+  };
   /** el último piso se retranquea con terraza al frente (por defecto sí) */
   topSetback?: boolean;
 }

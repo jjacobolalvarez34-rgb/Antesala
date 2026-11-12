@@ -161,6 +161,13 @@ function addWindow(
   p.windows.push({ ...spec, center: [c.x, c.y, c.z], width: w - fr, height: h - fr, rotY: facing(e) });
 }
 
+/** Fachada del primer piso residencial (D-059): garaje (persiana), local (vitrina) o puerta. */
+type GroundBay = 'garaje' | 'local' | 'puerta';
+export function residentialGround(bays: number): GroundBay[] {
+  const first = Math.max(1, Math.round(bays * 0.23));
+  return Array.from({ length: bays }, (_, b) => (b < first ? 'garaje' : b < first + 2 ? 'local' : b === first + 2 ? 'puerta' : 'garaje'));
+}
+
 function floorParts(
   building: Building,
   order: number,
@@ -198,7 +205,37 @@ function floorParts(
       cell: Math.floor(rand() * 4),
     });
 
-    if (isGround) {
+    if (isGround && building.style?.ground === 'residencial' && e.index === front) {
+      const kinds = residentialGround(bays);
+      const top = ceil - 0.45;
+      for (let b = 0; b < bays; b++) {
+        const t0 = b * bw;
+        const tc = t0 + bw / 2;
+        const k = kinds[b]!;
+        // machón de ladrillo entre vanos y dintel arriba
+        p.clad.push(onEdge(e, t0 + 0.15, wallOff, (SLAB + ceil) / 2, 0.3, ceil - SLAB, WALL));
+        if (k === 'puerta') {
+          // puerta pequeña con vidrio y el resto en ladrillo
+          const dw = 1.15;
+          p.clad.push(onEdge(e, t0 + (bw - dw) / 4 + 0.15, wallOff, (SLAB + ceil) / 2, (bw - dw) / 2 - 0.3, ceil - SLAB, WALL));
+          p.clad.push(onEdge(e, t0 + bw - (bw - dw) / 4, wallOff, (SLAB + ceil) / 2, (bw - dw) / 2, ceil - SLAB, WALL));
+          p.clad.push(onEdge(e, tc, wallOff, (SLAB + 2.25 + ceil) / 2, dw, ceil - SLAB - 2.25, WALL));
+          addWindow(p, e, tc, SLAB, dw - 0.1, 2.2, specFor(b, STYLE.lobby), false);
+          continue;
+        }
+        p.clad.push(onEdge(e, tc + 0.15, wallOff, (top + ceil) / 2, bw - 0.3, ceil - top, WALL));
+        if (k === 'local') {
+          addWindow(p, e, tc + 0.15, SLAB, bw - 0.4, top - SLAB, specFor(b, STYLE.lobby), false);
+        } else {
+          // persiana de garaje: lámina gris un poco hundida, con su cajón arriba
+          p.concrete.push(onEdge(e, tc + 0.15, wallOff + 0.08, (SLAB + top) / 2, bw - 0.3, top - SLAB, 0.06));
+          p.frame.push(onEdge(e, tc + 0.15, wallOff + 0.12, top - 0.12, bw - 0.3, 0.22, 0.12));
+        }
+      }
+      return;
+    }
+
+    if (isGround && building.style?.ground !== 'residencial') {
       const glassTop = ceil - 0.7;
       for (let b = 0; b <= bays; b++) {
         p.concrete.push(onEdge(e, b * bw, wallOff + 0.04, (SLAB + ceil) / 2, 0.45, ceil - SLAB, WALL + 0.08));
@@ -670,8 +707,23 @@ function Entrance({
     mats.sconce.emissiveIntensity = 0.5 + n * 3.5;
   });
 
+  const residential = building.style?.ground === 'residencial';
   const pieces = useMemo(() => {
     const at = (t: number, off: number, y: number, w: number, h: number, d: number) => onEdge(e, t, off, y, w, h, d);
+    if (residential) {
+      // edificio residencial (D-059): solo una placa con el nombre sobre la puerta pequeña y un aplique
+      const bays = bayCount(e.length);
+      const bw = e.length / bays;
+      const door = (residentialGround(bays).indexOf('puerta') + 0.5) * bw;
+      return {
+        canopy: null,
+        sign: at(door, 0.06, 2.5, 1.5, 0.26, 0.04),
+        door: null,
+        sconces: mergeBoxes([at(door + 0.95, 0.1, 2.1, 0.14, 0.32, 0.12)]),
+        planters: null,
+        plants: [],
+      };
+    }
     const mid = e.length / 2;
     return {
       canopy: mergeBoxes([at(mid, 1.25, glassTop + 0.1, canopyW, 0.14, 2.5)]),
@@ -688,7 +740,7 @@ function Entrance({
       planters: mergeBoxes([at(mid - 2.6, 0.75, 0.38, 0.9, 0.76, 0.9), at(mid + 2.6, 0.75, 0.38, 0.9, 0.76, 0.9)]),
       plants: [at(mid - 2.6, 0.75, 1.15, 0, 0, 0), at(mid + 2.6, 0.75, 1.15, 0, 0, 0)],
     };
-  }, [e, glassTop, canopyW]);
+  }, [e, glassTop, canopyW, residential]);
 
   return (
     <group>
