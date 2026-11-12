@@ -138,6 +138,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - Esencial: las habitaciones en 360°.
   - Inmersivo: el 3D.
   - Premium: los renders del propio 3D pasados por Higgsfield para que parezcan fotografía profesional, más videos de entrada hechos desde esas imágenes. Así lo que se ve en Premium coincide con el 3D.
+- **Plan detallado:** `docs/PLAN-PREMIUM.md`. Niebla Alta: unas 20 imágenes y 4 videos. Akuare: unas 17 imágenes y 2 videos. Primero se prueba una sola imagen (la sala de la 402) para calibrar, y todo lo generado se guarda en el repo para no depender de Higgsfield.
 - **Lo mismo para Akuare.** La fachada sale del render del 3D (datos del catastro), con fotos tomadas por Jacobo en la calle como referencia. Las imágenes de Google Maps o Street View no se usan, porque sus términos lo prohíben. Los interiores son ilustrativos.
 
 ---
