@@ -5,6 +5,8 @@ import type { Route } from 'next';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
+import { lessMotion } from '@/lib/motion';
+
 export interface CoverHeroPoint {
   id: string;
   label: string;
@@ -28,7 +30,7 @@ interface Layout {
  * y cada punto se ubica con la misma cuenta. En celular el texto de la portada
  * tapa la parte de abajo: ahí los puntos van como una fila de botones.
  * Al tocar uno con video, pasa el clip a pantalla completa y luego entra;
- * con movimiento reducido o ahorro de datos entra directo.
+ * con ahorro de datos o en modo ligero entra directo.
  */
 export function CoverHero({
   src,
@@ -98,15 +100,8 @@ export function CoverHero({
 
   const go = (p: CoverHeroPoint) => {
     router.prefetch(p.href);
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const nav = navigator as Navigator & { connection?: { saveData?: boolean } };
-    let ligero = false;
-    try {
-      ligero = localStorage.getItem('antesala:modo') === 'ligero';
-    } catch {
-      /* sin almacenamiento */
-    }
-    if (!p.clip || reduced || nav.connection?.saveData || ligero) {
+    if (!p.clip || nav.connection?.saveData || lessMotion()) {
       router.push(p.href);
       return;
     }
@@ -143,7 +138,7 @@ export function CoverHero({
                   className="group pointer-events-auto relative flex -translate-x-[18px] -translate-y-1/2 items-center gap-3 rounded-full py-1.5 pr-4 pl-1.5 text-left text-bone transition-colors hover:bg-ink/55 focus-visible:bg-ink/55"
                 >
                   <span className="relative grid size-6 shrink-0 place-items-center">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-bone/40 motion-reduce:hidden" />
+                    <span className="absolute inset-0 animate-ping rounded-full bg-bone/40" />
                     <span className="size-3 rounded-full bg-bone shadow-[0_0_0_4px_rgb(244_241_234/0.25)]" />
                   </span>
                   <span className="flex flex-col leading-tight [text-shadow:0_1px_12px_rgb(0_0_0/0.6)]">

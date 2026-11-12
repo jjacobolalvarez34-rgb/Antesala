@@ -191,6 +191,38 @@
           }
         ]
       }
+    ],
+    "cover": [
+      {
+        "id": "terraza",
+        "label": "La terraza",
+        "detail": "Piso 6 · penthouse y terraza común",
+        "x": 0.484,
+        "y": 0.215,
+        "to": {
+          "level": "6"
+        }
+      },
+      {
+        "id": "suites",
+        "label": "Las suites",
+        "detail": "Suite 402, con balcón",
+        "x": 0.54,
+        "y": 0.49,
+        "to": {
+          "unit": "402"
+        }
+      },
+      {
+        "id": "lobby",
+        "label": "El lobby",
+        "detail": "Piso 1 · lobby y cowork",
+        "x": 0.445,
+        "y": 0.735,
+        "to": {
+          "level": "1"
+        }
+      }
     ]
   },
   "levels": [
