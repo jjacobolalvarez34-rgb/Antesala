@@ -134,27 +134,32 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
     };
   }, [modo, data.floors, data.hlFloor, data.hlUnit]);
 
-  // paso activo = el que cruza el centro de la pantalla
+  // paso activo = el último cuyo borde superior ya pasó el centro de la pantalla.
+  // Antes, en los huecos entre pasos y en el espacio final no había ninguno y se
+  // volvía al paso 0: el edificio se reiniciaba (reporte de Jacobo, 2026-11-12).
   useEffect(() => {
+    let raf = 0;
     const pick = () => {
+      raf = 0;
       const steps = stepsRef.current?.querySelectorAll<HTMLElement>('[data-step]');
       if (!steps) return;
       const mid = window.innerHeight * 0.5;
       let best = 0;
       steps.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        if (r.top <= mid && r.bottom > mid) best = Number(el.dataset.step);
+        if (el.getBoundingClientRect().top <= mid) best = Number(el.dataset.step);
       });
-      const rec = stepsRef.current!.getBoundingClientRect();
-      if (rec.bottom < mid) best = 6;
       setStep((p) => (p === best ? p : best));
     };
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(pick);
+    };
     pick();
-    window.addEventListener('scroll', pick, { passive: true });
-    window.addEventListener('resize', pick);
+    window.addEventListener('scroll', on, { passive: true });
+    window.addEventListener('resize', on);
     return () => {
-      window.removeEventListener('scroll', pick);
-      window.removeEventListener('resize', pick);
+      window.removeEventListener('scroll', on);
+      window.removeEventListener('resize', on);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 

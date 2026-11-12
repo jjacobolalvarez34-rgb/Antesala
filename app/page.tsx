@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
+import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
 import { Intro } from '@/components/producto/Intro';
 import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
@@ -11,7 +12,7 @@ import type { RecorridoData } from '@/components/producto/Recorrido';
 import { SavingsCalculator } from '@/components/producto/SavingsCalculator';
 import { ANTESALA } from '@/lib/antesala';
 import { getHotelBundle } from '@/lib/content';
-import { findLevel, formatArea, formatCOP, unitPrice } from '@/lib/hotel';
+import { findLevel, formatArea, formatCOP, sortedLevels, unitPrice } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 
 export const metadata: Metadata = {
@@ -156,6 +157,7 @@ export default async function Home() {
           key: 'niebla',
           img: photo('exterior-edificio'),
           imgAlt: 'Fachada de Niebla Alta al anochecer (imagen ilustrativa)',
+          art: null,
           badge: 'Apartahotel · Bogotá',
           name: 'Niebla Alta',
           text: `${niebla.hotel.units.length} habitaciones en ${niebla.hotel.levels.length} pisos: estudios, suites y un penthouse. Elija piso, habitación y espacio.`,
@@ -165,8 +167,18 @@ export default async function Home() {
     akuare
       ? {
           key: 'akuare',
-          img: photo('akuare-fachada'),
-          imgAlt: 'Edificio Akuare en Suba (modelo desde el catastro)',
+          img: null,
+          imgAlt: '',
+          art: (
+            <ElevationArt
+              name={akuare.hotel.name}
+              heightM={(akuare.hotel.site.building?.floors ?? 5) * (akuare.hotel.site.building?.floorHeightM ?? 2.7)}
+              levels={sortedLevels(akuare.hotel).map((l) => ({
+                id: l.id,
+                units: akuare.hotel.units.filter((u) => u.levelId === l.id).map((u) => ({ id: u.id, sold: !!u.occupied })),
+              }))}
+            />
+          ),
           badge: 'Edificio real · venta · Suba',
           name: 'Akuare',
           text: `La torre real desde el catastro de Bogotá, con ${akuare.hotel.units.length} apartamentos en venta y los vendidos marcados.`,
@@ -196,8 +208,8 @@ export default async function Home() {
               {demos.map((d) => (
                 <article key={d.key} className={s.dcard}>
                   <div className={s.ph}>
-                    <img src={d.img} alt={d.imgAlt} width={960} height={600} loading="lazy" />
-                    <span className={s.tag}>Ilustrativa</span>
+                    {d.img ? <img src={d.img} alt={d.imgAlt} width={960} height={600} loading="lazy" /> : d.art}
+                    <span className={s.tag}>{d.img ? 'Ilustrativa' : 'Datos reales'}</span>
                   </div>
                   <div className={s.dbody}>
                     <span className={s.badge}>{d.badge}</span>
@@ -210,7 +222,10 @@ export default async function Home() {
                 </article>
               ))}
               <article className={`${s.dcard} ${s.soon}`}>
-                <div className={s.ph} />
+                <div className={s.ph}>
+                  <TerrainArt />
+                  <span className={s.tag}>Ilustración</span>
+                </div>
                 <div className={s.dbody}>
                   <span className={s.badge}>Glamping</span>
                   <h3 style={{ marginTop: 10 }}>Domos en la montaña</h3>

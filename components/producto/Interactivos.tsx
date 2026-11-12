@@ -33,15 +33,23 @@ export function Nav() {
   const [solid, setSolid] = useState(false);
   // sobre el plano de papel (modo ligero) la barra va siempre sólida
   const ligero = useModo() === 'ligero';
+  // transparente solo arriba del todo: al bajar, los textos de los pasos pasan
+  // por debajo y con la barra transparente se montaban sobre el logo
   useEffect(() => {
+    let raf = 0;
     const on = () => {
-      const rec = document.getElementById('recorrido')?.getBoundingClientRect();
-      const inStage = rec ? rec.top <= 0 && rec.bottom > window.innerHeight * 0.5 : false;
-      setSolid(window.scrollY > window.innerHeight * 0.6 && !inStage);
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        setSolid(window.scrollY > 24);
+      });
     };
     on();
     window.addEventListener('scroll', on, { passive: true });
-    return () => window.removeEventListener('scroll', on);
+    return () => {
+      window.removeEventListener('scroll', on);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
   return (
     <header className={`${s.nav} ${solid || ligero ? s.navSolid : ''}`}>

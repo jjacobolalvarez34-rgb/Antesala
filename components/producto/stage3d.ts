@@ -31,7 +31,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
     return null;
   }
   if (!renderer.getContext()) return null;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   const RM = opts.reduced;
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x111b33, 40, 95);
@@ -191,6 +191,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
   const luzCol = new THREE.Color(C.luz);
   const champCol = new THREE.Color(C.champ);
 
+  let needsRender = true;
   const resize = () => {
     const r = host.getBoundingClientRect();
     const w = Math.max(1, r.width);
@@ -205,12 +206,14 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
       cam.setViewOffset(w, h, 0, h * 0.2, w, h); // celular: edificio arriba
     }
     cam.updateProjectionMatrix();
+    needsRender = true;
   };
   resize();
   const ro = new ResizeObserver(resize);
   ro.observe(host);
   const io = new IntersectionObserver((es) => {
     visible = es[0]?.isIntersecting ?? true;
+    needsRender = true;
   });
   io.observe(host);
 
@@ -230,13 +233,22 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
       }
       let k = !started ? 0 : falling ? (RM ? 0.12 : 0.035) : RM ? 0.3 : 0.06;
       k = 1 - Math.pow(1 - k, dt * 60);
+      // dibujar solo si algo se mueve: con la cámara quieta el scroll queda libre
+      let moving = needsRender || (current === 0 && !RM && started);
+      if (camPos.distanceToSquared(tPos) > 1e-6 || camLook.distanceToSquared(shot.look) > 1e-6) moving = true;
       camPos.lerp(tPos, k);
       camLook.lerp(shot.look, k);
       if (falling && camPos.distanceTo(tPos) < 0.6) falling = false;
       const ks = 1 - Math.pow(1 - (RM ? 0.3 : 0.08), dt * 60);
       (Object.keys(st) as (keyof Look)[]).forEach((p) => {
+        if (Math.abs(look[p] - st[p]) > 1e-4) moving = true;
         st[p] += (look[p] - st[p]) * ks;
       });
+      if (!moving) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      needsRender = false;
       for (const f of floors) {
         let op = 1;
         let dy = 0;
@@ -270,6 +282,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
   return {
     setStep: (n) => {
       current = n;
+      needsRender = true;
     },
     start: (fromIntro) => {
       started = true;

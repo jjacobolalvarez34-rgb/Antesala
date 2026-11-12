@@ -14,6 +14,10 @@ import { useModo } from './modo';
  * - Ligero: sin video; la foto avanza con un acercamiento lento, pasa a la
  *   siguiente al final del capítulo y unos trazos de plano se dibujan encima.
  * En la puerta, la ranura de luz se abre con el scroll.
+ *
+ * Rendimiento: el scroll no pasa por React. Cada cuadro escribe estilos y el
+ * tiempo del video directo en el DOM; React solo vuelve a pintar al cambiar de
+ * capítulo (cuatro veces en toda la sección).
  */
 const CAPS = [
   { t: 'La calle', d: 'Su huésped llega antes de llegar.', de: 'exterior-edificio', a: 'lobby', clip: '01-calle-lobby' },
@@ -27,13 +31,25 @@ export function Pelicula() {
   const modo = useModo();
   const sec = useRef<HTMLElement>(null);
   const vids = useRef<(HTMLVideoElement | null)[]>([]);
+  const phA = useRef<(HTMLImageElement | null)[]>([]);
+  const phB = useRef<(HTMLImageElement | null)[]>([]);
+  const bars = useRef<(HTMLElement | null)[]>([]);
+  const trazos = useRef<(SVGPathElement | null)[]>([]);
+  const slit = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState<boolean[]>([false, false, false, false]);
-  const [pos, setPos] = useState({ i: 0, t: 0 });
+  const readyRef = useRef(ready);
+  const [i, setI] = useState(0);
   const [wide, setWide] = useState(true);
   // los videos se piden solo cuando la sección está cerca (no al abrir la página)
   const [near, setNear] = useState(false);
   const cine = modo === 'cine';
   const conVideo = cine && near;
+  const kick = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    readyRef.current = ready;
+    kick.current();
+  }, [ready]);
 
   useEffect(() => {
     const el = sec.current;
@@ -50,29 +66,66 @@ export function Pelicula() {
 
   useEffect(() => {
     let raf = 0;
+    let lastI = -1;
     const update = () => {
       raf = 0;
       const el = sec.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
+      // fuera de la pantalla no hay nada que mover
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
       const span = el.offsetHeight - window.innerHeight;
       const p = Math.min(1, Math.max(0, -r.top / span));
       const x = p * CAPS.length;
-      const i = Math.min(CAPS.length - 1, Math.floor(x));
-      const t = Math.min(1, x - i);
-      setPos((o) => (o.i === i && Math.abs(o.t - t) < 0.004 ? o : { i, t }));
-      const v = vids.current[i];
+      const ci = Math.min(CAPS.length - 1, Math.floor(x));
+      const t = Math.min(1, x - ci);
+      if (ci !== lastI) {
+        lastI = ci;
+        setI(ci);
+      }
+      const rd = readyRef.current;
+      for (let k = 0; k < CAPS.length; k++) {
+        const tk = k === ci ? t : k < ci ? 1 : 0;
+        const vidOn = cine && rd[k];
+        const a = phA.current[k];
+        if (a) {
+          a.style.opacity = vidOn ? '0' : '1';
+          a.style.transform = vidOn ? 'none' : `scale(${1 + tk * 0.12})`;
+        }
+        const b = phB.current[k];
+        if (b) {
+          b.style.opacity = vidOn ? '0' : String(Math.max(0, (tk - 0.72) / 0.28));
+          b.style.transform = `scale(${1.04 + tk * 0.04})`;
+        }
+        const bar = bars.current[k];
+        if (bar) bar.style.transform = `scaleX(${tk})`;
+      }
+      trazos.current.forEach((path, j) => {
+        if (path) path.style.strokeDashoffset = String(1 - Math.min(1, Math.max(0, t * 1.6 - j * 0.3)));
+      });
+      const sl = slit.current;
+      if (sl) {
+        const on = ci === 2 && !(cine && rd[2]);
+        sl.style.opacity = on ? String(Math.min(1, t * 3)) : '0';
+        sl.style.transform = `translate(-50%, -50%) scaleX(${on ? Math.max(0.02, t * t) : 0.02})`;
+      }
+      const v = vids.current[ci];
       if (v && v.readyState >= 1 && Number.isFinite(v.duration)) {
-        try {
-          v.currentTime = t * (v.duration - 0.05);
-        } catch {
-          /* el navegador todavía no puede buscar */
+        const want = t * (v.duration - 0.05);
+        // no pedir un cuadro que ya está en pantalla
+        if (Math.abs(v.currentTime - want) > 0.02) {
+          try {
+            v.currentTime = want;
+          } catch {
+            /* el navegador todavía no puede buscar */
+          }
         }
       }
     };
     const on = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
+    kick.current = on;
     update();
     window.addEventListener('scroll', on, { passive: true });
     window.addEventListener('resize', on);
@@ -83,34 +136,41 @@ export function Pelicula() {
     };
   }, [cine]);
 
-  const { i, t } = pos;
   const cap = CAPS[i]!;
 
   return (
-    <section ref={sec} id="entrar" aria-label="Así se entra al hotel" className={s.entrar} data-modo={cine ? 'cine' : 'ligero'}>
-      <div className={s.film}>
-        {CAPS.map((c, k) => {
-          const on = k === i;
-          const tk = k === i ? t : k < i ? 1 : 0;
-          return (
-            <div key={c.clip} className={`${s.clip} ${on ? s.clipOn : ''}`}>
+    <>
+      <div className={s.entrarHead}>
+        <div className={s.kicker}>Así se entra</div>
+        <h2>De la calle a su suite</h2>
+        <p className={s.lead}>
+          Así ve su huésped el hotel antes de reservar. Baje despacio: el video avanza con usted.
+        </p>
+      </div>
+      <section ref={sec} id="entrar" aria-label="Así se entra al hotel" className={s.entrar} data-modo={cine ? 'cine' : 'ligero'}>
+        <div className={s.film}>
+          {CAPS.map((c, k) => (
+            <div key={c.clip} className={`${s.clip} ${k === i ? s.clipOn : ''}`}>
               {/* foto de respaldo (y modo ligero): acercamiento lento y paso a la siguiente */}
               <img
+                ref={(el) => {
+                  phA.current[k] = el;
+                }}
                 className={s.clipPh}
                 src={photo(c.de)}
                 alt=""
-                loading="lazy"
-                style={cine && ready[k] ? { opacity: 0 } : { transform: `scale(${1 + tk * 0.12})` }}
+                loading={k === 0 ? 'eager' : 'lazy'}
               />
-              {!cine || !ready[k] ? (
-                <img
-                  className={s.clipPh}
-                  src={photo(c.a)}
-                  alt=""
-                  loading="lazy"
-                  style={{ opacity: Math.max(0, (tk - 0.72) / 0.28), transform: `scale(${1.04 + tk * 0.04})` }}
-                />
-              ) : null}
+              <img
+                ref={(el) => {
+                  phB.current[k] = el;
+                }}
+                className={s.clipPh}
+                src={photo(c.a)}
+                alt=""
+                loading="lazy"
+                style={{ opacity: 0 }}
+              />
               {conVideo ? (
                 <video
                   ref={(v) => {
@@ -126,37 +186,47 @@ export function Pelicula() {
                 />
               ) : null}
             </div>
-          );
-        })}
-
-        {/* trazos de plano (modo ligero): marco, ejes y cotas que se dibujan con el scroll */}
-        {!cine ? (
-          <svg className={s.filmTrazos} viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden>
-            <path pathLength={1} style={{ strokeDashoffset: 1 - Math.min(1, t * 1.6) }} d="M60 60H940V540H60Z" />
-            <path pathLength={1} style={{ strokeDashoffset: 1 - Math.min(1, Math.max(0, t * 1.6 - 0.3)) }} d="M500 60V540M60 300H940" />
-            <path pathLength={1} style={{ strokeDashoffset: 1 - Math.min(1, Math.max(0, t * 1.6 - 0.6)) }} d="M60 80H120M880 80H940M60 520H120M880 520H940" />
-          </svg>
-        ) : null}
-
-        {/* la ranura de luz se abre en el capítulo de la puerta */}
-        {i === 2 && !(cine && ready[2]) ? (
-          <div className={s.slit} style={{ opacity: Math.min(1, t * 3), width: `${Math.max(2, t * t * 100)}vw` }} />
-        ) : null}
-        <div className={s.shade} />
-        <div className={s.filmCap} aria-live="polite">
-          <div className={s.kicker}>Así se entra · {String(i + 1).padStart(2, '0')}</div>
-          <h2>{cap.t}</h2>
-          <p className={s.lead}>{cap.d}</p>
-        </div>
-        <div className={s.bar} aria-hidden>
-          {CAPS.map((c, k) => (
-            <i key={c.clip}>
-              <b style={{ transform: `scaleX(${k < i ? 1 : k === i ? t : 0})` }} />
-            </i>
           ))}
+
+          {/* trazos de plano (modo ligero): marco, ejes y cotas que se dibujan con el scroll */}
+          {!cine ? (
+            <svg className={s.filmTrazos} viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden>
+              {['M60 60H940V540H60Z', 'M500 60V540M60 300H940', 'M60 80H120M880 80H940M60 520H120M880 520H940'].map((d, j) => (
+                <path
+                  key={d}
+                  ref={(el) => {
+                    trazos.current[j] = el;
+                  }}
+                  pathLength={1}
+                  d={d}
+                />
+              ))}
+            </svg>
+          ) : null}
+
+          {/* la ranura de luz se abre en el capítulo de la puerta */}
+          <div ref={slit} className={s.slit} style={{ opacity: 0 }} />
+          <div className={s.shade} />
+          <div className={s.filmCap} aria-live="polite">
+            <div className={s.kicker}>Así se entra · {String(i + 1).padStart(2, '0')}</div>
+            <h2>{cap.t}</h2>
+            <p className={s.lead}>{cap.d}</p>
+          </div>
+          <div className={s.bar} aria-hidden>
+            {CAPS.map((c, k) => (
+              <i key={c.clip}>
+                <b
+                  ref={(el) => {
+                    bars.current[k] = el;
+                  }}
+                  style={{ transform: 'scaleX(0)' }}
+                />
+              </i>
+            ))}
+          </div>
+          <span className={s.filmFict}>Imágenes y video ilustrativos</span>
         </div>
-        <span className={s.filmFict}>Imágenes y video ilustrativos</span>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
