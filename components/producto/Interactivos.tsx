@@ -218,7 +218,7 @@ export function QuoteForm({ whatsapp, email }: { whatsapp: string; email: string
           <option>Esencial</option>
           <option>Inmersivo</option>
           <option>Premium</option>
-          <option>Corporativo</option>
+          <option>A la medida (varias sedes)</option>
         </select>
       </label>
       <label htmlFor={`${id}-m`} className={s.full}>

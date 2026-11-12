@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- fotos estáticas livianas en public/demo */
-import type { Metadata, Viewport } from 'next';
+import type { Metadata, Route, Viewport } from 'next';
 import Link from 'next/link';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
@@ -44,35 +44,44 @@ function MamutMark({ className }: { className?: string }) {
   );
 }
 
-const PRICES = [
+/**
+ * Paquetes (definidos con Jacobo, 2026-11-12, D-069). Cada uno con su ejemplo:
+ * Esencial = la lista de Niebla Alta (sin 3D), Inmersivo = Niebla Alta en 3D,
+ * Premium = la producción visual de esta misma página. Las cadenas, a la medida.
+ */
+const PRICES: {
+  name: string;
+  for: string;
+  items: string[];
+  impl: string;
+  month: string;
+  star?: boolean;
+  example: { label: string; href: string };
+}[] = [
   {
     name: 'Esencial',
-    for: 'Para empezar con lo que el huésped más pregunta.',
-    items: ['Recorrido 360°', 'Galería por espacio', 'Enlace de reserva'],
+    for: 'Que el huésped vea cada espacio antes de reservar.',
+    items: ['Fotos de cada espacio', 'Recorrido 360° por espacio', 'Botón de reserva o WhatsApp', 'Sin 3D: liviano en cualquier celular'],
     impl: '$5 – 9 M',
     month: '$250 – 400 mil',
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/lista` },
   },
   {
     name: 'Inmersivo',
-    for: 'La experiencia completa de esta página.',
-    items: ['Edificio 3D', 'Selección de pisos y unidades', 'Planos interactivos', 'Galerías por espacio'],
+    for: 'El hotel en 3D, como la demo de Niebla Alta.',
+    items: ['Edificio 3D con su barrio', 'Pisos y habitaciones que se tocan', 'Planos y maqueta amoblada', 'Todo lo de Esencial'],
     impl: '$12 – 22 M',
     month: '$450 – 850 mil',
     star: true,
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/explorar` },
   },
   {
     name: 'Premium',
-    for: 'Más unidades y más producción visual.',
-    items: ['3D avanzado', 'Más unidades', 'Más producción visual'],
+    for: 'Inmersivo con producción visual de cine.',
+    items: ['Fotos profesionales de cada espacio', 'Video de entrada, de la calle a la habitación', 'Portada con puntos tocables', 'Todo lo de Inmersivo'],
     impl: '$25 – 45 M',
     month: '$0,9 – 1,5 M',
-  },
-  {
-    name: 'Corporativo',
-    for: 'Para cadenas y varias sedes.',
-    items: ['Varias sedes', 'Permisos por equipo', 'Integraciones'],
-    impl: 'Desde $45 M',
-    month: 'Desde $1,5 M',
+    example: { label: 'Ver el ejemplo en esta página', href: '#entrar' },
   },
 ];
 
@@ -403,9 +412,24 @@ export default async function Home() {
                       Mensualidad<b>{p.month}</b>
                     </div>
                   </div>
+                  {p.example.href.startsWith('#') ? (
+                    <a className={s.ex} href={p.example.href}>
+                      {p.example.label} <span className={s.arr}>→</span>
+                    </a>
+                  ) : (
+                    <Link className={s.ex} href={p.example.href as Route}>
+                      {p.example.label} <span className={s.arr}>→</span>
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>
+            <p className={`${s.medida} ${s.reveal}`}>
+              ¿Varias sedes o una cadena? Lo armamos a la medida.{' '}
+              <a href="#cotizar">
+                Hablemos <span className={s.arr}>→</span>
+              </a>
+            </p>
             <div className={`${s.pextra} ${s.reveal}`}>
               <div>
                 <h4>La mensualidad incluye</h4>

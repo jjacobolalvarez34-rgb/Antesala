@@ -944,7 +944,7 @@
 /* precios */
 .prices {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 .pcard {
@@ -993,6 +993,39 @@
 }
 .amt {
   margin-top: auto;
+}
+.ex {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 16px;
+  font: 500 11.5px/1 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champ);
+  text-decoration: none;
+  border-top: 1px solid var(--line-2);
+  padding-top: 14px;
+}
+.root a.ex {
+  color: var(--champ);
+}
+.root a.ex:hover {
+  color: var(--txt);
+}
+.medida {
+  margin: 22px 0 0;
+  font: italic 20px/1.4 var(--f-it);
+  color: var(--luz);
+}
+.root .medida a {
+  font: 500 11.5px/1 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champ);
+  margin-left: 8px;
+  text-decoration: none;
 }
 .amt div {
   display: flex;
