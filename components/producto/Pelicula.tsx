@@ -60,7 +60,10 @@ export function Pelicula() {
   }, [near]);
 
   useEffect(() => {
-    const t = window.setTimeout(() => setWide(window.innerWidth > 900), 0);
+    // 1280 solo en pantallas grandes con memoria de sobra; el resto, 720 (la versión
+    // grande en una laptop modesta, junto al 3D, llegó a tumbar la pestaña)
+    const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
+    const t = window.setTimeout(() => setWide(window.innerWidth > 1400 && mem >= 8), 0);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -73,6 +76,7 @@ export function Pelicula() {
     let target = 0;
     let cur = -1;
     let last = performance.now();
+    let lastSeek = 0;
     const readTarget = () => {
       const el = sec.current;
       if (!el) return false;
@@ -84,17 +88,22 @@ export function Pelicula() {
       return true;
     };
     const paint = (p: number) => {
-      const x = p * CAPS.length;
-      const ci = Math.min(CAPS.length - 1, Math.floor(x));
-      const t = Math.min(1, x - ci);
+      // siempre dentro de la película: con la inercia el valor podía pasarse de 0 o
+      // de 1 y pedir el capítulo -1 (eso tumbaba la página, reporte de Jacobo)
+      const x = Math.min(1, Math.max(0, p)) * CAPS.length;
+      const ci = Math.max(0, Math.min(CAPS.length - 1, Math.floor(x)));
+      const t = Math.min(1, Math.max(0, x - ci));
       if (ci !== lastI) {
         lastI = ci;
         setI(ci);
+        // solo el capítulo actual y el siguiente tienen video: los demás vuelven a
+        // "no listo" para que, al montarse otra vez, se vea la foto hasta que cargue
+        setReady((r) => (r.some((x, k) => x && k !== ci && k !== ci + 1) ? r.map((x, k) => (k === ci || k === ci + 1 ? x : false)) : r));
       }
       const rd = readyRef.current;
       for (let k = 0; k < CAPS.length; k++) {
         const tk = k === ci ? t : k < ci ? 1 : 0;
-        const vidOn = cine && rd[k];
+        const vidOn = cine && rd[k] && !!vids.current[k];
         const a = phA.current[k];
         if (a) {
           a.style.opacity = vidOn ? '0' : '1';
@@ -118,12 +127,15 @@ export function Pelicula() {
         sl.style.transform = `translate(-50%, -50%) scaleX(${on ? Math.max(0.02, t * t) : 0.02})`;
       }
       const v = vids.current[ci];
-      // un cuadro a la vez: si el anterior todavía se está buscando, se espera
-      if (v && !v.seeking && v.readyState >= 1 && Number.isFinite(v.duration)) {
+      // un cuadro a la vez y como mucho ~25 por segundo: si el anterior todavía se
+      // está buscando, se espera (al terminar, onSeeked vuelve a pintar)
+      const now = performance.now();
+      if (v && !v.seeking && now - lastSeek >= 40 && v.readyState >= 1 && Number.isFinite(v.duration)) {
         const want = t * (v.duration - 0.05);
         if (Math.abs(v.currentTime - want) > 1 / 60) {
           try {
             v.currentTime = want;
+            lastSeek = now;
           } catch {
             /* el navegador todavía no puede buscar */
           }
@@ -132,12 +144,14 @@ export function Pelicula() {
     };
     const frame = (now: number) => {
       raf = 0;
-      const dt = Math.min(0.1, (now - last) / 1000);
+      // el reloj del cuadro puede ir unos ms detrás de performance.now(): nunca negativo
+      const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));
       last = now;
       if (!readTarget()) return;
       if (cur < 0) cur = target;
       // ~0,35 s para alcanzar la meta, igual a cualquier tasa de refresco
       cur += (target - cur) * (1 - Math.exp(-dt * 9));
+      cur = Math.min(1, Math.max(0, cur));
       if (Math.abs(target - cur) < 0.0004) cur = target;
       paint(cur);
       if (cur !== target) raf = requestAnimationFrame(frame);
@@ -197,7 +211,8 @@ export function Pelicula() {
                 loading="lazy"
                 style={{ opacity: 0 }}
               />
-              {conVideo ? (
+              {/* solo el capítulo actual y el siguiente tienen video montado: menos memoria */}
+              {conVideo && (k === i || k === i + 1) ? (
                 <video
                   ref={(v) => {
                     vids.current[k] = v;
@@ -206,7 +221,8 @@ export function Pelicula() {
                   src={`/demo/video/${c.clip}-${wide ? 1280 : 720}.mp4`}
                   muted
                   playsInline
-                  preload={Math.abs(k - i) <= 1 ? 'auto' : 'metadata'}
+                  preload="auto"
+                  onSeeked={() => kick.current()}
                   onLoadedData={() => setReady((r) => (r[k] ? r : r.map((x, j) => (j === k ? true : x))))}
                   style={{ opacity: ready[k] ? 1 : 0 }}
                 />
