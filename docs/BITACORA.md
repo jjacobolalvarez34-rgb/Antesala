@@ -34,6 +34,9 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 - Todo lo de trabajo pasa a D: (`.tmp/` en el proyecto). Playwright usa el Chromium de `D:\Repositorios\Prodigia\compilacion\ms-playwright` (se borró la copia en C:).
 - Generador de planos de Akuare llevado al repo (`pipeline/gen_akuare.py`); fachada residencial de Akuare (D-059) incluida.
 
+- Sombras congeladas con un piso abierto (D-064). Revisado el piso abierto en el tiempo: a los 5 s (WebGL por software) se ve la transición a medias; a los 25 s el cajón está afuera, los pisos de arriba velados y la planta completa. No se reprodujo un estado final dañado: si Jacobo lo sigue viendo, pedir video o captura en su equipo.
+- Rutas `/demo` y `/cotizar` (redirigen a sus secciones).
+
 **Siguiente sesión**
 - Empezar por: la revisión de Jacobo de la web en su celular y los cambios del boceto que mande.
 

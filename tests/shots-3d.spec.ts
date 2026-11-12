@@ -56,6 +56,8 @@ for (const hotel of hotels) {
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await openScene(page, r.url, DAY);
+      // con WebGL por software el cajón y la planta tardan ~20 s en terminar de aparecer
+      if (r.name.startsWith('piso-')) await page.waitForTimeout(25_000);
       await expect(page.getByRole('navigation', { name: 'Reserva' }).getByRole('button', { name: /Reservar/ })).toBeVisible();
       await page.screenshot({ path: `tests/__shots__/${info.project.name}/${hotel.slug}/3d-${r.name}.png` });
       expect(errors, `errores en ${r.url}`).toEqual([]);

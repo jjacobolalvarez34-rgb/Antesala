@@ -149,6 +149,31 @@ function ViewLayerController({ on }: { on: boolean }) {
   return null;
 }
 
+/**
+ * Con un piso abierto las sombras no aportan y cuestan (propuesta de Jacobo, D-064):
+ * se calculan una vez cuando el cajón termina de salir y se congelan. Al volver
+ * al edificio, se calculan en cada cuadro otra vez. Congelar (y no apagar la luz)
+ * evita recompilar los materiales en plena transición.
+ */
+function ShadowFreeze({ frozen }: { frozen: boolean }) {
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    if (!frozen) {
+      gl.shadowMap.autoUpdate = true;
+      return;
+    }
+    const t = window.setTimeout(() => {
+      gl.shadowMap.autoUpdate = false;
+      gl.shadowMap.needsUpdate = true;
+    }, 2600);
+    return () => {
+      window.clearTimeout(t);
+      gl.shadowMap.autoUpdate = true;
+    };
+  }, [frozen, gl]);
+  return null;
+}
+
 function ReadySignal() {
   const frames = useRef(0);
   const setSceneReady = useTour((s) => s.setSceneReady);
@@ -669,6 +694,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         ) : null}
         <FovController wide={in360} reduced={reduced} />
         <ViewLayerController on={vpData !== null} />
+        <ShadowFreeze frozen={stage.kind === 'piso' && shadows} />
         <ReadySignal />
       </Canvas>
       <PoiLayer pois={data.pois} anchors={anchors} visible={showPois} />

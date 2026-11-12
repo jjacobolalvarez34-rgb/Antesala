@@ -305,3 +305,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - El 3D del modo cine baja el azul: caras veladas, el edificio se lee por sus trazos champán.
 - Por qué: pedido de Jacobo; el boceto es la referencia y está sujeto a cambios. Los dos modos dejan que la página funcione con poca conexión.
 
+**D-064 · 2026-11-11 · Sombras congeladas con un piso abierto**
+- Decisión: con un piso abierto, el mapa de sombras se calcula una vez cuando termina de salir el cajón y se congela; al volver al edificio se calcula en cada cuadro. Se congela en lugar de apagar la luz para no recompilar materiales en plena transición.
+- Por qué: propuesta de Jacobo; las sombras no aportan con el piso abierto y cuestan en celular.
+
