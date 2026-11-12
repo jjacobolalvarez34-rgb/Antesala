@@ -163,7 +163,7 @@ Tres bloques: **Más reserva directa** (dato: la mayoría de los hoteles paga al
 **Qué necesitamos de su hotel:** planos o medidas de las unidades; acceso para la captura o sus fotos; logo y colores; el enlace de su motor de reservas o su WhatsApp; quien maneje su dominio, para agregar un registro (no movemos su web ni su correo).
 
 ### 6 · Precios
-Cuatro tarjetas (Esencial, Inmersivo destacado, Premium, Corporativo) con implementación y mensualidad; lista de adicionales "se cotizan aparte"; qué incluye la mensualidad; forma de pago 40/40/20. Ver la sección 6 abajo.
+Tres tarjetas (Esencial, Inmersivo destacado como "Recomendado para empezar", Premium), cada una con implementación, mensualidad y "Ver ejemplo"; debajo, "¿Varias sedes o una cadena? Hablemos" (D-069); lista de adicionales "se cotizan aparte"; qué incluye la mensualidad; forma de pago 40/40/20. Ver la sección 6 abajo.
 
 ### 7 · Clientes
 **Oculta.** Se activa con el primer caso real y su permiso (logo, cita textual, enlace). No usar ejemplos inventados.
@@ -191,12 +191,12 @@ Campos: nombre, hotel, ciudad, tipo (hotel, apartahotel, glamping, otro), númer
 
 ## 6. Precios (COP, valores de referencia)
 
-| Paquete | Incluye | Implementación | Mensualidad |
-|---|---|---|---|
-| Esencial | Recorrido 360°, galería por espacio, enlace de reserva | $5–9 M | $250–400 mil |
-| Inmersivo | Edificio 3D, selección de unidades, planos interactivos, galerías | $12–22 M | $450–850 mil |
-| Premium | 3D avanzado, más unidades, más producción visual | $25–45 M | $0,9–1,5 M |
-| Corporativo | Varias sedes, permisos, integraciones | Desde $45 M | Desde $1,5 M |
+| Paquete | Incluye | Ejemplo | Implementación | Mensualidad |
+|---|---|---|---|---|
+| Esencial | Fotos y 360° de cada espacio, botón de reserva o WhatsApp; sin 3D | Lista de Niebla Alta | $5–9 M | $250–400 mil |
+| Inmersivo | Edificio 3D con su barrio, pisos y habitaciones que se tocan, planos y maqueta amoblada; todo Esencial | Niebla Alta en 3D | $12–22 M | $450–850 mil |
+| Premium | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos; todo Inmersivo | "Así se entra" en la web de Antesala | $25–45 M | $0,9–1,5 M |
+| A la medida | Varias sedes o cadenas: se cotiza | — | — | — |
 
 - **La mensualidad incluye:** alojamiento, CDN y transferencia dentro del límite del plan, mantenimiento, copias de seguridad, soporte, panel y analítica básica.
 - **Adicionales (se cotizan):** fotografía o 360° extra, dron, modelado de áreas nuevas, nuevas unidades o sedes, traducción, integración con motor de reservas o PMS, desplazamientos fuera de Bogotá.

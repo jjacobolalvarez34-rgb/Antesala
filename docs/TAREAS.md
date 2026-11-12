@@ -177,7 +177,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Animaciones visibles con movimiento reducido del sistema (D-067); video con inercia, mosaico de espacios, plano que cabe, bloom al desplazarse rápido (D-068)
 - [x] Demos con el símbolo de Antesala y "volver" en la banda superior; Niebla Alta sin las fotos de Higgsfield (son de la página de Antesala)
 - [x] Precios: "Recomendado para empezar" en vez de "Más elegido" (nadie ha comprado todavía)
-- [ ] **Definir los paquetes con Jacobo**: qué incluye cada uno con un ejemplo real de cada nivel (hoy Premium y Corporativo no están definidos)
+- [x] Paquetes definidos con Jacobo (D-069): Esencial, Inmersivo y Premium con "Ver ejemplo"; varias sedes a la medida
 - [ ] Medir en el celular de Jacobo el scroll de la web y la carga del 3D después de estos cambios
 - [x] Modo cine (3D y video) y modo ligero (plano y fotos), con botón para cambiar
 - [ ] Revisar la web en celular real (sobre todo el video con el scroll en iPhone)

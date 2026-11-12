@@ -340,3 +340,13 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - El plano del paso 4 se dimensiona por el alto disponible.
 - Por qué: con la rueda del mouse el scroll avanza a saltos de ~100 px y el video saltaba de la calle al lobby en un cuadro. Una sola foto no explicaba "cada espacio". Lo demás, pedidos de Jacobo.
 
+**D-069 · 2026-11-12 · Tres paquetes con ejemplo y "a la medida"**
+- Decisión (Jacobo eligió la propuesta):
+  - **Esencial:** fotos y 360° por espacio con botón de reserva, sin 3D.
+  - **Inmersivo:** lo de Niebla Alta (edificio 3D, pisos, planos, maqueta amoblada).
+  - **Premium:** Inmersivo más producción visual (fotos profesionales, video de entrada, portada con puntos).
+  - Cada uno con "Ver ejemplo".
+  - Corporativo sale de la grilla y queda "¿Varias sedes o una cadena? Hablemos", sin precio.
+  - "Más elegido para empezar" pasa a "Recomendado para empezar": todavía no hay clientes.
+- Por qué: Premium ("3D avanzado") y Corporativo no correspondían a nada construido ni planeado; cada paquete tiene que poder mostrarse.
+
