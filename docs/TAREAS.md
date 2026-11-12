@@ -156,11 +156,12 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Edificio y barrio reales desde el catastro y OpenStreetMap (`pnpm catastro`, D-056)
 - [x] Oferta por hotel: noche, mes o venta (D-057)
 - [x] 37 apartamentos sobre la huella real, modo venta (D-058)
-- [ ] Fachada con primer piso residencial y planta del piso 1 alineada (hecho sin subir; falta build y revisar)
-- [ ] Sección "Elige una demo" en la página de Antesala
-- [ ] `pnpm renders akuare` y revisar capturas 2D y 3D
-- [ ] Registrar D-056 a D-059 en DECISIONES.md
-- [ ] Llevar el generador de planos de Akuare al repo (`pipeline/`) si se va a reutilizar
+- [x] Fachada con primer piso residencial y planta del piso 1 alineada
+- [x] Sección "Elige una demo" en la página de Antesala (sección Demos)
+- [x] `pnpm renders -g akuare`: 16 fotos ilustrativas (fachada de día y de noche, piso 5, espacios de los tipos 101 y 102), revisadas
+- [x] Cubierta plana en Akuare (`style.roof: "plana"`): el edificio real no tiene pérgola
+- [x] Registrar D-056 a D-059 en DECISIONES.md
+- [x] Llevar el generador de planos de Akuare al repo (`pipeline/gen_akuare.py`)
 - [ ] **El piso abierto sigue fallando (reporte de Jacobo, 2026-11-08, en Vercel).** Reproducir en su equipo antes de tocar código. Revisar: profundidad de las fachadas retiradas, pisos atenuados encima de la planta y orden de dibujo de la planta frente a los vidrios.
 - [x] Sombras congeladas mientras un piso está abierto (D-064). ~~Propuesta de Jacobo: sin sombras mientras un piso está abierto (no aportan y cuestan). Opción: apagar el mapa de sombras del sol en la etapa de piso, o congelarlo, y volver a encenderlo en la vista del edificio.~~
 

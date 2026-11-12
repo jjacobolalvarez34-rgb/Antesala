@@ -98,7 +98,7 @@ const hotelSchema = z.object({
         floors: z.number().int().positive(),
         floorHeightM: z.number().positive(),
         style: z
-          .object({ cladding: z.enum(['ladrillo', 'estuco', 'concreto']), ground: z.enum(['lobby', 'residencial']).optional() })
+          .object({ cladding: z.enum(['ladrillo', 'estuco', 'concreto']), ground: z.enum(['lobby', 'residencial']).optional(), roof: z.enum(['terraza', 'plana']).optional() })
           .optional(),
         topSetback: z.boolean().optional(),
       })

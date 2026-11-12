@@ -282,9 +282,10 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: segundo demo con el edificio real de la Calle 158 # 93A-37 (Suba Salitre): torre de 35 × 20 m y 5 pisos del catastro, 37 apartamentos ilustrativos (esquineros de 3 alcobas y medianeros de 2) sobre esa huella, modo venta, banner "Demostración no oficial". Para que una página no cargue todos los planos, cada plano de unidad viaja una vez y las plantas de piso se piden aparte desde la escena (página de 359 a 88 KB).
 - Por qué: pedido de Jacobo; un edificio que conoce, con datos públicos. Los interiores son inventados porque no hay planos públicos.
 
-**D-059 · 2026-11-08 · Primer piso residencial (en curso, sin subir)**
+**D-059 · 2026-11-08 · Primer piso residencial y cubierta plana**
 - Decisión: `style.ground: "residencial"` dibuja hacia la calle garajes con persiana, un local con vitrina y una puerta pequeña con placa, sin marquesina de hotel; la planta del piso 1 de Akuare se alinea con eso (parqueaderos, local, portería; salón social atrás).
 - Por qué: la fachada real de Akuare (Street View, mostrada por Jacobo) no tiene lobby de hotel.
+- Ampliación (2026-11-12): `style.roof: "plana"` quita la pérgola de madera de la cubierta (por defecto `"terraza"`, con pérgola). Akuare la usa porque el edificio real no tiene pérgola.
 
 **D-060 · 2026-11-10 · Modo renders y mercado de constructoras (propuesta)**
 - Decisión propuesta: agregar al visor un modo basado en imágenes (portada con render y puntos, video de transición, planta cenital como imagen con unidades disponibles y vendidas, 360°) que conviva con el 3D en vivo. Ofrecerlo primero a constructoras con proyectos sobre planos, que ya tienen renders.

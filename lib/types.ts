@@ -145,6 +145,8 @@ export interface Building {
      * pequeña con placa; en los demás lados, ventanas de apartamento.
      */
     ground?: 'lobby' | 'residencial';
+    /** cubierta: "terraza" = pérgola de madera (por defecto); "plana" = solo antepecho y baranda */
+    roof?: 'terraza' | 'plana';
   };
   /** el último piso se retranquea con terraza al frente (por defecto sí) */
   topSetback?: boolean;

@@ -35,11 +35,40 @@
       "floorHeightM": 2.7,
       "style": {
         "cladding": "ladrillo",
-        "ground": "residencial"
+        "ground": "residencial",
+        "roof": "plana"
       },
       "topSetback": false
     },
-    "exterior": [],
+    "exterior": [
+      {
+        "id": "render-exterior-1",
+        "kind": "photo",
+        "src": "media/renders/fachada-dia.jpg",
+        "alt": "Fachada de Akuare en la tarde (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-2",
+        "kind": "photo",
+        "src": "media/renders/fachada-noche.jpg",
+        "alt": "Fachada de Akuare de noche (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-3",
+        "kind": "photo",
+        "src": "media/renders/piso-5.jpg",
+        "alt": "Piso 5 abierto, con la planta amoblada (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      }
+    ],
     "pois": [
       {
         "id": "lobby",
@@ -225,6 +254,15 @@
               ]
             },
             {
+              "id": "render-101-cocina",
+              "kind": "photo",
+              "src": "media/renders/101-cocina.jpg",
+              "alt": "Cocina de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-101-cocina-1",
               "kind": "photo",
               "src": "media/units/101/cocina-amplia.svg",
@@ -299,6 +337,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "render-101-bano",
+              "kind": "photo",
+              "src": "media/renders/101-bano.jpg",
+              "alt": "Baño de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-101-bano-1",
@@ -377,6 +424,15 @@
               ]
             },
             {
+              "id": "render-101-alcoba-3",
+              "kind": "photo",
+              "src": "media/renders/101-alcoba-3.jpg",
+              "alt": "Alcoba 3 de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-101-alcoba-3-1",
               "kind": "photo",
               "src": "media/units/101/alcoba-3-amplia.svg",
@@ -451,6 +507,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "render-101-alcoba-2",
+              "kind": "photo",
+              "src": "media/renders/101-alcoba-2.jpg",
+              "alt": "Alcoba 2 de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-101-alcoba-2-1",
@@ -529,6 +594,15 @@
               ]
             },
             {
+              "id": "render-101-sala",
+              "kind": "photo",
+              "src": "media/renders/101-sala.jpg",
+              "alt": "Sala y comedor de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-101-sala-1",
               "kind": "photo",
               "src": "media/units/101/sala-amplia.svg",
@@ -605,6 +679,15 @@
               ]
             },
             {
+              "id": "render-101-alcoba",
+              "kind": "photo",
+              "src": "media/renders/101-alcoba.jpg",
+              "alt": "Alcoba principal de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-101-alcoba-1",
               "kind": "photo",
               "src": "media/units/101/alcoba-amplia.svg",
@@ -679,6 +762,15 @@
                   "target": "alcoba"
                 }
               ]
+            },
+            {
+              "id": "render-101-balcon",
+              "kind": "photo",
+              "src": "media/renders/101-balcon.jpg",
+              "alt": "Balcón de Apartamento 101, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-101-balcon-1",
@@ -774,6 +866,15 @@
               ]
             },
             {
+              "id": "render-102-cocina",
+              "kind": "photo",
+              "src": "media/renders/102-cocina.jpg",
+              "alt": "Cocina de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-102-cocina-1",
               "kind": "photo",
               "src": "media/units/102/cocina-amplia.svg",
@@ -841,6 +942,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "render-102-bano",
+              "kind": "photo",
+              "src": "media/renders/102-bano.jpg",
+              "alt": "Baño de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-102-bano-1",
@@ -912,6 +1022,15 @@
               ]
             },
             {
+              "id": "render-102-alcoba-2",
+              "kind": "photo",
+              "src": "media/renders/102-alcoba-2.jpg",
+              "alt": "Alcoba 2 de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-102-alcoba-2-1",
               "kind": "photo",
               "src": "media/units/102/alcoba-2-amplia.svg",
@@ -979,6 +1098,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "render-102-sala",
+              "kind": "photo",
+              "src": "media/renders/102-sala.jpg",
+              "alt": "Sala y comedor de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-102-sala-1",
@@ -1050,6 +1178,15 @@
               ]
             },
             {
+              "id": "render-102-alcoba",
+              "kind": "photo",
+              "src": "media/renders/102-alcoba.jpg",
+              "alt": "Alcoba principal de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
               "id": "units-102-alcoba-1",
               "kind": "photo",
               "src": "media/units/102/alcoba-amplia.svg",
@@ -1117,6 +1254,15 @@
                   "target": "alcoba"
                 }
               ]
+            },
+            {
+              "id": "render-102-balcon",
+              "kind": "photo",
+              "src": "media/renders/102-balcon.jpg",
+              "alt": "Balcón de Apartamento 102, vista desde adentro (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
             },
             {
               "id": "units-102-balcon-1",

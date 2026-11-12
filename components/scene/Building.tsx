@@ -860,6 +860,7 @@ function Roof({
     const rails = edges.map((e) => onEdge(e, e.length / 2, -0.12, 0.4 + 1.25, e.length, 0.7, 0.03));
     const [cx, cz] = frame.center;
     const beams: Box[] = [];
+    if (building.style?.roof === 'plana') return { parapet, beams, rails };
     const span = frame.width * 0.5;
     const zc = cz - frame.depth * 0.15;
     const dz = frame.depth * 0.42;
@@ -873,7 +874,7 @@ function Roof({
       }
     }
     return { parapet, beams, rails };
-  }, [footprint, frame]);
+  }, [footprint, frame, building.style?.roof]);
 
   const parapetGeo = useMemo(() => mergeBoxes(parapet, tex.concrete.tile, frame.height), [parapet, tex, frame.height]);
   const beamGeo = useMemo(() => mergeBoxes(beams), [beams]);

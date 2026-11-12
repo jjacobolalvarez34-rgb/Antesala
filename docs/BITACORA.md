@@ -25,6 +25,19 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 · Akuare · fotos desde la escena 3D y cubierta plana
+
+**Hecho**
+- `pnpm renders -g akuare`: 16 fotos ilustrativas en `content/hotels/akuare/media/renders/` (fachada de día y de noche, piso 5 y los espacios de las plantillas 101 y 102), registradas en `hotel.json` con `fidelity: "ilustrativa"`.
+- Cubierta plana: nuevo `building.style.roof` (`"terraza"` con pérgola por defecto, `"plana"` solo antepecho y baranda). Akuare usa `"plana"`, como el edificio real. Fachadas regeneradas y revisadas.
+- TAREAS al día con lo de Akuare que ya estaba hecho (fachada residencial, sección de demos, D-056 a D-059, generador en `pipeline/`).
+
+**Mediciones**
+- `pnpm typecheck`, `pnpm lint` y `pnpm build` sin errores; pruebas de Akuare (entrada, unidad 101, sala) en verde.
+
+**Siguiente sesión**
+- Empezar por: la revisión de Jacobo de la web en su celular (video con scroll en iPhone) y los cambios del boceto que mande.
+
 ## 2026-11-11 · Identidad visual y web de Antesala con dos modos
 
 **Hecho**
