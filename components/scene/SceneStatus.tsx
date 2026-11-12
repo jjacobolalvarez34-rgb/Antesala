@@ -45,7 +45,7 @@ export function SceneStatus({ className }: { className?: string }) {
 
   return (
     <p role="status" className={cn('flex items-center gap-2 text-sm text-muted-foreground', className)}>
-      <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+      <LoaderCircle aria-hidden className="size-4 animate-spin" />
       Preparando el edificio en 3D…
     </p>
   );

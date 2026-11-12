@@ -48,7 +48,8 @@ export function Intro() {
     const el = root.current;
     const svg = logo.current;
     if (!el || !svg) return;
-    const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // D-067: la intro se ve completa aunque el sistema pida movimiento reducido
+    const RM = false;
     const S = RM ? 0.55 : 1;
     const parts = Array.from(svg.querySelectorAll('path'));
     const slit = svg.querySelector('rect');

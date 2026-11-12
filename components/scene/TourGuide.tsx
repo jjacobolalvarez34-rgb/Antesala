@@ -152,7 +152,7 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
     >
       <p className="glass-dark flex animate-in items-center gap-2 rounded-full py-2 pr-4 pl-3 text-sm shadow-xl duration-500 fade-in slide-in-from-top-2">
         <span className="relative grid size-6 place-items-center">
-          <span className="absolute size-6 animate-ping rounded-full bg-accent-on-dark/30 motion-reduce:hidden" />
+          <span className="absolute size-6 animate-ping rounded-full bg-accent-on-dark/30" />
           <HintIcon aria-hidden className="relative size-4 text-accent-on-dark" />
         </span>
         {text}

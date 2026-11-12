@@ -1,24 +1,13 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
-
 /**
- * Hook único para prefers-reduced-motion (DISENO.md §4, regla 7).
- * Sin dependencias para que sirva a GSAP (cámara) y a Motion (UI) por igual.
- * Las transiciones CSS se apagan además desde app/globals.css.
+ * Hook único de movimiento reducido para GSAP (cámara) y Motion (UI).
+ *
+ * D-067: ya no sigue a prefers-reduced-motion. En Windows con los efectos de
+ * animación apagados (muy común) la cámara saltaba sin transición y el
+ * recorrido se veía cortado. Se deja el hook para tener un solo punto si más
+ * adelante se agrega un interruptor propio de "menos movimiento".
  */
-const QUERY = '(prefers-reduced-motion: reduce)';
-
-function subscribe(onChange: () => void) {
-  const mql = window.matchMedia(QUERY);
-  mql.addEventListener('change', onChange);
-  return () => mql.removeEventListener('change', onChange);
-}
-
 export function useReducedMotion(): boolean {
-  return useSyncExternalStore(
-    subscribe,
-    () => window.matchMedia(QUERY).matches,
-    () => false,
-  );
+  return false;
 }

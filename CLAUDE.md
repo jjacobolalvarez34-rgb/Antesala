@@ -40,7 +40,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 5. **Presupuestos de peso y FPS** de `docs/ARQUITECTURA.md` §8. Son criterios de aceptación, no sugerencias.
 6. **Nada pesado se sirve desde Vercel.** Los assets pesados van a R2 en producción.
 7. **Transparencia:** en la demo, todo medio lleva `fidelity: "ilustrativa"` y el banner de hotel ficticio es visible. Nunca usar fotos de hoteles reales identificables.
-8. **Animación con propósito:** GSAP para cámara y escenas, Motion para interfaz. No agregar otras librerías de animación. Siempre respetar `prefers-reduced-motion`.
+8. **Animación con propósito:** GSAP para cámara y escenas, Motion para interfaz. No agregar otras librerías de animación. Las animaciones se ven aunque el sistema pida movimiento reducido (D-067); quien quiera menos movimiento usa el modo ligero.
 
 ## Forma de trabajar
 
