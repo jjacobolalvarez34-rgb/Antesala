@@ -314,7 +314,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: Jacobo aprueba D-060. Primera entrega:
   - La portada del hotel puede llevar puntos tocables sobre la foto (`site.cover`). Al tocar uno con video, pasa el clip a pantalla completa y entra al piso o a la unidad. Sin video con movimiento reducido, ahorro de datos o modo ligero.
   - La planta del piso pinta cada unidad según su disponibilidad (verde libre, terracota ocupada o vendida) y muestra la leyenda.
-  - En Niebla Alta, las fotos de Higgsfield pasan a ser la portada, el lobby, la terraza y los espacios de la Suite 402. La fachada 3D pasa a estuco color arena para parecerse a la foto.
+  - ~~En Niebla Alta, las fotos de Higgsfield pasan a ser la portada…~~ Corregido el mismo día: las fotos y los videos de Higgsfield son de la página de Antesala, no de Niebla Alta (Jacobo). Niebla Alta vuelve a sus renders y al ladrillo; sus puntos de portada van sobre su propio render y sin video. La tarjeta de Niebla Alta en la página de Antesala muestra su planta del piso 5 con libres y ocupadas.
   - Quedan pendientes los assets pesados en R2 y la demo de constructora con contenido generado.
 - Por qué: la demo mostraba la foto bonita en la página de Antesala pero, al entrar, la captura del 3D. El contenido fotográfico es lo que hace que se vea vendible (D-060).
 
@@ -323,4 +323,20 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Al elegir un espacio en la maqueta, lo que queda fuera de su rectángulo se corta cada vez más bajo hasta hundirse en el piso, y solo queda ese espacio con su etiqueta. La cámara lo encuadra según su tamaño. Se hace en el shader (recorte por posición), porque muros y muebles son mallas unidas.
   - En escritorio, la barra de reserva va en la esquina inferior derecha y el selector de fachada en la izquierda. En celular siguen abajo y centrados. La barra sigue siempre visible.
 - Por qué: pedidos de Jacobo. Los demás espacios distraían, y la barra centrada tapaba el edificio y los clics.
+
+**D-067 · 2026-11-12 · Las animaciones no se apagan con el movimiento reducido del sistema**
+- Decisión: el sitio deja de seguir `prefers-reduced-motion`.
+  - Se quitó la regla global que llevaba todas las animaciones y transiciones a 0 ms.
+  - `useReducedMotion` devuelve siempre falso, y la intro, el recorrido y la cámara 3D usan su movimiento normal.
+  - Quien quiera menos movimiento tiene el modo ligero (sin 3D ni video; `lessMotion()` en `lib/motion.ts`).
+  - Reemplaza la última frase de la regla 8 de CLAUDE.md.
+- Por qué: el equipo de Jacobo tiene apagados los "efectos de animación" de Windows, algo muy común, y veía todo a saltos: cortes sin fundido y cámara sin transición. Sus clientes probablemente también. Riesgo aceptado: quien activa esa opción por mareo ve movimiento; por eso se mantienen los movimientos suaves y está el modo ligero.
+
+**D-068 · 2026-11-12 · Video con inercia, mosaico de espacios y bloom al desplazarse rápido**
+- Decisión:
+  - En "Así se entra", el scroll da la meta y el video la persigue con inercia (~0,35 s), con un cuadro a la vez; la sección pasa a 620svh.
+  - El paso 5 del recorrido muestra un mosaico con todos los espacios, que entran uno tras otro.
+  - Al desplazarse rápido (rueda o salto del menú) se abre una ranura de luz cálida (bloom) proporcional a la velocidad.
+  - El plano del paso 4 se dimensiona por el alto disponible.
+- Por qué: con la rueda del mouse el scroll avanza a saltos de ~100 px y el video saltaba de la calle al lobby en un cuadro. Una sola foto no explicaba "cada espacio". Lo demás, pedidos de Jacobo.
 

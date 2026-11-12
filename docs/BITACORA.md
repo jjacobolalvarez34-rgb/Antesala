@@ -25,6 +25,23 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (2) · Revisión de Jacobo: movimiento, video, mosaico, demos y precios
+
+**Hecho**
+- Causa de "todo se ve a saltos": su Windows tiene apagados los efectos de animación y el sitio cortaba todas las animaciones (D-067). Ahora se ven siempre; el modo ligero queda para quien quiera menos movimiento.
+- "Así se entra": el video persigue el scroll con inercia; antes un paso de rueda saltaba de la calle al lobby (D-068).
+- Recorrido: el plano del paso 4 cabe entero; el paso 5 es un mosaico con todos los espacios; el 3D de fondo más tenue en los pasos 4 a 6.
+- Bloom: ranura de luz cálida al desplazarse rápido o al saltar desde el menú (los enlaces del menú ahora se deslizan).
+- Demos: banda superior con el símbolo de Antesala y "volver". Niebla Alta vuelve a sus renders y al ladrillo (las fotos de Higgsfield son de la página de Antesala); sus puntos de portada van sobre su render. Su tarjeta muestra la planta del piso 5.
+- Precios: "Recomendado para empezar".
+
+**Problemas / bloqueos**
+- Los paquetes (sobre todo Premium y Corporativo) no están definidos: se le propone a Jacobo una definición atada a lo que existe.
+- Sin acceso a Higgsfield desde Claude Code: las fotos propias de Niebla Alta y Akuare esperan a que se conecte.
+
+**Siguiente sesión**
+- Empezar por: la definición de paquetes que elija Jacobo y su prueba del scroll y del video en su laptop.
+
 ## 2026-11-12 · Bloque 9 (aprobado) y revisión de Jacobo de la web y el 3D
 
 **Hecho**
