@@ -46,6 +46,8 @@ Ruta: `content/hotels/<slug>/plans/<unit-id>.svg`
 
 **Fotos desde la escena** (D-053): `pnpm build && pnpm renders` toma fotos ilustrativas del 3D (fachada de día y de noche, un piso abierto y cada espacio con 360° de las unidades completas), las guarda en `media/renders/` y las registra en `hotel.json` (`site.exterior` y la primera foto de cada espacio). Cuando haya fotos reales se reemplazan con `fidelity: "exacta"`.
 
+**Portada con puntos** (bloque 9, D-065): `site.cover` es una lista de puntos tocables sobre la primera foto exterior (`site.exterior[0]`, `kind: "photo"`): `{"id", "label", "detail"?, "x", "y", "to", "clip"?}`. `x` e `y` van en fracción de la imagen (0 a 1, desde arriba a la izquierda). `to` es `{"level": "6"}`, `{"unit": "402"}` o `{"explorar": true}`. `clip` (opcional) es el video de transición: `{"sm": "...720.mp4", "lg"?: "...1280.mp4", "poster"?}`; las rutas son relativas a la carpeta del hotel o absolutas (`/...` o `https://...`, p. ej. R2). El validador revisa que el destino exista. En escritorio los puntos van sobre el edificio; los que no quepan en el encuadre, y todos en celular, van como botones.
+
 **Unidades tipo** (D-047): en `hotel.json`, una unidad puede ser copia de otra completa: `{"sameAs": "201", "id": "202", "name": "Estudio 202", "levelId": "2", "basePriceCOP": 260000, "view": "…", "exterior": […]}`. Hereda categoría, capacidad, camas, área, plano y espacios (con sus medios). Solo puede cambiar `id`, `name`, `levelId`, `exterior`, `view`, `viewPremiumCOP`, `basePriceCOP` y `featured`. Las ventanas y la vista no se heredan.
 
 **Extrusión a 3D** (`components/plan/planToMesh`):
@@ -59,6 +61,8 @@ Desde `site.building`:
 - `footprint`: polígono en metros.
 - `floors` y `floorHeightM`.
 - `style.cladding` (opcional): `ladrillo`, `estuco` o `concreto`. Por defecto, estuco.
+- `style.ground` (opcional, D-059): `lobby` (por defecto) o `residencial` (garajes, local y puerta pequeña).
+- `style.roof` (opcional, D-059): `terraza` (por defecto, con pérgola) o `plana` (solo antepecho y baranda).
 - Fachada realista (D-026): machones, antepechos y dinteles del revestimiento; ventanas con marco de aluminio, vidrio retranqueado e interior tenue; losas de concreto; primer piso vidriado con marquesina en la fachada principal; retranqueo con terraza, baranda y materas en el último piso; cubierta con parapeto y pérgola. Las texturas se generan en canvas, a escala real (UV en metros).
 - La fachada principal es el borde que mira a +z (la calle). Las demás salen de los otros bordes del `footprint` (selector de fachada, D-027).
 - Cada piso es un grupo separado (para resaltarlo y separarlo).

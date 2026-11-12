@@ -25,6 +25,34 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 · Bloque 9 (aprobado) y revisión de Jacobo de la web y el 3D
+
+**Hecho**
+- Página de Antesala:
+  - Scroll fluido. Se quitó el vidrio esmerilado (backdrop-filter) de las tarjetas y la barra sobre el 3D. El 3D de la portada dibuja solo cuando algo se mueve (DPR máx. 1,5). "Así se entra" mueve fotos, barra y video directo en el DOM, sin re-render de React por cuadro, y no pide un cuadro de video que ya está.
+  - El edificio ya no se reinicia al final del recorrido (en los huecos entre pasos y en el espacio final el paso volvía a 0).
+  - Barra superior sólida al bajar: los textos ya no se montan sobre el logo.
+  - Entrada "De la calle a su suite" antes del video, para que la foto no aparezca sin contexto.
+  - Tarjetas de demos: Akuare con su alzado dibujado (unidades por piso, vendidas rayadas, datos reales) y glamping con mapa de terreno y domos.
+- Bloque 9 (D-065):
+  - Portada del hotel con puntos tocables (`site.cover`) y video de transición; sin video con movimiento reducido, ahorro de datos o modo ligero.
+  - Planta del piso con disponibilidad (verde y terracota) y leyenda.
+  - Niebla Alta: las fotos de Higgsfield son la portada, el lobby, la terraza y los espacios de la Suite 402; fachada 3D en estuco color arena (renders de fachada y piso 6 regenerados).
+- 3D (D-066):
+  - Al elegir un espacio en la maqueta, los demás se hunden en el piso y solo queda ese, encuadrado a su tamaño.
+  - Barra de reserva a la derecha y selector de fachada a la izquierda en escritorio.
+  - Telón de carga sin filtros animados (fluido aunque el 3D se esté armando) y con la foto de portada detrás.
+
+**Problemas / bloqueos**
+- La carga del 3D en sí no se midió en un equipo real (aquí el WebGL es por software). Lo que se arregló es el telón trabado; si sigue lenta, medir en el equipo de Jacobo.
+- La vista 360° en vivo de la Suite 402 se ve tosca en WebGL por software; revisar en un equipo real.
+
+**Mediciones**
+- `pnpm typecheck`, `pnpm lint` y `pnpm build` (562 páginas) sin errores. 24 capturas de rutas tocadas en verde; revisadas a 1366×640 y 390×844.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo pruebe en su laptop y su celular el scroll, la carga del 3D, los puntos de la portada y la maqueta enfocada. Después, más fotos de Higgsfield para estudio y penthouse.
+
 ## 2026-11-12 · Akuare · fotos desde la escena 3D y cubierta plana
 
 **Hecho**

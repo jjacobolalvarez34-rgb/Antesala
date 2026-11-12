@@ -134,12 +134,13 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Página web como servicio para quien no la tiene; MamutHerd S.A.S. en la página de Antesala y en los docs (D-061)
 - [ ] Precio de la página web sola (por debajo del piloto con 3D)
 
-## Bloque 9 — Modo renders (propuesta D-060, pendiente de aprobación)
+## Bloque 9 — Modo renders (D-060, aprobado 2026-11-12, D-065)
 
-- [ ] Portada con imagen (render o foto) y puntos tocables (torres, zonas)
-- [ ] Video de transición al tocar un punto (con alternativa sin video y respetando movimiento reducido)
-- [ ] Planta cenital como imagen, con las unidades encima en verde o rojo según disponibilidad
-- [ ] Unir con lo que existe: unidad, 360°, "Agendar visita", panel
+- [x] Portada con imagen (render o foto) y puntos tocables (torres, zonas): `site.cover`; Niebla Alta con terraza, suites y lobby
+- [x] Video de transición al tocar un punto (con alternativa sin video y respetando movimiento reducido)
+- [x] Planta del piso con las unidades en verde o terracota según disponibilidad, con leyenda (sobre el plano vectorial; una imagen de render puede ir debajo después)
+- [x] Unir con lo que existe: los puntos llevan al piso y a la unidad; la planta usa el mismo plano y la oferta (noche, mes o venta)
+- [ ] Fotos de Higgsfield para los demás tipos (estudio completo, penthouse completo) y para Akuare (solo interiores ilustrativos, nunca la fachada real)
 - [ ] Assets pesados en R2 (videos y 360° en alta)
 - [ ] Demo de constructora con contenido ilustrativo: render propio pasado por IA para acabado fotográfico y video de vuelo generado desde una imagen (etiqueta "ilustrativa"; revisar la licencia comercial de la herramienta)
 
@@ -169,6 +170,11 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 - [x] Identidad aplicada: logo, colores, tipografías, favicon
 - [x] Web desde el boceto: intro, recorrido, así se entra (video), demos, precios, Mamut Herd, preguntas, cotización
+- [x] Revisión de Jacobo (2026-11-12): scroll fluido (sin vidrio esmerilado sobre el 3D, el 3D dibuja solo cuando se mueve, el video avanza sin pasar por React); el modelo ya no se reinicia al final del recorrido; barra sólida al bajar; entrada que explica la sección de video; tarjetas de Akuare (alzado con vendidos) y glamping (mapa de terreno)
+- [x] Telón de carga del 3D fluido (sin filtros de desenfoque animados) y con la foto de portada detrás
+- [x] Maqueta: al elegir un espacio, los demás se hunden y desaparecen (D-066)
+- [x] Barra de reserva en la esquina derecha en escritorio; selector de fachada en la izquierda (D-066)
+- [ ] Medir en el celular de Jacobo el scroll de la web y la carga del 3D después de estos cambios
 - [x] Modo cine (3D y video) y modo ligero (plano y fotos), con botón para cambiar
 - [ ] Revisar la web en celular real (sobre todo el video con el scroll en iPhone)
 - [ ] Videos en R2 cuando haya cliente (hoy en `public/`, unos 15 MB en total)

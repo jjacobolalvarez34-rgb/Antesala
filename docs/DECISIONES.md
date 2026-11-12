@@ -310,3 +310,17 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: con un piso abierto, el mapa de sombras se calcula una vez cuando termina de salir el cajón y se congela; al volver al edificio se calcula en cada cuadro. Se congela en lugar de apagar la luz para no recompilar materiales en plena transición.
 - Por qué: propuesta de Jacobo; las sombras no aportan con el piso abierto y cuestan en celular.
 
+**D-065 · 2026-11-12 · Bloque 9 aprobado: portada con puntos, video de transición y planta con disponibilidad**
+- Decisión: Jacobo aprueba D-060. Primera entrega:
+  - La portada del hotel puede llevar puntos tocables sobre la foto (`site.cover`). Al tocar uno con video, pasa el clip a pantalla completa y entra al piso o a la unidad. Sin video con movimiento reducido, ahorro de datos o modo ligero.
+  - La planta del piso pinta cada unidad según su disponibilidad (verde libre, terracota ocupada o vendida) y muestra la leyenda.
+  - En Niebla Alta, las fotos de Higgsfield pasan a ser la portada, el lobby, la terraza y los espacios de la Suite 402. La fachada 3D pasa a estuco color arena para parecerse a la foto.
+  - Quedan pendientes los assets pesados en R2 y la demo de constructora con contenido generado.
+- Por qué: la demo mostraba la foto bonita en la página de Antesala pero, al entrar, la captura del 3D. El contenido fotográfico es lo que hace que se vea vendible (D-060).
+
+**D-066 · 2026-11-12 · Espacio enfocado en la maqueta y controles en las esquinas**
+- Decisión:
+  - Al elegir un espacio en la maqueta, lo que queda fuera de su rectángulo se corta cada vez más bajo hasta hundirse en el piso, y solo queda ese espacio con su etiqueta. La cámara lo encuadra según su tamaño. Se hace en el shader (recorte por posición), porque muros y muebles son mallas unidas.
+  - En escritorio, la barra de reserva va en la esquina inferior derecha y el selector de fachada en la izquierda. En celular siguen abajo y centrados. La barra sigue siempre visible.
+- Por qué: pedidos de Jacobo. Los demás espacios distraían, y la barra centrada tapaba el edificio y los clics.
+
