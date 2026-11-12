@@ -1,0 +1,198 @@
+[
+ {
+  "hotel": "akuare",
+  "espacio": "102-alcoba-2",
+  "v": 1,
+  "job_id": "3771d3f2-8032-4db9-b4e2-7ae3f2557626",
+  "raw": ".tmp/premium/raw\\akuare--102-alcoba-2--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "lobby",
+  "v": 1,
+  "job_id": "f6222d39-2244-43b4-93c7-5643f3a82224",
+  "raw": ".tmp/premium/raw\\niebla-alta--lobby--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "fachada-dia",
+  "v": 1,
+  "job_id": "f61ac621-95d9-4776-8a5c-a13c30989668",
+  "raw": ".tmp/premium/raw\\niebla-alta--fachada-dia--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "fachada-noche",
+  "v": 1,
+  "job_id": "6885862e-a25b-40f4-93a2-c10894f24d6e",
+  "raw": ".tmp/premium/raw\\niebla-alta--fachada-noche--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "cowork",
+  "v": 1,
+  "job_id": "77c4a43e-51f4-4f06-9011-927ca3410c93",
+  "raw": ".tmp/premium/raw\\niebla-alta--cowork--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "terraza-piso-6",
+  "v": 1,
+  "job_id": "d11329f8-bd4b-45e8-9b9a-ded26f0e0ad6",
+  "raw": ".tmp/premium/raw\\niebla-alta--terraza-piso-6--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-descanso",
+  "v": 1,
+  "job_id": "5b5f9f96-1ce7-4342-90f8-4ebfe8008172",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-descanso--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-sala",
+  "v": 1,
+  "job_id": "8a13b04f-46d2-4d75-bf43-fc4bff16d0e6",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-sala--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-cocina",
+  "v": 1,
+  "job_id": "4a74c668-47ec-4454-aa90-37a9b0ea1e7d",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-cocina--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-sala",
+  "v": 2,
+  "job_id": "59e9883f-6005-442d-85e3-d6454b6346dd",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-sala--v2.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-cocina",
+  "v": 2,
+  "job_id": "bf6a470f-c1c5-4a9d-9bcd-8ee9dd8c6322",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-cocina--v2.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "201-bano",
+  "v": 1,
+  "job_id": "667cec00-b6c8-4c0d-9fbb-94fa12a4e85b",
+  "raw": ".tmp/premium/raw\\niebla-alta--201-bano--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "402-dormitorio",
+  "v": 1,
+  "job_id": "a8e8c91e-1e89-4be2-b96f-9b7024b6d0e2",
+  "raw": ".tmp/premium/raw\\niebla-alta--402-dormitorio--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "402-balcon",
+  "v": 1,
+  "job_id": "973a7ecb-f103-42fc-88c5-e7b55eb9c49a",
+  "raw": ".tmp/premium/raw\\niebla-alta--402-balcon--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "402-cocina",
+  "v": 1,
+  "job_id": "80c6f7f8-5055-4bda-b264-aedf897c3dbb",
+  "raw": ".tmp/premium/raw\\niebla-alta--402-cocina--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "402-bano",
+  "v": 1,
+  "job_id": "8476cb14-753c-443c-86f4-40a8bfe91d5d",
+  "raw": ".tmp/premium/raw\\niebla-alta--402-bano--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "601-sala",
+  "v": 1,
+  "job_id": "9530e4fa-c57d-47b3-af31-d9229b398d1e",
+  "raw": ".tmp/premium/raw\\niebla-alta--601-sala--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "601-cocina",
+  "v": 1,
+  "job_id": "254afa25-acef-456f-9e24-e96c3011491f",
+  "raw": ".tmp/premium/raw\\niebla-alta--601-cocina--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "601-dormitorio",
+  "v": 1,
+  "job_id": "c7ea67f0-6fdc-4b73-9389-bd542d0589b6",
+  "raw": ".tmp/premium/raw\\niebla-alta--601-dormitorio--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "601-bano",
+  "v": 1,
+  "job_id": "34f35406-32bd-47f8-be33-a43604d8d2a2",
+  "raw": ".tmp/premium/raw\\niebla-alta--601-bano--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-sala",
+  "v": 1,
+  "job_id": "00168aa1-7e25-4db7-aa93-abd315a6a647",
+  "raw": ".tmp/premium/raw\\akuare--101-sala--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-balcon",
+  "v": 1,
+  "job_id": "d0b1282c-4868-40e3-b6ce-81eac8c88302",
+  "raw": ".tmp/premium/raw\\akuare--101-balcon--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-cocina",
+  "v": 1,
+  "job_id": "bbd62e48-ac36-4704-a7a6-ffffcc272ab0",
+  "raw": ".tmp/premium/raw\\akuare--101-cocina--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-alcoba",
+  "v": 1,
+  "job_id": "27d34a85-d4b2-487c-8b73-179898e27fd9",
+  "raw": ".tmp/premium/raw\\akuare--101-alcoba--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-alcoba-2",
+  "v": 1,
+  "job_id": "a7505c18-70e2-43c4-ab9f-336b991881a8",
+  "raw": ".tmp/premium/raw\\akuare--101-alcoba-2--v1.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-bano",
+  "v": 1,
+  "job_id": "1a9a67d3-f9ad-4d4f-8c4a-ffc1424a5bb0",
+  "raw": ".tmp/premium/raw\\akuare--101-bano--v1.png"
+ },
+ {
+  "hotel": "niebla-alta",
+  "espacio": "402-cocina",
+  "v": 2,
+  "job_id": "047acc15-f9b2-46d1-bc21-4924b3d208f2",
+  "raw": ".tmp/premium/raw\\niebla-alta--402-cocina--v2.png"
+ },
+ {
+  "hotel": "akuare",
+  "espacio": "101-alcoba-3",
+  "v": 1,
+  "job_id": "260c4a02-408f-4249-a9f4-e9f20e063d51",
+  "raw": ".tmp/premium/raw\\akuare--101-alcoba-3--v1.png"
+ }
+]
