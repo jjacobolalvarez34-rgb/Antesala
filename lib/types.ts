@@ -33,6 +33,8 @@ export interface Media {
   hotspots?: PanoHotspot[];
   /** solo pano360: hacia dónde mira la cámara al entrar (radianes, misma convención que los hotspots) */
   yaw?: number;
+  /** nivel de la demo (D-072): "premium" = solo se ve en el nivel Premium */
+  tier?: 'premium';
 }
 
 export type SpaceType =

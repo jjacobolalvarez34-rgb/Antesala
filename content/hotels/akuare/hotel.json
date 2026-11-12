@@ -260,7 +260,8 @@
               "alt": "Cocina de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-cocina",
@@ -354,7 +355,8 @@
               "alt": "Baño de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-bano",
@@ -448,7 +450,8 @@
               "alt": "Tercera alcoba de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-alcoba-3",
@@ -542,7 +545,8 @@
               "alt": "Segunda alcoba de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-alcoba-2",
@@ -636,7 +640,8 @@
               "alt": "Sala de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-sala",
@@ -730,7 +735,8 @@
               "alt": "Alcoba principal de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-alcoba",
@@ -824,7 +830,8 @@
               "alt": "Balcón de Apartamento 101 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-101-balcon",
@@ -935,7 +942,8 @@
               "alt": "Cocina de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-cocina",
@@ -1022,7 +1030,8 @@
               "alt": "Baño de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-bano",
@@ -1109,7 +1118,8 @@
               "alt": "Segunda alcoba de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-alcoba-2",
@@ -1196,7 +1206,8 @@
               "alt": "Sala de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-sala",
@@ -1283,7 +1294,8 @@
               "alt": "Alcoba principal de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-alcoba",
@@ -1370,7 +1382,8 @@
               "alt": "Balcón de Apartamento 102 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-102-balcon",

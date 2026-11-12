@@ -8,7 +8,6 @@ import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
 import { Intro } from '@/components/producto/Intro';
 import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
-import { Pelicula } from '@/components/producto/Pelicula';
 import type { RecorridoData } from '@/components/producto/Recorrido';
 import { SavingsCalculator } from '@/components/producto/SavingsCalculator';
 import { ANTESALA } from '@/lib/antesala';
@@ -81,7 +80,7 @@ const PRICES: {
     items: ['Fotos profesionales de cada espacio', 'Video de entrada, de la calle a la habitación', 'Portada con puntos tocables', 'Todo lo de Inmersivo'],
     impl: '$25 – 45 M',
     month: '$0,9 – 1,5 M',
-    example: { label: 'Ver el ejemplo en esta página', href: '#entrar' },
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}` },
   },
 ];
 
@@ -227,7 +226,7 @@ export default async function Home() {
 
       <main id="top">
         {recorrido ? <RecorridoConAviso data={recorrido} /> : null}
-        <Pelicula />
+        {/* "Así se entra" (Pelicula) se quitó: Jacobo no le vio razón de ser (D-073). El componente sigue en el repo. */}
 
         {/* 3 · Demos */}
         <section className={`${s.blk} ${s.alt}`} id="demos">

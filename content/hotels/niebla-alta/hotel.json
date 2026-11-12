@@ -44,7 +44,8 @@
         "alt": "Fachada de Niebla Alta en una tarde de niebla (imagen ilustrativa)",
         "fidelity": "ilustrativa",
         "width": 1600,
-        "height": 893
+        "height": 893,
+        "tier": "premium"
       },
       {
         "id": "premium-fachada-noche",
@@ -53,7 +54,8 @@
         "alt": "Fachada de Niebla Alta al anochecer (imagen ilustrativa)",
         "fidelity": "ilustrativa",
         "width": 1600,
-        "height": 893
+        "height": 893,
+        "tier": "premium"
       },
       {
         "id": "render-exterior-1",
@@ -102,7 +104,8 @@
             "alt": "Lobby de Niebla Alta (imagen ilustrativa)",
             "fidelity": "ilustrativa",
             "width": 1600,
-            "height": 893
+            "height": 893,
+            "tier": "premium"
           },
           {
             "id": "pois-lobby-1",
@@ -142,7 +145,8 @@
             "alt": "Cowork de Niebla Alta (imagen ilustrativa)",
             "fidelity": "ilustrativa",
             "width": 1600,
-            "height": 893
+            "height": 893,
+            "tier": "premium"
           },
           {
             "id": "pois-cowork-1",
@@ -182,7 +186,8 @@
             "alt": "Terraza de Niebla Alta (imagen ilustrativa)",
             "fidelity": "ilustrativa",
             "width": 1600,
-            "height": 893
+            "height": 893,
+            "tier": "premium"
           },
           {
             "id": "pois-terraza-1",
@@ -427,7 +432,8 @@
               "alt": "Zona de descanso de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-201-descanso",
@@ -520,7 +526,8 @@
               "alt": "Sala de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-201-sala",
@@ -614,7 +621,8 @@
               "alt": "Cocina de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-201-cocina",
@@ -706,7 +714,8 @@
               "alt": "Baño de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-201-bano",
@@ -819,7 +828,8 @@
               "alt": "Zona de descanso de Estudio 301 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-301-descanso",
@@ -912,7 +922,8 @@
               "alt": "Sala de Estudio 301 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-301-sala",
@@ -1006,7 +1017,8 @@
               "alt": "Cocina de Estudio 301 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-301-cocina",
@@ -1098,7 +1110,8 @@
               "alt": "Baño de Estudio 301 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-301-bano",
@@ -1221,7 +1234,8 @@
               "alt": "Sala de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-402-sala",
@@ -1319,7 +1333,8 @@
               "alt": "Balcón de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-402-balcon",
@@ -1419,7 +1434,8 @@
               "alt": "Cocina de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-402-cocina",
@@ -1519,7 +1535,8 @@
               "alt": "Dormitorio de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-402-dormitorio",
@@ -1618,7 +1635,8 @@
               "alt": "Baño de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-402-bano",
@@ -1741,7 +1759,8 @@
               "alt": "Sala de Suite 502 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-502-sala",
@@ -1839,7 +1858,8 @@
               "alt": "Balcón de Suite 502 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-502-balcon",
@@ -1939,7 +1959,8 @@
               "alt": "Cocina de Suite 502 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-502-cocina",
@@ -2039,7 +2060,8 @@
               "alt": "Dormitorio de Suite 502 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-502-dormitorio",
@@ -2138,7 +2160,8 @@
               "alt": "Baño de Suite 502 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-502-bano",
@@ -2263,7 +2286,8 @@
               "alt": "Terraza de Penthouse 601 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-601-terraza",
@@ -2364,7 +2388,8 @@
               "alt": "Sala de Penthouse 601 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-601-sala",
@@ -2465,7 +2490,8 @@
               "alt": "Cocina de Penthouse 601 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-601-cocina",
@@ -2565,7 +2591,8 @@
               "alt": "Dormitorio de Penthouse 601 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-601-dormitorio",
@@ -2665,7 +2692,8 @@
               "alt": "Baño de Penthouse 601 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 893
+              "height": 893,
+              "tier": "premium"
             },
             {
               "id": "render-601-bano",

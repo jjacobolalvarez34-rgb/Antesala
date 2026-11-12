@@ -42,6 +42,7 @@ const media = z.object({
   height: z.number().int().positive().optional(),
   hotspots: z.array(panoHotspot).optional(),
   yaw: z.number().optional(),
+  tier: z.enum(['premium']).optional(),
 });
 
 const space = z.object({
