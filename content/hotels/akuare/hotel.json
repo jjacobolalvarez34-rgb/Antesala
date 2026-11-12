@@ -254,6 +254,15 @@
               ]
             },
             {
+              "id": "premium-101-cocina",
+              "kind": "photo",
+              "src": "media/premium/101-cocina.webp",
+              "alt": "Cocina de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-101-cocina",
               "kind": "photo",
               "src": "media/renders/101-cocina.jpg",
@@ -337,6 +346,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "premium-101-bano",
+              "kind": "photo",
+              "src": "media/premium/101-bano.webp",
+              "alt": "Baño de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-101-bano",
@@ -424,6 +442,15 @@
               ]
             },
             {
+              "id": "premium-101-alcoba-3",
+              "kind": "photo",
+              "src": "media/premium/101-alcoba-3.webp",
+              "alt": "Tercera alcoba de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-101-alcoba-3",
               "kind": "photo",
               "src": "media/renders/101-alcoba-3.jpg",
@@ -507,6 +534,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "premium-101-alcoba-2",
+              "kind": "photo",
+              "src": "media/premium/101-alcoba-2.webp",
+              "alt": "Segunda alcoba de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-101-alcoba-2",
@@ -594,6 +630,15 @@
               ]
             },
             {
+              "id": "premium-101-sala",
+              "kind": "photo",
+              "src": "media/premium/101-sala.webp",
+              "alt": "Sala de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-101-sala",
               "kind": "photo",
               "src": "media/renders/101-sala.jpg",
@@ -679,6 +724,15 @@
               ]
             },
             {
+              "id": "premium-101-alcoba",
+              "kind": "photo",
+              "src": "media/premium/101-alcoba.webp",
+              "alt": "Alcoba principal de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-101-alcoba",
               "kind": "photo",
               "src": "media/renders/101-alcoba.jpg",
@@ -762,6 +816,15 @@
                   "target": "alcoba"
                 }
               ]
+            },
+            {
+              "id": "premium-101-balcon",
+              "kind": "photo",
+              "src": "media/premium/101-balcon.webp",
+              "alt": "Balcón de Apartamento 101 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-101-balcon",
@@ -866,6 +929,15 @@
               ]
             },
             {
+              "id": "premium-102-cocina",
+              "kind": "photo",
+              "src": "media/premium/102-cocina.webp",
+              "alt": "Cocina de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-102-cocina",
               "kind": "photo",
               "src": "media/renders/102-cocina.jpg",
@@ -942,6 +1014,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "premium-102-bano",
+              "kind": "photo",
+              "src": "media/premium/102-bano.webp",
+              "alt": "Baño de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-102-bano",
@@ -1022,6 +1103,15 @@
               ]
             },
             {
+              "id": "premium-102-alcoba-2",
+              "kind": "photo",
+              "src": "media/premium/102-alcoba-2.webp",
+              "alt": "Segunda alcoba de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-102-alcoba-2",
               "kind": "photo",
               "src": "media/renders/102-alcoba-2.jpg",
@@ -1098,6 +1188,15 @@
                   "target": "balcon"
                 }
               ]
+            },
+            {
+              "id": "premium-102-sala",
+              "kind": "photo",
+              "src": "media/premium/102-sala.webp",
+              "alt": "Sala de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-102-sala",
@@ -1178,6 +1277,15 @@
               ]
             },
             {
+              "id": "premium-102-alcoba",
+              "kind": "photo",
+              "src": "media/premium/102-alcoba.webp",
+              "alt": "Alcoba principal de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-102-alcoba",
               "kind": "photo",
               "src": "media/renders/102-alcoba.jpg",
@@ -1254,6 +1362,15 @@
                   "target": "alcoba"
                 }
               ]
+            },
+            {
+              "id": "premium-102-balcon",
+              "kind": "photo",
+              "src": "media/premium/102-sala.webp",
+              "alt": "Balcón de Apartamento 102 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-102-balcon",

@@ -144,8 +144,10 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Plan del modo Premium: `docs/PLAN-PREMIUM.md` (inventario, prompts, dónde queda cada archivo, orden)
 - [x] Higgsfield conectado (cuenta Prodigia, Ultra). Prueba `402-sala` hecha y guardada en `media/premium/` (el MCP cobra créditos; el lote va por la web)
 - [x] Kit para la web de Higgsfield: 29 referencias y prompts en `.tmp/kit-premium/` (lista en `docs/identidad/premium-kit.json`)
-- [ ] Jacobo: generar el kit en la web de Higgsfield (Nano Banana Pro, 2K, 16:9)
-- [ ] Traer los resultados por el MCP, pasarlos a WebP y registrarlos (`media/premium/`, `premium-higgsfield.json`)
+- [x] Jacobo generó el kit (29 imágenes, tabla en `docs/identidad/premium-finales.md`)
+- [x] Fotos traídas, pasadas a WebP y registradas como primera foto de cada espacio (D-071)
+- [x] Fotos que se pueden mirar (arrastrar o inclinar el celular), sin ser 360°
+- [ ] Selector de nivel "Ver como: Esencial · Inmersivo · Premium" (hoy las fotos premium se ven en todos)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield
 - [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes
 - [ ] Modo Premium para Akuare: fachada desde el render del 3D (catastro) con fotos propias de Jacobo desde la calle como referencia (no Google Maps ni Street View: sus términos lo prohíben); interiores ilustrativos

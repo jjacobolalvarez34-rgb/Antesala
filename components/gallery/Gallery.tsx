@@ -6,6 +6,8 @@ import { ChevronLeft, ChevronRight, Expand, Minus, Plus, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
+
+import { LookImage } from './LookImage';
 import type { Fidelity } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -56,16 +58,15 @@ export function Gallery({ items, title, className }: { items: GalleryItem[]; tit
   return (
     <section aria-label={`Imágenes de ${title}`} className={className}>
       <div className="relative overflow-hidden bg-muted sm:rounded-2xl md:rounded-3xl" style={{ aspectRatio: ratio }}>
-        <img
-            key={current.id}
-            src={current.url}
-            alt={current.alt}
-            width={current.width}
-            height={current.height}
-            decoding="async"
-            fetchPriority={index === 0 ? 'high' : undefined}
-            className="absolute inset-0 size-full animate-in object-cover duration-500 ease-out fade-in zoom-in-[1.015]"
-          />
+        {/* la foto se puede mirar: arrastrar o inclinar el celular mueve la cámara */}
+        <LookImage
+          key={current.id}
+          src={current.url}
+          alt={current.alt}
+          width={current.width}
+          height={current.height}
+          priority={index === 0}
+        />
         <FidelityBadge fidelity={current.fidelity} className="absolute top-3 left-3" />
         <button
           type="button"

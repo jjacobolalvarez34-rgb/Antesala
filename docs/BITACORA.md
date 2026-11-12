@@ -25,6 +25,15 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (5) · Fotos Premium en las demos y fotos que se pueden mirar
+
+**Hecho**
+- 30 fotos de Higgsfield en WebP (18 de Niebla Alta y 12 de Akuare), registradas como primera foto de cada espacio, de las zonas comunes y de la portada de Niebla Alta. Puntos de la portada recalibrados.
+- Galería: la foto de cada espacio se mira arrastrando o inclinando el celular (`LookImage`), con un paneo de presentación al abrir (D-071).
+
+**Siguiente sesión**
+- Empezar por: el selector de nivel; los videos de entrada desde las fotos; la fachada de Akuare con las fotos de Jacobo.
+
 ## 2026-11-12 (4) · Caída en "Así se entra", sin bloom y animación de la reserva
 
 **Hecho**

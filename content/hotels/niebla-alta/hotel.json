@@ -38,6 +38,24 @@
     },
     "exterior": [
       {
+        "id": "premium-fachada-dia",
+        "kind": "photo",
+        "src": "media/premium/fachada-dia.webp",
+        "alt": "Fachada de Niebla Alta en una tarde de niebla (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 893
+      },
+      {
+        "id": "premium-fachada-noche",
+        "kind": "photo",
+        "src": "media/premium/fachada-noche.webp",
+        "alt": "Fachada de Niebla Alta al anochecer (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 893
+      },
+      {
         "id": "render-exterior-1",
         "kind": "photo",
         "src": "media/renders/fachada-dia.jpg",
@@ -78,6 +96,15 @@
         ],
         "media": [
           {
+            "id": "premium-lobby",
+            "kind": "photo",
+            "src": "media/premium/lobby.webp",
+            "alt": "Lobby de Niebla Alta (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 893
+          },
+          {
             "id": "pois-lobby-1",
             "kind": "photo",
             "src": "media/pois/lobby-amplia.svg",
@@ -109,6 +136,15 @@
         ],
         "media": [
           {
+            "id": "premium-cowork",
+            "kind": "photo",
+            "src": "media/premium/cowork.webp",
+            "alt": "Cowork de Niebla Alta (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 893
+          },
+          {
             "id": "pois-cowork-1",
             "kind": "photo",
             "src": "media/pois/cowork-amplia.svg",
@@ -139,6 +175,15 @@
           4
         ],
         "media": [
+          {
+            "id": "premium-terraza",
+            "kind": "photo",
+            "src": "media/premium/terraza-piso-6.webp",
+            "alt": "Terraza de Niebla Alta (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1600,
+            "height": 893
+          },
           {
             "id": "pois-terraza-1",
             "kind": "photo",
@@ -197,8 +242,8 @@
         "id": "terraza",
         "label": "La terraza",
         "detail": "Piso 6 · penthouse y terraza común",
-        "x": 0.484,
-        "y": 0.215,
+        "x": 0.506,
+        "y": 0.105,
         "to": {
           "level": "6"
         }
@@ -207,7 +252,7 @@
         "id": "suites",
         "label": "Las suites",
         "detail": "Suite 402, con balcón",
-        "x": 0.54,
+        "x": 0.544,
         "y": 0.49,
         "to": {
           "unit": "402"
@@ -218,7 +263,7 @@
         "label": "El lobby",
         "detail": "Piso 1 · lobby y cowork",
         "x": 0.445,
-        "y": 0.735,
+        "y": 0.775,
         "to": {
           "level": "1"
         }
@@ -376,6 +421,15 @@
               ]
             },
             {
+              "id": "premium-201-descanso",
+              "kind": "photo",
+              "src": "media/premium/201-descanso.webp",
+              "alt": "Zona de descanso de Estudio 201 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-201-descanso",
               "kind": "photo",
               "src": "media/renders/201-descanso.jpg",
@@ -458,6 +512,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "premium-201-sala",
+              "kind": "photo",
+              "src": "media/premium/201-sala.webp",
+              "alt": "Sala de Estudio 201 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-201-sala",
@@ -545,6 +608,15 @@
               ]
             },
             {
+              "id": "premium-201-cocina",
+              "kind": "photo",
+              "src": "media/premium/201-cocina.webp",
+              "alt": "Cocina de Estudio 201 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-201-cocina",
               "kind": "photo",
               "src": "media/renders/201-cocina.jpg",
@@ -626,6 +698,15 @@
                   "target": "cocina"
                 }
               ]
+            },
+            {
+              "id": "premium-201-bano",
+              "kind": "photo",
+              "src": "media/premium/201-bano.webp",
+              "alt": "Baño de Estudio 201 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-201-bano",
@@ -732,6 +813,15 @@
               ]
             },
             {
+              "id": "premium-301-descanso",
+              "kind": "photo",
+              "src": "media/premium/201-descanso.webp",
+              "alt": "Zona de descanso de Estudio 301 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-301-descanso",
               "kind": "photo",
               "src": "media/renders/301-descanso.jpg",
@@ -814,6 +904,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "premium-301-sala",
+              "kind": "photo",
+              "src": "media/premium/201-sala.webp",
+              "alt": "Sala de Estudio 301 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-301-sala",
@@ -901,6 +1000,15 @@
               ]
             },
             {
+              "id": "premium-301-cocina",
+              "kind": "photo",
+              "src": "media/premium/201-cocina.webp",
+              "alt": "Cocina de Estudio 301 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-301-cocina",
               "kind": "photo",
               "src": "media/renders/301-cocina.jpg",
@@ -982,6 +1090,15 @@
                   "target": "cocina"
                 }
               ]
+            },
+            {
+              "id": "premium-301-bano",
+              "kind": "photo",
+              "src": "media/premium/201-bano.webp",
+              "alt": "Baño de Estudio 301 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-301-bano",
@@ -1098,6 +1215,15 @@
               ]
             },
             {
+              "id": "premium-402-sala",
+              "kind": "photo",
+              "src": "media/premium/402-sala.webp",
+              "alt": "Sala de Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-402-sala",
               "kind": "photo",
               "src": "media/renders/402-sala.jpg",
@@ -1185,6 +1311,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "premium-402-balcon",
+              "kind": "photo",
+              "src": "media/premium/402-balcon.webp",
+              "alt": "Balcón de Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-402-balcon",
@@ -1278,6 +1413,15 @@
               ]
             },
             {
+              "id": "premium-402-cocina",
+              "kind": "photo",
+              "src": "media/premium/402-cocina.webp",
+              "alt": "Cocina de Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-402-cocina",
               "kind": "photo",
               "src": "media/renders/402-cocina.jpg",
@@ -1369,6 +1513,15 @@
               ]
             },
             {
+              "id": "premium-402-dormitorio",
+              "kind": "photo",
+              "src": "media/premium/402-dormitorio.webp",
+              "alt": "Dormitorio de Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-402-dormitorio",
               "kind": "photo",
               "src": "media/renders/402-dormitorio.jpg",
@@ -1457,6 +1610,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "premium-402-bano",
+              "kind": "photo",
+              "src": "media/premium/402-bano.webp",
+              "alt": "Baño de Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-402-bano",
@@ -1573,6 +1735,15 @@
               ]
             },
             {
+              "id": "premium-502-sala",
+              "kind": "photo",
+              "src": "media/premium/402-sala.webp",
+              "alt": "Sala de Suite 502 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-502-sala",
               "kind": "photo",
               "src": "media/renders/502-sala.jpg",
@@ -1660,6 +1831,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "premium-502-balcon",
+              "kind": "photo",
+              "src": "media/premium/402-balcon.webp",
+              "alt": "Balcón de Suite 502 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-502-balcon",
@@ -1753,6 +1933,15 @@
               ]
             },
             {
+              "id": "premium-502-cocina",
+              "kind": "photo",
+              "src": "media/premium/402-cocina.webp",
+              "alt": "Cocina de Suite 502 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-502-cocina",
               "kind": "photo",
               "src": "media/renders/502-cocina.jpg",
@@ -1844,6 +2033,15 @@
               ]
             },
             {
+              "id": "premium-502-dormitorio",
+              "kind": "photo",
+              "src": "media/premium/402-dormitorio.webp",
+              "alt": "Dormitorio de Suite 502 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-502-dormitorio",
               "kind": "photo",
               "src": "media/renders/502-dormitorio.jpg",
@@ -1932,6 +2130,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "premium-502-bano",
+              "kind": "photo",
+              "src": "media/premium/402-bano.webp",
+              "alt": "Baño de Suite 502 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-502-bano",
@@ -2050,6 +2257,15 @@
               ]
             },
             {
+              "id": "premium-601-terraza",
+              "kind": "photo",
+              "src": "media/premium/terraza-piso-6.webp",
+              "alt": "Terraza de Penthouse 601 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-601-terraza",
               "kind": "photo",
               "src": "media/renders/601-terraza.jpg",
@@ -2140,6 +2356,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "premium-601-sala",
+              "kind": "photo",
+              "src": "media/premium/601-sala.webp",
+              "alt": "Sala de Penthouse 601 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-601-sala",
@@ -2234,6 +2459,15 @@
               ]
             },
             {
+              "id": "premium-601-cocina",
+              "kind": "photo",
+              "src": "media/premium/601-cocina.webp",
+              "alt": "Cocina de Penthouse 601 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-601-cocina",
               "kind": "photo",
               "src": "media/renders/601-cocina.jpg",
@@ -2325,6 +2559,15 @@
               ]
             },
             {
+              "id": "premium-601-dormitorio",
+              "kind": "photo",
+              "src": "media/premium/601-dormitorio.webp",
+              "alt": "Dormitorio de Penthouse 601 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
+            },
+            {
               "id": "render-601-dormitorio",
               "kind": "photo",
               "src": "media/renders/601-dormitorio.jpg",
@@ -2414,6 +2657,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "premium-601-bano",
+              "kind": "photo",
+              "src": "media/premium/601-bano.webp",
+              "alt": "Baño de Penthouse 601 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 893
             },
             {
               "id": "render-601-bano",

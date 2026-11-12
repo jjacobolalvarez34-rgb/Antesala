@@ -357,3 +357,11 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Todo lo aprobado se guarda en el repo (WebP en `media/premium/`) con su registro, para no depender de Higgsfield.
 - Por qué: por el MCP cada imagen cuesta unos 2 créditos y cada video unos 12,5; el ilimitado del plan Ultra no aplica por ahí. El plan completo serían unos 150 créditos.
 
+**D-071 · 2026-11-12 · Fotos Premium en las demos y fotos que se pueden mirar**
+- Decisión:
+  - Las 30 fotos generadas con Higgsfield (desde los renders del propio 3D) quedan como **primera foto** de cada espacio, de las zonas comunes y, en Niebla Alta, de la portada. Los puntos de la portada se recalibraron sobre la foto nueva.
+  - La foto de cada espacio se puede **mirar**: es un poco más grande que el marco y se mueve arrastrando o inclinando el celular, con perspectiva e inercia. Al abrir se mueve sola un momento. No es un 360° (`components/gallery/LookImage.tsx`).
+  - Akuare: solo interiores. La fachada espera las fotos de Jacobo. Su balcón del 102 usa la sala vista desde el balcón.
+  - El selector "Ver como: Esencial · Inmersivo · Premium" queda pendiente: por ahora las fotos premium se ven en todos los niveles.
+- Por qué: pedido de Jacobo. Las fotos coinciden con la maqueta y cambian por completo cómo se ve la demo; "mover la cámara" sin dar la vuelta completa basta para la sensación de estar ahí.
+
