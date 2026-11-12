@@ -141,6 +141,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Planta del piso con las unidades en verde o terracota según disponibilidad, con leyenda (sobre el plano vectorial; una imagen de render puede ir debajo después)
 - [x] Unir con lo que existe: los puntos llevan al piso y a la unidad; la planta usa el mismo plano y la oferta (noche, mes o venta)
 - [ ] Contenido fotográfico propio para Niebla Alta (las fotos de Higgsfield actuales son de la página de Antesala) y para Akuare (solo interiores ilustrativos, nunca la fachada real); requiere conectar Higgsfield
+- [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes
+- [ ] Modo Premium para Akuare: fachada desde el render del 3D (catastro) con fotos propias de Jacobo desde la calle como referencia (no Google Maps ni Street View: sus términos lo prohíben); interiores ilustrativos
+- [ ] Jacobo: tomar fotos de la fachada de Akuare desde la calle (de día, de frente y en diagonal) para usarlas de referencia
 - [ ] Assets pesados en R2 (videos y 360° en alta)
 - [ ] Demo de constructora con contenido ilustrativo: render propio pasado por IA para acabado fotográfico y video de vuelo generado desde una imagen (etiqueta "ilustrativa"; revisar la licencia comercial de la herramienta)
 

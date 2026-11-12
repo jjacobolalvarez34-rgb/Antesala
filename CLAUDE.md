@@ -17,6 +17,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 | Planos SVG, edificio, imágenes, 360°, pipeline de assets | `docs/CONTENIDO.md` |
 | Orden de trabajo y criterios de cada bloque | `docs/PLAN.md` |
 | Por qué se eligió algo | `docs/DECISIONES.md` |
+| Resumen de todo para decidir (estado, páginas, comercial) | `docs/ESTADO.md` |
 
 ## Al terminar cada sesión (obligatorio)
 
@@ -24,6 +25,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 2. Agrega una entrada al **inicio** de `docs/BITACORA.md` con la plantilla de ese archivo.
 3. Si se tomó una decisión de diseño o arquitectura, regístrala en `docs/DECISIONES.md`.
 4. Si cambió algo estructural (tipos, rutas, convenciones), actualiza el doc correspondiente en el mismo commit.
+5. Actualiza `docs/ESTADO.md` (el resumen para tomar decisiones que Jacobo pasa a la conversación de estrategia): qué cambió en las páginas, decisiones comerciales nuevas y decisiones abiertas.
 
 ## Qué estamos construyendo
 
