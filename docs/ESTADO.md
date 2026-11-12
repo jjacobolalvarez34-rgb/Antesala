@@ -51,9 +51,7 @@ Es la página principal (`/`). Le habla de "usted" al dueño del hotel. Tiene la
 11. **Cotización.** Formulario sin servidor que arma el mensaje y lo abre en WhatsApp o en el correo, o lo copia.
 12. **Pie.**
 
-**Efectos:**
-- Al bajar rápido, o al saltar desde el menú, se abre una "ranura de luz" cálida (bloom).
-- Las secciones aparecen con un fundido al entrar a la pantalla.
+**Efectos:** las secciones aparecen con un fundido al entrar a la pantalla. En el recorrido, el mosaico de espacios entra foto por foto y la tarjeta de reserva aparece renglón por renglón.
 
 **Dos modos:**
 - **Cine** (por defecto): 3D y video.

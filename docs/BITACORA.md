@@ -25,6 +25,19 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (4) · Caída en "Así se entra", sin bloom y animación de la reserva
+
+**Hecho**
+- **Caída de la página** ("This page couldn't load") al llegar al video: la inercia recibía un tiempo negativo entre cuadros, se pasaba del inicio y pedía el capítulo -1. Ahora los valores están acotados, solo hay dos videos montados (el actual y el siguiente), se usa 720 salvo en pantallas grandes con memoria y las búsquedas se limitan a unas 25 por segundo. Se reprodujo y verificó con el Chrome instalado (con H.264), subiendo y bajando con la rueda: sin errores, 2 videos.
+- Bloom quitado (a Jacobo no le gustó).
+- Paso 5 → 6: el mosaico sale recogiéndose en orden inverso; la tarjeta de reserva sube, la recorre una línea de luz, los renglones entran en orden, el total se enciende y el botón brilla una vez.
+
+**Mediciones**
+- Prueba de estrés de la película (`.tmp/check/check9.spec.ts`, canal chrome): 0 errores; heap de unos 8 MB.
+
+**Siguiente sesión**
+- Empezar por: traer lo que Jacobo genere con el kit de Higgsfield.
+
 ## 2026-11-12 (3) · Modo Premium: plan, prueba con Higgsfield y kit
 
 **Hecho**

@@ -336,7 +336,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión:
   - En "Así se entra", el scroll da la meta y el video la persigue con inercia (~0,35 s), con un cuadro a la vez; la sección pasa a 620svh.
   - El paso 5 del recorrido muestra un mosaico con todos los espacios, que entran uno tras otro.
-  - Al desplazarse rápido (rueda o salto del menú) se abre una ranura de luz cálida (bloom) proporcional a la velocidad.
+  - ~~Al desplazarse rápido se abre una ranura de luz cálida (bloom).~~ Quitado el mismo día: a Jacobo no le gustó.
   - El plano del paso 4 se dimensiona por el alto disponible.
 - Por qué: con la rueda del mouse el scroll avanza a saltos de ~100 px y el video saltaba de la calle al lobby en un cuadro. Una sola foto no explicaba "cada espacio". Lo demás, pedidos de Jacobo.
 
