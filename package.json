@@ -16,6 +16,7 @@
     "shots": "playwright test",
     "assets": "echo \"pipeline de assets: llega en el bloque 5\"",
     "placeholders": "node pipeline/placeholders.mjs",
+    "estado": "node pipeline/estado-pdf.mjs",
     "budget": "node tests/budget.mjs",
     "renders": "playwright test -c pipeline/renders.config.ts renders.spec",
     "producto": "playwright test -c pipeline/renders.config.ts producto.spec",

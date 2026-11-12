@@ -25,6 +25,21 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (6) · Clics en el piso abierto, luz al pasar el mouse, rumbo del 3D realista y documento con capturas
+
+**Hecho**
+- **Clics en las habitaciones del piso abierto:** el raycast de la planta pasaba de `() => null` a `undefined` y no volvía al predeterminado; ahora se pone explícito. Verificado: pasar el mouse muestra "Estudio 203" y el clic entra a la unidad 203.
+- Se borra la etiqueta vieja de la fachada al cambiar de etapa (salía "Suite 404" sobre el piso 2).
+- Luz cálida solo sobre la habitación bajo el mouse (malla con la forma exacta de su piso, con fundido).
+- El enlace "Antesala" de la banda de demo funciona sobre la escena 3D.
+- Medios marcados por nivel (`tier: "premium"`, D-072).
+- Fuera "Así se entra" (D-073); "Ver ejemplo" de Premium lleva a la portada de Niebla Alta.
+- Rumbo del 3D realista (D-074): luz horneada en Blender, manejado con el MCP `/use-blender` de Higgsfield (local y gratis). Plan en `docs/PLAN-REALISTA.md`.
+- `docs/ESTADO.md` al día y en PDF con 15 capturas: `docs/estado/Antesala-estado.pdf` (`pnpm estado`). Las capturas se rehacen con `.tmp/check/capturas.spec.ts`; pasarlo a `pipeline/` si se usa seguido.
+
+**Siguiente sesión**
+- Empezar por: lo que Jacobo decida con la conversación de estrategia. Si sigue el 3D realista: instalar Blender en D: y el MCP `/use-blender`, y hacer la prueba con la Suite 402.
+
 ## 2026-11-12 (5) · Fotos Premium en las demos y fotos que se pueden mirar
 
 **Hecho**

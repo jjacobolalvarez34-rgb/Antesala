@@ -365,3 +365,15 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - El selector "Ver como: Esencial · Inmersivo · Premium" queda pendiente: por ahora las fotos premium se ven en todos los niveles.
 - Por qué: pedido de Jacobo. Las fotos coinciden con la maqueta y cambian por completo cómo se ve la demo; "mover la cámara" sin dar la vuelta completa basta para la sensación de estar ahí.
 
+**D-072 · 2026-11-12 · Medios por nivel (`tier: "premium"`)**
+- Decisión: `Media.tier?: "premium"` marca los medios que solo se ven en el nivel Premium. Las fotos de Higgsfield ya están marcadas. El selector de nivel queda para cuando exista el 3D realista (D-074); mientras tanto las fotos se ven en todos los niveles.
+- Por qué: un selector con dos niveles casi iguales no explica la diferencia de precio.
+
+**D-073 · 2026-11-12 · Fuera "Así se entra" de la página de Antesala**
+- Decisión: se quita la sección de video con scroll. El componente queda en el repo (`components/producto/Pelicula.tsx`) por si se reutiliza. "Ver ejemplo" de Premium apunta a la portada de Niebla Alta.
+- Por qué: Jacobo no le vio razón de ser; era la sección más pesada y la que más fallaba.
+
+**D-074 · 2026-11-12 · El nivel Premium es un 3D realista con luz horneada en Blender**
+- Decisión: el realismo se logra en el mismo 3D interactivo, sin cambiar entre 3D y foto: materiales reales y luz de Cycles horneada en texturas (GLB), con Blender local manejado por el MCP `/use-blender` de Higgsfield. También da los 360° fotográficos. Plan: `docs/PLAN-REALISTA.md`.
+- Por qué: Jacobo: "si el realista no sirve, no hay producto: no podemos vender un plan que no existe". Las fotos encima del 3D se descartaron porque el cambio entre uno y otro se ve feo. Los splats y el 3D desde una imagen no dejan abrir pisos.
+

@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-12
+**Actualizado:** 2026-11-12 (noche)
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---
@@ -37,19 +37,18 @@ Es la página principal (`/`). Le habla de "usted" al dueño del hotel. Tiene la
    - 05 Cada espacio: mosaico con dormitorio, baño, sala, balcón y cocina.
    - 06 La reserva: tarjeta con tarifa base, extra por piso alto y botón (en la demo abre un aviso de "esto es una demo").
    - Cada paso dice "El huésped ve" y "Su hotel resuelve".
-4. **"Así se entra: de la calle a su suite".** Video que avanza con el scroll en cuatro capítulos (la calle, el lobby, la puerta, la suite) y persigue el scroll con inercia. En modo ligero son fotos con acercamiento lento y trazos de plano.
-5. **Demos: "Pruébelo usted".** Cuatro tarjetas:
+4. **Demos: "Pruébelo usted".** Cuatro tarjetas:
    - **Niebla Alta** (hotel ficticio): su planta del piso 5 con habitaciones libres y ocupadas.
    - **Akuare** (edificio real de Suba, en venta): su fachada dibujada con los apartamentos vendidos rayados.
    - **Glamping** "Próximamente": mapa de terreno con domos.
    - **"Su hotel aquí"**, que lleva a cotizar.
-6. **Para su hotel: "Lo que una galería no alcanza a explicar".** Tres beneficios (más reserva directa, categorías que se entienden, la unidad exacta), el bloque "¿Su hotel no tiene página web? Se la hacemos" y una calculadora de comisión ahorrada.
-7. **Cómo trabajamos: "De su edificio a su recorrido".** Cinco pasos: diagnóstico, captura, producción, revisión y publicación, mantenimiento. También la lista de lo que necesitamos del hotel.
-8. **Precios.** Ver la sección 5.
-9. **Mamut Herd: "Hecho por Mamut Herd".** Quién lo hace (Jacobo López, Bogotá).
-10. **Preguntas frecuentes.**
-11. **Cotización.** Formulario sin servidor que arma el mensaje y lo abre en WhatsApp o en el correo, o lo copia.
-12. **Pie.**
+5. **Para su hotel: "Lo que una galería no alcanza a explicar".** Tres beneficios (más reserva directa, categorías que se entienden, la unidad exacta), el bloque "¿Su hotel no tiene página web? Se la hacemos" y una calculadora de comisión ahorrada.
+6. **Cómo trabajamos: "De su edificio a su recorrido".** Cinco pasos: diagnóstico, captura, producción, revisión y publicación, mantenimiento. También la lista de lo que necesitamos del hotel.
+7. **Precios.** Ver la sección 5.
+8. **Mamut Herd: "Hecho por Mamut Herd".** Quién lo hace (Jacobo López, Bogotá).
+9. **Preguntas frecuentes.**
+10. **Cotización.** Formulario sin servidor que arma el mensaje y lo abre en WhatsApp o en el correo, o lo copia.
+11. **Pie.**
 
 **Efectos:** las secciones aparecen con un fundido al entrar a la pantalla. En el recorrido, el mosaico de espacios entra foto por foto y la tarjeta de reserva aparece renglón por renglón.
 
@@ -59,7 +58,7 @@ Es la página principal (`/`). Le habla de "usted" al dueño del hotel. Tiene la
 
 El modo ligero se activa solo con datos ahorrados, conexión 2G o 3G o celulares con poca memoria, y se puede cambiar con el botón.
 
-**Las fotos y videos de Higgsfield son solo de esta página**, como ejemplo de producción visual. No son de Niebla Alta.
+**Las fotos de Higgsfield de esta página** (las de la Suite 502 en el recorrido) son ejemplos de producción visual. La sección de video "Así se entra" se quitó (D-073).
 
 ---
 
@@ -71,11 +70,11 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 | Página | Dirección | Qué contiene |
 |---|---|---|
-| Portada | `/h/<hotel>` | Hace de **sitio web completo**: foto o render de portada con **puntos tocables** (terraza, suites, lobby) que llevan al piso o a la unidad; presentación y datos clave; "Elige tu habitación viéndola"; habitaciones por categoría con precio; zonas comunes y servicios; ubicación y políticas; preguntas; reserva directa por WhatsApp. |
+| Portada | `/h/<hotel>` | Hace de **sitio web completo**: foto de portada (en Niebla Alta, la fachada fotográfica hecha con Higgsfield desde su 3D) con **puntos tocables** (terraza, suites, lobby) que llevan al piso o a la unidad; presentación y datos clave; "Elige tu habitación viéndola"; habitaciones por categoría con precio; zonas comunes y servicios; ubicación y políticas; preguntas; reserva directa por WhatsApp. |
 | Edificio | `/h/<hotel>/explorar` | El edificio en 3D con su barrio, día y noche, cuatro fachadas, selector de pisos y una guía de 3 pasos para quien entra por primera vez. Mientras carga, un telón con el nombre del hotel. |
-| Piso | `/h/<hotel>/piso/<n>` | El piso sale del edificio como un cajón y se ve la planta amoblada. Se toca cualquier habitación: brilla un momento y entra. Sin 3D, la planta en 2D con cada unidad **en verde (libre) o terracota (ocupada o vendida)**, con leyenda. |
+| Piso | `/h/<hotel>/piso/<n>` | El piso sale del edificio como un cajón y se ve la planta amoblada. Al pasar el mouse, **una luz cálida se enciende solo sobre esa habitación**, con su nombre y precio; al tocarla brilla un momento y entra. Sin 3D, la planta en 2D con cada unidad **en verde (libre) o terracota (ocupada o vendida)**, con leyenda. |
 | Unidad | `/h/<hotel>/unidad/<id>` | La maqueta de la unidad amoblada y sin techo, su ficha (área, capacidad, precio), "Elige tu unidad exacta" (la misma unidad en otros pisos, con el extra por vista) y "Ver la vista desde la ventana". |
-| Espacio | `/h/<hotel>/unidad/<id>/<espacio>` | El espacio en 360° o en maqueta. En maqueta, **los demás espacios se hunden en el piso** y solo queda el elegido. |
+| Espacio | `/h/<hotel>/unidad/<id>/<espacio>` | La **foto del espacio se puede mirar**: arrastrar o inclinar el celular mueve la cámara (no es 360°). Además, el 360° o la maqueta. En maqueta, **los demás espacios se hunden en el piso** y solo queda el elegido. |
 | Lista | `/h/<hotel>/lista` | Todo sin 3D: pisos, unidades, planos y fotos. Es el respaldo para celulares sin 3D. |
 | Comparar | `/h/<hotel>/comparar` | Las categorías lado a lado. |
 | Panel | `/h/<hotel>/panel` | Métricas **simuladas** para el gerente: visitas, unidades más vistas, clics a reservar y comisión ahorrada. |
@@ -83,8 +82,8 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 **La barra de reserva** siempre está visible. En celular va abajo y centrada; en computador, en la esquina inferior derecha. Dice "Reservar" o "Agendar visita" según el tipo de oferta (noche, mes o venta). En una unidad ocupada ofrece la alternativa libre más parecida.
 
 **Las dos demos:**
-- **Niebla Alta.** Apartahotel ficticio en Chapinero Alto: 6 pisos, 21 unidades (estudios, suites con balcón y un penthouse), lobby, cowork y terraza. Edificio de ladrillo hecho por código. Fotos ilustrativas sacadas del propio 3D. Algunas unidades salen ocupadas a propósito.
-- **Akuare.** Edificio real en Suba Salitre, armado con datos públicos del catastro de Bogotá y OpenStreetMap: dos torres de 5 pisos y 35 apartamentos en venta (12 vendidos). El primer piso es residencial (garajes, local y puerta pequeña), como en la fachada real, con cubierta plana. Interiores ilustrativos. Lleva la nota "Demostración no oficial".
+- **Niebla Alta.** Apartahotel ficticio en Chapinero Alto: 6 pisos, 21 unidades (estudios, suites con balcón y un penthouse), lobby, cowork y terraza. Edificio de ladrillo hecho por código. **Fotos de nivel profesional** de cada espacio, el lobby, el cowork, la terraza y la fachada, hechas con Higgsfield desde los renders de su propio 3D (coinciden con la maqueta). Algunas unidades salen ocupadas a propósito.
+- **Akuare.** Edificio real en Suba Salitre, armado con datos públicos del catastro de Bogotá y OpenStreetMap: dos torres de 5 pisos y 35 apartamentos en venta (12 vendidos). El primer piso es residencial (garajes, local y puerta pequeña), como en la fachada real, con cubierta plana. Interiores con fotos de Higgsfield desde su 3D; la fachada sigue siendo el render, a la espera de fotos de Jacobo desde la calle. Lleva la nota "Demostración no oficial".
 
 ---
 
@@ -106,7 +105,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 |---|---|---|---|---|
 | **Esencial** | Fotos y 360° de cada espacio, botón de reserva o WhatsApp. Sin 3D. | Lista de Niebla Alta | $5 – 9 M | $250 – 400 mil |
 | **Inmersivo** (recomendado para empezar) | Edificio 3D con su barrio, pisos y habitaciones que se tocan, planos y maqueta amoblada. Todo Esencial. | Niebla Alta en 3D | $12 – 22 M | $450 – 850 mil |
-| **Premium** | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos tocables. Todo Inmersivo. | "Así se entra", en la página de Antesala | $25 – 45 M | $0,9 – 1,5 M |
+| **Premium** | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos tocables. Todo Inmersivo. | Portada de Niebla Alta (hoy fotos; falta el 3D realista) | $25 – 45 M | $0,9 – 1,5 M |
 | **A la medida** | Varias sedes o cadenas | — | Se cotiza | Se cotiza |
 
 - **Piloto sugerido:** $12 – 15 M con alcance limitado.
@@ -132,13 +131,16 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 ## 6. Qué está en curso
 
-- **Modo Premium con Higgsfield.** Se conecta por MCP con la cuenta de **Prodigia** (plan Ultra). La propuesta es que **el mismo hotel se vea en los tres niveles**, con un selector "Ver como: Esencial · Inmersivo · Premium":
-  - Esencial: las habitaciones en 360°.
-  - Inmersivo: el 3D.
-  - Premium: los renders del propio 3D pasados por Higgsfield para que parezcan fotografía profesional, más videos de entrada hechos desde esas imágenes. Así lo que se ve en Premium coincide con el 3D.
-- **Plan detallado:** `docs/PLAN-PREMIUM.md`. Niebla Alta: unas 20 imágenes y 4 videos. Akuare: unas 17 imágenes y 2 videos. Primero se prueba una sola imagen (la sala de la 402) para calibrar, y todo lo generado se guarda en el repo para no depender de Higgsfield.
-- **Cómo se genera (D-070):** por la conexión directa (MCP) Higgsfield cobra créditos (unos 2 por imagen y 12,5 por video), así que el lote se hace en la web de Higgsfield, donde el plan Ultra es ilimitado, con un kit de 29 referencias y prompts. La prueba (sala de la Suite 402) ya está hecha y conserva la distribución del 3D.
-- **Lo mismo para Akuare.** La fachada sale del render del 3D (datos del catastro), con fotos tomadas por Jacobo en la calle como referencia. Las imágenes de Google Maps o Street View no se usan, porque sus términos lo prohíben. Los interiores son ilustrativos.
+- **Hecho hoy:**
+  - 30 fotos de nivel profesional generadas en la web de Higgsfield, sin costo con el plan Ultra, desde los renders del 3D.
+  - Están en la portada de Niebla Alta y en cada espacio, y se pueden "mirar" moviendo la cámara.
+  - Por la conexión directa desde Claude (MCP), Higgsfield cobra créditos (unos 2 por imagen y 12,5 por video); por eso las imágenes se generan en la web (D-070).
+- **Lo que Jacobo pide para Premium y aún no existe:** que **el edificio 3D se vea realista**, sin cambiar entre 3D y foto (D-074). El camino elegido:
+  - **Blender** en el PC (gratis), manejado desde Claude Code con el conector "use Blender" de Higgsfield.
+  - Materiales reales y luz de cielo **horneada** en el modelo: el mismo 3D interactivo se ve como render. Además da **360° fotográficos** de cada espacio.
+  - Prueba primero con la Suite 402. Plan en `docs/PLAN-REALISTA.md`.
+- **Selector "Ver como: Esencial · Inmersivo · Premium":** queda para cuando exista el 3D realista; antes, dos niveles se verían casi iguales. Los medios ya están marcados por nivel (D-072).
+- **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---
 
@@ -146,7 +148,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 1. **Precio de la página web sola.** Debe quedar claramente por debajo del piloto con 3D.
 2. **Mensualidad y tope de transferencia** por paquete.
-3. **Premium para clientes reales:** ¿fotografía profesional real del hotel, renders con IA o ambos? En un hotel que ya existe, las imágenes con IA pueden no coincidir con lo real. Para constructoras sobre planos sí encajan, porque no hay edificio que fotografiar.
+3. **Qué es Premium exactamente y cuánto cuesta producirlo.** Hoy: fotos profesionales y portada con puntos; falta el 3D realista (Blender, D-074). Para un hotel real, ¿fotografía real, renders con IA desde su 3D o ambos? En un hotel que ya existe, las imágenes con IA pueden no coincidir con lo real. Para constructoras sobre planos sí encajan, porque no hay edificio que fotografiar. Cuántas horas de Blender por hotel define el precio.
 4. **Akuare como demo:** es un edificio real, mostrado sin permiso de la constructora y marcado "no oficial". ¿Se mantiene así, se le ofrece a la constructora o se reemplaza por un proyecto ficticio de constructora?
 5. **Primeros contactos:** confirmar Monir y Nico por teléfono; armar la lista de 5 constructoras con proyectos sobre planos en Bogotá.
 6. **Formalidades:**
@@ -155,6 +157,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
    - verificar la marca en la SIC (clases 42 y 35), los dominios e Instagram.
 7. **Glamping (KingDome):** construir la variante solo si responden.
 8. **Trato en la web de Antesala:** hoy es de "usted" (dueños de hotel) y las páginas de los hoteles son de "tú" (huésped). ¿Se mantiene así?
+9. **¿Vale la pena seguir con el 3D realista antes de vender?** Son varias sesiones de trabajo. La alternativa es salir a vender Esencial e Inmersivo ya, y Premium como "próximamente" o a la medida.
 
 ---
 
@@ -162,11 +165,12 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 | Qué | Dónde |
 |---|---|
-| Este resumen | `docs/ESTADO.md` |
+| Este resumen | `docs/ESTADO.md` y en PDF con capturas: `docs/estado/Antesala-estado.pdf` |
+| Plan del 3D realista | `docs/PLAN-REALISTA.md` |
 | Producto, mercados y alcance | `docs/PRODUCTO.md` |
 | Guion de venta y mensajes | `docs/VENTA.md` |
 | Hosting, dominios y transferencia | `docs/ENTREGA.md` |
-| Por qué se decidió cada cosa (D-001 a D-069) | `docs/DECISIONES.md` |
+| Por qué se decidió cada cosa (D-001 a D-074) | `docs/DECISIONES.md` |
 | Tareas hechas y pendientes | `docs/TAREAS.md` |
 | Diario de cada sesión | `docs/BITACORA.md` |
 | Brief de la página de Antesala | `docs/WEB-ANTESALA.md` |

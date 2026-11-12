@@ -147,7 +147,11 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Jacobo generó el kit (29 imágenes, tabla en `docs/identidad/premium-finales.md`)
 - [x] Fotos traídas, pasadas a WebP y registradas como primera foto de cada espacio (D-071)
 - [x] Fotos que se pueden mirar (arrastrar o inclinar el celular), sin ser 360°
-- [ ] Selector de nivel "Ver como: Esencial · Inmersivo · Premium" (hoy las fotos premium se ven en todos)
+- [x] Medios marcados por nivel (`tier: "premium"`, D-072)
+- [x] Piso abierto: las habitaciones reciben clics otra vez; luz cálida solo sobre la habitación bajo el mouse; enlace a Antesala sobre la escena
+- [x] Fuera "Así se entra" de la página de Antesala (D-073)
+- [ ] **3D realista con luz horneada en Blender (D-074, `docs/PLAN-REALISTA.md`)**: instalar Blender en D: y el MCP `/use-blender`; prueba con la Suite 402 y un 360° fotográfico
+- [ ] Selector "Ver como: Esencial · Inmersivo · Premium" (cuando exista el 3D realista)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield
 - [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes
 - [ ] Modo Premium para Akuare: fachada desde el render del 3D (catastro) con fotos propias de Jacobo desde la calle como referencia (no Google Maps ni Street View: sus términos lo prohíben); interiores ilustrativos
