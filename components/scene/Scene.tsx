@@ -329,6 +329,13 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const night = useTour((s) => s.night);
   const facadeIndex = useTour((s) => s.facade);
   const setHoveredUnit = useTour((s) => s.setHoveredUnit);
+  // al cambiar de etapa se borra la etiqueta de la ventana que quedó bajo el mouse:
+  // la fachada deja de recibir eventos y su "pointerleave" nunca llegaba (se veía
+  // "Suite 404" sobre la planta del piso 2)
+  const stageId = stage.kind === 'piso' ? `piso-${stage.levelId}` : stage.kind === 'unidad' ? `u-${stage.unitId}` : stage.kind;
+  useEffect(() => {
+    setHoveredUnit(null);
+  }, [stageId, setHoveredUnit]);
   const setSelectedUnit = useTour((s) => s.setSelectedUnit);
   // sombras y detalle se deciden una vez (al montar): prenderlos y apagarlos en marcha obligaba
   // a recompilar materiales y vaciaba el fondo (tirones, colores dañados, fondo negro en celular).

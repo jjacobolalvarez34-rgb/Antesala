@@ -10,7 +10,7 @@ import { AntesalaSymbol } from '@/components/brand/AntesalaLogo';
  */
 export function DemoBanner({ note = 'Hotel ficticio · imágenes ilustrativas' }: { note?: string }) {
   return (
-    <div role="note" className="relative z-[60] bg-ink text-bone">
+    <div role="note" className="pointer-events-auto relative z-[60] bg-ink text-bone">
       <div className="mx-auto grid min-h-9 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 md:px-6">
         <Link
           href="/#demos"

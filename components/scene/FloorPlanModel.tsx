@@ -12,6 +12,8 @@ import type { PlanGeometry } from '@/lib/types';
 
 import type { LightUniforms } from './windows';
 
+const noHit = () => null;
+
 /**
  * Planta del piso dentro del cajón (D-041): al sacar el piso, la fachada se
  * retira y queda la planta en corte (muros de 1,1 m) con el pasillo, el
@@ -134,6 +136,32 @@ export function FloorPlanModel({
     }
   });
 
+  // luz al pasar el mouse (pedido de Jacobo, 2026-11-12): un pozo de luz cálida con la
+  // forma exacta de la habitación, que se enciende con un fundido y solo ilumina esa habitación
+  const glowMat = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        // tinte cálido normal (no aditivo): sobre los pisos claros de día el aditivo casi no se veía
+        color: '#f4a63f',
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+      }),
+    [],
+  );
+  // la malla del brillo siempre está; al pasar el mouse toma la forma de la habitación
+  const glowRef = useRef<THREE.Mesh>(null);
+  useEffect(() => {
+    const f = hovered ? meshes.floors.find((x) => meta.get(x.id)?.unitId === hovered) : undefined;
+    if (f) {
+      if (glowRef.current) glowRef.current.geometry = f.geometry;
+      gsap.fromTo(glowMat, { opacity: 0 }, { opacity: 0.42, duration: 0.35, ease: 'power2.out', overwrite: true });
+    } else {
+      gsap.to(glowMat, { opacity: 0, duration: 0.45, ease: 'power2.out', overwrite: true });
+    }
+  }, [hovered, meshes, meta, glowMat]);
+  useEffect(() => () => glowMat.dispose(), [glowMat]);
+
   // entra cuando el cajón ya salió (la fachada se retira al mismo tiempo); cerrado, no se dibuja
   const group = useRef<THREE.Group>(null);
   usePrecompile(group);
@@ -170,7 +198,7 @@ export function FloorPlanModel({
   return (
     <group ref={group} position={position} visible={false} userData={{ floorPlan: true }}>
       {meshes.walls ? (
-        <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows && visible} receiveShadow={shadows} raycast={visible ? undefined : () => null} />
+        <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows && visible} receiveShadow={shadows} raycast={visible ? THREE.Mesh.prototype.raycast : noHit} />
       ) : null}
       {meshes.floors.map((f) => {
         const s = meta.get(f.id);
@@ -182,7 +210,8 @@ export function FloorPlanModel({
             material={mats.floors[f.id]}
             position-y={0.02}
             receiveShadow={shadows}
-            raycast={visible ? undefined : () => null}
+            // explícito: con `undefined` no siempre volvía el raycast por defecto y las habitaciones no se podían tocar
+            raycast={visible ? THREE.Mesh.prototype.raycast : noHit}
             onPointerOver={
               clickable
                 ? (e: ThreeEvent<PointerEvent>) => {
@@ -211,6 +240,7 @@ export function FloorPlanModel({
           />
         );
       })}
+      <mesh ref={glowRef} material={glowMat} visible={visible} position-y={0.06} renderOrder={6} raycast={noHit} />
       {meshes.furniture.map((f) => (
         <mesh
           key={f.material}
