@@ -346,7 +346,7 @@
  * nunca en las de los hoteles, que usan la marca de cada hotel. Azul noche ≈60 %,
  * marfil ≈30 %, champán ≈10 %; colores planos, esquinas de 2 px.
  */
-/* en la página de Antesala los enlaces del menú se deslizan (y encienden el bloom) */
+/* en la página de Antesala los enlaces del menú se deslizan */
 html:has(.marca-antesala) {
   scroll-behavior: smooth;
 }

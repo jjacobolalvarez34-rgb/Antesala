@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
 
@@ -26,54 +26,6 @@ export function ModoToggle() {
       {cine ? 'Cine' : 'Ligero'}
     </button>
   );
-}
-
-/**
- * Bloom al desplazarse rápido (pedido de Jacobo, 2026-11-12): una luz suave que
- * crece con la velocidad del scroll (rueda rápida o salto desde el menú) y se
- * apaga al frenar. Solo opacidad y transform en una capa fija: no toca el diseño.
- */
-export function ScrollBloom() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let lastY = window.scrollY;
-    let lastT = performance.now();
-    let level = 0;
-    let dir = 1;
-    let raf = 0;
-    const tick = (now: number) => {
-      const dt = Math.max(1, now - lastT);
-      const y = window.scrollY;
-      const dy = y - lastY;
-      lastY = y;
-      lastT = now;
-      if (dy !== 0) dir = Math.sign(dy);
-      // px por ms; un salto de más de una pantalla en un cuadro cuenta como máximo
-      const v = Math.abs(dy) > window.innerHeight * 1.2 ? 99 : Math.abs(dy) / dt;
-      const want = Math.min(1, Math.max(0, (v - 1.4) / 4));
-      // sube rápido, baja despacio
-      level += (want - level) * (want > level ? 0.35 : 0.06);
-      if (level < 0.004) level = 0;
-      el.style.opacity = (level * 0.85).toFixed(3);
-      // la ranura se abre a lo ancho y se corre un poco hacia donde va el scroll
-      el.style.transform = `translate3d(0, ${(dir * level * 4).toFixed(2)}vh, 0) scale(${(1 + level * 1.6).toFixed(3)}, ${(1 + level * 0.15).toFixed(3)})`;
-      raf = level > 0 ? requestAnimationFrame(tick) : 0;
-    };
-    const on = () => {
-      if (!raf) {
-        lastT = performance.now();
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    window.addEventListener('scroll', on, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', on);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-  return <div ref={ref} aria-hidden className={s.bloom} />;
 }
 
 /** Barra superior: transparente sobre el escenario, sólida al bajar. */

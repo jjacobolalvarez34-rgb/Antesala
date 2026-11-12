@@ -6,7 +6,7 @@ import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
 import { Intro } from '@/components/producto/Intro';
-import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro, ScrollBloom } from '@/components/producto/Interactivos';
+import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
 import { Pelicula } from '@/components/producto/Pelicula';
 import type { RecorridoData } from '@/components/producto/Recorrido';
@@ -224,7 +224,6 @@ export default async function Home() {
     <div className={`${s.root} marca-antesala`}>
       <Intro />
       <Nav />
-      <ScrollBloom />
 
       <main id="top">
         {recorrido ? <RecorridoConAviso data={recorrido} /> : null}
