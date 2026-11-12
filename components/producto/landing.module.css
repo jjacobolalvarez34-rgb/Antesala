@@ -142,6 +142,21 @@
   letter-spacing: 0;
 }
 
+/* bloom al desplazarse rápido: la ranura de luz de la marca que se abre con la velocidad */
+.bloom {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
+  background:
+    radial-gradient(ellipse 2.6% 62% at 50% 50%, rgb(255 236 196 / 0.95), rgb(255 214 150 / 0.45) 40%, transparent 72%),
+    radial-gradient(ellipse 16% 62% at 50% 50%, rgb(214 168 100 / 0.42), rgb(149 110 60 / 0.14) 55%, transparent 78%),
+    radial-gradient(ellipse 70% 70% at 50% 50%, rgb(180 140 80 / 0.12), transparent 70%);
+}
+
 /* nav */
 .nav {
   position: fixed;
@@ -204,7 +219,8 @@
 .stage[data-step='4'] .canvas,
 .stage[data-step='5'] .canvas,
 .stage[data-step='6'] .canvas {
-  opacity: 0.28;
+  /* el plano, el mosaico y la reserva mandan: el 3D queda de fondo, casi sin verse */
+  opacity: 0.14;
 }
 .svgBuilding {
   position: absolute;
@@ -276,6 +292,10 @@
   visibility: visible;
 }
 .paper {
+  /* alto disponible: escenario menos la barra (96 px), el aire de abajo y el
+     encabezado y la nota del papel (~150 px) */
+  width: min(100%, calc((100svh - 96px - 6vh - 150px) * var(--r, 1)));
+  margin-inline: auto;
   background: var(--marfil);
   color: var(--noche);
   padding: 22px 22px 16px;
@@ -297,6 +317,68 @@
 .paperHead span {
   font: italic 16px/1 var(--f-it);
 }
+/* mosaico de espacios (paso 5) */
+.mosaic {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+  height: min(470px, calc(100svh - 96px - 6vh - 40px));
+}
+.tile {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-2);
+  background: var(--noche-2);
+  opacity: 0;
+  transform: translateY(18px) scale(0.97);
+}
+.tile:first-child {
+  grid-row: span 2;
+}
+.layerOn .tile {
+  animation: tile-in 0.75s var(--ease) both;
+  animation-delay: calc(var(--i) * 90ms + 120ms);
+}
+@keyframes tile-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  transition: transform 1.4s var(--ease);
+}
+.layerOn .tile img {
+  transform: none;
+}
+.tile:hover img {
+  transform: scale(1.04);
+}
+.tile span {
+  position: absolute;
+  left: 10px;
+  bottom: 9px;
+  font: 400 10.5px/1 var(--f-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--luz);
+  background: rgb(11 18 36 / 0.7);
+  padding: 6px 8px;
+}
+.mosaicNote {
+  margin: 10px 0 0;
+  font: italic 15px/1 var(--f-it);
+  color: var(--txt-2);
+}
 .planNote {
   font: italic 17px/1.35 var(--f-it);
   margin: 10px 0 0;
@@ -316,6 +398,36 @@
   height: 100%;
   object-fit: cover;
 }
+.planArt {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px 18px 30px;
+  background:
+    linear-gradient(rgb(17 27 51 / 0.06) 1px, transparent 1px) 0 0 / 20px 20px,
+    linear-gradient(90deg, rgb(17 27 51 / 0.06) 1px, transparent 1px) 0 0 / 20px 20px,
+    var(--marfil);
+  color: var(--noche);
+}
+.planArt figure {
+  /* que quepa entero: el ancho sale del alto disponible */
+  width: min(100%, calc((100cqh - 48px) * var(--r, 1.6)));
+  margin: 0;
+}
+.planArt span {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  font: 400 8.5px/1 var(--f-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
 .tag {
   position: absolute;
   left: 12px;
@@ -326,29 +438,6 @@
   color: var(--luz);
   background: rgb(11 18 36 / 0.7);
   padding: 6px 8px;
-}
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-.chip {
-  min-height: 40px;
-  border: 1px solid var(--line);
-  background: rgb(11 18 36 / 0.6);
-  padding: 0 13px;
-  font: 400 12px/1 var(--f-body);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--txt-2);
-  border-radius: 2px;
-  cursor: pointer;
-}
-.chip[aria-pressed='true'],
-.chip:hover {
-  border-color: var(--champ);
-  color: var(--txt);
 }
 .book {
   background: var(--hondo);
@@ -547,7 +636,12 @@
     width: 100%;
   }
   .paper {
+    width: min(100%, calc((52svh - 76px - 110px) * var(--r, 1)));
     padding: 14px 12px 10px;
+  }
+  .mosaic {
+    height: calc(52svh - 76px - 34px);
+    gap: 6px;
   }
   .book {
     padding: 18px 20px;
@@ -1189,12 +1283,10 @@
 
 /* aparición al bajar (solo CSS, donde se soporta) */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: reveal-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 20%;
-    }
+  .reveal {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
   }
 }
 @keyframes reveal-up {
@@ -1259,14 +1351,7 @@
   cursor: pointer;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .layer {
-    transform: none;
-  }
-  .heroFade {
-    animation-duration: 0.01ms;
-  }
-}
+
 
 /* ===== modos (D-063) ===== */
 .modoBtn {
@@ -1435,7 +1520,8 @@
 }
 .entrar {
   position: relative;
-  height: 460svh;
+  /* cada capítulo ~1,5 pantallas: cada paso de la rueda avanza menos el video */
+  height: 620svh;
   background: #000;
 }
 .film {
@@ -1541,13 +1627,7 @@
   background: rgb(11 18 36 / 0.6);
   padding: 6px 8px;
 }
-@media (prefers-reduced-motion: reduce) {
-  .trazo,
-  .planoUnidad {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
-}
+
 .book {
   color: var(--txt);
 }

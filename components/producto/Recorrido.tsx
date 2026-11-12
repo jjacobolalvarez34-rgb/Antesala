@@ -89,13 +89,12 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
   const [no3d, setNo3d] = useState(false);
   const modo = useModo();
   const ligero = modo === 'ligero' || no3d;
-  const [photo, setPhoto] = useState(data.photos[1]?.key ?? data.photos[0]?.key);
 
   // el 3D se carga aparte (three.js no entra en el JS inicial) y solo en modo cine
   useEffect(() => {
     if (modo !== 'cine') return;
     let alive = true;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = false; // D-067
     const begin = (fromIntro: boolean) => api.current?.start(fromIntro);
     const onIntro = () => begin(true);
     // three.js se pide cuando la página terminó de cargar y el equipo está libre
@@ -170,11 +169,8 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
   const goTo = useCallback((n: number) => {
     const el = stepsRef.current?.querySelector<HTMLElement>(`[data-step="${n}"]`);
     if (!el) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: reduced ? 'auto' : 'smooth' });
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
   }, []);
-
-  const current = data.photos.find((p) => p.key === photo) ?? data.photos[0];
 
   return (
     <section id="recorrido" aria-label="Así recorre su huésped el hotel" className={s.recorrido}>
@@ -196,7 +192,8 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
 
         <div className={s.layers}>
           <div className={`${s.layer} ${step === 4 ? s.layerOn : ''}`} aria-hidden={step !== 4}>
-            <div className={s.paper}>
+            {/* el ancho sale del alto disponible: un plano alto ya no se corta abajo */}
+            <div className={s.paper} style={{ ['--r' as string]: (data.plan.width / data.plan.height).toFixed(3) }}>
               <div className={s.paperHead}>
                 <b>{data.unitName.toUpperCase()}</b>
                 <span>{data.area} · plano de la unidad</span>
@@ -209,19 +206,16 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
           </div>
 
           <div className={`${s.layer} ${step === 5 ? s.layerOn : ''}`} aria-hidden={step !== 5}>
-            {current ? (
-              <div className={s.ph}>
-                <img src={current.src} alt={`${current.label} (imagen ilustrativa)`} width={960} height={720} loading="lazy" />
-                <span className={s.tag}>{current.label} · ilustrativa</span>
-              </div>
-            ) : null}
-            <div className={s.chips} role="group" aria-label="Espacios">
-              {data.photos.map((p) => (
-                <button key={p.key} type="button" className={s.chip} aria-pressed={p.key === photo} onClick={() => setPhoto(p.key)}>
-                  {p.label}
-                </button>
+            {/* mosaico: todos los espacios de la unidad a la vez, entran uno tras otro */}
+            <ul className={s.mosaic} aria-label={`Espacios de la ${data.unitName}`}>
+              {data.photos.map((p, k) => (
+                <li key={p.key} className={s.tile} style={{ ['--i' as string]: k }}>
+                  <img src={p.src} alt={`${p.label} (imagen ilustrativa)`} width={960} height={720} loading="lazy" />
+                  <span>{p.label}</span>
+                </li>
               ))}
-            </div>
+            </ul>
+            <p className={s.mosaicNote}>Imágenes ilustrativas</p>
           </div>
 
           <div className={`${s.layer} ${step === 6 ? s.layerOn : ''}`} aria-hidden={step !== 6}>

@@ -67,15 +67,23 @@ export function Pelicula() {
   useEffect(() => {
     let raf = 0;
     let lastI = -1;
-    const update = () => {
-      raf = 0;
+    // el scroll da la meta; lo que se ve la persigue con inercia. Con la rueda
+    // del mouse el scroll avanza a saltos de ~100 px y el video saltaba de la
+    // calle al lobby en un solo cuadro (reporte de Jacobo, 2026-11-12).
+    let target = 0;
+    let cur = -1;
+    let last = performance.now();
+    const readTarget = () => {
       const el = sec.current;
-      if (!el) return;
+      if (!el) return false;
       const r = el.getBoundingClientRect();
       // fuera de la pantalla no hay nada que mover
-      if (r.bottom < 0 || r.top > window.innerHeight) return;
+      if (r.bottom < 0 || r.top > window.innerHeight) return false;
       const span = el.offsetHeight - window.innerHeight;
-      const p = Math.min(1, Math.max(0, -r.top / span));
+      target = Math.min(1, Math.max(0, -r.top / span));
+      return true;
+    };
+    const paint = (p: number) => {
       const x = p * CAPS.length;
       const ci = Math.min(CAPS.length - 1, Math.floor(x));
       const t = Math.min(1, x - ci);
@@ -110,10 +118,10 @@ export function Pelicula() {
         sl.style.transform = `translate(-50%, -50%) scaleX(${on ? Math.max(0.02, t * t) : 0.02})`;
       }
       const v = vids.current[ci];
-      if (v && v.readyState >= 1 && Number.isFinite(v.duration)) {
+      // un cuadro a la vez: si el anterior todavía se está buscando, se espera
+      if (v && !v.seeking && v.readyState >= 1 && Number.isFinite(v.duration)) {
         const want = t * (v.duration - 0.05);
-        // no pedir un cuadro que ya está en pantalla
-        if (Math.abs(v.currentTime - want) > 0.02) {
+        if (Math.abs(v.currentTime - want) > 1 / 60) {
           try {
             v.currentTime = want;
           } catch {
@@ -122,11 +130,29 @@ export function Pelicula() {
         }
       }
     };
+    const frame = (now: number) => {
+      raf = 0;
+      const dt = Math.min(0.1, (now - last) / 1000);
+      last = now;
+      if (!readTarget()) return;
+      if (cur < 0) cur = target;
+      // ~0,35 s para alcanzar la meta, igual a cualquier tasa de refresco
+      cur += (target - cur) * (1 - Math.exp(-dt * 9));
+      if (Math.abs(target - cur) < 0.0004) cur = target;
+      paint(cur);
+      if (cur !== target) raf = requestAnimationFrame(frame);
+    };
     const on = () => {
-      if (!raf) raf = requestAnimationFrame(update);
+      if (!raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      }
     };
     kick.current = on;
-    update();
+    if (readTarget()) {
+      cur = target;
+      paint(cur);
+    }
     window.addEventListener('scroll', on, { passive: true });
     window.addEventListener('resize', on);
     return () => {

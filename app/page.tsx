@@ -3,9 +3,10 @@ import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
+import { PlanSvg } from '@/components/plan/PlanSvg';
 import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
 import { Intro } from '@/components/producto/Intro';
-import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
+import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro, ScrollBloom } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
 import { Pelicula } from '@/components/producto/Pelicula';
 import type { RecorridoData } from '@/components/producto/Recorrido';
@@ -155,9 +156,32 @@ export default async function Home() {
     niebla
       ? {
           key: 'niebla',
-          img: photo('exterior-edificio'),
-          imgAlt: 'Fachada de Niebla Alta al anochecer (imagen ilustrativa)',
-          art: null,
+          img: null,
+          imgAlt: '',
+          // su propia planta (no la foto de la página de Antesala): piso 5 con libres y ocupadas
+          art: (() => {
+            const lv = sortedLevels(niebla.hotel).find((l) => l.id === '5') ?? sortedLevels(niebla.hotel).at(-1);
+            const geo = lv?.plan ? niebla.plans[lv.plan] : undefined;
+            if (!lv || !geo) return null;
+            return (
+              <div className={s.planArt} style={{ ['--r' as string]: (geo.width / geo.height).toFixed(3) }}>
+                <PlanSvg
+                  geometry={geo}
+                  variant="thumb"
+                  title={`Planta del ${lv.name.toLowerCase()} de ${niebla.hotel.name}`}
+                  spaces={niebla.hotel.units
+                    .filter((u) => u.levelId === lv.id)
+                    .map((u) => ({
+                      id: u.id,
+                      name: u.name,
+                      href: routes.unidad(niebla.hotel.slug, u.id),
+                      status: u.occupied ? ('ocupada' as const) : ('libre' as const),
+                    }))}
+                />
+                <span>Planta del {lv.name.toLowerCase()} · libres y ocupadas</span>
+              </div>
+            );
+          })(),
           badge: 'Apartahotel · Bogotá',
           name: 'Niebla Alta',
           text: `${niebla.hotel.units.length} habitaciones en ${niebla.hotel.levels.length} pisos: estudios, suites y un penthouse. Elija piso, habitación y espacio.`,
@@ -191,6 +215,7 @@ export default async function Home() {
     <div className={`${s.root} marca-antesala`}>
       <Intro />
       <Nav />
+      <ScrollBloom />
 
       <main id="top">
         {recorrido ? <RecorridoConAviso data={recorrido} /> : null}
@@ -209,7 +234,7 @@ export default async function Home() {
                 <article key={d.key} className={s.dcard}>
                   <div className={s.ph}>
                     {d.img ? <img src={d.img} alt={d.imgAlt} width={960} height={600} loading="lazy" /> : d.art}
-                    <span className={s.tag}>{d.img ? 'Ilustrativa' : 'Datos reales'}</span>
+                    <span className={s.tag}>{d.key === 'akuare' ? 'Datos reales' : 'Demo'}</span>
                   </div>
                   <div className={s.dbody}>
                     <span className={s.badge}>{d.badge}</span>
@@ -362,7 +387,7 @@ export default async function Home() {
             <div className={`${s.prices} ${s.reveal}`}>
               {PRICES.map((p) => (
                 <div key={p.name} className={`${s.pcard} ${p.star ? s.star : ''}`}>
-                  {p.star ? <span className={s.starTag}>Más elegido para empezar</span> : null}
+                  {p.star ? <span className={s.starTag}>Recomendado para empezar</span> : null}
                   <h3>{p.name}</h3>
                   <p className={s.for}>{p.for}</p>
                   <ul>
