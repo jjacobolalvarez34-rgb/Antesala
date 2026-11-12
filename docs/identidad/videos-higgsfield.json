@@ -1,0 +1,33 @@
+{
+  "nota": "Clips para la sección 'Así se entra' (#entrar). Seedance 2.0, 720p, 5 s, sin audio. Cada clip empieza y termina en una foto de fotos-higgsfield.json, así se encadenan. Claude Code: descárgalos y re-codifícalos para que el scroll los mueva sin saltos: ffmpeg -i in.mp4 -c:v libx264 -preset veryfast -crf 23 -g 1 -pix_fmt yuv420p -movflags +faststart -an out.mp4 (y una versión WebM/VP9). Si una URL vence, búscala por job_id con el MCP de Higgsfield.",
+  "clips": [
+    {
+      "archivo": "01-calle-lobby",
+      "de": "exterior-edificio",
+      "a": "lobby",
+      "job_id": "2e43a897-4858-46c8-a08f-fe3e04ce79eb",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_180559_2e43a897-4858-46c8-a08f-fe3e04ce79eb.mp4"
+    },
+    {
+      "archivo": "02-lobby-pasillo",
+      "de": "lobby",
+      "a": "pasillo-puerta-luz",
+      "job_id": "b13a34a0-2dd0-4325-b560-c62dabcbe3e6",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_181350_b13a34a0-2dd0-4325-b560-c62dabcbe3e6.mp4"
+    },
+    {
+      "archivo": "03-puerta-suite",
+      "de": "pasillo-puerta-luz",
+      "a": "suite-dormitorio",
+      "job_id": "f5dccaf1-64be-4603-82cb-a1ac0924bdb0",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_180120_f5dccaf1-64be-4603-82cb-a1ac0924bdb0.mp4"
+    },
+    {
+      "archivo": "04-suite-balcon",
+      "de": "suite-dormitorio",
+      "a": "suite-balcon",
+      "job_id": "8e303cb3-af37-4784-8f47-be00688ec139",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3LyCEQdTPVrcZqIrCwiVexAGJXO/hf_20261111_181754_8e303cb3-af37-4784-8f47-be00688ec139.mp4"
+    }
+  ]
+}

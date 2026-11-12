@@ -27,3 +27,6 @@ Thumbs.db
 
 # capturas de pnpm shots (se regeneran; no se versionan)
 tests/__shots__/
+
+# temporales de trabajo (en D:, no en C:)
+/.tmp/

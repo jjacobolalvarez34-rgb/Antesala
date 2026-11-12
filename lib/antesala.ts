@@ -12,6 +12,7 @@ export const ANTESALA = {
   company: 'MamutHerd S.A.S.',
   /** firma de marca: "Un producto de Mamut Herd" (D-062) */
   brandOwner: 'Mamut Herd',
+  email: 'mamutherdoficial@gmail.com',
 } as const;
 
 export const antesalaWhatsApp = (text: string) =>
