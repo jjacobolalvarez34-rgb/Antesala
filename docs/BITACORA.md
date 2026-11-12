@@ -36,6 +36,7 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 - Sombras congeladas con un piso abierto (D-064). Revisado el piso abierto en el tiempo: a los 5 s (WebGL por software) se ve la transición a medias; a los 25 s el cajón está afuera, los pisos de arriba velados y la planta completa. No se reprodujo un estado final dañado: si Jacobo lo sigue viendo, pedir video o captura en su equipo.
 - Rutas `/demo` y `/cotizar` (redirigen a sus secciones).
+- Lighthouse en Vercel (móvil): página de Niebla Alta 78, Akuare 70, explorar 60 (accesibilidad 100 en las tres). Web de Antesala: 35. Arreglos: la luz de la intro anima solo transform (CLS de 0,157 a 0,002), los videos se piden al acercarse a la sección, three.js espera a que la página cargue y el equipo esté libre, los botones champán llevan texto azul noche (contraste) y el botón de modo anuncia lo que muestra. Medido en local: 46. Lo que queda es la intro de 3 s (diseño) y armar el 3D.
 
 **Siguiente sesión**
 - Empezar por: la revisión de Jacobo de la web en su celular y los cambios del boceto que mande.

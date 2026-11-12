@@ -88,15 +88,10 @@ export function Intro() {
       const b = beam.current;
       const r = slit ? slit.getBoundingClientRect() : { left: innerWidth / 2 - 1, top: innerHeight * 0.3, width: 2, height: innerHeight * 0.4 };
       if (b) {
-        Object.assign(b.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${Math.max(2, r.width)}px`, height: `${r.height}px`, opacity: '1' });
-        A(
-          b,
-          [
-            { left: `${r.left}px`, top: `${r.top}px`, width: `${Math.max(2, r.width)}px`, height: `${r.height}px` },
-            { left: '0px', top: '0px', width: `${innerWidth}px`, height: `${innerHeight}px` },
-          ],
-          { duration: 800 * S, easing: 'cubic-bezier(.7,0,.3,1)' },
-        );
+        // solo transform (no left/top/width/height): la luz crece sin mover el diseño de la página
+        const from = `translate(${r.left}px, ${r.top}px) scale(${Math.max(2, r.width) / innerWidth}, ${r.height / innerHeight})`;
+        Object.assign(b.style, { transform: from, opacity: '1' });
+        A(b, [{ transform: from }, { transform: 'none' }], { duration: 800 * S, easing: 'cubic-bezier(.7,0,.3,1)' });
       }
       if (slit) (slit as SVGElement).style.opacity = '0';
       const open = (dx: number) => [{ transform: 'none', opacity: 1 }, { transform: RM ? 'none' : `translateX(${dx}px)`, opacity: 0 }];

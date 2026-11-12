@@ -98,7 +98,17 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const begin = (fromIntro: boolean) => api.current?.start(fromIntro);
     const onIntro = () => begin(true);
-    import('./stage3d')
+    // three.js se pide cuando la página terminó de cargar y el equipo está libre
+    const whenFree = new Promise<void>((res) => {
+      const idle = () => {
+        if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(() => res(), { timeout: 2500 });
+        else setTimeout(res, 800);
+      };
+      if (document.readyState === 'complete') idle();
+      else window.addEventListener('load', idle, { once: true });
+    });
+    whenFree
+      .then(() => import('./stage3d'))
       .then(({ initStage }) => {
         if (!alive || !canvasRef.current || !stageRef.current) return;
         const a = initStage(canvasRef.current, stageRef.current, {

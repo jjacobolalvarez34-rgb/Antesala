@@ -19,7 +19,7 @@ export function ModoToggle() {
       type="button"
       className={s.modoBtn}
       onClick={() => setModo(cine ? 'ligero' : 'cine')}
-      aria-label={cine ? 'Pasar al modo ligero (sin 3D ni video, para conexiones lentas)' : 'Pasar al modo cine (3D y video)'}
+      aria-label={cine ? 'Cine: pasar al modo ligero, sin 3D ni video' : 'Ligero: pasar al modo cine, con 3D y video'}
       title={cine ? 'Modo ligero: sin 3D ni video' : 'Modo cine: 3D y video'}
     >
       <span className={s.modoDot} data-on={cine} />

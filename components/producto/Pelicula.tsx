@@ -30,7 +30,18 @@ export function Pelicula() {
   const [ready, setReady] = useState<boolean[]>([false, false, false, false]);
   const [pos, setPos] = useState({ i: 0, t: 0 });
   const [wide, setWide] = useState(true);
+  // los videos se piden solo cuando la sección está cerca (no al abrir la página)
+  const [near, setNear] = useState(false);
   const cine = modo === 'cine';
+  const conVideo = cine && near;
+
+  useEffect(() => {
+    const el = sec.current;
+    if (!el || near) return;
+    const io = new IntersectionObserver((es) => es.some((e) => e.isIntersecting) && setNear(true), { rootMargin: '120% 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near]);
 
   useEffect(() => {
     const t = window.setTimeout(() => setWide(window.innerWidth > 900), 0);
@@ -88,7 +99,7 @@ export function Pelicula() {
                 className={s.clipPh}
                 src={photo(c.de)}
                 alt=""
-                loading={k === 0 ? 'eager' : 'lazy'}
+                loading="lazy"
                 style={cine && ready[k] ? { opacity: 0 } : { transform: `scale(${1 + tk * 0.12})` }}
               />
               {!cine || !ready[k] ? (
@@ -100,7 +111,7 @@ export function Pelicula() {
                   style={{ opacity: Math.max(0, (tk - 0.72) / 0.28), transform: `scale(${1.04 + tk * 0.04})` }}
                 />
               ) : null}
-              {cine ? (
+              {conVideo ? (
                 <video
                   ref={(v) => {
                     vids.current[k] = v;

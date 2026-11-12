@@ -123,11 +123,13 @@
 .btn:hover {
   background: rgb(210 184 140 / 0.12);
 }
-.solid {
+.solid,
+.root a.solid {
   background: var(--champ);
   color: var(--noche);
 }
-.solid:hover {
+.solid:hover,
+.root a.solid:hover {
   background: var(--luz);
 }
 .btn[disabled] {
@@ -1237,6 +1239,8 @@
 }
 .beam {
   position: fixed;
+  inset: 0;
+  transform-origin: 0 0;
   background: var(--luz);
   pointer-events: none;
   opacity: 0;
