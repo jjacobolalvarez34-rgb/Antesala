@@ -75,26 +75,68 @@ const SURFACE: Record<Surface, string> = {
     diffuseColor.rgb *= mix(1.1, 0.96 + 0.06 * uNoise(vSurfPos * 3.0), joint);`,
 };
 
+/** Uniformes compartidos por todos los materiales de la maqueta. */
+interface CutUniforms {
+  cut: { value: number };
+  /** rectángulo del espacio enfocado (minX, minZ, maxX, maxZ), en metros de la maqueta */
+  focus: { value: THREE.Vector4 };
+  /** 0 = todo a la vista; 1 = lo que queda fuera del espacio enfocado se hundió en el piso */
+  sink: { value: number };
+}
+
 /**
  * Recorta en el GPU todo lo que pase de uCut (sin deformar: los vértices altos
  * bajan al corte) y, si se pide, pinta un acabado procedural.
+ *
+ * Espacio enfocado (pedido de Jacobo, 2026-11-12): al elegir un espacio, lo que
+ * queda fuera de su rectángulo se corta cada vez más bajo hasta desaparecer en
+ * el piso, como columnas que se hunden, y solo queda el espacio elegido.
  */
-function cuttable<T extends THREE.Material>(mat: T, cut: { value: number }, surface?: Surface): T {
+function cuttable<T extends THREE.Material>(mat: T, u: CutUniforms, surface?: Surface): T {
   mat.onBeforeCompile = (shader) => {
-    shader.uniforms.uCut = cut;
-    shader.vertexShader = `uniform float uCut;\nvarying vec3 vSurfPos;\nvarying vec3 vSurfNormal;\n${shader.vertexShader}`.replace(
+    shader.uniforms.uCut = u.cut;
+    shader.uniforms.uFocus = u.focus;
+    shader.uniforms.uSink = u.sink;
+    shader.vertexShader = `uniform float uCut;
+varying vec3 vSurfPos;
+varying vec3 vSurfNormal;
+${shader.vertexShader}`.replace(
       '#include <begin_vertex>',
-      '#include <begin_vertex>\n  transformed.y = min(transformed.y, uCut);\n  vSurfPos = transformed;\n  vSurfNormal = normal;',
+      `#include <begin_vertex>
+  transformed.y = min(transformed.y, uCut);
+  vSurfPos = transformed;
+  vSurfNormal = normal;`,
+    );
+    shader.fragmentShader = `uniform float uCut;
+uniform vec4 uFocus;
+uniform float uSink;
+varying vec3 vSurfPos;
+varying vec3 vSurfNormal;
+${surface ? NOISE : ''}
+${shader.fragmentShader}`.replace(
+      '#include <clipping_planes_fragment>',
+      `#include <clipping_planes_fragment>
+  if (uSink > 0.0) {
+    bool outside = vSurfPos.x < uFocus.x || vSurfPos.z < uFocus.y || vSurfPos.x > uFocus.z || vSurfPos.z > uFocus.w;
+    if (outside && vSurfPos.y > mix(uCut + 0.01, -0.02, uSink)) discard;
+  }`,
     );
     if (surface) {
-      shader.fragmentShader = `varying vec3 vSurfPos;\nvarying vec3 vSurfNormal;\n${NOISE}\n${shader.fragmentShader}`.replace(
-        '#include <color_fragment>',
-        `#include <color_fragment>\n${SURFACE[surface]}`,
-      );
+      shader.fragmentShader = shader.fragmentShader.replace('#include <color_fragment>', `#include <color_fragment>
+${SURFACE[surface]}`);
     }
   };
   mat.customProgramCacheKey = () => `unit-cut-${surface ?? 'plain'}`;
   return mat;
+}
+
+/** Rectángulo de un espacio en metros de la maqueta, con margen para que queden sus muros. */
+function focusRect(plan: PlanGeometry, spaceId: string, margin = 0.2): THREE.Vector4 | null {
+  const sp = plan.spaces.find((x) => x.id === spaceId);
+  if (!sp || !sp.points.length) return null;
+  const xs = sp.points.map((p) => p[0] * 0.01 - (plan.width * 0.01) / 2);
+  const zs = sp.points.map((p) => p[1] * 0.01 - (plan.height * 0.01) / 2);
+  return new THREE.Vector4(Math.min(...xs) - margin, Math.min(...zs) - margin, Math.max(...xs) + margin, Math.max(...zs) + margin);
 }
 
 const surfaceFor = (type: SpaceType): Surface => (type === 'bano' || type === 'cocina' ? 'tile' : 'wood');
@@ -109,6 +151,7 @@ export function UnitModel({
   reduced,
   shadows,
   cut,
+  focus = null,
   interior = false,
   onHover,
   onSelect,
@@ -125,6 +168,8 @@ export function UnitModel({
   shadows: boolean;
   /** maqueta abierta (muros bajos) para ver un espacio desde arriba sin que estorben */
   cut: boolean;
+  /** espacio enfocado: el resto de la maqueta se hunde y desaparece */
+  focus?: string | null;
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
 }) {
@@ -145,18 +190,37 @@ export function UnitModel({
     [meshes, railing],
   );
 
-  const cutU = useMemo(() => ({ value: FULL_CUT }), []);
+  const uni = useMemo<CutUniforms>(() => ({ cut: { value: FULL_CUT }, focus: { value: new THREE.Vector4() }, sink: { value: 0 } }), []);
+  const cutU = uni.cut;
+  // enfocar: hundir lo de afuera; al cambiar de espacio, primero vuelve todo y luego se hunde otra vez
+  useEffect(() => {
+    const rect = focus ? focusRect(plan, focus) : null;
+    const tl = gsap.timeline();
+    const d = reduced ? 0 : 1;
+    if (!rect) {
+      tl.to(uni.sink, { value: 0, duration: 0.6 * d, ease: 'power2.out' });
+    } else {
+      if (uni.sink.value > 0.01) tl.to(uni.sink, { value: 0, duration: 0.35 * d, ease: 'power2.in' });
+      tl.call(() => {
+        uni.focus.value.copy(rect);
+      });
+      tl.to(uni.sink, { value: 1, duration: 1.1 * d, delay: reduced ? 0 : 0.25, ease: 'power2.inOut' });
+    }
+    return () => {
+      tl.kill();
+    };
+  }, [focus, plan, reduced, uni]);
   useEffect(() => {
     const t = gsap.to(cutU, { value: cut ? SPACE_CUT : FULL_CUT, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0.2, ease: 'power2.inOut', overwrite: true });
     return () => {
       t.kill();
     };
   }, [cut, reduced, cutU]);
-  const depthMat = useMemo(() => cuttable(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), cutU), [cutU]);
+  const depthMat = useMemo(() => cuttable(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), uni), [uni]);
 
   const mats = useMemo(() => {
     const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}, surface?: Surface) =>
-      cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), cutU, surface);
+      cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), uni, surface);
     return {
       walls: m('#e3dacb', { roughness: 0.92 }, 'plaster'),
       door: m(FURNITURE_COLORS.wood, { roughness: 0.6 }),
@@ -183,7 +247,7 @@ export function UnitModel({
         ]),
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
-  }, [spaces, meshes, cutU]);
+  }, [spaces, meshes, uni]);
 
   // aparece y desaparece con fundido
   useLayoutEffect(() => {
@@ -256,15 +320,19 @@ export function UnitModel({
         <mesh geometry={railing.solid} material={mats.rail} castShadow={shadows} receiveShadow={shadows} raycast={() => null} />
       ) : null}
       {railing.glass ? <mesh geometry={railing.glass} material={mats.glass} raycast={() => null} /> : null}
-      {meshes.floors.map((f) => (
+      {meshes.floors.map((f) => {
+        // con un espacio enfocado, los pisos hundidos no se pueden tocar
+        const live = visible && (!focus || f.id === focus);
+        return (
         <mesh
           key={f.id}
           geometry={f.geometry}
           material={mats.floors[f.id]}
           position-y={0.01}
           receiveShadow={shadows}
+          raycast={live ? THREE.Mesh.prototype.raycast : () => null}
           onPointerOver={
-            visible
+            live
               ? (e: ThreeEvent<PointerEvent>) => {
                   e.stopPropagation();
                   onHover(f.id);
@@ -273,7 +341,7 @@ export function UnitModel({
               : undefined
           }
           onPointerOut={
-            visible
+            live
               ? () => {
                   onHover(null);
                   document.body.style.cursor = '';
@@ -281,7 +349,7 @@ export function UnitModel({
               : undefined
           }
           onClick={
-            visible
+            live
               ? (e: ThreeEvent<MouseEvent>) => {
                   e.stopPropagation();
                   onSelect(f.id);
@@ -289,7 +357,8 @@ export function UnitModel({
               : undefined
           }
         />
-      ))}
+        );
+      })}
       {meshes.furniture.map((f) => (
         <mesh
           key={f.material}

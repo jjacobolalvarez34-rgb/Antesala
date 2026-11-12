@@ -199,13 +199,11 @@
 @keyframes intro-letter {
   from {
     opacity: 0;
-    transform: translateY(0.35em);
-    filter: blur(8px);
+    transform: translate3d(0, 0.35em, 0);
   }
   to {
     opacity: 1;
     transform: none;
-    filter: blur(0);
   }
 }
 @keyframes intro-fade {
@@ -226,12 +224,14 @@
 }
 @keyframes intro-leave {
   to {
-    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    transform: translate3d(0, -2%, 0) scale(1.02);
   }
 }
 .brand-intro-name span {
   display: inline-block;
   opacity: 0;
+  will-change: transform, opacity;
   animation: intro-letter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .brand-intro-tagline {
@@ -245,11 +245,32 @@
     radial-gradient(40% 30% at 30% 60%, color-mix(in oklab, var(--hotel-base) 16%, transparent), transparent 70%),
     radial-gradient(35% 25% at 70% 40%, color-mix(in oklab, var(--hotel-accent-on-dark) 18%, transparent), transparent 70%),
     radial-gradient(50% 35% at 50% 85%, color-mix(in oklab, var(--hotel-base) 10%, transparent), transparent 70%);
-  filter: blur(30px);
+  /* sin filter: blur. Los degradados ya son suaves y así la niebla se mueve en
+     la GPU aunque el hilo principal esté ocupado armando el 3D */
+  will-change: transform;
   animation: intro-fog 6s ease-in-out infinite alternate;
 }
 .brand-intro-leave {
   animation: intro-leave 0.75s cubic-bezier(0.64, 0, 0.36, 1) forwards;
+}
+/* foto de portada detrás del telón: oscura y con un acercamiento lento */
+@keyframes intro-cover {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+.brand-intro-cover {
+  opacity: 0.32;
+  will-change: transform;
+  animation: intro-cover 14s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-intro-cover {
+    animation: none;
+  }
 }
 /* ya vista en la sesión: el telón de carga muestra el nombre quieto (D-052) */
 [data-intro='seen'] .brand-intro-name span,

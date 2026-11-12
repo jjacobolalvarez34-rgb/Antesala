@@ -245,7 +245,13 @@ function Rig({
         stageKey = `pano-${stage.unitId}-${stage.spaceId}`;
         depth = 5;
       } else if (c) {
-        pose = spacePose([anchor[0] + c[0], anchor[1] + 0.6, anchor[2] + c[1]], facade, FOV, aspect, layout);
+        // solo queda el espacio elegido (el resto se hunde): encuadrarlo a su tamaño
+        const sp = plan.spaces.find((x) => x.id === stage.spaceId);
+        const xs = sp?.points.map((p) => p[0] * 0.01) ?? [];
+        const zs = sp?.points.map((p) => p[1] * 0.01) ?? [];
+        const half = xs.length ? Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...zs) - Math.min(...zs)) / 2 : 3;
+        const reach = Math.min(4.2, Math.max(2.2, half + 0.5));
+        pose = spacePose([anchor[0] + c[0], anchor[1] + 0.6, anchor[2] + c[1]], facade, FOV, aspect, layout, reach);
         stageKey = `espacio-${stage.unitId}-${stage.spaceId}`;
         depth = 4;
       } else {
@@ -668,6 +674,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             reduced={reduced}
             shadows={shadows}
             cut={spaceId !== null && !in360}
+            focus={spaceId !== null && !in360 ? spaceId : null}
             interior={in360Pano && data.liveInterior}
             onHover={setHoveredSpace}
             onSelect={(sid) => router.push(routes.espacio(data.slug, unitId, sid))}
@@ -719,7 +726,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         ariaLabel="Ir a otro espacio"
       />
       <SpaceLabelLayer
-        labels={spaceLabels}
+        // con un espacio elegido solo queda su etiqueta: el resto se hundió (los demás, en el panel)
+        labels={spaceId ? spaceLabels.filter((l) => l.id === spaceId) : spaceLabels}
         anchors={spaceAnchors}
         visible={inUnit && active && !in360}
         current={spaceId}

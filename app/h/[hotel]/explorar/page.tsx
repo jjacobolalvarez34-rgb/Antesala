@@ -55,11 +55,12 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
           />
         </div>
       </div>
+      {/* en escritorio va a la esquina izquierda, a la altura de la barra de reserva: el centro queda libre */}
       {hotel.site.building ? (
-        <div className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-20 hidden justify-center scene:flex viewpoint:hidden">
+        <div className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-20 hidden justify-center scene:flex viewpoint:hidden md:inset-x-auto md:bottom-[calc(0.75rem+var(--safe-bottom)+0.5rem)] md:left-6">
           <FacadePicker
             building={hotel.site.building}
-            className="pointer-events-auto w-full max-w-sm animate-in duration-500 fade-in slide-in-from-bottom-2 lg:max-w-none lg:w-auto"
+            className="pointer-events-auto w-full max-w-sm animate-in duration-500 fade-in slide-in-from-bottom-2 md:w-auto md:max-w-none"
           />
         </div>
       ) : null}

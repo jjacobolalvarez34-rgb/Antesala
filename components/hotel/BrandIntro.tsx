@@ -24,7 +24,7 @@ const MIN_STATIC_MS = 300;
 const MAX_MS = 20_000;
 const LEAVE_MS = 750;
 
-export function BrandIntro({ name, tagline, base }: { name: string; tagline: string; base: string }) {
+export function BrandIntro({ name, tagline, base, cover }: { name: string; tagline: string; base: string; cover?: string }) {
   const pathname = usePathname();
   const rest = pathname.startsWith(base) ? pathname.slice(base.length) : '';
   const stage3d = /^\/(explorar|piso\/[^/]+|unidad\/[^/]+)(\/[^/]+)?\/?$/.test(rest);
@@ -76,6 +76,11 @@ export function BrandIntro({ name, tagline, base }: { name: string; tagline: str
         aria-label={`${name}: preparando el edificio`}
         className={`brand-intro pointer-events-auto fixed inset-0 z-50 grid place-items-center overflow-hidden bg-ink text-bone ${phase === 'leaving' ? 'brand-intro-leave' : ''}`}
       >
+        {/* la foto de portada detrás del nombre, con un acercamiento lento (solo transform: fluido aunque el 3D se esté armando) */}
+        {cover ? (
+          // eslint-disable-next-line @next/next/no-img-element -- foto ya cargada en la portada
+          <img aria-hidden alt="" src={cover} className="brand-intro-cover absolute inset-0 size-full object-cover" />
+        ) : null}
         <div aria-hidden className="brand-intro-fog" />
         <div className="relative text-center">
           <p className="brand-intro-name font-display text-[3.75rem] leading-none tracking-tight md:text-8xl" aria-hidden>

@@ -109,7 +109,11 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
   return { label: data.name, detail: from, context: base };
 }
 
-/** Barra inferior fija: etapa, atrás y Reservar siempre visible (DISENO.md §3). */
+/**
+ * Barra inferior fija: etapa, atrás y Reservar siempre visible (DISENO.md §3).
+ * En escritorio va en la esquina derecha para no tapar el edificio, la portada
+ * ni los clics (pedido de Jacobo, 2026-11-12).
+ */
 export function BookingBar({ data }: { data: BookingSummary }) {
   const segments = useSelectedLayoutSegments();
   const stage = resolveStage(data, segments);
@@ -120,7 +124,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(0.75rem+var(--safe-bottom))] md:px-6">
       <nav
         aria-label="Reserva"
-        className="glass pointer-events-auto mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center gap-2 rounded-2xl border border-white/60 py-2 pr-2 pl-2 shadow-[0_8px_32px_-12px_rgb(28_27_25/0.28)]"
+        className="glass pointer-events-auto mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center md:mr-0 md:max-w-md gap-2 rounded-2xl border border-white/60 py-2 pr-2 pl-2 shadow-[0_8px_32px_-12px_rgb(28_27_25/0.28)]"
       >
         {stage.back ? (
           <Link

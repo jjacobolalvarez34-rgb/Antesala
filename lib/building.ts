@@ -281,11 +281,13 @@ export function spacePose(
   fov: number,
   aspect: number,
   layout: 'sheet' | 'side',
+  /** radio del espacio en metros (media diagonal más un borde); encuadra baños y salas por igual */
+  reach = 3.8,
 ): CameraPose {
   return {
     target,
     // desde más arriba: con la maqueta abierta (muros bajos) nada tapa el espacio
-    radius: fitDistance(3.8, fov, aspect, 1.2),
+    radius: fitDistance(reach, fov, aspect, 1.2),
     polar: 38 * DEG,
     azimuth: facade.azimuth + 30 * DEG,
     shiftX: layout === 'side' ? 0.2 : 0,
