@@ -139,6 +139,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - Inmersivo: el 3D.
   - Premium: los renders del propio 3D pasados por Higgsfield para que parezcan fotografía profesional, más videos de entrada hechos desde esas imágenes. Así lo que se ve en Premium coincide con el 3D.
 - **Plan detallado:** `docs/PLAN-PREMIUM.md`. Niebla Alta: unas 20 imágenes y 4 videos. Akuare: unas 17 imágenes y 2 videos. Primero se prueba una sola imagen (la sala de la 402) para calibrar, y todo lo generado se guarda en el repo para no depender de Higgsfield.
+- **Cómo se genera (D-070):** por la conexión directa (MCP) Higgsfield cobra créditos (unos 2 por imagen y 12,5 por video), así que el lote se hace en la web de Higgsfield, donde el plan Ultra es ilimitado, con un kit de 29 referencias y prompts. La prueba (sala de la Suite 402) ya está hecha y conserva la distribución del 3D.
 - **Lo mismo para Akuare.** La fachada sale del render del 3D (datos del catastro), con fotos tomadas por Jacobo en la calle como referencia. Las imágenes de Google Maps o Street View no se usan, porque sus términos lo prohíben. Los interiores son ilustrativos.
 
 ---

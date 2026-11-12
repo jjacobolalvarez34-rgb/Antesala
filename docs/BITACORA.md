@@ -25,6 +25,24 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (3) · Modo Premium: plan, prueba con Higgsfield y kit
+
+**Hecho**
+- `docs/ESTADO.md` (resumen vivo para la conversación de estrategia) y `docs/PLAN-PREMIUM.md` (inventario, prompts y orden).
+- Higgsfield conectado por MCP (`.mcp.json`; cuenta Prodigia, plan Ultra).
+- Prueba de calibración: la sala de la Suite 402 desde su render, con Nano Banana Pro. Conserva la distribución y queda en `content/hotels/niebla-alta/media/premium/402-sala.webp`; registro en `docs/identidad/premium-higgsfield.json`.
+- Kit para la web de Higgsfield: 29 referencias numeradas y sus prompts en `.tmp/kit-premium/`.
+
+**Decisiones**
+- D-070: por el MCP todo cuesta créditos (el ilimitado del Ultra no aplica). El lote se genera en la web y el MCP solo prueba y trae resultados.
+
+**Problemas / bloqueos**
+- Algunas referencias son flojas (dormitorio del penthouse en blanco, baños vacíos). Para esas el kit usa otra referencia o solo el prompt.
+- La fachada de Akuare espera las fotos de Jacobo desde la calle (no se usa Google Maps).
+
+**Siguiente sesión**
+- Empezar por: traer por el MCP lo que Jacobo genere con el kit, pasarlo a WebP, registrarlo y armar el selector de nivel (Esencial, Inmersivo, Premium).
+
 ## 2026-11-12 (2) · Revisión de Jacobo: movimiento, video, mosaico, demos y precios
 
 **Hecho**

@@ -1,0 +1,13 @@
+{
+  "nota": "Registro del modo Premium (docs/PLAN-PREMIUM.md). Cada imagen generada con Higgsfield: archivo en el repo, job_id, modelo, referencia y prompt, para poder rehacerla. Todo ilustrativo.",
+  "imagenes": [
+    {
+      "archivo": "content/hotels/niebla-alta/media/premium/402-sala.webp",
+      "job_id": "fc08fbf5-6fe2-4eb5-99a9-1d5ff7a0a0e4",
+      "modelo": "nano_banana_pro (2k, 16:9)",
+      "referencia": "content/hotels/niebla-alta/media/renders/402-sala.jpg",
+      "via": "MCP (2 créditos), prueba de calibración aprobada",
+      "prompt": "Turn this simple 3D mockup into a professional real-estate interior photograph of the SAME apartment living room. Keep the exact layout: the L-shaped beige sofa on the left, the low white coffee table, the wooden dining table with four upholstered chairs in the foreground, the wide window on the back wall opening to a balcony with a glass railing, two potted round shrubs, a small bistro table with a chair on the balcony, light oak wood floor, white walls. Camera: slightly pulled back to show the whole room, eye level 1.5 m, 24 mm lens, straight vertical lines. Outside the window: the city of Bogotá with brick buildings and the green eastern hills with low mist, overcast late afternoon light. Warm, elegant boutique-hotel styling: linen cushions, a wool rug, a ceramic vase, warm floor lamp. Photorealistic, editorial architectural photography, natural soft light. No people, no text, no logos, no watermark."
+    }
+  ]
+}

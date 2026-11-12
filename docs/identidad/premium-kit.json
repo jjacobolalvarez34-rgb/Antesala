@@ -1,0 +1,205 @@
+[
+ {
+  "n": 1,
+  "hotel": "niebla-alta",
+  "espacio": "fachada-dia",
+  "referencia": "content/hotels/niebla-alta/media/renders/fachada-dia.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME building exterior. Keep the exact layout and camera direction of the reference: a six-storey red-brick boutique apartment hotel on a street corner, ground floor fully glazed lobby with a small dark canopy over the entrance with the words NIEBLA ALTA in small serif letters, two round planters at the door, white concrete floor slabs between floors, aluminium windows in a regular grid, one column of glass-railing balconies, top floor set back with a terrace, glass railing and planters, a wooden pergola on the roof, tree-lined side street. Late afternoon, overcast sky, the green eastern hills of Bogota with low mist behind, wet pavement, soft warm light in some windows. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 2,
+  "hotel": "niebla-alta",
+  "espacio": "fachada-noche",
+  "referencia": "content/hotels/niebla-alta/media/renders/fachada-noche.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME building exterior at dusk. Keep the exact layout and camera direction of the reference: the same six-storey red-brick boutique apartment hotel on a street corner, glazed ground-floor lobby glowing warm, small dark canopy with the words NIEBLA ALTA, uplights on the facade, many windows lit warm, roof terrace with pergola lit, street lamps on. Blue hour, dark hills of Bogota behind with mist. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 3,
+  "hotel": "niebla-alta",
+  "espacio": "lobby",
+  "referencia": null,
+  "prompt": "Professional photograph of the ground-floor lobby of a small boutique apartment hotel in Chapinero Alto, Bogota: compact reception desk in warm walnut with a brass edge, terrazzo floor, exposed red brick wall, a small waiting area with a curved boucle armchair and a low table, pendant lamp, plants, glass front door to the street. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 4,
+  "hotel": "niebla-alta",
+  "espacio": "cowork",
+  "referencia": null,
+  "prompt": "Professional photograph of a small cowork room in a boutique apartment hotel in Bogota: one long shared oak table with six chairs, a phone booth corner, shelves with books and plants, large window to a quiet tree-lined street, pendant lamps. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 5,
+  "hotel": "niebla-alta",
+  "espacio": "terraza-piso-6",
+  "referencia": "content/hotels/niebla-alta/media/renders/601-terraza.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME rooftop terrace of the penthouse. Keep the exact layout and camera direction of the reference: a long terrace along the top floor with a glass railing, a strip of planted greenery along the edge, an outdoor dining table with chairs under a wooden pergola, deck flooring, sliding glass doors to the living room on the right. View over Bogota brick buildings to the green eastern hills with mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 6,
+  "hotel": "niebla-alta",
+  "espacio": "201-descanso",
+  "referencia": "content/hotels/niebla-alta/media/renders/201-descanso.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME studio apartment, sleeping area. Keep the exact layout and camera direction of the reference: a queen bed with a padded headboard on the left, bedside lamp, a small desk with a chair by the window on the right, wide window. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 7,
+  "hotel": "niebla-alta",
+  "espacio": "201-sala",
+  "referencia": "content/hotels/niebla-alta/media/renders/201-sala.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME studio apartment, living area. Keep the exact layout and camera direction of the reference: a small grey sofa on the right, a potted plant, a small dining table with chairs by the wide window, bed visible at the left edge. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 8,
+  "hotel": "niebla-alta",
+  "espacio": "201-cocina",
+  "referencia": "content/hotels/niebla-alta/media/renders/201-cocina.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME studio apartment, kitchenette. Keep the exact layout and camera direction of the reference: a compact dark kitchenette with a white countertop against the wall, a wooden dining table in front, sofa at the left edge. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 9,
+  "hotel": "niebla-alta",
+  "espacio": "201-bano",
+  "referencia": "content/hotels/niebla-alta/media/renders/201-bano.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME studio apartment bathroom. Keep the exact layout and camera direction of the reference: a compact bathroom seen from its door: white toilet on the right, floating vanity with round mirror, walk-in shower with glass panel, large format beige porcelain tiles. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 10,
+  "hotel": "niebla-alta",
+  "espacio": "402-dormitorio",
+  "referencia": "content/hotels/niebla-alta/media/renders/402-dormitorio.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME suite bedroom. Keep the exact layout and camera direction of the reference: a queen bed with a padded headboard on the left and a wood bench at its foot, bedside lamp, a small desk with two chairs under the wide window. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 11,
+  "hotel": "niebla-alta",
+  "espacio": "402-balcon",
+  "referencia": "content/hotels/niebla-alta/media/renders/402-balcon.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME suite living room seen from the balcony door. Keep the exact layout and camera direction of the reference: a plant in the foreground, dining table with four chairs on the left, white coffee table on a rug, beige sofa on the right, floor lamp, kitchen in the back. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 12,
+  "hotel": "niebla-alta",
+  "espacio": "402-cocina",
+  "referencia": "content/hotels/niebla-alta/media/renders/402-cocina.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME suite kitchen. Keep the exact layout and camera direction of the reference: an L-shaped kitchen with dark lower cabinets and a white quartz countertop, window at the back with the city view. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 13,
+  "hotel": "niebla-alta",
+  "espacio": "402-bano",
+  "referencia": "content/hotels/niebla-alta/media/renders/402-bano.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME suite bathroom. Keep the exact layout and camera direction of the reference: seen from the door: white toilet on the right, floating walnut vanity with a round brass mirror, walk-in shower with glass panel, travertine-look tiles, a door at the back. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 14,
+  "hotel": "niebla-alta",
+  "espacio": "601-sala",
+  "referencia": "content/hotels/niebla-alta/media/renders/601-sala.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME penthouse living room. Keep the exact layout and camera direction of the reference: a large wooden dining table in the foreground, a lounge with sofas and armchairs in the back, a wide window to the terrace with greenery. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 15,
+  "hotel": "niebla-alta",
+  "espacio": "601-cocina",
+  "referencia": "content/hotels/niebla-alta/media/renders/601-cocina.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME penthouse kitchen. Keep the exact layout and camera direction of the reference: a kitchen island with a white countertop and round stools, dark cabinets, window at the back with the city view, dining chairs at the left edge. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 16,
+  "hotel": "niebla-alta",
+  "espacio": "601-dormitorio",
+  "referencia": "content/hotels/niebla-alta/media/renders/402-dormitorio.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME penthouse master bedroom (larger and more luxurious than the reference). Keep the exact layout and camera direction of the reference: king bed with a tall upholstered headboard, two bedside tables with lamps, a reading armchair, a wide window to the terrace. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 17,
+  "hotel": "niebla-alta",
+  "espacio": "601-bano",
+  "referencia": "content/hotels/niebla-alta/media/renders/601-bano.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME penthouse bathroom. Keep the exact layout and camera direction of the reference: a freestanding bathtub under the window, double walnut vanity, walk-in shower, travertine and brass. Outside the windows: Bogota, red-brick apartment buildings and the green eastern hills with low mist. Elegant boutique apartment-hotel styling: warm oak, linen, wool, ceramics, brass details, plants. Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 18,
+  "hotel": "akuare",
+  "espacio": "101-sala",
+  "referencia": "content/hotels/akuare/media/renders/101-sala.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment living room. Keep the exact layout and camera direction of the reference: beige sofa facing a white coffee table, floor lamp on the left, dining table with chairs on the right, a long horizontal window on the back wall. Outside: Suba, Bogota, residential brick and concrete buildings. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 19,
+  "hotel": "akuare",
+  "espacio": "101-balcon",
+  "referencia": "content/hotels/akuare/media/renders/101-balcon.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment living and dining room seen from the balcony. Keep the exact layout and camera direction of the reference: long sofa on the left facing a coffee table and armchair, rug, dining table in the back, doors to the hallway on the right, long window on the left. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 20,
+  "hotel": "akuare",
+  "espacio": "101-cocina",
+  "referencia": "content/hotels/akuare/media/renders/101-cocina.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment kitchen. Keep the exact layout and camera direction of the reference: an L-shaped kitchen with wood-look lower cabinets and a white countertop under a window. Outside: Suba, Bogota, residential brick and concrete buildings. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 21,
+  "hotel": "akuare",
+  "espacio": "101-alcoba",
+  "referencia": "content/hotels/akuare/media/renders/101-alcoba.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME master bedroom. Keep the exact layout and camera direction of the reference: double bed with a dark headboard on the left, bedside lamp, a window on the back wall, wardrobe on the right. Outside: Suba, Bogota, residential brick and concrete buildings. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 22,
+  "hotel": "akuare",
+  "espacio": "101-alcoba-2",
+  "referencia": "content/hotels/akuare/media/renders/101-alcoba-2.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME second bedroom. Keep the exact layout and camera direction of the reference: double bed with a dark headboard centered against the wall. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 23,
+  "hotel": "akuare",
+  "espacio": "101-alcoba-3",
+  "referencia": "content/hotels/akuare/media/renders/101-alcoba-3.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME third bedroom, used as a study and guest room. Keep the exact layout and camera direction of the reference: a bed with a dark headboard against the wall, small desk. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 24,
+  "hotel": "akuare",
+  "espacio": "101-bano",
+  "referencia": null,
+  "prompt": "Professional photograph of a modern apartment bathroom in Bogota: white toilet, floating vanity with mirror, shower with glass panel, light grey porcelain tiles. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 25,
+  "hotel": "akuare",
+  "espacio": "102-sala",
+  "referencia": "content/hotels/akuare/media/renders/102-balcon.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment living room seen from the balcony. Keep the exact layout and camera direction of the reference: a plant and glass railing in the foreground, beige sofa and coffee table inside, white walls. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 26,
+  "hotel": "akuare",
+  "espacio": "102-cocina",
+  "referencia": "content/hotels/akuare/media/renders/102-cocina.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment open kitchen. Keep the exact layout and camera direction of the reference: a kitchen counter with a round table and stools, dining chairs at the right. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 27,
+  "hotel": "akuare",
+  "espacio": "102-alcoba",
+  "referencia": "content/hotels/akuare/media/renders/102-alcoba.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME master bedroom. Keep the exact layout and camera direction of the reference: double bed with a dark headboard on the left, bedside lamp, window on the back wall. Outside: Suba, Bogota, residential brick and concrete buildings. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 28,
+  "hotel": "akuare",
+  "espacio": "102-alcoba-2",
+  "referencia": null,
+  "prompt": "Professional photograph of a small second bedroom in a modern Bogota apartment: single bed, built-in wardrobe in light wood, small desk under a window. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ },
+ {
+  "n": 29,
+  "hotel": "akuare",
+  "espacio": "102-bano",
+  "referencia": "content/hotels/akuare/media/renders/102-bano.jpg",
+  "prompt": "Turn this simple 3D mockup into a professional photograph of the SAME apartment bathroom. Keep the exact layout and camera direction of the reference: seen from the door: white toilet on the left, shower with glass panel, vanity, light porcelain tiles. Modern Bogota residential apartment, clean contemporary finishes, light wood floor, white walls, tasteful but realistic furnishing (not a luxury hotel). Photorealistic, editorial architectural photography, soft natural light of an overcast Bogota afternoon mixed with warm interior lamps, 24 mm lens, eye level about 1.5 m, straight vertical lines. No people, no text, no logos, no watermark."
+ }
+]

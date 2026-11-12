@@ -350,3 +350,10 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - "Más elegido para empezar" pasa a "Recomendado para empezar": todavía no hay clientes.
 - Por qué: Premium ("3D avanzado") y Corporativo no correspondían a nada construido ni planeado; cada paquete tiene que poder mostrarse.
 
+**D-070 · 2026-11-12 · Higgsfield: el lote se genera en la web; el MCP para probar y traer resultados**
+- Decisión:
+  - Las imágenes y los videos del modo Premium se generan en la web de Higgsfield con el kit (referencias numeradas y prompts).
+  - El MCP se usa para la prueba de calibración y para traer los resultados al repo; leer generaciones no gasta créditos.
+  - Todo lo aprobado se guarda en el repo (WebP en `media/premium/`) con su registro, para no depender de Higgsfield.
+- Por qué: por el MCP cada imagen cuesta unos 2 créditos y cada video unos 12,5; el ilimitado del plan Ultra no aplica por ahí. El plan completo serían unos 150 créditos.
+

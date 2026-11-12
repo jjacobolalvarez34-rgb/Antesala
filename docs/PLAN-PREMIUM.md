@@ -69,6 +69,13 @@ Las copias (301, 502 y demás) heredan los medios de su plantilla.
 
 **Total Akuare:** unas 17 imágenes y 2 videos. **Espera las fotos de Jacobo** para la fachada; los interiores pueden ir antes.
 
+## 2b. Qué se encontró al conectar (2026-11-12)
+
+- **Por el MCP todo cuesta créditos:** unos 2 por imagen (Nano Banana Pro a 2K) y unos 12,5 por video de 5 s (Seedance 2.0). El "ilimitado" del plan Ultra **no aplica por el MCP**: el servidor responde `unlim.available: false`. La cuenta tenía 7,25 créditos.
+- **Decisión (Jacobo):** el MCP solo se usa para la **prueba** (hecha: `402-sala`, 2 créditos) y para **traer los resultados** (leer generaciones no cuesta). El lote se genera en la **web de Higgsfield**, donde el Ultra es ilimitado, con el kit.
+- **Kit:** `.tmp/kit-premium/` (local, no se sube). Trae cada referencia numerada (`NN-hotel-espacio-REF.jpg`) y `KIT.md` con el prompt de cada una. La lista también está en `docs/identidad/premium-kit.json`: son 29 imágenes, 17 de Niebla Alta y 12 de Akuare. La fachada de Akuare espera las fotos de Jacobo.
+- **Modelo calibrado:** Nano Banana Pro, 2K, 16:9, con el render como referencia. La prueba conservó la distribución (sofá, mesa, ventana al balcón, materas) y dio un Bogotá creíble. El registro está en `docs/identidad/premium-higgsfield.json`.
+
 ## 3. Cómo se genera
 
 1. **Revisar la cuenta:** `balance` y `list_workspaces` (que sea Prodigia, plan Ultra). Con `models_explore` (`unlim: true`) ver qué modelos de imagen y video entran sin gastar créditos en el plan. **Revisar los términos de uso comercial del plan** antes de publicar.
