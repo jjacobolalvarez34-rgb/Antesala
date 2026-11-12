@@ -26,6 +26,8 @@ export async function generateMetadata({ params }: PageProps<'/h/[hotel]/piso/[n
   return { title: bundle ? findLevel(bundle.hotel, nivel)?.name : undefined };
 }
 
+const capitalize = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
 export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[nivel]'>) {
   const { hotel: slug, nivel } = await params;
   const bundle = await getHotelBundle(slug);
@@ -106,10 +108,25 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
               name: u.name,
               areaM2: u.areaM2,
               href: routes.unidad(hotel.slug, u.id),
+              // disponibilidad sobre la planta (bloque 9): verde libre, terracota ocupada o vendida
+              status: u.occupied ? ('ocupada' as const) : ('libre' as const),
+              statusLabel: u.occupied ? offerOf(hotel).takenShort : capitalize(offerOf(hotel).free),
             }))}
             title={`Planta del ${level.name}`}
             className="mx-auto mt-4 max-w-2xl"
           />
+          {units.length ? (
+            <ul aria-label="Leyenda" className="mx-auto mt-5 flex max-w-2xl flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="size-3 rounded-sm border border-ink/20 bg-[#dfe8d6]" />
+                {capitalize(offerOf(hotel).freePlural)} · {units.filter((u) => !u.occupied).length}
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="size-3 rounded-sm border border-ink/20 bg-[#efd9cf]" />
+                {offerOf(hotel).takenShort} · {units.filter((u) => u.occupied).length}
+              </li>
+            </ul>
+          ) : null}
         </section>
       ) : null}
 

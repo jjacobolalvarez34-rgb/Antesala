@@ -921,7 +921,7 @@ export function BuildingModel({
   const cladding = building.style?.cladding ?? 'estuco';
   const tex = useMemo<SharedTextures>(
     () => ({
-      clad: cladding === 'ladrillo' ? brickTexture() : cladding === 'concreto' ? concreteTexture(17) : stuccoTexture(),
+      clad: cladding === 'ladrillo' ? brickTexture() : cladding === 'concreto' ? concreteTexture(17) : stuccoTexture(3, '#d6c8b0'), // estuco color arena: cerca de la piedra de la foto de portada
       concrete: concreteTexture(),
       atlas: interiorAtlas(),
     }),

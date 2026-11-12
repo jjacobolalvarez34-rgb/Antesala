@@ -160,6 +160,27 @@ export interface Site {
   pois: Poi[];
   /** contexto real (vecinos y calles) generado con pnpm catastro (D-056): ruta relativa a un JSON */
   context?: string;
+  /** puntos tocables sobre la foto de portada (bloque 9, D-060) */
+  cover?: CoverPoint[];
+}
+
+/**
+ * Punto tocable sobre la foto de portada (exterior[0]). x, y en fracción de la
+ * imagen (0 a 1, desde arriba a la izquierda). Lleva a un piso, una unidad o al
+ * edificio en 3D; con clip, antes pasa un video corto de transición.
+ */
+export interface CoverPoint {
+  id: string;
+  label: string;
+  detail?: string;
+  x: number;
+  y: number;
+  to: { level: string } | { unit: string } | { explorar: true };
+  /**
+   * Video de transición (sin sonido). Rutas relativas a la carpeta del hotel o
+   * absolutas ("/..." o "https://..."): sm para celular, lg para escritorio.
+   */
+  clip?: { sm: string; lg?: string; poster?: string };
 }
 
 export interface Hotel {

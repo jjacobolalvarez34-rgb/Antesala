@@ -9,3 +9,8 @@ const BASE = (process.env.NEXT_PUBLIC_ASSETS_BASE_URL ?? '/demo-assets').replace
 export function mediaUrl(hotelSlug: string, src: string): string {
   return `${BASE}/${hotelSlug}/${src.replace(/^\//, '')}`;
 }
+
+/** Como mediaUrl, pero deja pasar rutas absolutas ("/..." o "https://..."), p. ej. videos en R2. */
+export function assetUrl(hotelSlug: string, src: string): string {
+  return /^(https?:)?\/\//.test(src) || src.startsWith('/') ? src : mediaUrl(hotelSlug, src);
+}

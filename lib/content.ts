@@ -105,6 +105,19 @@ const hotelSchema = z.object({
       .optional(),
     exterior: z.array(media),
     context: relPath.regex(/\.json$/, 'el contexto es un .json').optional(),
+    cover: z
+      .array(
+        z.object({
+          id,
+          label: z.string().min(1),
+          detail: z.string().optional(),
+          x: z.number().min(0).max(1),
+          y: z.number().min(0).max(1),
+          to: z.union([z.object({ level: id }), z.object({ unit: id }), z.object({ explorar: z.literal(true) })]),
+          clip: z.object({ sm: z.string().min(1), lg: z.string().min(1).optional(), poster: z.string().min(1).optional() }).optional(),
+        }),
+      )
+      .optional(),
     pois: z.array(
       z.object({
         id,
@@ -345,6 +358,18 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
     for (const u of hotel.units.filter((x) => x.levelId === level.id)) {
       if (!ids.has(u.id)) problems.push(`piso "${level.id}" → ${level.plan} no tiene el polígono de la unidad "${u.id}"`);
     }
+  }
+
+  // puntos de la portada (bloque 9): destino que exista y clips locales presentes
+  for (const pt of hotel.site.cover ?? []) {
+    if ('level' in pt.to && !levelIds.has(pt.to.level)) problems.push(`portada "${pt.id}" → el piso "${pt.to.level}" no existe`);
+    if ('unit' in pt.to && !unitIds.has(pt.to.unit)) problems.push(`portada "${pt.id}" → la unidad "${pt.to.unit}" no existe`);
+    for (const src of [pt.clip?.sm, pt.clip?.lg, pt.clip?.poster]) {
+      if (src && !src.startsWith('/') && !/^https?:/.test(src)) mediaSrcs.add(src);
+    }
+  }
+  if (hotel.site.cover?.length && !hotel.site.exterior.some((m) => m.kind === 'photo')) {
+    problems.push('portada → hay puntos pero no hay foto exterior (exterior[0] con kind "photo")');
   }
 
   if (tokens.brand.logo) mediaSrcs.add(tokens.brand.logo);

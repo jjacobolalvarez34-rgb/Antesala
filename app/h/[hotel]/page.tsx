@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, Check, Clock, MapPin, MessageCircle, Move3d, Plus } from 'lucide-react';
 
+import { CoverHero, type CoverHeroPoint } from '@/components/hotel/CoverHero';
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { unitCover } from '@/components/hotel/UnitCard';
 import { getHotelBundle } from '@/lib/content';
 import { findLevel, formatArea, formatCOP, offerOf, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
-import { mediaUrl } from '@/lib/media';
+import { assetUrl, mediaUrl } from '@/lib/media';
 import { routes } from '@/lib/routes';
 import type { Media, Unit } from '@/lib/types';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
@@ -29,7 +30,27 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
 
   const exterior = hotel.site.exterior.filter((m) => m.kind === 'photo');
   const hero = exterior[0] ?? unitCover(hotel.units.find((u) => u.featured) ?? hotel.units[0]!);
-  const night = exterior.find((m) => /noche/i.test(m.src));
+  // zonas comunes: la foto de una zona si la hay; si no, la fachada de noche
+  const night = hotel.site.pois.flatMap((p) => p.media).find((m) => m.kind === 'photo') ?? exterior.find((m) => /noche/i.test(m.src));
+  // puntos tocables de la portada (bloque 9): solo sobre una foto exterior
+  const coverPoints: CoverHeroPoint[] =
+    exterior[0] && hero === exterior[0]
+      ? (hotel.site.cover ?? []).map((pt) => ({
+          id: pt.id,
+          label: pt.label,
+          detail: pt.detail,
+          x: pt.x,
+          y: pt.y,
+          href: 'level' in pt.to ? routes.piso(hotel.slug, pt.to.level) : 'unit' in pt.to ? routes.unidad(hotel.slug, pt.to.unit) : routes.explorar(hotel.slug),
+          clip: pt.clip
+            ? {
+                sm: assetUrl(hotel.slug, pt.clip.sm),
+                lg: pt.clip.lg ? assetUrl(hotel.slug, pt.clip.lg) : undefined,
+                poster: pt.clip.poster ? assetUrl(hotel.slug, pt.clip.poster) : undefined,
+              }
+            : undefined,
+        }))
+      : [];
   const openFloor = exterior.find((m) => /piso/i.test(m.src));
 
   // una tarjeta por categoría: precio desde, área y capacidad, y la unidad que se muestra
@@ -61,7 +82,9 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
       {/* Portada: el edificio a pantalla completa */}
       <section className="px-3 md:px-6">
         <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-ink text-bone md:rounded-[2.25rem]">
-          {hero ? (
+          {hero && coverPoints.length ? (
+            <CoverHero src={photo(hero)!} alt={hero.alt} width={hero.width ?? 1600} height={hero.height ?? 1000} points={coverPoints} />
+          ) : hero ? (
             <img
               src={photo(hero)}
               alt={hero.alt}
@@ -73,7 +96,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
           ) : null}
           <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/45 to-ink/5" />
           {hero ? <FidelityBadge fidelity={hero.fidelity} className="absolute top-4 left-4 md:top-6 md:left-6" /> : null}
-          <div className="flex min-h-[74svh] flex-col justify-end px-6 pt-24 pb-8 md:min-h-[82svh] md:px-14 md:pb-14">
+          <div className={`flex min-h-[74svh] flex-col justify-end px-6 pt-24 pb-8 md:px-14 md:pb-14 ${coverPoints.length ? 'md:min-h-[88svh]' : 'md:min-h-[82svh]'}`}>
             <p className="text-xs tracking-[0.2em] text-bone/75 uppercase">{place}</p>
             <h1 className="mt-3 font-display text-[3.75rem] leading-[0.9] tracking-tight text-balance md:text-[7.5rem]">
               {tokens.brand.name}

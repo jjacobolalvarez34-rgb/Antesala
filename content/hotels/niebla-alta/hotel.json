@@ -33,10 +33,19 @@
       "floors": 6,
       "floorHeightM": 3.1,
       "style": {
-        "cladding": "ladrillo"
+        "cladding": "estuco"
       }
     },
     "exterior": [
+      {
+        "id": "foto-fachada",
+        "kind": "photo",
+        "src": "media/fotos/exterior-edificio.webp",
+        "alt": "Fachada de Niebla Alta al anochecer, con la terraza encendida (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1344,
+        "height": 752
+      },
       {
         "id": "render-exterior-1",
         "kind": "photo",
@@ -77,6 +86,15 @@
           14.5
         ],
         "media": [
+          {
+            "id": "foto-lobby",
+            "kind": "photo",
+            "src": "media/fotos/lobby.webp",
+            "alt": "Lobby de Niebla Alta (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1344,
+            "height": 752
+          },
           {
             "id": "pois-lobby-1",
             "kind": "photo",
@@ -140,6 +158,15 @@
         ],
         "media": [
           {
+            "id": "foto-terraza",
+            "kind": "photo",
+            "src": "media/fotos/penthouse-terraza.webp",
+            "alt": "Terraza del piso 6 al anochecer (imagen ilustrativa)",
+            "fidelity": "ilustrativa",
+            "width": 1344,
+            "height": 752
+          },
+          {
             "id": "pois-terraza-1",
             "kind": "photo",
             "src": "media/pois/terraza-amplia.svg",
@@ -190,6 +217,46 @@
             "yaw": 0
           }
         ]
+      }
+    ],
+    "cover": [
+      {
+        "id": "terraza",
+        "label": "La terraza",
+        "detail": "Piso 6 · penthouse y terraza común",
+        "x": 0.505,
+        "y": 0.06,
+        "to": {
+          "level": "6"
+        }
+      },
+      {
+        "id": "suites",
+        "label": "Las suites",
+        "detail": "Suite 402, con balcón",
+        "x": 0.55,
+        "y": 0.47,
+        "to": {
+          "unit": "402"
+        },
+        "clip": {
+          "sm": "/demo/video/03-puerta-suite-720.mp4",
+          "lg": "/demo/video/03-puerta-suite-1280.mp4"
+        }
+      },
+      {
+        "id": "lobby",
+        "label": "El lobby",
+        "detail": "Piso 1 · lobby y cowork",
+        "x": 0.536,
+        "y": 0.86,
+        "to": {
+          "level": "1"
+        },
+        "clip": {
+          "sm": "/demo/video/01-calle-lobby-720.mp4",
+          "lg": "/demo/video/01-calle-lobby-1280.mp4"
+        }
       }
     ]
   },
@@ -342,6 +409,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "foto-201-descanso",
+              "kind": "photo",
+              "src": "media/fotos/suite-anochecer.webp",
+              "alt": "Zona de descanso del Estudio 201 al anochecer (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 896,
+              "height": 1120
             },
             {
               "id": "render-201-descanso",
@@ -1066,6 +1142,15 @@
               ]
             },
             {
+              "id": "foto-402-sala",
+              "kind": "photo",
+              "src": "media/fotos/suite-sala.webp",
+              "alt": "Sala y comedor de la Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1168,
+              "height": 880
+            },
+            {
               "id": "render-402-sala",
               "kind": "photo",
               "src": "media/renders/402-sala.jpg",
@@ -1153,6 +1238,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "foto-402-balcon",
+              "kind": "photo",
+              "src": "media/fotos/suite-balcon.webp",
+              "alt": "Balcón de la Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1168,
+              "height": 880
             },
             {
               "id": "render-402-balcon",
@@ -1246,6 +1340,15 @@
               ]
             },
             {
+              "id": "foto-402-cocina",
+              "kind": "photo",
+              "src": "media/fotos/suite-cocina.webp",
+              "alt": "Cocina de la Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1168,
+              "height": 880
+            },
+            {
               "id": "render-402-cocina",
               "kind": "photo",
               "src": "media/renders/402-cocina.jpg",
@@ -1337,6 +1440,15 @@
               ]
             },
             {
+              "id": "foto-402-dormitorio",
+              "kind": "photo",
+              "src": "media/fotos/suite-dormitorio.webp",
+              "alt": "Dormitorio de la Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1168,
+              "height": 880
+            },
+            {
               "id": "render-402-dormitorio",
               "kind": "photo",
               "src": "media/renders/402-dormitorio.jpg",
@@ -1425,6 +1537,15 @@
                   "target": "dormitorio"
                 }
               ]
+            },
+            {
+              "id": "foto-402-bano",
+              "kind": "photo",
+              "src": "media/fotos/suite-bano.webp",
+              "alt": "Baño de la Suite 402 (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1168,
+              "height": 880
             },
             {
               "id": "render-402-bano",
@@ -2016,6 +2137,15 @@
                   "target": "bano"
                 }
               ]
+            },
+            {
+              "id": "foto-601-terraza",
+              "kind": "photo",
+              "src": "media/fotos/penthouse-terraza.webp",
+              "alt": "Terraza del Penthouse al anochecer (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1344,
+              "height": 752
             },
             {
               "id": "render-601-terraza",

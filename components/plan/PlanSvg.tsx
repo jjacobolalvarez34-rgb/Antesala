@@ -16,6 +16,10 @@ export interface PlanSpaceMeta {
   areaM2?: number;
   href: Route;
   outdoor?: boolean;
+  /** disponibilidad en la planta del piso (bloque 9): verde libre, terracota ocupada o vendida */
+  status?: 'libre' | 'ocupada';
+  /** texto corto del estado ("Vendido", "Ocupada") */
+  statusLabel?: string;
 }
 
 interface Props {
@@ -70,7 +74,13 @@ export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive',
                   points={s.points.map((p) => p.join(',')).join(' ')}
                   className={cn(
                     'transition-[fill] duration-200',
-                    info?.outdoor ? 'fill-stone/45' : 'fill-card',
+                    info?.status === 'libre'
+                      ? 'fill-[#dfe8d6]'
+                      : info?.status === 'ocupada'
+                        ? 'fill-[#efd9cf]'
+                        : info?.outdoor
+                          ? 'fill-stone/45'
+                          : 'fill-card',
                     hot && 'fill-accent/16',
                     active && 'fill-accent/18',
                     interactive && 'cursor-pointer',
@@ -197,6 +207,16 @@ export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive',
                         )}
                       >
                         {formatArea(info.areaM2)}
+                      </span>
+                    ) : null}
+                    {info.statusLabel ? (
+                      <span
+                        className={cn(
+                          'mt-0.5 text-[0.6875rem] font-medium tracking-wide uppercase',
+                          active || hovered === l.id ? 'text-accent-foreground/85' : info.status === 'ocupada' ? 'text-[#9a4a33]' : 'text-[#4d6b3c]',
+                        )}
+                      >
+                        {info.statusLabel}
                       </span>
                     ) : null}
                   </Link>
