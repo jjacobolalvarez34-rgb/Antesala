@@ -143,6 +143,7 @@ const hotelSchema = z.object({
         kind: z.enum(['piso', 'zona']),
         order: z.number(),
         plan: relPath.regex(/^plans\/.+\.svg$/, 'el plano va en plans/*.svg').optional(),
+        realista: relPath.regex(/\.glb$/).optional(),
       }),
     )
     .min(1),
@@ -377,6 +378,7 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
   }
 
   if (hotel.site.building?.realista) mediaSrcs.add(hotel.site.building.realista);
+  for (const l of hotel.levels) if (l.realista) mediaSrcs.add(l.realista);
   if (tokens.brand.logo) mediaSrcs.add(tokens.brand.logo);
   for (const src of mediaSrcs) {
     if (!(await exists(path.join(dir, src)))) problems.push(`falta el archivo de medio: ${src}`);

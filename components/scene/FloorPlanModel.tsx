@@ -2,7 +2,7 @@
 
 import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 import { FURNITURE_COLORS } from '@/components/plan/furniture';
@@ -49,6 +49,8 @@ const FINISH: Record<string, string> = {
 };
 
 const WARM = new THREE.Color('#ffb46b');
+const WHITE = new THREE.Color('#ffffff');
+const NIGHT_WARM = new THREE.Color('#b98a5e');
 const GLOW = new THREE.Color('#ffc98a');
 
 const colorFor = (s: FloorPlanSpace | undefined, finish: string | undefined) => {
@@ -67,7 +69,13 @@ export function FloorPlanModel({
   light,
   onHover,
   onSelect,
+  name,
+  realista,
 }: {
+  /** nombre del grupo (lo usa el exportador del 3D realista: "planta-<piso>") */
+  name?: string;
+  /** planta horneada en Blender (nivel Premium, D-074): reemplaza muros, pisos y muebles */
+  realista?: string;
   /** día/noche de la escena: de noche las habitaciones se encienden por dentro */
   light: LightUniforms;
   plan: PlanGeometry;
@@ -93,22 +101,80 @@ export function FloorPlanModel({
   const meta = useMemo(() => new Map(spaces.map((s) => [s.id, s])), [spaces]);
   const finishes = useMemo(() => new Map(plan.spaces.map((s) => [s.id, s.finish])), [plan]);
   const mats = useMemo(() => {
-    const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
-      new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra });
+    const m = (name: string, color: string, extra: THREE.MeshStandardMaterialParameters = {}) =>
+      new THREE.MeshStandardMaterial({ name, color, roughness: 0.85, transparent: true, opacity: 0, ...extra });
+    // los nombres los lee Blender (amoblar.py) para poner el acabado de cada superficie
+    const surface = (finish: string | undefined) =>
+      finish === 'baldosa' || finish === 'piedra' ? 'tile' : finish === 'alfombra' ? 'alfombra' : finish === 'concreto' || finish === 'deck' ? 'concreto' : 'wood';
     return {
       // muros en corte oscuros (como el relleno de un plano): la planta se lee de día y de noche
-      walls: m('#57504a', { roughness: 0.9 }),
-      floors: Object.fromEntries(meshes.floors.map((f) => [f.id, m(colorFor(meta.get(f.id), finishes.get(f.id)), { roughness: 0.75 })])),
+      walls: m('muros', '#57504a', { roughness: 0.9 }),
+      floors: Object.fromEntries(
+        meshes.floors.map((f) => [
+          f.id,
+          m(`piso-${surface(finishes.get(f.id))}-${f.id}`, colorFor(meta.get(f.id), finishes.get(f.id)), { roughness: 0.75 }),
+        ]),
+      ),
       furniture: Object.fromEntries(
         meshes.furniture.map((f) => [
           f.material,
           f.material === 'glass'
-            ? m(FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
-            : m(FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
+            ? m('mueble-glass', FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
+            : m(`mueble-${f.material}`, FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
         ]),
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
   }, [meshes, meta, finishes]);
+
+  // planta horneada (Premium): se carga al montarse; mientras tanto se ve la de código
+  const [baked, setBaked] = useState<{ obj: THREE.Object3D; mat: THREE.MeshBasicMaterial } | null>(null);
+  useEffect(() => {
+    if (!realista) return;
+    let alive = true;
+    let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial } | null = null;
+    void (async () => {
+      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+        import('three/examples/jsm/loaders/GLTFLoader.js'),
+        import('three/examples/jsm/loaders/DRACOLoader.js'),
+      ]);
+      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
+      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
+      draco.dispose();
+      if (!alive || !gltf) return;
+      let mat: THREE.MeshBasicMaterial | null = null;
+      gltf.scene.traverse((o) => {
+        const mesh = o as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        const src = mesh.material as THREE.MeshStandardMaterial;
+        // la luz ya viene en la textura: sin la curva de tono del visor (D-074)
+        const next = new THREE.MeshBasicMaterial({ map: src.map, transparent: true, opacity: 0, toneMapped: false });
+        mesh.material = next;
+        mesh.raycast = noHit;
+        mat ??= next;
+      });
+      if (!mat) return;
+      loaded = { obj: gltf.scene, mat };
+      setBaked(loaded);
+    })();
+    return () => {
+      alive = false;
+      loaded?.mat.dispose();
+    };
+  }, [realista]);
+  // con la horneada, la de código no se dibuja: los pisos de las unidades siguen
+  // recibiendo el mouse y las ocupadas quedan con un velo gris
+  useEffect(() => {
+    const procedural = [mats.walls, ...Object.values(mats.furniture)];
+    for (const m of procedural) m.visible = !baked;
+    for (const f of meshes.floors) {
+      const s = meta.get(f.id);
+      const mat = mats.floors[f.id]!;
+      mat.visible = !baked || (s?.kind === 'unit' && !!s.occupied);
+    }
+    return () => {
+      for (const m of [...procedural, ...Object.values(mats.floors)]) m.visible = true;
+    };
+  }, [baked, mats, meshes, meta]);
 
   // de noche, luz interior cálida: pisos y muebles brillan un poco con su propio color
   const lit = useMemo(
@@ -123,6 +189,11 @@ export function FloorPlanModel({
   }, [chosen, spaces, mats]);
   const pulse = useRef(0);
   useFrame((state, delta) => {
+    if (baked) {
+      // horneada de día: de noche se entibia y baja un poco, como con la luz de las lámparas
+      const n = light.uNight.value;
+      baked.mat.color.copy(WHITE).lerp(NIGHT_WARM, n * 0.55);
+    }
     const k = light.uNight.value * 0.42;
     for (const m of lit) {
       m.emissiveIntensity = k;
@@ -170,7 +241,8 @@ export function FloorPlanModel({
     if (visible && g) g.visible = true;
     const all: [THREE.Material, number][] = [
       [mats.walls, 1],
-      ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
+      ...Object.values(mats.floors).map((m) => [m, baked ? 0.5 : 1] as [THREE.Material, number]),
+      ...(baked ? [[baked.mat, 1] as [THREE.Material, number]] : []),
       ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
     ];
     all.forEach(([mat, base], i) =>
@@ -183,7 +255,7 @@ export function FloorPlanModel({
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
-  }, [visible, mats, reduced]);
+  }, [visible, mats, reduced, baked]);
 
   useEffect(() => {
     for (const f of meshes.floors) {
@@ -196,7 +268,8 @@ export function FloorPlanModel({
   }, [hovered, meshes, meta, mats]);
 
   return (
-    <group ref={group} position={position} visible={false} userData={{ floorPlan: true }}>
+    <group ref={group} name={name} position={position} visible={false} userData={{ floorPlan: true }}>
+      {baked ? <primitive object={baked.obj} /> : null}
       {meshes.walls ? (
         <mesh geometry={meshes.walls} material={mats.walls} castShadow={shadows && visible} receiveShadow={shadows} raycast={visible ? THREE.Mesh.prototype.raycast : noHit} />
       ) : null}

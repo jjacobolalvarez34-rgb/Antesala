@@ -134,7 +134,13 @@ M = {
     'lienzo': plain('lienzo', '#e9e1d3', 0.9),
     'cortina': texmat('cortina', 'rough_linen', 0.35, tint='#efe9df', normal=0.8),
     'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=2.5),
+    'alfombra': texmat('alfombra', 'caban', 0.6, tint='#8f867b', normal=0.5),
+    'concreto': plain('concreto', '#bdb6ab', 0.85),
 }
+# PLANTA=1: planta de un piso entero en corte (muros a 1,1 m): sin cortinas ni cuadros y
+# los muebles altos recortados a la altura del corte
+PLANTA = bool(os.environ.get('PLANTA'))
+CORTE = 1.12
 
 
 # ---------------------------------------------------------------- importación
@@ -153,6 +159,10 @@ for o in list(bpy.context.scene.objects):
             s.material = M['muro']
         elif n.startswith('piso-tile'):
             s.material = M['baldosa']
+        elif n.startswith('piso-alfombra'):
+            s.material = M['alfombra']
+        elif n.startswith('piso-concreto'):
+            s.material = M['concreto']
         elif n.startswith('piso-'):
             s.material = M['madera_piso']
         elif n.startswith('puertas'):
@@ -296,6 +306,8 @@ GAP = {'v': 0.0}  # distancia del respaldo del mueble al muro (para colgar cuadr
 
 def art(x, y, z, w, h):
     """Cuadro: marco de roble y lienzo con dos manchas de color (abstracto, sin texto)."""
+    if PLANTA:
+        return
     box(x, y, z, w, 0.03, h, M['roble'], 0.004)
     box(x, y - 0.018, z + 0.03, w - 0.06, 0.006, h - 0.06, M['lienzo'], 0.001)
     box(x - w * 0.12, y - 0.022, z + h * 0.25, w * 0.32, 0.004, h * 0.45, M['terciopelo'], 0.001)
@@ -549,7 +561,7 @@ def inside(px, py):
 for g in root.iter():
     if g.tag.endswith('g') and g.get('id') == 'openings':
         for r in g.iter():
-            if not r.tag.endswith('rect') or r.get('data-type') != 'window':
+            if PLANTA or not r.tag.endswith('rect') or r.get('data-type') != 'window':
                 continue
             x, y = float(r.get('x')) * 0.01, float(r.get('y')) * 0.01
             w, h = float(r.get('width')) * 0.01, float(r.get('height')) * 0.01
@@ -570,6 +582,17 @@ for g in root.iter():
                         o.location.x, o.location.y = px, py
                         o['tipo'] = 'mueble'
                 break
+if PLANTA:
+    # corte a la altura de los muros: lo que queda encima se quita y lo que lo cruza se acorta
+    for o in [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.get('tipo') in ('mueble', 'modelo', 'planta')]:
+        zs = [(o.matrix_world @ Vector(v)).z for v in o.bound_box]
+        z0, z1 = min(zs), max(zs)
+        if z0 >= CORTE - 0.02:
+            bpy.data.objects.remove(o, do_unlink=True)
+        elif z1 > CORTE and o.get('tipo') == 'mueble':
+            k = (CORTE - z0) / (z1 - z0)
+            o.location.z = z0 + (o.location.z - z0) * k
+            o.scale.z *= k
 log('muebles', count)
 
 # ---------------------------------------------------------------- luz, cámara, render de muestra

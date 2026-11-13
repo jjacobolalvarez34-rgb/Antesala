@@ -85,7 +85,9 @@ interface Props {
   /** x, y: punto del toque en pantalla (para mostrar el nombre mientras se enciende la luz) */
   onUnitSelect: (slot: number, x: number, y: number) => void;
   /** plantas de piso (D-041) por id de nivel */
-  floorPlans?: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>;
+  floorPlans?: Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[]; realista?: string }>;
+  /** plantas horneadas (nivel Premium) */
+  planRealista?: boolean;
   planHovered?: string | null;
   onPlanHover?: (unitId: string | null) => void;
   onPlanSelect?: (unitId: string) => void;
@@ -390,6 +392,7 @@ function Floor({
   onUnitHover,
   onUnitSelect,
   floorPlan,
+  planRealista,
   planHovered,
   onPlanHover,
   onPlanSelect,
@@ -397,7 +400,8 @@ function Floor({
 }: {
   /** fachada y losa horneadas en Blender para este piso (nivel Premium, D-074) */
   baked?: BakedFloor;
-  floorPlan?: { plan: PlanGeometry; spaces: FloorPlanSpace[] };
+  floorPlan?: { plan: PlanGeometry; spaces: FloorPlanSpace[]; realista?: string };
+  planRealista?: boolean;
   planHovered: string | null;
   onPlanHover: (unitId: string | null) => void;
   onPlanSelect: (unitId: string) => void;
@@ -669,6 +673,8 @@ function Floor({
             light={light}
             onHover={onPlanHover}
             onSelect={onPlanSelect}
+            name={`planta-${floor.id}`}
+            realista={planRealista ? floorPlan.realista : undefined}
           />
         ) : null}
       </group>
@@ -976,6 +982,7 @@ export function BuildingModel({
   onUnitHover,
   onUnitSelect,
   floorPlans,
+  planRealista,
   planHovered = null,
   onPlanHover = () => {},
   onPlanSelect = () => {},
@@ -1094,6 +1101,7 @@ export function BuildingModel({
           onUnitHover={onUnitHover}
           onUnitSelect={onUnitSelect}
           floorPlan={floorPlans?.[f.id]}
+          planRealista={planRealista}
           baked={realista ? baked?.floors[f.id] : undefined}
           planHovered={planHovered}
           onPlanHover={onPlanHover}

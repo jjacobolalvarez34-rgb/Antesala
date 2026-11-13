@@ -110,6 +110,8 @@ export interface Level {
   order: number;
   /** planta completa del piso ("plans/piso-4.svg"): polígonos con id de unidad, de zona común o con data-label */
   plan?: string;
+  /** planta horneada en Blender (D-074): "media/realista/piso-tipo.glb"; solo en Premium */
+  realista?: string;
 }
 
 export interface Poi {

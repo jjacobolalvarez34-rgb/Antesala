@@ -41,7 +41,7 @@ import { TourGuide, type GuideStep } from './TourGuide';
 import { useNivel } from '@/components/hotel/Nivel';
 
 import { ExportHook } from './ExportHook';
-import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
+import { panoEye, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
 import { createLightUniforms, envIntensity, MAX_UNITS, type LightUniforms } from './windows';
@@ -72,7 +72,7 @@ export interface SceneData {
   colors: BuildingColors;
   /** planta de cada piso (D-041) */
   /** plantas de piso: el SVG se pide y se interpreta en el cliente (D-058) */
-  levelPlanSources: Record<string, { url: string; spaces: FloorPlanSpace[] }>;
+  levelPlanSources: Record<string, { url: string; spaces: FloorPlanSpace[]; realista?: string }>;
   /**
    * Demo (D-046): el 360° de cada espacio se recorre por dentro de la maqueta
    * amoblada, en vivo. Un hotel real muestra sus fotos 360° capturadas.
@@ -416,16 +416,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     const poly = entry.plan.spaces.find((s) => s.id === spaceId);
     if (data.liveInterior && yaw !== undefined && poly) {
       const [dx, , dz] = panoDirection(yaw, 0);
-      const xs = poly.points.map((p) => p[0] / 100 - entry.plan.width / 200);
-      const zs = poly.points.map((p) => p[1] / 100 - entry.plan.height / 200);
-      const m = 0.45;
-      const [x0, x1, z0, z1] = [Math.min(...xs) + m, Math.max(...xs) - m, Math.min(...zs) + m, Math.max(...zs) - m];
-      for (let t = 0; t < 3; t += 0.05) {
-        const nx = c[0] - dx * t;
-        const nz = c[1] - dz * t;
-        if (nx < x0 || nx > x1 || nz < z0 || nz > z1) break;
-        [x, z] = [nx, nz];
-      }
+      const p = panoEye(entry.plan, spaceId, [dx, dz]);
+      if (p) [x, z] = p;
     }
     return [anchor[0] + x, anchor[1] + 1.5, anchor[2] + z];
   }, [unitId, spaceId, data, frame]);
@@ -649,6 +641,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           selectedId={selectedId}
           gone={inUnit}
           floorPlans={levelPlans}
+          planRealista={nivel === 'premium'}
           planHovered={planHovered}
           onPlanHover={setPlanHovered}
           onPlanSelect={(id) => {
@@ -762,7 +755,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
  * libre, las demás. Así no viajan dentro de cada página.
  */
 function useLevelPlans(sources: SceneData['levelPlanSources'], priority: string | null) {
-  const [plans, setPlans] = useState<Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[] }>>({});
+  const [plans, setPlans] = useState<Record<string, { plan: PlanGeometry; spaces: FloorPlanSpace[]; realista?: string }>>({});
   const asked = useRef(new Set<string>());
   useEffect(() => {
     let alive = true;
@@ -775,7 +768,7 @@ function useLevelPlans(sources: SceneData['levelPlanSources'], priority: string 
         .then((svg) => {
           if (!alive) return;
           const plan = parsePlan(svg, src.url);
-          setPlans((p) => ({ ...p, [id]: { plan, spaces: src.spaces } }));
+          setPlans((p) => ({ ...p, [id]: { plan, spaces: src.spaces, realista: src.realista } }));
         })
         .catch(() => asked.current.delete(id));
     };

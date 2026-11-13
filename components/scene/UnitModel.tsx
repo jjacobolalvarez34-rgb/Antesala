@@ -442,6 +442,59 @@ export function spaceCenter(plan: PlanGeometry, spaceId: string): [number, numbe
 }
 
 /**
+ * Punto de vista del 360° en vivo, en metros relativos al centro de la unidad.
+ * Se busca en una grilla dentro del polígono (sirve para cuartos en L): el punto
+ * más despejado de los muros y, entre los bien despejados, el que más se aleja de
+ * la ventana, para ver el cuarto y la ventana a la vez.
+ */
+export function panoEye(plan: PlanGeometry, spaceId: string, dir: [number, number]): [number, number] | null {
+  const s = plan.spaces.find((x) => x.id === spaceId);
+  if (!s || s.points.length < 3) return null;
+  const pts = s.points.map(([x, y]) => [x / 100 - plan.width / 200, y / 100 - plan.height / 200] as [number, number]);
+  const inside = (x: number, z: number) => {
+    let r = false;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const [xi, zi] = pts[i]!;
+      const [xj, zj] = pts[j]!;
+      if (zi > z !== zj > z && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) r = !r;
+    }
+    return r;
+  };
+  const clearance = (x: number, z: number) => {
+    let d = Infinity;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const [ax, az] = pts[j]!;
+      const [bx, bz] = pts[i]!;
+      const vx = bx - ax;
+      const vz = bz - az;
+      const t = Math.max(0, Math.min(1, ((x - ax) * vx + (z - az) * vz) / (vx * vx + vz * vz || 1)));
+      d = Math.min(d, Math.hypot(x - ax - vx * t, z - az - vz * t));
+    }
+    return d;
+  };
+  const xs = pts.map((p) => p[0]);
+  const zs = pts.map((p) => p[1]);
+  const cand: { x: number; z: number; c: number }[] = [];
+  for (let x = Math.min(...xs); x <= Math.max(...xs); x += 0.1) {
+    for (let z = Math.min(...zs); z <= Math.max(...zs); z += 0.1) {
+      if (inside(x, z)) cand.push({ x, z, c: clearance(x, z) });
+    }
+  }
+  if (!cand.length) return null;
+  const best = Math.max(...cand.map((p) => p.c));
+  // bien despejado: al menos 1,1 m de los muros (o lo más que dé el cuarto)
+  const need = Math.min(1.1, best * 0.85);
+  let pick = cand[0]!;
+  let score = -Infinity;
+  for (const p of cand) {
+    if (p.c < need) continue;
+    const sc = -(p.x * dir[0] + p.z * dir[1]) + p.c * 0.6;
+    if (sc > score) [pick, score] = [p, sc];
+  }
+  return [pick.x, pick.z];
+}
+
+/**
  * Baranda de balcones y terrazas (D-052): en cada borde del polígono que no da
  * contra un muro, sardinel de 12 cm, vidrio hasta 1 m y pasamanos. Sin ella, por
  * dentro se veía el vacío al borde de la terraza.

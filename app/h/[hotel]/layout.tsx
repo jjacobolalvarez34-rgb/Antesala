@@ -110,7 +110,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
                 occupied: unit?.occupied === true,
               };
             });
-            return [[l.id, { url: mediaUrl(hotel.slug, l.plan), spaces }]];
+            return [[l.id, { url: mediaUrl(hotel.slug, l.plan), spaces, realista: l.realista ? mediaUrl(hotel.slug, l.realista) : undefined }]];
           }),
         ),
         // cada plano viaja una vez (D-058): las copias de una unidad tipo lo comparten
