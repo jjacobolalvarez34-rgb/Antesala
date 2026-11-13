@@ -315,6 +315,17 @@ interface Materials {
 
 const BASE_OPACITY = { clad: 1, concrete: 1, slab: 1, frame: 1, glass: 0.42, rail: 0.3, green: 1 } as const;
 
+/** Piezas horneadas de un piso (D-074). */
+export interface BakedFloor {
+  fachada?: THREE.Mesh;
+  fachadaMat?: THREE.MeshBasicMaterial;
+  losa?: THREE.Mesh;
+  losaMat?: THREE.MeshBasicMaterial;
+}
+const WHITE = new THREE.Color('#ffffff');
+const NIGHT_TINT = new THREE.Color('#2a3048');
+const WARM_HOVER = new THREE.Color('#ffd9a6');
+
 function makeMaterials(tex: SharedTextures, light: LightUniforms): Materials {
   return {
     clad: new THREE.MeshStandardMaterial({
@@ -382,7 +393,10 @@ function Floor({
   planHovered,
   onPlanHover,
   onPlanSelect,
+  baked,
 }: {
+  /** fachada y losa horneadas en Blender para este piso (nivel Premium, D-074) */
+  baked?: BakedFloor;
   floorPlan?: { plan: PlanGeometry; spaces: FloorPlanSpace[] };
   planHovered: string | null;
   onPlanHover: (unitId: string | null) => void;
@@ -443,6 +457,24 @@ function Floor({
   const windowGeo = useMemo(() => buildWindowGeometry(parts.windows), [parts.windows]);
   const glowGeo = useMemo(() => buildGlowGeometry(parts.windows), [parts.windows]);
   const mats = useMemo(() => makeMaterials(tex, light), [tex, light]);
+  // con la fachada horneada, las piezas opacas por código no se dibujan (siguen recibiendo el mouse)
+  useEffect(() => {
+    const parts = [mats.clad, mats.concrete, mats.frame, mats.green, mats.slab];
+    for (const m of parts) m.visible = !baked || (m === mats.slab && !baked.losa);
+    return () => {
+      for (const m of parts) m.visible = true;
+    };
+  }, [baked, mats]);
+  // horneada de día: de noche se oscurece con la luz del visor; bajo el puntero se entibia
+  useFrame(() => {
+    if (!baked) return;
+    const n = light.uNight.value;
+    for (const m of [baked.fachadaMat, baked.losaMat]) {
+      if (!m) continue;
+      m.color.copy(WHITE).lerp(NIGHT_TINT, n * 0.82);
+      if (state === 'hovered') m.color.lerp(WARM_HOVER, 0.25);
+    }
+  });
 
   // ladrillo real cuando llega (carga progresiva)
   useEffect(() => {
@@ -521,13 +553,27 @@ function Floor({
       });
       m.depthWrite = m === mats.windows ? !dim && !cutaway : false;
     }
+    // la fachada horneada sigue al ladrillo y la losa horneada a la losa
+    const bakedTo = (m: THREE.MeshBasicMaterial | undefined, keep: boolean) => {
+      if (!m) return;
+      gsap.to(m, {
+        opacity: dim ? fade : cutaway && !keep ? 0 : 1,
+        duration: gone ? d * 0.9 : d * 0.7,
+        delay: reduced ? rd : gone ? 0.55 : cutaway ? 1.1 : 0,
+        ease,
+        overwrite: true,
+      });
+      m.depthWrite = !dim && !(cutaway && !keep);
+    };
+    bakedTo(baked?.fachadaMat, false);
+    bakedTo(baked?.losaMat, true);
     // señal visible de "esto se puede tocar": el piso bajo el puntero se entibia
     const hot = state === 'hovered';
     mats.clad.emissive.set(hot ? '#5a3a1a' : '#000000');
     mats.concrete.emissive.set(hot ? '#3a2a18' : '#000000');
     const slabColor = new THREE.Color(lifted ? colors.accent : '#d4cfc6');
     gsap.to(mats.slab.color, { r: slabColor.r, g: slabColor.g, b: slabColor.b, duration: 0.25, overwrite: true });
-  }, [state, reduced, mats, colors, pullDir, hasPlan]);
+  }, [state, reduced, mats, colors, pullDir, hasPlan, baked]);
 
   const slotAt = (e: ThreeEvent<PointerEvent | MouseEvent>) => {
     const geo = (e.object as THREE.Mesh).geometry;
@@ -571,13 +617,15 @@ function Floor({
       }
     >
       <group position={[0, yBase, 0]}>
-        <mesh geometry={slab} material={mats.slab} castShadow={castsShadow} receiveShadow={shadows} />
+        <mesh name="h-losa" geometry={slab} material={mats.slab} castShadow={castsShadow} receiveShadow={shadows} />
+        {baked?.losa ? <primitive object={baked.losa} position-y={-yBase} /> : null}
         <group ref={facadeRef}>
-          {clad ? <mesh geometry={clad} material={mats.clad} castShadow={castsShadow} receiveShadow={shadows} /> : null}
+          {baked?.fachada ? <primitive object={baked.fachada} position-y={-yBase} /> : null}
+          {clad ? <mesh name="h-fachada" geometry={clad} material={mats.clad} castShadow={castsShadow} receiveShadow={shadows} /> : null}
           {concrete ? (
-            <mesh geometry={concrete} material={mats.concrete} castShadow={castsShadow} receiveShadow={shadows} />
+            <mesh name="h-fachada" geometry={concrete} material={mats.concrete} castShadow={castsShadow} receiveShadow={shadows} />
           ) : null}
-          {frameGeo ? <mesh geometry={frameGeo} material={mats.frame} castShadow={castsShadow} /> : null}
+          {frameGeo ? <mesh name="h-fachada" geometry={frameGeo} material={mats.frame} castShadow={castsShadow} /> : null}
           {windowGeo ? (
             <mesh
               geometry={windowGeo}
@@ -607,7 +655,7 @@ function Floor({
           {glass ? <mesh geometry={glass} material={mats.glass} renderOrder={2} raycast={noRaycast} /> : null}
           {glowGeo ? <mesh geometry={glowGeo} material={mats.glow} renderOrder={4} raycast={noRaycast} /> : null}
           {rail ? <mesh geometry={rail} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
-          {green ? <mesh geometry={green} material={mats.green} castShadow={castsShadow} /> : null}
+          {green ? <mesh name="h-fachada" geometry={green} material={mats.green} castShadow={castsShadow} /> : null}
         </group>
         {floorPlan && planMounted ? (
           <FloorPlanModel
@@ -815,6 +863,8 @@ function Roof({
   dimmed,
   gone = false,
   shadows,
+  baked,
+  light,
 }: {
   building: Building;
   frame: BuildingFrame;
@@ -822,6 +872,8 @@ function Roof({
   dimmed: boolean;
   gone?: boolean;
   shadows: boolean;
+  baked?: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial };
+  light: LightUniforms;
 }) {
   const footprint = building.footprint as Pt[];
   const roof = useMemo(() => slabGeometry(scaled(footprint, 0.3), 0.4), [footprint]);
@@ -852,7 +904,16 @@ function Roof({
       gsap.to(m, { opacity: gone ? 0 : dimmed ? base * 0.08 : base, duration: 0.8, overwrite: true });
       if (k !== 'rail') m.depthWrite = !dimmed && !gone;
     }
-  }, [dimmed, gone, mats]);
+    if (baked) {
+      gsap.to(baked.mat, { opacity: gone ? 0 : dimmed ? 0.08 : 1, duration: 0.8, overwrite: true });
+      baked.mat.depthWrite = !dimmed && !gone;
+    }
+    for (const m of [mats.roof, mats.concrete, mats.wood]) m.visible = !baked;
+  }, [dimmed, gone, mats, baked]);
+  // la cubierta horneada también se oscurece de noche
+  useFrame(() => {
+    if (baked) baked.mat.color.copy(WHITE).lerp(NIGHT_TINT, light.uNight.value * 0.82);
+  });
 
   const { parapet, beams, rails } = useMemo(() => {
     const edges = edgesOf(scaled(footprint, 0.3));
@@ -882,12 +943,13 @@ function Roof({
 
   return (
     <group position={[0, frame.height, 0]}>
-      <mesh geometry={roof} material={mats.roof} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
+      <mesh name="h-cubierta" geometry={roof} material={mats.roof} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
       {parapetGeo ? (
-        <mesh geometry={parapetGeo} material={mats.concrete} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
+        <mesh name="h-cubierta" geometry={parapetGeo} material={mats.concrete} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
       ) : null}
-      {beamGeo ? <mesh geometry={beamGeo} material={mats.wood} castShadow={shadows && !dimmed && !gone} /> : null}
+      {beamGeo ? <mesh name="h-cubierta" geometry={beamGeo} material={mats.wood} castShadow={shadows && !dimmed && !gone} /> : null}
       {railGeo ? <mesh geometry={railGeo} material={mats.rail} renderOrder={3} raycast={noRaycast} /> : null}
+      {baked ? <primitive object={baked.mesh} position-y={-frame.height} /> : null}
     </group>
   );
 }
@@ -917,8 +979,48 @@ export function BuildingModel({
   planHovered = null,
   onPlanHover = () => {},
   onPlanSelect = () => {},
-}: Props) {
+  realista,
+}: Props & { realista?: string }) {
   const cladding = building.style?.cladding ?? 'estuco';
+  // fachada horneada (Premium): una pieza por piso y la cubierta
+  const [baked, setBaked] = useState<{ floors: Record<string, BakedFloor>; roof?: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial } } | null>(null);
+  useEffect(() => {
+    if (!realista) return;
+    let alive = true;
+    void (async () => {
+      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+        import('three/examples/jsm/loaders/GLTFLoader.js'),
+        import('three/examples/jsm/loaders/DRACOLoader.js'),
+      ]);
+      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
+      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
+      draco.dispose();
+      if (!alive || !gltf) return;
+      const floorsOut: Record<string, BakedFloor> = {};
+      let roof: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial } | undefined;
+      gltf.scene.traverse((o) => {
+        const mesh = o as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        const src = mesh.material as THREE.MeshStandardMaterial;
+        const mat = new THREE.MeshBasicMaterial({ map: src.map, transparent: true });
+        mesh.material = mat;
+        mesh.raycast = noRaycast;
+        // se identifica por el material ("horneado-piso-<id>-fachada"): el optimizador puede renombrar o unir nodos
+        const name = (src.name || mesh.name || '').replace(/^horneado-/, '').replace(/[._]\d+$/, '');
+        const m = name.match(/^piso-(.+)-(fachada|losa)$/);
+        if (m) {
+          const id = m[1]!;
+          const f = floorsOut[id] ?? (floorsOut[id] = {});
+          if (m[2] === 'fachada') Object.assign(f, { fachada: mesh, fachadaMat: mat });
+          else Object.assign(f, { losa: mesh, losaMat: mat });
+        } else if (name.startsWith('cubierta')) roof = { mesh, mat };
+      });
+      setBaked({ floors: floorsOut, roof });
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [realista]);
   const tex = useMemo<SharedTextures>(
     () => ({
       clad: cladding === 'ladrillo' ? brickTexture() : cladding === 'concreto' ? concreteTexture(17) : stuccoTexture(3, '#d6c8b0'), // estuco color arena: cerca de la piedra de la foto de portada
@@ -960,7 +1062,7 @@ export function BuildingModel({
   }, [gone, reduced]);
 
   return (
-    <group ref={root}>
+    <group ref={root} name="edificio">
       {/* recibe la sombra del edificio sobre el fondo congelado */}
       {shadows ? (
         <mesh rotation-x={-Math.PI / 2} position={[cx, 0.02, cz]} material={catcher} receiveShadow raycast={noRaycast}>
@@ -991,6 +1093,7 @@ export function BuildingModel({
           onUnitHover={onUnitHover}
           onUnitSelect={onUnitSelect}
           floorPlan={floorPlans?.[f.id]}
+          baked={realista ? baked?.floors[f.id] : undefined}
           planHovered={planHovered}
           onPlanHover={onPlanHover}
           onPlanSelect={onPlanSelect}
@@ -998,7 +1101,16 @@ export function BuildingModel({
       ))}
       {selectedId || gone ? null : <Entrance building={building} frame={frame} brandName={brandName} shadows={shadows} light={light} />}
       {selectedId || gone ? null : <Uplights building={building} light={light} />}
-      <Roof building={building} frame={frame} tex={tex} dimmed={selectedId !== null} gone={gone} shadows={shadows} />
+      <Roof
+        building={building}
+        frame={frame}
+        tex={tex}
+        dimmed={selectedId !== null}
+        gone={gone}
+        shadows={shadows}
+        baked={realista ? baked?.roof : undefined}
+        light={light}
+      />
     </group>
   );
 }

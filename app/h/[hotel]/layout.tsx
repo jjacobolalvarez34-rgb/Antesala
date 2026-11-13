@@ -78,6 +78,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         brandName: tokens.brand.name,
         offer: hotel.offer,
         contextUrl: hotel.site.context ? mediaUrl(hotel.slug, hotel.site.context) : undefined,
+        buildingRealista: hotel.site.building?.realista ? mediaUrl(hotel.slug, hotel.site.building.realista) : undefined,
         liveInterior: hotel.isDemo === true,
         units: hotel.units.map((u) => ({
           id: u.id,

@@ -154,6 +154,8 @@ export interface Building {
   };
   /** el último piso se retranquea con terraza al frente (por defecto sí) */
   topSetback?: boolean;
+  /** fachada horneada en Blender, una pieza por piso (D-074): "media/realista/fachada.glb" */
+  realista?: string;
 }
 
 export interface Site {

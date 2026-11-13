@@ -80,6 +80,8 @@ export interface SceneData {
   liveInterior: boolean;
   /** contexto real (vecinos del catastro y calles de OpenStreetMap, D-056) */
   contextUrl?: string;
+  /** fachada horneada (D-074); solo se usa en el nivel Premium */
+  buildingRealista?: string;
   /** qué se ofrece: noche, mes o venta (D-057) */
   offer?: Offer;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
@@ -635,6 +637,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         <DayNightLights frame={frame} light={light} shadows={shadows} high={high} />
         <BuildingEnvironment map={environment} light={light} interior={in360Pano && data.liveInterior} />
         <BuildingModel
+          realista={nivel === 'premium' ? data.buildingRealista : undefined}
           building={data.building}
           frame={frame}
           floors={data.floors}

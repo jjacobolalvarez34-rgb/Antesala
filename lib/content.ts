@@ -103,6 +103,7 @@ const hotelSchema = z.object({
           .object({ cladding: z.enum(['ladrillo', 'estuco', 'concreto']), ground: z.enum(['lobby', 'residencial']).optional(), roof: z.enum(['terraza', 'plana']).optional() })
           .optional(),
         topSetback: z.boolean().optional(),
+        realista: relPath.regex(/\.glb$/).optional(),
       })
       .optional(),
     exterior: z.array(media),
@@ -375,6 +376,7 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
     problems.push('portada → hay puntos pero no hay foto exterior (exterior[0] con kind "photo")');
   }
 
+  if (hotel.site.building?.realista) mediaSrcs.add(hotel.site.building.realista);
   if (tokens.brand.logo) mediaSrcs.add(tokens.brand.logo);
   for (const src of mediaSrcs) {
     if (!(await exists(path.join(dir, src)))) problems.push(`falta el archivo de medio: ${src}`);
