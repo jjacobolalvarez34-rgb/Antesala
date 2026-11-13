@@ -80,36 +80,9 @@ export function Nav() {
   );
 }
 
-/** Recorrido con el aviso de demo del botón "Reservar". */
+/** Recorrido: el botón de la reserva lleva a las demos (antes abría un aviso que tapaba la página). */
 export function RecorridoConAviso({ data }: { data: RecorridoData }) {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (!open) return;
-    const k = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
-    document.addEventListener('keydown', k);
-    return () => document.removeEventListener('keydown', k);
-  }, [open]);
-  return (
-    <>
-      <Recorrido data={data} onReserve={() => setOpen(true)} />
-      {open ? (
-        <div className={s.dlg} role="dialog" aria-modal="true" aria-labelledby="dlg-t" onClick={(e) => e.target === e.currentTarget && setOpen(false)}>
-          <div className={s.dlgBox}>
-            <h3 id="dlg-t">Esto es una demo</h3>
-            <p>En su hotel, este botón lleva a su motor de reservas o a su WhatsApp, con la unidad ya elegida.</p>
-            <div className={s.acts} style={{ marginTop: 22 }}>
-              <a className={`${s.btn} ${s.solid}`} href="#cotizar" onClick={() => setOpen(false)}>
-                Quiero esto para mi hotel
-              </a>
-              <button type="button" className={s.btn} onClick={() => setOpen(false)} autoFocus>
-                Seguir explorando
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </>
-  );
+  return <Recorrido data={data} onReserve={() => document.getElementById('demos')?.scrollIntoView({ behavior: 'smooth' })} />;
 }
 
 /** Cotización sin backend: arma el mensaje y lo abre en WhatsApp o en el correo. */

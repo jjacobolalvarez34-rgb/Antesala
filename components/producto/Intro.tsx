@@ -8,7 +8,7 @@ import s from './landing.module.css';
  * Intro de la página de Antesala (D-063), del boceto: los pilares suben, la
  * ranura se dibuja, la luz llena la pantalla mientras los pilares se abren como
  * puertas y la cámara del recorrido cae sobre el edificio. Una vez por sesión
- * (?intro=1 la fuerza); se salta con clic, tecla o "Saltar". Con movimiento
+ * (?intro=1 la fuerza); se salta con clic o tecla (sin botón: pedido de Jacobo). Con movimiento
  * reducido se acorta y queda en fundidos. Avisa al recorrido con el evento
  * "antesala-intro" cuando la cámara debe empezar a caer.
  */
@@ -164,16 +164,6 @@ export function Intro() {
         ANTESALA
       </div>
       <div ref={beam} className={s.beam} />
-      <button
-        type="button"
-        className={s.skip}
-        onClick={(e) => {
-          e.stopPropagation();
-          finishRef.current();
-        }}
-      >
-        Saltar
-      </button>
     </div>
   );
 }

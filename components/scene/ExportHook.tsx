@@ -33,7 +33,14 @@ export function ExportHook() {
         }
       });
       const { GLTFExporter } = await import('three/examples/jsm/exporters/GLTFExporter.js');
+      // en el origen: así las coordenadas del GLB son las del plano (metros, centrado) y Blender
+      // puede ubicar cada mueble con el SVG
+      const prev = obj.position.clone();
+      obj.position.set(0, 0, 0);
+      obj.updateMatrixWorld(true);
       const buf = (await new GLTFExporter().parseAsync(obj, { binary: true, onlyVisible: true })) as ArrayBuffer;
+      obj.position.copy(prev);
+      obj.updateMatrixWorld(true);
       let bin = '';
       const bytes = new Uint8Array(buf);
       for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));

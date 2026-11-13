@@ -1,7 +1,6 @@
 'use client';
 
 /* eslint-disable @next/next/no-img-element -- fotos estáticas livianas en public/demo */
-import Link from 'next/link';
 import type { Route } from 'next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -240,7 +239,7 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
                 <b>{data.total}</b>
               </div>
               <button type="button" className={`${s.btn} ${s.solid}`} style={{ width: '100%', justifyContent: 'center' }} onClick={onReserve}>
-                Reservar esta suite
+                Pruébelo en la demo <span className={s.arr}>↓</span>
               </button>
               <p className={s.tiny} style={{ margin: '14px 0 0' }}>
                 Va a su motor de reservas o a su WhatsApp. Sin intermediarios.
@@ -299,9 +298,9 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
                 </div>
               </dl>
               {i === 5 ? (
-                <Link className={s.btn} href={data.unitHref} style={{ marginTop: 24 }}>
-                  Recorrer la {data.unitName} <span className={s.arr}>→</span>
-                </Link>
+                <a className={s.btn} href="#demos" style={{ marginTop: 24 }}>
+                  Ver las demos <span className={s.arr}>↓</span>
+                </a>
               ) : null}
             </div>
           </div>

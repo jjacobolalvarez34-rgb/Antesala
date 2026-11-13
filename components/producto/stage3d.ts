@@ -80,28 +80,36 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
     );
     m.position.set(x, yy, z);
     m.rotation.y = ry;
+    m.renderOrder = 3;
     g.add(m);
     return m;
   };
   const top = opts.floors;
   for (let n = 1; n <= top; n++) {
     const h = n === 1 ? LOBBY : FH;
-    const w = n === top ? 7.5 : Wd;
+    // todos los pisos del mismo ancho: el último retranqueado dejaba ver, a través de las caras
+    // veladas del piso 5, un pedazo cortado de su losa (reporte de Jacobo, 2026-11-12)
+    const w = Wd;
     const g = new THREE.Group();
     g.position.y = y;
     scene.add(g);
     // caras apenas veladas: el edificio se lee como trazos champán, no como un bloque azul
-    const faceMat = track(new THREE.MeshBasicMaterial({ color: C.n2, transparent: true, opacity: 0.38 }));
+    // orden fijo de dibujo: losas, luego caras veladas (sin escribir profundidad), luego trazos.
+    // Con el orden por distancia, unas losas quedaban teñidas y otras no (un rectángulo raro en el piso 5)
+    const faceMat = track(new THREE.MeshBasicMaterial({ color: C.n2, transparent: true, opacity: 0.38, depthWrite: false }));
     const bodyGeo = track(new THREE.BoxGeometry(w, h * 0.9, D));
     const body = new THREE.Mesh(bodyGeo, faceMat);
+    body.renderOrder = 2;
     body.position.y = h * 0.45 + 0.05;
     g.add(body);
     const edgeMat = track(new THREE.LineBasicMaterial({ color: C.champ, transparent: true, opacity: 0.6 }));
     const edges = new THREE.LineSegments(track(new THREE.EdgesGeometry(bodyGeo)), edgeMat);
+    edges.renderOrder = 3;
     edges.position.copy(body.position);
     g.add(edges);
     const slabMat = track(new THREE.MeshBasicMaterial({ color: C.bisel, transparent: true, opacity: 1 }));
     const slab = new THREE.Mesh(track(new THREE.BoxGeometry(w + 0.35, 0.07, D + 0.35)), slabMat);
+    slab.renderOrder = 1;
     slab.position.y = 0.035;
     g.add(slab);
     const wins: THREE.Mesh[] = [];
