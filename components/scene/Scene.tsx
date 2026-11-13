@@ -38,6 +38,7 @@ import { PanoSphere, panoDirection } from './PanoSphere';
 import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
 import { useRealContext } from './RealContext';
 import { TourGuide, type GuideStep } from './TourGuide';
+import { ExportHook } from './ExportHook';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
@@ -666,6 +667,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           }}
         />
         <UnitLights light={light} units={data.units} />
+        <ExportHook />
         <PoiProjector pois={data.pois} anchors={anchors} />
 
         {/* maqueta de la unidad actual (bloque 3); solo se monta la que se ve */}

@@ -221,10 +221,11 @@ export function UnitModel({
   const mats = useMemo(() => {
     const m = (color: string, extra: THREE.MeshStandardMaterialParameters = {}, surface?: Surface) =>
       cuttable(new THREE.MeshStandardMaterial({ color, roughness: 0.85, transparent: true, opacity: 0, ...extra }), uni, surface);
+    const named = <T extends THREE.Material>(name: string, mat: T) => ((mat.name = name), mat);
     return {
-      walls: m('#e3dacb', { roughness: 0.92 }, 'plaster'),
-      door: m(FURNITURE_COLORS.wood, { roughness: 0.6 }),
-      rail: m('#3b3733', { roughness: 0.5, metalness: 0.3 }),
+      walls: named('muros', m('#e3dacb', { roughness: 0.92 }, 'plaster')),
+      door: named('puertas', m(FURNITURE_COLORS.wood, { roughness: 0.6 })),
+      rail: named('baranda', m('#3b3733', { roughness: 0.5, metalness: 0.3 })),
       // cielo raso: solo se ve desde abajo (recorrido por dentro); desde arriba no estorba
       ceiling: new THREE.MeshStandardMaterial({
         color: '#f4f1ea',
@@ -234,16 +235,19 @@ export function UnitModel({
         transparent: true,
         opacity: 0,
       }),
-      glass: m('#bcd3d6', { roughness: 0.05, metalness: 0.2, depthWrite: false }),
+      glass: named('vidrio', m('#bcd3d6', { roughness: 0.05, metalness: 0.2, depthWrite: false })),
       floors: Object.fromEntries(
-        spaces.map((s) => [s.id, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 }, surfaceFor(s.type))]),
+        spaces.map((s) => [s.id, named(`piso-${surfaceFor(s.type)}-${s.id}`, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 }, surfaceFor(s.type)))]),
       ) as Record<string, THREE.MeshStandardMaterial>,
       furniture: Object.fromEntries(
         meshes.furniture.map((f) => [
           f.material,
-          f.material === 'glass'
-            ? m(FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
-            : m(FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
+          named(
+            `mueble-${f.material}`,
+            f.material === 'glass'
+              ? m(FURNITURE_COLORS.glass, { roughness: 0.05, metalness: 0.2, depthWrite: false })
+              : m(FURNITURE_COLORS[f.material], { roughness: f.material === 'metal' ? 0.45 : 0.85 }),
+          ),
         ]),
       ) as Record<string, THREE.MeshStandardMaterial>,
     };
@@ -290,7 +294,7 @@ export function UnitModel({
   }, [selectedSpace, hoveredSpace, spaces, mats]);
 
   return (
-    <group ref={group} position={position} visible={false}>
+    <group ref={group} position={position} visible={false} name="unidad-maqueta">
       {/* relleno de estudio para la maqueta; por dentro casi nada (la luz entra por las ventanas) */}
       <hemisphereLight args={['#fff8ee', '#8a8070', interior ? 0.15 : 0.55]} />
       {shadows ? (
