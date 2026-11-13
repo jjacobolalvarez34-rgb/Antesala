@@ -63,7 +63,7 @@ const PRICES: {
     items: ['Fotos de cada espacio', 'Recorrido 360° por espacio', 'Botón de reserva o WhatsApp', 'Sin 3D: liviano en cualquier celular'],
     impl: '$5 – 9 M',
     month: '$250 – 400 mil',
-    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/lista` },
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/lista?nivel=esencial&calidad=lista` },
   },
   {
     name: 'Inmersivo',
@@ -72,7 +72,7 @@ const PRICES: {
     impl: '$12 – 22 M',
     month: '$450 – 850 mil',
     star: true,
-    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/explorar` },
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}/explorar?nivel=inmersivo` },
   },
   {
     name: 'Premium',
@@ -80,7 +80,7 @@ const PRICES: {
     items: ['Fotos profesionales de cada espacio', 'Video de entrada, de la calle a la habitación', 'Portada con puntos tocables', 'Todo lo de Inmersivo'],
     impl: '$25 – 45 M',
     month: '$0,9 – 1,5 M',
-    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}` },
+    example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}?nivel=premium` },
   },
 ];
 

@@ -53,6 +53,7 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
       fidelity: m.fidelity,
       width: m.width,
       height: m.height,
+      tier: m.tier,
     }));
 
   return (

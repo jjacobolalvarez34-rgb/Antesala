@@ -7,6 +7,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 
+import { useNivel } from '@/components/hotel/Nivel';
+
 import { LookImage } from './LookImage';
 import type { Fidelity } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -18,18 +20,24 @@ export interface GalleryItem {
   fidelity: Fidelity;
   width?: number;
   height?: number;
+  /** "premium": solo en el nivel Premium (D-072) */
+  tier?: 'premium';
 }
 
 /**
  * Galería del espacio: imagen principal, miniaturas y vista ampliada.
  * Solo se renderiza lo que haya (regla 2); sin medios muestra un estado vacío digno.
  */
-export function Gallery({ items, title, className }: { items: GalleryItem[]; title: string; className?: string }) {
+export function Gallery({ items: all, title, className }: { items: GalleryItem[]; title: string; className?: string }) {
+  // fuera de Premium no se muestran las fotos premium (si queda alguna otra)
+  const nivel = useNivel();
+  const base = all.filter((i) => i.tier !== 'premium');
+  const items = nivel === 'premium' || base.length === 0 ? all : base;
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const count = items.length;
-  const current = items[index];
+  const current = items[index] ?? items[0];
 
   const go = useCallback((delta: number) => setIndex((i) => (i + delta + count) % count), [count]);
 

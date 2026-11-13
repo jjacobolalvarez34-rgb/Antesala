@@ -7,6 +7,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 
 import { lessMotion } from '@/lib/motion';
 
+import { useNivel } from './Nivel';
+
 export interface CoverHeroPoint {
   id: string;
   label: string;
@@ -248,3 +250,26 @@ function ClipOverlay({ point, wide, onDone }: { point: CoverHeroPoint; wide: boo
     </div>
   );
 }
+
+/** Portada según el nivel (D-075): Premium con foto profesional y puntos; los demás, la portada base. */
+export function HeroNivel({
+  premium,
+  base,
+}: {
+  premium: { src: string; alt: string; width: number; height: number; points: CoverHeroPoint[] };
+  base?: { src: string; alt: string; width: number; height: number };
+}) {
+  const nivel = useNivel();
+  if (nivel === 'premium' || !base) return <CoverHero {...premium} />;
+  return (
+    <img
+      src={base.src}
+      alt={base.alt}
+      width={base.width}
+      height={base.height}
+      fetchPriority="high"
+      className="absolute inset-0 -z-10 size-full object-cover"
+    />
+  );
+}
+

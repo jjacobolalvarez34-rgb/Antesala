@@ -38,6 +38,8 @@ import { PanoSphere, panoDirection } from './PanoSphere';
 import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
 import { useRealContext } from './RealContext';
 import { TourGuide, type GuideStep } from './TourGuide';
+import { useNivel } from '@/components/hotel/Nivel';
+
 import { ExportHook } from './ExportHook';
 import { spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
@@ -330,6 +332,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const night = useTour((s) => s.night);
   const facadeIndex = useTour((s) => s.facade);
   const setHoveredUnit = useTour((s) => s.setHoveredUnit);
+  // nivel de la demo: la maqueta realista solo en Premium (D-075)
+  const nivel = useNivel();
   // al cambiar de etapa se borra la etiqueta de la ventana que quedó bajo el mouse:
   // la fachada deja de recibir eventos y su "pointerleave" nunca llegaba (se veía
   // "Suite 404" sobre la planta del piso 2)
@@ -673,10 +677,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         {/* maqueta de la unidad actual (bloque 3); solo se monta la que se ve */}
         {unitId && data.unitPlans[unitId] && unitAnchor(data, frame, unitId) ? (
           <UnitModel
-            key={unitId}
+            key={`${unitId}-${nivel}`}
             plan={data.unitPlans[unitId]!.plan}
             spaces={data.unitPlans[unitId]!.spaces}
-            realista={data.unitPlans[unitId]!.realista}
+            realista={nivel === 'premium' ? data.unitPlans[unitId]!.realista : undefined}
             position={unitAnchor(data, frame, unitId)!}
             visible={inUnit && active}
             selectedSpace={spaceId}

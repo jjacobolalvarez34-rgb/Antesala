@@ -145,7 +145,13 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       className="relative flex min-h-dvh flex-col bg-background text-foreground scene:pointer-events-none scene:bg-transparent"
     >
       {scene ? <SceneLayer data={scene} /> : null}
-      {hotel.isDemo ? <DemoBanner note={hotel.demoNote} /> : null}
+      {hotel.isDemo ? (
+        <DemoBanner
+          note={hotel.demoNote}
+          base={`/h/${hotel.slug}`}
+          niveles={hotel.units.some((u) => u.realista) || JSON.stringify(hotel).includes('"tier":"premium"')}
+        />
+      ) : null}
       <HotelHeader
         slug={hotel.slug}
         name={tokens.brand.name}

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, Check, Clock, MapPin, MessageCircle, Move3d, Plus } from 'lucide-react';
 
-import { CoverHero, type CoverHeroPoint } from '@/components/hotel/CoverHero';
+import { type CoverHeroPoint, HeroNivel } from '@/components/hotel/CoverHero';
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { unitCover } from '@/components/hotel/UnitCard';
 import { getHotelBundle } from '@/lib/content';
@@ -83,7 +83,14 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
       <section className="px-3 md:px-6">
         <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-ink text-bone md:rounded-[2.25rem]">
           {hero && coverPoints.length ? (
-            <CoverHero src={photo(hero)!} alt={hero.alt} width={hero.width ?? 1600} height={hero.height ?? 1000} points={coverPoints} />
+            // Premium: foto profesional con puntos; los otros niveles, la portada base (D-075)
+            <HeroNivel
+              premium={{ src: photo(hero)!, alt: hero.alt, width: hero.width ?? 1600, height: hero.height ?? 1000, points: coverPoints }}
+              base={(() => {
+                const b = exterior.find((m) => m.tier !== 'premium');
+                return b ? { src: photo(b)!, alt: b.alt, width: b.width ?? 1600, height: b.height ?? 1000 } : undefined;
+              })()}
+            />
           ) : hero ? (
             <img
               src={photo(hero)}

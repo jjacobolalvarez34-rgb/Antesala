@@ -3,12 +3,24 @@ import { ArrowLeft, Info } from 'lucide-react';
 
 import { AntesalaSymbol } from '@/components/brand/AntesalaLogo';
 
+import { NivelSelector } from './Nivel';
+
 /**
  * Visible si hotel.isDemo (CONTENIDO.md §2). Discreto pero legible.
  * En las demos lleva el símbolo de Antesala y la vuelta a su página: quien entra
  * desde la web de Antesala tiene por dónde volver (pedido de Jacobo, 2026-11-12).
  */
-export function DemoBanner({ note = 'Hotel ficticio · imágenes ilustrativas' }: { note?: string }) {
+export function DemoBanner({
+  note = 'Hotel ficticio · imágenes ilustrativas',
+  base,
+  niveles = false,
+}: {
+  note?: string;
+  /** /h/<hotel> */
+  base?: string;
+  /** el hotel tiene contenido Premium: se muestra "Ver como: Esencial · Inmersivo · Premium" */
+  niveles?: boolean;
+}) {
   return (
     <div role="note" className="pointer-events-auto relative z-[60] bg-ink text-bone">
       <div className="mx-auto grid min-h-9 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 md:px-6">
@@ -25,8 +37,12 @@ export function DemoBanner({ note = 'Hotel ficticio · imágenes ilustrativas' }
           <Info aria-hidden className="hidden size-3.5 shrink-0 opacity-80 sm:block" />
           <span className="min-w-0">{note}</span>
         </p>
-        {/* contrapeso del enlace para que la nota quede centrada */}
-        <span aria-hidden className="hidden w-[7.5rem] sm:block" />
+        {niveles && base ? (
+          <NivelSelector base={base} className="col-span-3 justify-center pb-1 sm:col-span-1 sm:pb-0" />
+        ) : (
+          /* contrapeso del enlace para que la nota quede centrada */
+          <span aria-hidden className="hidden w-[7.5rem] sm:block" />
+        )}
       </div>
     </div>
   );
