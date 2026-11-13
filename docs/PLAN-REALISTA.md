@@ -37,7 +37,7 @@ Higgsfield "use Blender" (`/use-blender`) es un MCP local para manejar Blender d
 
 ## Prueba 1 (2026-11-12): Suite 402
 
-- Blender 5.2.4 LTS portable en `D:\Herramientaslender-5.2.4-windows-x64`.
+- Blender 5.2.4 LTS portable en `D:\Herramientas/blender-5.2.4-windows-x64` (es decir, `D:/Herramientas/blender-5.2.4-windows-x64`).
 - El visor exporta la maqueta con `?export=1` (`pipeline/realista/exportar.spec.ts`). Luego `pipeline/realista/hornear.py` le pone materiales, luz (el HDRI del visor y un sol), saca un render de muestra, hornea un mapa de luz de 2K y exporta GLB (485 KB).
 - **Tiempo en el PC de Jacobo** (i5-4300M, 2 núcleos, gráficos integrados): 1,5 min de render de muestra y 4 min de horneado, con 48 muestras.
 - **Resultado:** `docs/estado/realista-prueba-1.jpg`. El proceso funciona, pero **todavía no se ve realista**, por tres cosas:
