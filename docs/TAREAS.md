@@ -160,6 +160,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Horneado nocturno propio de la fachada (hoy, el de día oscurecido)
 - [x] Esquinas negras de los muros en la maqueta realista
 - [x] Zonas más oscuras que en el render (curva de tono del visor sobre lo horneado)
+- [x] 360° en vivo: la cámara en el punto más despejado del cuarto (el dormitorio en L del 601 la dejaba entre muros)
+- [ ] Planta del piso abierto horneada en Premium (`Level.realista`, `lote_plantas.py`): piso 1, tipo 2–5 y piso 6
+- [x] Entorno apagado en Premium (vecinos sin color para que mande el edificio)
 - [ ] Más decoración en la maqueta realista (cojines, objetos, cocina y baño más detallados)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield
 - [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes

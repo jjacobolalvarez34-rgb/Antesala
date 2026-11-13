@@ -127,11 +127,11 @@ export function FloorPlanModel({
   }, [meshes, meta, finishes]);
 
   // planta horneada (Premium): se carga al montarse; mientras tanto se ve la de código
-  const [baked, setBaked] = useState<{ obj: THREE.Object3D; mat: THREE.MeshBasicMaterial } | null>(null);
+  const [baked, setBaked] = useState<{ obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null>(null);
   useEffect(() => {
     if (!realista) return;
     let alive = true;
-    let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial } | null = null;
+    let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null = null;
     void (async () => {
       const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
         import('three/examples/jsm/loaders/GLTFLoader.js'),
@@ -142,23 +142,35 @@ export function FloorPlanModel({
       draco.dispose();
       if (!alive || !gltf) return;
       let mat: THREE.MeshBasicMaterial | null = null;
+      const all: THREE.MeshBasicMaterial[] = [];
       gltf.scene.traverse((o) => {
         const mesh = o as THREE.Mesh;
         if (!mesh.isMesh) return;
         const src = mesh.material as THREE.MeshStandardMaterial;
+        const glass = src.name.startsWith('vidrio');
         // la luz ya viene en la textura: sin la curva de tono del visor (D-074)
-        const next = new THREE.MeshBasicMaterial({ map: src.map, transparent: true, opacity: 0, toneMapped: false });
+        const next = new THREE.MeshBasicMaterial({
+          map: glass ? null : src.map,
+          color: glass ? '#dfe9ea' : '#ffffff',
+          transparent: true,
+          opacity: 0,
+          depthWrite: !glass,
+          toneMapped: false,
+        });
+        next.userData.base = glass ? 0.22 : 1;
         mesh.material = next;
         mesh.raycast = noHit;
-        mat ??= next;
+        all.push(next);
+        if (src.name.startsWith('horneado')) mat = next;
       });
+      mat ??= all[0] ?? null;
       if (!mat) return;
-      loaded = { obj: gltf.scene, mat };
+      loaded = { obj: gltf.scene, mat, all };
       setBaked(loaded);
     })();
     return () => {
       alive = false;
-      loaded?.mat.dispose();
+      loaded?.all.forEach((m) => m.dispose());
     };
   }, [realista]);
   // con la horneada, la de código no se dibuja: los pisos de las unidades siguen
@@ -192,7 +204,7 @@ export function FloorPlanModel({
     if (baked) {
       // horneada de día: de noche se entibia y baja un poco, como con la luz de las lámparas
       const n = light.uNight.value;
-      baked.mat.color.copy(WHITE).lerp(NIGHT_WARM, n * 0.55);
+      for (const m of baked.all) if (m.userData.base === 1) m.color.copy(WHITE).lerp(NIGHT_WARM, n * 0.55);
     }
     const k = light.uNight.value * 0.42;
     for (const m of lit) {
@@ -242,7 +254,7 @@ export function FloorPlanModel({
     const all: [THREE.Material, number][] = [
       [mats.walls, 1],
       ...Object.values(mats.floors).map((m) => [m, baked ? 0.5 : 1] as [THREE.Material, number]),
-      ...(baked ? [[baked.mat, 1] as [THREE.Material, number]] : []),
+      ...(baked?.all ?? []).map((m) => [m, m.userData.base as number] as [THREE.Material, number]),
       ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
     ];
     all.forEach(([mat, base], i) =>

@@ -301,6 +301,9 @@ export function UnitModel({
     const on = real ? 0 : 1; // con la maqueta realista, la de código se apaga
     // y del todo: invisibles igual escribían profundidad y tapaban lo horneado (manchas oscuras)
     for (const m of [mats.walls, mats.door, mats.rail, mats.glass, ...Object.values(mats.furniture)]) m.visible = !real;
+    // cielo raso junto a lo horneado: claro y cálido como los muros (con la luz del visor quedaba gris azulado)
+    mats.ceiling.emissive.set(real ? '#e6dfd3' : '#000000');
+    mats.ceiling.emissiveIntensity = real ? 0.78 : 0;
     const all: [THREE.Material, number][] = [
       [mats.walls, on],
       [mats.door, on],

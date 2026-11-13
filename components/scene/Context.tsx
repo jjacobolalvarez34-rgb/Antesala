@@ -9,7 +9,7 @@ import type { BuildingFrame, Facade } from '@/lib/building';
 import { VIEW_ONLY_LAYER } from './Backdrop';
 import { mergeBoxes, type Box } from './geometry';
 import { RealNeighbors, streetSpots, type LampSpot, type RealContextData } from './RealContext';
-import { neighborFacadeTexture, neighborLitTexture } from './textures';
+import { muteNeighbor, neighborFacadeTexture, neighborLitTexture } from './textures';
 import type { LightUniforms } from './windows';
 
 /**
@@ -111,15 +111,17 @@ function NeighborBlocks({
 }) {
   const blocks = useNeighbors(frame, facades);
   const mats = useMemo(() => {
-    const roof = new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 });
+    const roof = muteNeighbor(new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 }));
     const make = (kind: 'ladrillo' | 'estuco', seed: number) =>
-      new THREE.MeshStandardMaterial({
-        map: neighborFacadeTexture(kind, kind === 'ladrillo' ? 3 : 9),
-        emissiveMap: neighborLitTexture(seed),
-        emissive: new THREE.Color('#ffffff'),
-        emissiveIntensity: 0,
-        roughness: 0.92,
-      });
+      muteNeighbor(
+        new THREE.MeshStandardMaterial({
+          map: neighborFacadeTexture(kind, kind === 'ladrillo' ? 3 : 9),
+          emissiveMap: neighborLitTexture(seed),
+          emissive: new THREE.Color('#ffffff'),
+          emissiveIntensity: 0,
+          roughness: 0.92,
+        }),
+      );
     return { roof, ladrillo: make('ladrillo', 21), estuco: make('estuco', 37) };
   }, []);
   useFrame(() => {

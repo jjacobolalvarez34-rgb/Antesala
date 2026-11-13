@@ -8,7 +8,7 @@ const PORT = Number(process.env.SHOTS_PORT ?? 3100);
  */
 export default defineConfig({
   testDir: '.',
-  testMatch: /(renders|producto|exportar|exportar-edificio)\.spec\.ts$/,
+  testMatch: /(renders|producto|exportar|exportar-edificio|exportar-planta)\.spec\.ts$/,
   outputDir: '../test-results/renders',
   reporter: [['line']],
   workers: 1,

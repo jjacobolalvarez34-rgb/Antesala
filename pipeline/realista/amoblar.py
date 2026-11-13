@@ -584,12 +584,12 @@ for g in root.iter():
                 break
 if PLANTA:
     # corte a la altura de los muros: lo que queda encima se quita y lo que lo cruza se acorta
-    for o in [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.get('tipo') in ('mueble', 'modelo', 'planta')]:
+    for o in [o for o in bpy.context.scene.objects if o.type == 'MESH' and o.get('tipo') in ('mueble', 'modelo', 'planta', 'vidrio')]:
         zs = [(o.matrix_world @ Vector(v)).z for v in o.bound_box]
         z0, z1 = min(zs), max(zs)
         if z0 >= CORTE - 0.02:
             bpy.data.objects.remove(o, do_unlink=True)
-        elif z1 > CORTE and o.get('tipo') == 'mueble':
+        elif z1 > CORTE and o.get('tipo') in ('mueble', 'vidrio'):
             k = (CORTE - z0) / (z1 - z0)
             o.location.z = z0 + (o.location.z - z0) * k
             o.scale.z *= k

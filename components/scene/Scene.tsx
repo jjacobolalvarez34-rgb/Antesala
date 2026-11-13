@@ -41,6 +41,7 @@ import { TourGuide, type GuideStep } from './TourGuide';
 import { useNivel } from '@/components/hotel/Nivel';
 
 import { ExportHook } from './ExportHook';
+import { NEIGHBOR_MUTE } from './textures';
 import { panoEye, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
@@ -336,6 +337,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const setHoveredUnit = useTour((s) => s.setHoveredUnit);
   // nivel de la demo: la maqueta realista solo en Premium (D-075)
   const nivel = useNivel();
+  // Premium: el entorno se apaga para que el edificio horneado mande
+  useEffect(() => {
+    NEIGHBOR_MUTE.value = nivel === 'premium' ? 1 : 0;
+  }, [nivel]);
   // al cambiar de etapa se borra la etiqueta de la ventana que quedó bajo el mouse:
   // la fachada deja de recibir eventos y su "pointerleave" nunca llegaba (se veía
   // "Suite 404" sobre la planta del piso 2)

@@ -8,7 +8,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { BuildingFrame, Facade } from '@/lib/building';
 
 import { VIEW_ONLY_LAYER } from './Backdrop';
-import { neighborFacadeTexture, neighborLitTexture } from './textures';
+import { muteNeighbor, neighborFacadeTexture, neighborLitTexture } from './textures';
 import type { LightUniforms } from './windows';
 
 /**
@@ -196,12 +196,12 @@ export function RealNeighbors({
       map.wrapS = map.wrapT = THREE.RepeatWrapping;
       const lit = neighborLitTexture(seed);
       lit.wrapS = lit.wrapT = THREE.RepeatWrapping;
-      return new THREE.MeshStandardMaterial({ map, emissiveMap: lit, emissive: new THREE.Color('#ffffff'), emissiveIntensity: 0, roughness: 0.92 });
+      return muteNeighbor(new THREE.MeshStandardMaterial({ map, emissiveMap: lit, emissive: new THREE.Color('#ffffff'), emissiveIntensity: 0, roughness: 0.92 }));
     };
     return {
       ladrillo: make('ladrillo', 21),
       estuco: make('estuco', 37),
-      roof: new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 }),
+      roof: muteNeighbor(new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 })),
       road: new THREE.MeshStandardMaterial({ color: '#56585b', roughness: 0.95 }),
       walk: new THREE.MeshStandardMaterial({ color: '#b9b5ad', roughness: 1 }),
     };

@@ -25,7 +25,9 @@ export function ExportHook() {
       if (!obj) throw new Error(`no existe ${name}`);
       // con opacidad completa y visible, sin la animación de entrada
       obj.traverse((o) => {
-        o.visible = true;
+        // sin geometría (p. ej. el brillo al pasar el mouse, que la toma prestada) no se exporta
+        const geo = (o as THREE.Mesh).geometry as THREE.BufferGeometry | undefined;
+        o.visible = !(o as THREE.Mesh).isMesh || !!geo?.getAttribute('position');
         const m = (o as THREE.Mesh).material as THREE.Material | THREE.Material[] | undefined;
         for (const mat of Array.isArray(m) ? m : m ? [m] : []) {
           mat.opacity = 1;

@@ -203,6 +203,28 @@ export function neighborLitTexture(seed = 21) {
 }
 
 /** Fachada genérica de vecino: muro con ventanas en grilla. Tile 6 m × 3 m (un piso, dos ventanas). */
+/**
+ * Entorno apagado en Premium: los vecinos pierden color y bajan un poco para que el
+ * edificio horneado sea el protagonista. Un solo uniforme para todo el entorno; lo fija
+ * la escena según el nivel (0 = como siempre).
+ */
+export const NEIGHBOR_MUTE = { value: 0 };
+export function muteNeighbor<T extends THREE.Material>(mat: T): T {
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uMute = NEIGHBOR_MUTE;
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', `#include <common>
+uniform float uMute;`)
+      .replace(
+        '#include <map_fragment>',
+        `#include <map_fragment>
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114))) * vec3(1.02, 1.0, 0.97), uMute * 0.72) * (1.0 - uMute * 0.1);`,
+      );
+  };
+  mat.customProgramCacheKey = () => 'vecino-apagado';
+  return mat;
+}
+
 export function neighborFacadeTexture(kind: 'ladrillo' | 'estuco', seed = 1) {
   const W = 512;
   const H = 256;
