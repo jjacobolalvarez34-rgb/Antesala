@@ -159,7 +159,8 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Akuare: unidades y fachada realistas (cancelado esta noche a pedido de Jacobo)
 - [ ] Horneado nocturno propio de la fachada (hoy, el de día oscurecido)
 - [x] Esquinas negras de los muros en la maqueta realista
-- [ ] Pulir la maqueta realista: zonas más oscuras que en el render, más decoración
+- [x] Zonas más oscuras que en el render (curva de tono del visor sobre lo horneado)
+- [ ] Más decoración en la maqueta realista (cojines, objetos, cocina y baño más detallados)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield
 - [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes
 - [ ] Modo Premium para Akuare: fachada desde el render del 3D (catastro) con fotos propias de Jacobo desde la calle como referencia (no Google Maps ni Street View: sus términos lo prohíben); interiores ilustrativos

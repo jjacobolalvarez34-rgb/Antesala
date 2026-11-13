@@ -1002,7 +1002,8 @@ export function BuildingModel({
         const mesh = o as THREE.Mesh;
         if (!mesh.isMesh) return;
         const src = mesh.material as THREE.MeshStandardMaterial;
-        const mat = new THREE.MeshBasicMaterial({ map: src.map, transparent: true });
+        // sin la curva del visor: la luz ya viene horneada con la de Blender
+        const mat = new THREE.MeshBasicMaterial({ map: src.map, transparent: true, toneMapped: false });
         mesh.material = mat;
         mesh.raycast = noRaycast;
         // se identifica por el material ("horneado-piso-<id>-fachada"): el optimizador puede renombrar o unir nodos

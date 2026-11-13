@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-12 (noche)
+**Actualizado:** 2026-11-13 (madrugada)
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---

@@ -25,6 +25,15 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-13 (madrugada) · Despertador de las 3:30: la luz horneada sin la curva del visor
+
+**Hecho**
+- La fachada ya estaba integrada y las esquinas negras resueltas (entrada anterior).
+- **Zonas oscuras:** el visor aplicaba su curva de tono (ACES) encima de la luz ya horneada, que oscurecía y ensuciaba los tonos. Los materiales horneados (unidades y fachada) pasan a `toneMapped: false`. La maqueta queda más cerca del render de Blender: muros claros y madera cálida. Verificado en el estudio 201 y en la fachada de noche, sin errores.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo revise Premium en Niebla Alta. Pendientes: Akuare, horneado nocturno propio y más decoración.
+
 ## 2026-11-12 (7, noche) · 3D realista en Premium: unidades y fachada de Niebla Alta, selector de nivel
 
 **Hecho**

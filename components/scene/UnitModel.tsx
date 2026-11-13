@@ -278,9 +278,10 @@ export function UnitModel({
         if (!mesh.isMesh) return;
         mesh.raycast = () => null;
         const src = mesh.material as THREE.MeshStandardMaterial;
+        // la luz ya viene horneada con la curva de Blender (AgX): sin la curva del visor encima (se veía más oscuro)
         const baked = src.name === 'horneado';
         const mat = baked
-          ? cuttable(new THREE.MeshBasicMaterial({ map: src.map, transparent: true, opacity: 0 }), uni)
+          ? cuttable(new THREE.MeshBasicMaterial({ map: src.map, transparent: true, opacity: 0, toneMapped: false }), uni)
           : cuttable(Object.assign(src, { transparent: true, opacity: 0 }), uni);
         mat.userData.base = src.name === 'vidrio' ? 0.35 : 1;
         mesh.material = mat;
