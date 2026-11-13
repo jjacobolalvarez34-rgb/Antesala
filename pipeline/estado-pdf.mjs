@@ -31,6 +31,8 @@ const CAPTIONS = {
   '15-celular-niebla-portada': 'Celular: portada de Niebla Alta',
   '16-niebla-premium-fachada-noche': 'Premium: fachada horneada en Blender, de noche, con las ventanas encendidas',
   '17-niebla-premium-penthouse': 'Premium: el Penthouse 601 amoblado y horneado en Blender',
+  '18-niebla-premium-piso-abierto': 'Premium: el piso 6 abierto, con la planta horneada en Blender (muebles reales y luz)',
+  '19-niebla-premium-360': 'Premium: 360° en vivo del dormitorio del Penthouse, desde el punto más despejado del cuarto',
 };
 
 const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

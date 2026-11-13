@@ -161,7 +161,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Esquinas negras de los muros en la maqueta realista
 - [x] Zonas más oscuras que en el render (curva de tono del visor sobre lo horneado)
 - [x] 360° en vivo: la cámara en el punto más despejado del cuarto (el dormitorio en L del 601 la dejaba entre muros)
-- [ ] Planta del piso abierto horneada en Premium (`Level.realista`, `lote_plantas.py`): piso 1, tipo 2–5 y piso 6
+- [x] Planta del piso abierto horneada en Premium (`Level.realista`, `lote_plantas.py`): piso 1, tipo 2–5 y piso 6
+- [x] Del piso a la habitación sin cortes: la planta se desvanece al ritmo del edificio y la horneada entra directo (precargada)
+- [ ] Akuare: plantas de piso horneadas (cuando se retome Akuare)
 - [x] Entorno apagado en Premium (vecinos sin color para que mande el edificio)
 - [ ] Más decoración en la maqueta realista (cojines, objetos, cocina y baño más detallados)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield

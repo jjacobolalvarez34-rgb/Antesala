@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-13 (madrugada)
+**Actualizado:** 2026-11-13 (mañana)
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---
@@ -105,7 +105,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 |---|---|---|---|---|
 | **Esencial** | Fotos y 360° de cada espacio, botón de reserva o WhatsApp. Sin 3D. | Lista de Niebla Alta | $5 – 9 M | $250 – 400 mil |
 | **Inmersivo** (recomendado para empezar) | Edificio 3D con su barrio, pisos y habitaciones que se tocan, planos y maqueta amoblada. Todo Esencial. | Niebla Alta en 3D | $12 – 22 M | $450 – 850 mil |
-| **Premium** | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos tocables. Todo Inmersivo. | Portada de Niebla Alta (hoy fotos; falta el 3D realista) | $25 – 45 M | $0,9 – 1,5 M |
+| **Premium** | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos tocables. Todo Inmersivo. | Niebla Alta en Premium: 3D realista horneado (edificio, pisos abiertos, habitaciones y 360°) | $25 – 45 M | $0,9 – 1,5 M |
 | **A la medida** | Varias sedes o cadenas | — | Se cotiza | Se cotiza |
 
 - **Piloto sugerido:** $12 – 15 M con alcance limitado.
@@ -141,6 +141,12 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - Prueba primero con la Suite 402. Plan en `docs/PLAN-REALISTA.md`.
 - **Hecho esta noche (D-074, D-075):** el **3D realista ya existe** en Niebla Alta. El estudio, la suite y el penthouse están amoblados, y la fachada horneada en Blender por piso. Todo se ve en Premium y sigue siendo interactivo.
 - **Selector "Ver como: Esencial · Inmersivo · Premium"** en la banda de las demos. Los "Ver ejemplo" de los precios abren cada nivel.
+- **Hecho esta mañana (D-076): Premium completo en Niebla Alta.**
+  - **Pisos abiertos realistas:** las plantas de los pisos también se hornearon (lobby, piso tipo y penthouse). La disponibilidad se sigue leyendo (velo gris en las ocupadas) y la luz cálida al pasar el mouse sigue igual.
+  - **El 360° ya no se rompe:** la cámara se para en el punto más despejado del cuarto. En el dormitorio en L del penthouse quedaba entre muros.
+  - **Del piso a la habitación sin cortes:** la planta se desvanece al ritmo del edificio y la habitación realista entra directo, precargada.
+  - **Entorno apagado:** en Premium los edificios vecinos pierden el color para que el hotel sea el protagonista.
+  - **Costo de producción medido:** unos 15 min de Blender por planta de piso y unos 20 por unidad tipo, en el PC de Jacobo. Niebla Alta completa (3 unidades tipo, 3 plantas y la fachada) es unas 3 horas de máquina, casi sin trabajo manual.
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---
@@ -149,7 +155,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 1. **Precio de la página web sola.** Debe quedar claramente por debajo del piloto con 3D.
 2. **Mensualidad y tope de transferencia** por paquete.
-3. **Qué es Premium exactamente y cuánto cuesta producirlo.** Hoy: fotos profesionales y portada con puntos; falta el 3D realista (Blender, D-074). Para un hotel real, ¿fotografía real, renders con IA desde su 3D o ambos? En un hotel que ya existe, las imágenes con IA pueden no coincidir con lo real. Para constructoras sobre planos sí encajan, porque no hay edificio que fotografiar. Cuántas horas de Blender por hotel define el precio.
+3. **Qué es Premium exactamente y cuánto cuesta producirlo.** Hoy: el 3D realista horneado en Blender (D-074, D-076), las fotos profesionales y la portada con puntos. Producirlo cuesta unas 3 horas de máquina por hotel como Niebla Alta. Para un hotel real, ¿fotografía real, renders con IA desde su 3D o ambos? En un hotel que ya existe, las imágenes con IA pueden no coincidir con lo real. Para constructoras sobre planos sí encajan, porque no hay edificio que fotografiar. Cuántas horas de Blender por hotel define el precio.
 4. **Akuare como demo:** es un edificio real, mostrado sin permiso de la constructora y marcado "no oficial". ¿Se mantiene así, se le ofrece a la constructora o se reemplaza por un proyecto ficticio de constructora?
 5. **Primeros contactos:** confirmar Monir y Nico por teléfono; armar la lista de 5 constructoras con proyectos sobre planos en Bogotá.
 6. **Formalidades:**
@@ -158,7 +164,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
    - verificar la marca en la SIC (clases 42 y 35), los dominios e Instagram.
 7. **Glamping (KingDome):** construir la variante solo si responden.
 8. **Trato en la web de Antesala:** hoy es de "usted" (dueños de hotel) y las páginas de los hoteles son de "tú" (huésped). ¿Se mantiene así?
-9. **¿Vale la pena seguir con el 3D realista antes de vender?** Son varias sesiones de trabajo. La alternativa es salir a vender Esencial e Inmersivo ya, y Premium como "próximamente" o a la medida.
+9. **¿Premium ya se puede vender?** En Niebla Alta ya se ve completo. Falta Akuare (constructoras) y un horneado nocturno propio. ¿Se sale a vender ya con los tres niveles?
 
 ---
 

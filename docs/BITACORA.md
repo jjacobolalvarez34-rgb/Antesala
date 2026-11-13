@@ -25,6 +25,34 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-13 (mañana) · Revisión de Premium: pisos abiertos horneados, 360° y transición sin cortes
+
+**Hecho**
+- **Revisión de Premium** completa (portada, edificio de día y de noche, piso abierto, unidad, 360° y celular), sin errores. Lo que no se veía Premium: el piso abierto (planta por código), el 360° del dormitorio del 601 y el entorno de colores.
+- **360° en vivo:** la cámara iba al rincón de afuera del dormitorio en L del penthouse, entre muros. Ahora `panoEye` busca en una grilla dentro del polígono el punto más despejado de los muros y, entre esos, el más lejos de la ventana. El cielo raso junto a lo horneado queda claro y cálido.
+- **Plantas de piso horneadas:**
+  - `exportar-planta.spec.ts` y `lote_plantas.py`; `amoblar.py` con `PLANTA=1`: corte a 1,1 m, sin cortinas ni cuadros, muebles y vidrios recortados.
+  - Los pisos 2–5 son la misma planta, así que comparten un solo GLB. Piso 1, tipo y piso 6, unos 15 min cada uno, ~1 MB.
+  - En el visor, las ocupadas llevan velo gris y el brillo al pasar el mouse sigue.
+- **Entorno apagado en Premium** (`NEIGHBOR_MUTE`).
+- **Del piso a la habitación** (lo reportó Jacobo):
+  - La planta se iba de golpe en 0,25 s. Ahora se desvanece al ritmo del edificio y el cajón no vuelve a meterse.
+  - Al llegar, la maqueta gris aparecía y luego saltaba a la horneada, con cuadros vacíos de por medio. Ahora la horneada entra directo: las del piso abierto se precargan y decodifican por adelantado (`bakedCache.ts`) y el retardo de entrada cuenta desde que se pidió la unidad.
+  - Verificado cuadro por cuadro.
+- ESTADO y el PDF al día, con 2 capturas nuevas.
+
+**Decisiones**
+- D-076: Premium completo (plantas horneadas, entorno apagado, punto de vista del 360°).
+
+**Problemas / bloqueos**
+- La primera prueba de la planta no se veía: solo se animaba la opacidad del primer material del GLB (un vidrio). Corregido.
+
+**Mediciones**
+- Planta horneada: ~1,0–1,2 MB (Draco + WebP, 2048 px). Unos 15 min de Blender por planta (40 muestras).
+
+**Siguiente sesión**
+- Empezar por: que Jacobo vea Premium en el celular real. Pendientes: Akuare (unidades, plantas y fachada), horneado nocturno propio y más decoración.
+
 ## 2026-11-13 (madrugada) · Despertador de las 3:30: la luz horneada sin la curva del visor
 
 **Hecho**
