@@ -49,6 +49,8 @@ const FINISH: Record<string, string> = {
 };
 
 const WARM = new THREE.Color('#ffb46b');
+const HOVER_FREE = '#3f9a5c';
+const HOVER_BUSY = '#c4493a';
 const WHITE = new THREE.Color('#ffffff');
 const NIGHT_WARM = new THREE.Color('#b98a5e');
 const GLOW = new THREE.Color('#ffc98a');
@@ -203,6 +205,10 @@ export function FloorPlanModel({
     return sp ? (mats.floors[sp.id] ?? null) : null;
   }, [chosen, spaces, mats]);
   const pulse = useRef(0);
+  // en pantallas táctiles no hay "pasar el mouse": el primer toque resalta la habitación
+  // (color y etiqueta con precio) y el segundo entra
+  const touch = useRef(false);
+  const armed = useRef<string | null>(null);
   useFrame((state, delta) => {
     if (baked) {
       // horneada de día: de noche se entibia y baja un poco, como con la luz de las lámparas
@@ -241,7 +247,9 @@ export function FloorPlanModel({
     const f = hovered ? meshes.floors.find((x) => meta.get(x.id)?.unitId === hovered) : undefined;
     if (f) {
       if (glowRef.current) glowRef.current.geometry = f.geometry;
-      gsap.fromTo(glowMat, { opacity: 0 }, { opacity: 0.42, duration: 0.35, ease: 'power2.out', overwrite: true });
+      // libre en verde, ocupada en terracota (pedido de Jacobo, 2026-11-13)
+      glowMat.color.set(meta.get(f.id)?.occupied ? HOVER_BUSY : HOVER_FREE);
+      gsap.fromTo(glowMat, { opacity: 0 }, { opacity: 0.55, duration: 0.3, ease: 'power2.out', overwrite: true });
     } else {
       gsap.to(glowMat, { opacity: 0, duration: 0.45, ease: 'power2.out', overwrite: true });
     }
@@ -265,7 +273,8 @@ export function FloorPlanModel({
         opacity: visible ? base : 0,
         // al entrar a una habitación sigue al edificio (Building: retardo 0,55 s y 1,08 s de fundido)
         duration: reduced ? 0 : visible ? 0.6 : leaving ? 1.08 : 0.25,
-        delay: visible ? (reduced ? 0.45 : 1.15) : leaving && !reduced ? 0.55 : 0,
+        // horneada: entra antes, a la par con la fachada que se retira
+        delay: visible ? (reduced ? 0.45 : baked ? 0.55 : 1.15) : leaving && !reduced ? 0.55 : 0,
         ease: visible ? 'power2.out' : leaving ? 'power2.inOut' : 'power2.out',
         overwrite: true,
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
@@ -313,8 +322,17 @@ export function FloorPlanModel({
             onPointerOut={
               clickable
                 ? () => {
+                    // al levantar el dedo el navegador "saca" el puntero: el resaltado se queda
+                    if (touch.current) return;
                     onHover(null);
                     document.body.style.cursor = '';
+                  }
+                : undefined
+            }
+            onPointerDown={
+              clickable
+                ? (e: ThreeEvent<PointerEvent>) => {
+                    touch.current = e.nativeEvent.pointerType === 'touch';
                   }
                 : undefined
             }
@@ -322,6 +340,11 @@ export function FloorPlanModel({
               clickable
                 ? (e: ThreeEvent<MouseEvent>) => {
                     e.stopPropagation();
+                    if (touch.current && armed.current !== s.unitId) {
+                      armed.current = s.unitId!;
+                      onHover(s.unitId!);
+                      return;
+                    }
                     onSelect(s.unitId!);
                   }
                 : undefined

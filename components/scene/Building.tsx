@@ -317,6 +317,51 @@ interface Materials {
 
 const BASE_OPACITY = { clad: 1, concrete: 1, slab: 1, frame: 1, glass: 0.42, rail: 0.3, green: 1 } as const;
 
+/**
+ * La fachada horneada se queda solo con las caras de afuera: las de adentro del muro
+ * salieron negras en Blender (ahí no entra luz) y se veían al abrir el piso, antes de que
+ * la fachada se retire. Igual los topes de los muros, tapados por la losa de arriba. Una cara vertical que mira de frente hacia adentro del lado más
+ * cercano es de adentro (sirve para plantas rectangulares, como las de la demo).
+ */
+function outerShell(geo: THREE.BufferGeometry) {
+  const pos = geo.getAttribute('position');
+  const index = geo.getIndex();
+  if (!pos || !index) return;
+  geo.computeBoundingBox();
+  const box = geo.boundingBox!;
+  const a = new THREE.Vector3();
+  const b = new THREE.Vector3();
+  const d = new THREE.Vector3();
+  const n = new THREE.Vector3();
+  const keep: number[] = [];
+  for (let i = 0; i < index.count; i += 3) {
+    const [i0, i1, i2] = [index.getX(i), index.getX(i + 1), index.getX(i + 2)];
+    a.fromBufferAttribute(pos, i0);
+    b.fromBufferAttribute(pos, i1);
+    d.fromBufferAttribute(pos, i2);
+    n.subVectors(b, a).cross(d.clone().sub(a));
+    const len = n.length();
+    if (len > 0) n.divideScalar(len);
+    // el lado del piso más cercano da la normal de afuera; una cara que mira de frente
+    // al revés es la de adentro (los marcos de las ventanas miran de lado y se quedan)
+    const x = (a.x + b.x + d.x) / 3;
+    const z = (a.z + b.z + d.z) / 3;
+    const sides: [number, number, number][] = [
+      [x - box.min.x, -1, 0],
+      [box.max.x - x, 1, 0],
+      [z - box.min.z, 0, -1],
+      [box.max.z - z, 0, 1],
+    ];
+    const [, ox, oz] = sides.reduce((p, q) => (q[0] < p[0] ? q : p));
+    if (Math.abs(n.y) < 0.3 && n.x * ox + n.z * oz < -0.7) continue;
+    // los topes de los muros quedan bajo la losa de arriba (negros en el horneado) y se
+    // veían al sacar el cajón del piso
+    if (n.y > 0.7 && Math.min(a.y, b.y, d.y) > box.max.y - 0.06) continue;
+    keep.push(i0, i1, i2);
+  }
+  geo.setIndex(keep);
+}
+
 /** Piezas horneadas de un piso (D-074). */
 export interface BakedFloor {
   fachada?: THREE.Mesh;
@@ -528,6 +573,8 @@ function Floor({
     // planta del piso: con el cajón afuera, la fachada de este piso se retira (queda la losa).
     // Retirada, se oculta: con opacidad 0 seguía escribiendo profundidad y tapaba a ratos la planta
     const cutaway = selected && hasPlan;
+    // horneada: la fachada se retira mientras el cajón sale (por dentro quedó oscura en Blender)
+    const cutDelay = baked ? 0.45 : 1.1;
     const fg = facadeRef.current;
     if (fg && !cutaway) fg.visible = true;
     for (const key of Object.keys(BASE_OPACITY) as (keyof typeof BASE_OPACITY)[]) {
@@ -536,7 +583,7 @@ function Floor({
       gsap.to(mat, {
         opacity: dim ? BASE_OPACITY[key] * fade : cutaway && !keep ? 0 : BASE_OPACITY[key],
         duration: gone ? d * 0.9 : d * 0.7,
-        delay: reduced ? rd : gone ? 0.55 : cutaway ? 1.1 : 0,
+        delay: reduced ? rd : gone ? 0.55 : cutaway ? cutDelay : 0,
         ease,
         overwrite: true,
         onComplete:
@@ -552,7 +599,7 @@ function Floor({
       gsap.to(m.uniforms.uOpacity!, {
         value: dim ? fade : cutaway ? 0 : 1,
         duration: d * 0.7,
-        delay: reduced ? rd : cutaway ? 1.1 : 0,
+        delay: reduced ? rd : cutaway ? cutDelay : 0,
         ease,
         overwrite: true,
       });
@@ -564,7 +611,7 @@ function Floor({
       gsap.to(m, {
         opacity: dim ? fade : cutaway && !keep ? 0 : 1,
         duration: gone ? d * 0.9 : d * 0.7,
-        delay: reduced ? rd : gone ? 0.55 : cutaway ? 1.1 : 0,
+        delay: reduced ? rd : gone ? 0.55 : cutaway ? cutDelay : 0,
         ease,
         overwrite: true,
       });
@@ -1021,7 +1068,10 @@ export function BuildingModel({
         if (m) {
           const id = m[1]!;
           const f = floorsOut[id] ?? (floorsOut[id] = {});
-          if (m[2] === 'fachada') Object.assign(f, { fachada: mesh, fachadaMat: mat });
+          if (m[2] === 'fachada') {
+            outerShell(mesh.geometry);
+            Object.assign(f, { fachada: mesh, fachadaMat: mat });
+          }
           else Object.assign(f, { losa: mesh, losaMat: mat });
         } else if (name.startsWith('cubierta')) roof = { mesh, mat };
       });

@@ -277,6 +277,21 @@ export function UnitModel({
         return;
       }
       const out: THREE.Material[] = [];
+      // cada pieza con su posición metida en la geometría: el corte y el hundido de los demás
+      // espacios (shader) trabajan en coordenadas de la maqueta; con la posición aparte, la
+      // matera o un tapete de otro espacio quedaban flotando al elegir uno
+      gltf.scene.updateMatrixWorld(true);
+      const meshes: THREE.Mesh[] = [];
+      gltf.scene.traverse((o) => {
+        if ((o as THREE.Mesh).isMesh) meshes.push(o as THREE.Mesh);
+      });
+      for (const mesh of meshes) {
+        mesh.geometry = mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+        gltf.scene.attach(mesh);
+        mesh.position.set(0, 0, 0);
+        mesh.quaternion.identity();
+        mesh.scale.set(1, 1, 1);
+      }
       gltf.scene.traverse((o) => {
         const mesh = o as THREE.Mesh;
         if (!mesh.isMesh) return;
