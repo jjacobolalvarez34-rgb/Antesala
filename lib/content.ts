@@ -67,6 +67,7 @@ const unit = z.object({
   viewPremiumCOP: z.number().int().nonnegative().optional(),
   view: z.string().optional(),
   plan: relPath.regex(/^plans\/.+\.svg$/, 'el plano va en plans/*.svg'),
+  realista: relPath.regex(/\.glb$/, 'la maqueta realista es un .glb').optional(),
   exterior: z
     .array(
       z.object({
@@ -337,6 +338,7 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
       }
       collect(s.media);
     }
+    if (u.realista) mediaSrcs.add(u.realista);
     for (const pid of polygonIds.keys()) {
       if (!spaceIds.has(pid)) problems.push(`unidad "${u.id}" → ${u.plan} tiene el polígono "${pid}" sin espacio en hotel.json`);
     }

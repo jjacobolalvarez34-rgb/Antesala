@@ -2,7 +2,7 @@
 
 import type { ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
@@ -152,6 +152,7 @@ export function UnitModel({
   shadows,
   cut,
   focus = null,
+  realista,
   interior = false,
   onHover,
   onSelect,
@@ -170,6 +171,8 @@ export function UnitModel({
   cut: boolean;
   /** espacio enfocado: el resto de la maqueta se hunde y desaparece */
   focus?: string | null;
+  /** GLB horneado en Blender (D-074): reemplaza la maqueta por código cuando carga */
+  realista?: string;
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
 }) {
@@ -253,18 +256,59 @@ export function UnitModel({
     };
   }, [spaces, meshes, uni]);
 
+  // maqueta realista (D-074): se carga aparte y, cuando llega, la maqueta por código se desvanece.
+  // Muros y muebles horneados se ven sin iluminar (la luz ya viene en la textura); los pisos por
+  // código quedan invisibles pero reciben el mouse y se encienden en cálido sobre la habitación.
+  const [real, setReal] = useState<{ scene: THREE.Group; mats: THREE.Material[] } | null>(null);
+  useEffect(() => {
+    if (!realista) return;
+    let alive = true;
+    void (async () => {
+      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+        import('three/examples/jsm/loaders/GLTFLoader.js'),
+        import('three/examples/jsm/loaders/DRACOLoader.js'),
+      ]);
+      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
+      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
+      draco.dispose();
+      if (!alive || !gltf) return;
+      const out: THREE.Material[] = [];
+      gltf.scene.traverse((o) => {
+        const mesh = o as THREE.Mesh;
+        if (!mesh.isMesh) return;
+        mesh.raycast = () => null;
+        const src = mesh.material as THREE.MeshStandardMaterial;
+        const baked = src.name === 'horneado';
+        const mat = baked
+          ? cuttable(new THREE.MeshBasicMaterial({ map: src.map, transparent: true, opacity: 0 }), uni)
+          : cuttable(Object.assign(src, { transparent: true, opacity: 0 }), uni);
+        mat.userData.base = src.name === 'vidrio' ? 0.35 : 1;
+        mesh.material = mat;
+        out.push(mat);
+      });
+      setReal({ scene: gltf.scene, mats: out });
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [realista, uni]);
+
   // aparece y desaparece con fundido
   useLayoutEffect(() => {
     const g = group.current;
     if (visible && g) g.visible = true;
+    const on = real ? 0 : 1; // con la maqueta realista, la de código se apaga
+    // y del todo: invisibles igual escribían profundidad y tapaban lo horneado (manchas oscuras)
+    for (const m of [mats.walls, mats.door, mats.rail, mats.glass, ...Object.values(mats.furniture)]) m.visible = !real;
     const all: [THREE.Material, number][] = [
-      [mats.walls, 1],
-      [mats.door, 1],
-      [mats.rail, 1],
+      [mats.walls, on],
+      [mats.door, on],
+      [mats.rail, on],
       [mats.ceiling, 1],
-      [mats.glass, 0.35],
-      ...Object.values(mats.floors).map((m) => [m, 1] as [THREE.Material, number]),
-      ...Object.entries(mats.furniture).map(([k, m]) => [m, k === 'glass' ? 0.3 : 1] as [THREE.Material, number]),
+      [mats.glass, 0.35 * on],
+      ...Object.values(mats.floors).map((m) => [m, on] as [THREE.Material, number]),
+      ...Object.entries(mats.furniture).map(([k, m]) => [m, (k === 'glass' ? 0.3 : 1) * on] as [THREE.Material, number]),
+      ...(real?.mats ?? []).map((m) => [m, m.userData.base as number] as [THREE.Material, number]),
     ];
     const d = reduced ? 0 : 0.9;
     all.forEach(([m, base], i) =>
@@ -277,7 +321,7 @@ export function UnitModel({
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
-  }, [visible, mats, reduced]);
+  }, [visible, mats, reduced, real]);
 
   // resaltado del espacio (hover o seleccionado)
   useEffect(() => {
@@ -287,11 +331,20 @@ export function UnitModel({
       const base = new THREE.Color(FLOOR_COLOR[s.type] ?? WOOD);
       const active = s.id === selectedSpace;
       const hot = s.id === hoveredSpace;
+      if (real) {
+        // sobre la maqueta realista: un velo cálido solo en la habitación bajo el mouse o elegida
+        mat.color.set('#f4a63f');
+        mat.emissive.set('#000000');
+        // invisibles pero encima del piso horneado: sin escribir profundidad (si no, lo tapaban y se veía negro)
+        mat.depthWrite = false;
+        gsap.to(mat, { opacity: active ? 0.28 : hot ? 0.36 : 0, duration: 0.3, overwrite: true });
+        continue;
+      }
       const target = active ? base.clone().lerp(new THREE.Color('#d8b98a'), 0.55) : hot ? base.clone().lerp(new THREE.Color('#ffffff'), 0.25) : base;
       gsap.to(mat.color, { r: target.r, g: target.g, b: target.b, duration: 0.25, overwrite: true });
       mat.emissive.set(active ? '#5a3f1c' : '#000000');
     }
-  }, [selectedSpace, hoveredSpace, spaces, mats]);
+  }, [selectedSpace, hoveredSpace, spaces, mats, real]);
 
   return (
     <group ref={group} position={position} visible={false} name="unidad-maqueta">
@@ -363,6 +416,7 @@ export function UnitModel({
         />
         );
       })}
+      {real ? <primitive object={real.scene} /> : null}
       {meshes.furniture.map((f) => (
         <mesh
           key={f.material}

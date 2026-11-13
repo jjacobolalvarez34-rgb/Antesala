@@ -81,7 +81,7 @@ export interface SceneData {
   /** qué se ofrece: noche, mes o venta (D-057) */
   offer?: Offer;
   /** plano parseado y espacios de cada unidad (maqueta del bloque 3) */
-  unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
+  unitPlans: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[]; realista?: string }>;
 }
 
 /**
@@ -89,7 +89,7 @@ export interface SceneData {
  * unidad, cuál le toca. SceneLayer lo expande a unitPlans en el cliente.
  */
 export type SceneDataWire = Omit<SceneData, 'unitPlans'> & {
-  unitPlanTypes: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[] }>;
+  unitPlanTypes: Record<string, { plan: PlanGeometry; spaces: UnitSpaceMeta[]; realista?: string }>;
   unitPlanOf: Record<string, string>;
 }
 
@@ -676,6 +676,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             key={unitId}
             plan={data.unitPlans[unitId]!.plan}
             spaces={data.unitPlans[unitId]!.spaces}
+            realista={data.unitPlans[unitId]!.realista}
             position={unitAnchor(data, frame, unitId)!}
             visible={inUnit && active}
             selectedSpace={spaceId}

@@ -133,7 +133,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
                   : undefined,
               };
             });
-            return [[u.plan, { plan, spaces }]];
+            return [[u.plan, { plan, spaces, realista: u.realista ? mediaUrl(hotel.slug, u.realista) : undefined }]];
           }),
         ),
       }

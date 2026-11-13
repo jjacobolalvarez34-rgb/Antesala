@@ -50,6 +50,19 @@ Higgsfield "use Blender" (`/use-blender`) es un MCP local para manejar Blender d
   - Corregir la exposición.
   - Después, hornear otra vez y comparar.
 
+## Prueba 3 (2026-11-12): Suite 402 amoblada, en el visor
+
+- `pipeline/realista/amoblar.py` reemplaza cada mueble del plano por un mueble moderno armado en Blender o un modelo CC0 de Poly Haven (plantas y poltrona). Usa texturas fotográficas CC0 (`bajar_polyhaven.py`, en `D:/Herramientas/assets-polyhaven`).
+- Las texturas de tela se pasan a gris antes de teñirlas: venían con su propio color y salían azules o rojas.
+- Tiempo en el PC de Jacobo: 2 renders de muestra en ~10 min y horneado de 2K en ~11 min. El GLB pesa 8,8 MB y queda en **1,3 MB** con `gltf-transform optimize` (Draco y texturas WebP).
+- Renders: `docs/estado/realista-prueba-3.jpg` y `realista-prueba-3-sala.jpg`.
+- **En el visor:** `Unit.realista` (en `hotel.json`; 402 y 502) carga el GLB en la maqueta de la unidad. La maqueta por código se apaga del todo; sus pisos quedan invisibles para recibir el mouse, con un velo cálido en la habitación.
+- **Lo que falta pulir:**
+  - Hay zonas que se ven más oscuras que en el render.
+  - El velo al pasar el mouse es suave.
+  - Las esquinas negras de los muros.
+  - Más decoración: cortinas, cuadros, cojines.
+
 ## Lo que queda listo de antes
 
 - Las fotos de Higgsfield (`media/premium/`, marcadas `tier: "premium"`) sirven como galería y portada del nivel Premium mientras tanto.

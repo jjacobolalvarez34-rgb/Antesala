@@ -79,6 +79,8 @@ export interface Unit {
   view?: string;
   /** "plans/suite-502.svg" */
   plan: string;
+  /** maqueta realista horneada en Blender (D-074): "media/realista/402.glb"; las copias la heredan */
+  realista?: string;
   /**
    * Ventanas que ocupa la unidad en la fachada del edificio procedural.
    * facade: índice en el orden del visor (0 = principal, luego alrededor).

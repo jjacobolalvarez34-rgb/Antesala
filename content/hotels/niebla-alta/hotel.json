@@ -1667,7 +1667,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/suite-402.glb"
     },
     {
       "id": "502",
@@ -2192,7 +2193,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/suite-402.glb"
     },
     {
       "id": "601",
