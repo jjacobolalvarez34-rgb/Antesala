@@ -746,7 +746,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/estudio-201.glb"
     },
     {
       "id": "301",
@@ -1142,7 +1143,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/estudio-201.glb"
     },
     {
       "id": "402",
@@ -2735,7 +2737,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/penthouse-601.glb"
     },
     {
       "sameAs": "201",

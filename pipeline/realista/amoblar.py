@@ -131,6 +131,8 @@ M = {
     'vidrio': plain('vidrio', '#e6f0f0', 0.02, trans=1.0),
     'espejo': plain('espejo', '#d8dcdc', 0.02, metal=1.0),
     'blanco_mate': plain('blanco_mate', '#efece6', 0.45),
+    'lienzo': plain('lienzo', '#e9e1d3', 0.9),
+    'cortina': texmat('cortina', 'rough_linen', 0.35, tint='#efe9df', normal=0.8),
     'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=2.5),
 }
 
@@ -230,7 +232,10 @@ def _finish(o, mat, bevel):
 
 
 def box(x, y, z, sx, sy, sz, mat, bevel=0.008):
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + sz / 2))
+    # cada pieza 1-5 mm distinta: sin caras exactamente encima de otras (titilaban entre negro y blanco)
+    e = 0.001 * (len(PARTS) % 5 + 1)
+    sx, sy, sz = max(sx - e, 0.004), max(sy - e, 0.004), max(sz - e * 0.5, 0.004)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(x, y, z + sz / 2 + e * 0.25))
     o = bpy.context.active_object
     o.scale = (sx, sy, sz)
     bpy.ops.object.transform_apply(scale=True)
@@ -260,6 +265,18 @@ def bed(L, D):
         x = (i - (n - 1) / 2) * (L / n)
         box(x, D / 2 - 0.30, 0.52, L / n - 0.12, 0.34, 0.15, M['lino_claro'], 0.06)
     box(0, D / 2 - 0.04, 0.05, L + 0.08, 0.08, 1.05, M['terciopelo'], 0.025)  # cabecero
+    art(0, D / 2 + GAP['v'] - 0.03, 1.45, min(1.0, L * 0.6), 0.55)
+
+
+GAP = {'v': 0.0}  # distancia del respaldo del mueble al muro (para colgar cuadros contra el muro)
+
+
+def art(x, y, z, w, h):
+    """Cuadro: marco de roble y lienzo con dos manchas de color (abstracto, sin texto)."""
+    box(x, y, z, w, 0.03, h, M['roble'], 0.004)
+    box(x, y - 0.018, z + 0.03, w - 0.06, 0.006, h - 0.06, M['lienzo'], 0.001)
+    box(x - w * 0.12, y - 0.022, z + h * 0.25, w * 0.32, 0.004, h * 0.45, M['terciopelo'], 0.001)
+    box(x + w * 0.16, y - 0.022, z + h * 0.18, w * 0.22, 0.004, h * 0.3, M['laton'], 0.001)
 
 
 def nightstand(L, D):
@@ -312,6 +329,7 @@ def sofa(L, D):
         box(x, -0.08, 0.32, w - 0.02, D - 0.32, 0.13, M['lino_sofa'], 0.05)
         box(x, D / 2 - 0.26, 0.42, w - 0.08, 0.16, 0.36, M['lino_sofa'], 0.07)
     box(-L / 2 + arm + 0.25, D / 2 - 0.36, 0.46, 0.38, 0.12, 0.34, M['terciopelo'], 0.06)
+    art(0, D / 2 + GAP['v'] - 0.03, 1.35, min(1.1, L * 0.55), 0.7)
     for s in (-1, 1):
         cyl(s * (L / 2 - 0.08), D / 2 - 0.08, 0, 0.018, 0.08, M['metal'], verts=10)
         cyl(s * (L / 2 - 0.08), -D / 2 + 0.08, 0, 0.018, 0.08, M['metal'], verts=10)
@@ -469,6 +487,9 @@ for f in FURN:
     fn, sides_of = BUILD[it]
     side = back_side(f, sides_of(f))
     L, D = (f['sx'], f['sy']) if side in ('n', 's') else (f['sy'], f['sx'])
+    mids = {'n': (f['cx'], f['cy'] + f['sy'] / 2), 's': (f['cx'], f['cy'] - f['sy'] / 2),
+            'e': (f['cx'] + f['sx'] / 2, f['cy']), 'w': (f['cx'] - f['sx'] / 2, f['cy'])}
+    GAP['v'] = min(wall_dist(*mids[side]), 0.4)
     PARTS.clear()
     fn(L, D)
     rot = ROT[side]
@@ -478,6 +499,54 @@ for f in FURN:
         o.location.x = f['cx'] + x * math.cos(rot) - y * math.sin(rot)
         o.location.y = f['cy'] + x * math.sin(rot) + y * math.cos(rot)
         o['tipo'] = 'vidrio' if o.data.materials and o.data.materials[0] == M['vidrio'] else 'mueble'
+# cortinas: dos paños a los lados de cada ventana, del lado de adentro
+SPACES = []
+for g in root.iter():
+    if g.tag.endswith('g') and g.get('id') == 'spaces':
+        for pg in g.iter():
+            if pg.tag.endswith('polygon'):
+                pts = [tuple(float(v) for v in p.split(',')) for p in pg.get('points').split()]
+                SPACES.append((pg.get('id') or '', [(x * 0.01 - PW / 2, -(y * 0.01 - PH / 2)) for x, y in pts]))
+
+
+def inside(px, py):
+    for sid, poly in SPACES:
+        if any(k in sid for k in ('balcon', 'terraza')):
+            continue
+        c = False
+        for i in range(len(poly)):
+            (x1, y1), (x2, y2) = poly[i], poly[i - 1]
+            if (y1 > py) != (y2 > py) and px < (x2 - x1) * (py - y1) / (y2 - y1 + 1e-12) + x1:
+                c = not c
+        if c:
+            return True
+    return False
+
+
+for g in root.iter():
+    if g.tag.endswith('g') and g.get('id') == 'openings':
+        for r in g.iter():
+            if not r.tag.endswith('rect') or r.get('data-type') != 'window':
+                continue
+            x, y = float(r.get('x')) * 0.01, float(r.get('y')) * 0.01
+            w, h = float(r.get('width')) * 0.01, float(r.get('height')) * 0.01
+            cx, cy = x + w / 2 - PW / 2, -(y + h / 2 - PH / 2)
+            horiz = w >= h
+            for sgn in (1, -1):
+                nx, ny = (cx, cy + sgn * 0.3) if horiz else (cx + sgn * 0.3, cy)
+                if not inside(nx, ny):
+                    continue
+                off = (h if horiz else w) / 2 + 0.06
+                span = w if horiz else h
+                for end in (-1, 1):
+                    px = cx + end * (span / 2 + 0.05) if horiz else cx + sgn * off
+                    py = cy + sgn * off if horiz else cy + end * (span / 2 + 0.05)
+                    PARTS.clear()
+                    box(0, 0, 0.02, 0.32 if horiz else 0.07, 0.07 if horiz else 0.32, 2.45, M['cortina'], 0.02)
+                    for o in PARTS:
+                        o.location.x, o.location.y = px, py
+                        o['tipo'] = 'mueble'
+                break
 log('muebles', count)
 
 # ---------------------------------------------------------------- luz, cámara, render de muestra
@@ -551,7 +620,8 @@ shot(OUT + '-muestra.jpg', center + Vector((d * 0.7, -d * 0.75, d * 0.95)), cent
 # segunda toma: más cerca, sobre la sala (el sofá), en diagonal desde arriba
 sofa_f = next((f for f in FURN if f['item'] == 'sofa'), None)
 tgt = Vector((sofa_f['cx'], sofa_f['cy'], 0.4)) if sofa_f else center
-shot(OUT + '-muestra-2.jpg', tgt + Vector((1.9, -2.6, 3.0)), tgt + Vector((0.6, 0.2, 0)))
+if os.environ.get('DOS_TOMAS'):
+    shot(OUT + '-muestra-2.jpg', tgt + Vector((1.9, -2.6, 3.0)), tgt + Vector((0.6, 0.2, 0)))
 
 # ---------------------------------------------------------------- horneado
 for o in [o for o in sc.objects if o.type == 'MESH' and o.modifiers]:
