@@ -513,7 +513,8 @@ function Floor({
     const ease = 'power2.inOut';
     const g = group.current;
     if (g && !gone) g.visible = true;
-    if (g) {
+    // al entrar a una habitación el cajón se queda afuera: se desvanece con todo, sin volver a meterse
+    if (g && !gone) {
       // cajón: el piso elegido sale con desaceleración (después de que el anterior entra) y vuelve a entrar
       gsap.to(g.position, {
         x: selected ? pullDir[0] * FLOOR_PULL : 0,
@@ -674,6 +675,7 @@ function Floor({
             onHover={onPlanHover}
             onSelect={onPlanSelect}
             name={`planta-${floor.id}`}
+            leaving={state === 'gone'}
             realista={planRealista ? floorPlan.realista : undefined}
           />
         ) : null}

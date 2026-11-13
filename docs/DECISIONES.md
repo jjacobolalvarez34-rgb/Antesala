@@ -388,3 +388,10 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - La fachada realista del edificio queda para otra sesión: sus ventanas encendidas y sus pisos que se abren están hechos por código y hay que rehacerlos con cuidado.
 - Por qué: Jacobo va a vender a hoteles de todas las gamas y necesita los tres niveles visibles y distintos, con Premium que se vea premium.
 
+
+**D-076 · 2026-11-13 · Premium completo: planta del piso horneada, entorno apagado y 360° en el punto despejado**
+- Decisión:
+  - **Planta del piso abierto:** en Premium también se hornea (`Level.realista`, `pipeline/realista/lote_plantas.py` con `PLANTA=1`). Corte a 1,1 m: sin cortinas ni cuadros, y los muebles y vidrios altos se recortan a esa altura. Los pisos con la misma planta (salvo los números) comparten el GLB: en Niebla Alta, piso 1, tipo 2–5 y piso 6. La disponibilidad sigue en el visor: las ocupadas llevan un velo gris y el brillo al pasar el mouse no cambia.
+  - **Entorno:** en Premium los vecinos pierden el color (`NEIGHBOR_MUTE`) para que mande el edificio horneado.
+  - **360° en vivo:** la cámara se ubica en el punto del cuarto más despejado de los muros (grilla dentro del polígono) y, entre esos, el más lejos de la ventana. Antes salía de la caja del espacio y en cuartos en L quedaba entre muros.
+- Por qué: en la revisión de Premium, el piso abierto era el paso más usado y el único que no se veía realista. El 360° del dormitorio del Penthouse se rompía (Jacobo, 2026-11-13).

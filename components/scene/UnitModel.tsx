@@ -11,6 +11,7 @@ import { planToMesh, WALL_H } from '@/components/plan/planToMesh';
 import { polygonLabelPoint } from '@/lib/plan';
 import type { PlanGeometry, SpaceType } from '@/lib/types';
 
+import { loadBaked } from './bakedCache';
 import { usePrecompile } from './FloorPlanModel';
 
 /**
@@ -260,18 +261,21 @@ export function UnitModel({
   // Muros y muebles horneados se ven sin iluminar (la luz ya viene en la textura); los pisos por
   // código quedan invisibles pero reciben el mouse y se encienden en cálido sobre la habitación.
   const [real, setReal] = useState<{ scene: THREE.Group; mats: THREE.Material[] } | null>(null);
+  // mientras llega la horneada no se muestra la de código (se veía la gris y luego un salto);
+  // solo si tarda demasiado o falla, entra la de código
+  const [fallback, setFallback] = useState(false);
   useEffect(() => {
     if (!realista) return;
     let alive = true;
+    const slow = window.setTimeout(() => alive && setFallback(true), 5000);
     void (async () => {
-      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
-        import('three/examples/jsm/loaders/GLTFLoader.js'),
-        import('three/examples/jsm/loaders/DRACOLoader.js'),
-      ]);
-      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
-      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
-      draco.dispose();
-      if (!alive || !gltf) return;
+      const gltf = await loadBaked(realista);
+      window.clearTimeout(slow);
+      if (!alive) return;
+      if (!gltf) {
+        setFallback(true);
+        return;
+      }
       const out: THREE.Material[] = [];
       gltf.scene.traverse((o) => {
         const mesh = o as THREE.Mesh;
@@ -291,16 +295,25 @@ export function UnitModel({
     })();
     return () => {
       alive = false;
+      window.clearTimeout(slow);
     };
   }, [realista, uni]);
+  const waiting = !!realista && !real && !fallback;
 
-  // aparece y desaparece con fundido
+  // aparece y desaparece con fundido. El retardo de entrada cuenta desde que se pidió
+  // mostrar la unidad: si la horneada llega a mitad de camino, entra a tiempo (no empieza de cero)
+  const shownAt = useRef(0);
   useLayoutEffect(() => {
     const g = group.current;
     if (visible && g) g.visible = true;
-    const on = real ? 0 : 1; // con la maqueta realista, la de código se apaga
+    const now = performance.now() / 1000;
+    if (!visible) shownAt.current = 0;
+    else if (!shownAt.current) shownAt.current = now;
+    const wait = visible ? Math.max(0, 0.9 - (now - shownAt.current)) : 0;
+    const off = !!real || waiting; // con la maqueta realista (o mientras llega), la de código se apaga
+    const on = off ? 0 : 1;
     // y del todo: invisibles igual escribían profundidad y tapaban lo horneado (manchas oscuras)
-    for (const m of [mats.walls, mats.door, mats.rail, mats.glass, ...Object.values(mats.furniture)]) m.visible = !real;
+    for (const m of [mats.walls, mats.door, mats.rail, mats.glass, ...Object.values(mats.furniture)]) m.visible = !off;
     // cielo raso junto a lo horneado: claro y cálido como los muros (con la luz del visor quedaba gris azulado)
     mats.ceiling.emissive.set(real ? '#e6dfd3' : '#000000');
     mats.ceiling.emissiveIntensity = real ? 0.78 : 0;
@@ -319,13 +332,13 @@ export function UnitModel({
       gsap.to(m, {
         opacity: visible ? base : 0,
         duration: d,
-        delay: reduced ? 0.45 : visible ? 0.9 : 0,
+        delay: reduced ? 0.45 : wait,
         ease: 'power2.out',
         overwrite: true,
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
-  }, [visible, mats, reduced, real]);
+  }, [visible, mats, reduced, real, waiting]);
 
   // resaltado del espacio (hover o seleccionado)
   useEffect(() => {

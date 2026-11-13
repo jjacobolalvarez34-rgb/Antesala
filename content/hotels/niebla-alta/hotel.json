@@ -282,42 +282,48 @@
       "name": "Piso 1",
       "kind": "piso",
       "order": 1,
-      "plan": "plans/piso-1.svg"
+      "plan": "plans/piso-1.svg",
+      "realista": "media/realista/planta-1.glb"
     },
     {
       "id": "2",
       "name": "Piso 2",
       "kind": "piso",
       "order": 2,
-      "plan": "plans/piso-2.svg"
+      "plan": "plans/piso-2.svg",
+      "realista": "media/realista/planta-2.glb"
     },
     {
       "id": "3",
       "name": "Piso 3",
       "kind": "piso",
       "order": 3,
-      "plan": "plans/piso-3.svg"
+      "plan": "plans/piso-3.svg",
+      "realista": "media/realista/planta-2.glb"
     },
     {
       "id": "4",
       "name": "Piso 4",
       "kind": "piso",
       "order": 4,
-      "plan": "plans/piso-4.svg"
+      "plan": "plans/piso-4.svg",
+      "realista": "media/realista/planta-2.glb"
     },
     {
       "id": "5",
       "name": "Piso 5",
       "kind": "piso",
       "order": 5,
-      "plan": "plans/piso-5.svg"
+      "plan": "plans/piso-5.svg",
+      "realista": "media/realista/planta-2.glb"
     },
     {
       "id": "6",
       "name": "Piso 6",
       "kind": "piso",
       "order": 6,
-      "plan": "plans/piso-6.svg"
+      "plan": "plans/piso-6.svg",
+      "realista": "media/realista/planta-6.glb"
     }
   ],
   "categories": [

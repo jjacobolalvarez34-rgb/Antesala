@@ -42,6 +42,7 @@ import { useNivel } from '@/components/hotel/Nivel';
 
 import { ExportHook } from './ExportHook';
 import { NEIGHBOR_MUTE } from './textures';
+import { prefetchBaked } from './bakedCache';
 import { panoEye, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
@@ -341,6 +342,19 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   useEffect(() => {
     NEIGHBOR_MUTE.value = nivel === 'premium' ? 1 : 0;
   }, [nivel]);
+  // Premium: con un piso abierto se precargan sus habitaciones horneadas (al tocar una, ya está)
+  const openLevel = stage.kind === 'piso' ? stage.levelId : null;
+  useEffect(() => {
+    if (nivel !== 'premium' || !openLevel) return;
+    // después de que el cajón sale: decodificar en plena animación la trababa
+    const t = window.setTimeout(() => {
+      for (const u of data.units) {
+        const url = u.levelId === openLevel ? data.unitPlans[u.id]?.realista : undefined;
+        if (url) prefetchBaked(url);
+      }
+    }, 2200);
+    return () => window.clearTimeout(t);
+  }, [nivel, openLevel, data]);
   // al cambiar de etapa se borra la etiqueta de la ventana que quedó bajo el mouse:
   // la fachada deja de recibir eventos y su "pointerleave" nunca llegaba (se veía
   // "Suite 404" sobre la planta del piso 2)

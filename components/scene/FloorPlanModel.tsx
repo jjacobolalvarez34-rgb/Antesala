@@ -71,7 +71,10 @@ export function FloorPlanModel({
   onSelect,
   name,
   realista,
+  leaving = false,
 }: {
+  /** se va porque se entra a una habitación: se desvanece al ritmo del edificio, no de golpe */
+  leaving?: boolean;
   /** nombre del grupo (lo usa el exportador del 3D realista: "planta-<piso>") */
   name?: string;
   /** planta horneada en Blender (nivel Premium, D-074): reemplaza muros, pisos y muebles */
@@ -260,14 +263,15 @@ export function FloorPlanModel({
     all.forEach(([mat, base], i) =>
       gsap.to(mat, {
         opacity: visible ? base : 0,
-        duration: reduced ? 0 : visible ? 0.6 : 0.25,
-        delay: visible ? (reduced ? 0.45 : 1.15) : 0,
-        ease: 'power2.out',
+        // al entrar a una habitación sigue al edificio (Building: retardo 0,55 s y 1,08 s de fundido)
+        duration: reduced ? 0 : visible ? 0.6 : leaving ? 1.08 : 0.25,
+        delay: visible ? (reduced ? 0.45 : 1.15) : leaving && !reduced ? 0.55 : 0,
+        ease: visible ? 'power2.out' : leaving ? 'power2.inOut' : 'power2.out',
         overwrite: true,
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
-  }, [visible, mats, reduced, baked]);
+  }, [visible, mats, reduced, baked, leaving]);
 
   useEffect(() => {
     for (const f of meshes.floors) {
