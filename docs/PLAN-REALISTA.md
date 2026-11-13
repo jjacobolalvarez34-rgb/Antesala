@@ -35,6 +35,21 @@ Higgsfield "use Blender" (`/use-blender`) es un MCP local para manejar Blender d
 2. Si convence: el edificio de Niebla Alta (fachada y pisos, de día).
 3. La noche, Akuare y el pipeline automático para hoteles nuevos.
 
+## Prueba 1 (2026-11-12): Suite 402
+
+- Blender 5.2.4 LTS portable en `D:\Herramientaslender-5.2.4-windows-x64`.
+- El visor exporta la maqueta con `?export=1` (`pipeline/realista/exportar.spec.ts`). Luego `pipeline/realista/hornear.py` le pone materiales, luz (el HDRI del visor y un sol), saca un render de muestra, hornea un mapa de luz de 2K y exporta GLB (485 KB).
+- **Tiempo en el PC de Jacobo** (i5-4300M, 2 núcleos, gráficos integrados): 1,5 min de render de muestra y 4 min de horneado, con 48 muestras.
+- **Resultado:** `docs/estado/realista-prueba-1.jpg`. El proceso funciona, pero **todavía no se ve realista**, por tres cosas:
+  1. **Muebles:** son cajas sacadas del plano (sofá, cama y mesa como bloques). Ningún render hace realista una caja.
+  2. **Materiales:** la veta de madera procedural salió como rayas de cebra (escala errada) y los muros blancos se queman.
+  3. **Contexto:** losa negra y fondo azul liso.
+- **Lo que sigue:**
+  - Cambiar cada mueble del plano por un **modelo 3D real CC0** (Poly Haven: sofás, camas, sillas, mesas, lámparas, plantas), escalado a su caja.
+  - **Texturas fotográficas CC0** (piso de madera, pañete, baldosa) en lugar de procedurales.
+  - Corregir la exposición.
+  - Después, hornear otra vez y comparar.
+
 ## Lo que queda listo de antes
 
 - Las fotos de Higgsfield (`media/premium/`, marcadas `tier: "premium"`) sirven como galería y portada del nivel Premium mientras tanto.

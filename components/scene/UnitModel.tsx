@@ -227,14 +227,14 @@ export function UnitModel({
       door: named('puertas', m(FURNITURE_COLORS.wood, { roughness: 0.6 })),
       rail: named('baranda', m('#3b3733', { roughness: 0.5, metalness: 0.3 })),
       // cielo raso: solo se ve desde abajo (recorrido por dentro); desde arriba no estorba
-      ceiling: new THREE.MeshStandardMaterial({
+      ceiling: named('techo', new THREE.MeshStandardMaterial({
         color: '#f4f1ea',
         roughness: 0.95,
         side: THREE.BackSide,
         shadowSide: THREE.DoubleSide,
         transparent: true,
         opacity: 0,
-      }),
+      })),
       glass: named('vidrio', m('#bcd3d6', { roughness: 0.05, metalness: 0.2, depthWrite: false })),
       floors: Object.fromEntries(
         spaces.map((s) => [s.id, named(`piso-${surfaceFor(s.type)}-${s.id}`, m(FLOOR_COLOR[s.type] ?? WOOD, { roughness: 0.7 }, surfaceFor(s.type)))]),
