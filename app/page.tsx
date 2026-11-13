@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
-import { Intro } from '@/components/producto/Intro';
+import { Intro, INTRO_PREPAINT } from '@/components/producto/Intro';
 import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
 import type { RecorridoData } from '@/components/producto/Recorrido';
@@ -221,6 +221,8 @@ export default async function Home() {
 
   return (
     <div className={`${s.root} marca-antesala`}>
+      {/* antes de pintar: decide si hay intro y tapa la página desde el primer cuadro */}
+      <script dangerouslySetInnerHTML={{ __html: INTRO_PREPAINT }} />
       <Intro />
       <Nav />
 

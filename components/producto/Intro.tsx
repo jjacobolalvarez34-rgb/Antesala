@@ -14,6 +14,21 @@ import s from './landing.module.css';
  */
 const KEY = 'antesala:intro-web';
 
+/**
+ * Se ejecuta al leer el HTML, antes de pintar: si toca intro, marca <html> y una
+ * cortina azul noche tapa la página desde el primer cuadro (antes se veía la
+ * página un instante y luego empezaba la intro).
+ */
+export const INTRO_PREPAINT = `try{var f=new URLSearchParams(location.search).get('intro')==='1';if(f||!sessionStorage.getItem('${KEY}')){var d=document.createElement('div');d.id='intro-cortina';d.style.cssText='position:fixed;inset:0;z-index:99;background:#111b33;transition:opacity .5s;animation:intro-cortina .4s ease 9s forwards';document.documentElement.appendChild(d)}}catch(e){}`;
+
+/** quita la cortina de antes de pintar (fuera de React: así la hidratación no la borra antes de tiempo) */
+const dropCurtain = () => {
+  const c = document.getElementById('intro-cortina');
+  if (!c) return;
+  c.style.opacity = '0';
+  window.setTimeout(() => c.remove(), 500);
+};
+
 export function Intro() {
   const [show, setShow] = useState(false);
   const root = useRef<HTMLDivElement>(null);
@@ -50,7 +65,8 @@ export function Intro() {
     if (!el || !svg) return;
     // D-067: la intro se ve completa aunque el sistema pida movimiento reducido
     const RM = false;
-    const S = RM ? 0.55 : 1;
+    // 1,7 veces más lenta que la primera versión: la gente decía que no alcanzaba a verla
+    const S = 1.7;
     const parts = Array.from(svg.querySelectorAll('path'));
     const slit = svg.querySelector('rect');
     const left = parts.filter((_, i) => i % 2 === 0);
@@ -101,6 +117,8 @@ export function Intro() {
       if (word.current) A(word.current, [{ opacity: 1 }, { opacity: 0 }], { duration: 400 * S });
     });
     at(2200, () => {
+      // la cortina de antes de pintar se quita justo cuando la intro empieza a desvanecerse
+      dropCurtain();
       el.style.background = 'transparent';
       startStage();
       A(el, [{ opacity: 1 }, { opacity: 0 }], { duration: 800 * S, easing: 'ease-out' });
@@ -109,6 +127,7 @@ export function Intro() {
     const finish = () => {
       if (done) return;
       done = true;
+      dropCurtain();
       timers.forEach(clearTimeout);
       anims.forEach((a) => a.cancel());
       document.body.style.overflow = '';
@@ -124,6 +143,7 @@ export function Intro() {
       anims.forEach((a) => a.cancel());
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
+      dropCurtain();
       startStage();
     };
   }, [show]);

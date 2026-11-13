@@ -290,7 +290,7 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
               <p className={s.lead}>{typeof st.lead === 'function' ? st.lead(data) : st.lead}</p>
               <dl>
                 <div>
-                  <dt>El huésped ve</dt>
+                  <dt>El huésped observa</dt>
                   <dd>{st.sees}</dd>
                 </div>
                 <div>

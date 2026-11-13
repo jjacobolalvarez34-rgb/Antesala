@@ -346,6 +346,13 @@
  * nunca en las de los hoteles, que usan la marca de cada hotel. Azul noche ≈60 %,
  * marfil ≈30 %, champán ≈10 %; colores planos, esquinas de 2 px.
  */
+/* cortina de la intro de Antesala (#intro-cortina la pone un script antes de pintar; la quita la intro) */
+@keyframes intro-cortina {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
 /* en la página de Antesala los enlaces del menú se deslizan */
 html:has(.marca-antesala) {
   scroll-behavior: smooth;
