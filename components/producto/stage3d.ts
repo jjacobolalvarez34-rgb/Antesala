@@ -73,6 +73,56 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
   const floors: Floor[] = [];
   let y = 0;
   let unitGlow: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial> | null = null;
+  // paso 3: el piso elegido se vuelve una maqueta sencilla (muros bajos y muebles en bloque)
+  // con la unidad resaltada; sin ella, desde arriba solo se veía una losa café (Jacobo, 2026-11-13)
+  const maqMats: THREE.MeshLambertMaterial[] = [];
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+  const sun = new THREE.DirectionalLight(0xfff1dc, 2.2);
+  sun.position.set(6, 14, 9);
+  scene.add(sun);
+  const buildMaqueta = (g: THREE.Group, floorY: number) => {
+    const mq = new THREE.Group();
+    mq.position.y = floorY;
+    g.add(mq);
+    const mat = (c: string) => {
+      const m = track(new THREE.MeshLambertMaterial({ color: c, transparent: true, opacity: 0 }));
+      maqMats.push(m);
+      return m;
+    };
+    const wall = mat('#f2ede4');
+    const furn = mat('#e6dccb');
+    const sofa = mat('#7d8c78');
+    const woodHl = mat('#c99d68');
+    const floorOther = mat('#8f877b');
+    const tile = mat('#d9d3c7');
+    const box = (x: number, y0: number, z: number, sx: number, sy: number, sz: number, m: THREE.Material) => {
+      const b = new THREE.Mesh(track(new THREE.BoxGeometry(sx, sy, sz)), m);
+      b.position.set(x, y0 + sy / 2, z);
+      b.renderOrder = 4;
+      mq.add(b);
+    };
+    const T = 0.07;
+    const H = 0.36;
+    for (let u = 0; u < 4; u++) {
+      const cx = -4.5 + u * 3;
+      const hl = u === opts.hlUnit;
+      box(cx, 0, 0, 2.94, 0.03, D - 0.06, hl ? woodHl : floorOther);
+      // muros: perímetro de la unidad, dormitorio atrás, baño en la esquina
+      box(cx, 0, D / 2 - T / 2, 3, H, T, wall);
+      box(cx, 0, -D / 2 + T / 2, 3, H, T, wall);
+      box(cx - 1.5 + T / 2, 0, 0, T, H, D, wall);
+      box(cx + 1.5 - T / 2, 0, 0, T, H, D, wall);
+      box(cx - 0.55, 0, -0.6, 1.9, H, T, wall);
+      box(cx + 0.55, 0, -2.3, T, H, 2.3, wall);
+      box(cx + 1.0, 0.03, -2.3, 0.9, 0.02, 2.2, tile);
+      // muebles
+      box(cx - 0.45, 0.03, -2.2, 1.3, 0.2, 1.7, furn); // cama
+      box(cx - 0.45, 0.23, -2.95, 1.3, 0.12, 0.3, furn); // almohadas
+      box(cx - 0.2, 0.03, 1.6, 1.7, 0.22, 0.6, hl ? sofa : furn); // sofá
+      box(cx - 0.2, 0.03, 0.75, 0.8, 0.14, 0.45, furn); // mesa de centro
+      box(cx + 1.15, 0.03, 0.7, 0.5, 0.3, 1.8, furn); // cocina
+    }
+  };
   const winSlit = (g: THREE.Group, x: number, yy: number, z: number, h: number, lit: boolean, ry = 0) => {
     const m = new THREE.Mesh(
       track(new THREE.PlaneGeometry(0.13, h)),
@@ -152,6 +202,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
         unitGlow = new THREE.Mesh(track(new THREE.BoxGeometry(2.9, h * 0.9 + 0.02, D - 0.1)), gm);
         unitGlow.position.set(-4.5 + opts.hlUnit * 3, h * 0.45 + 0.05, 0);
         g.add(unitGlow);
+        buildMaqueta(g, 0.07);
       }
     }
     wins.forEach((m) => mats.push(m.material as THREE.Material));
@@ -169,7 +220,8 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
     0: { pos: V(22, 9.5, 24), look: V(0, y * 0.5, 0) },
     1: { pos: V(17, 7, 23), look: V(0, y * 0.52, 0) },
     2: { pos: V(13, HY + 3.2, 16), look: V(0, HY + 0.6, 0) },
-    3: { pos: V(ux + 1.3, HY + 17, 7.5), look: V(ux, HY + 0.6, 0) },
+    // la maqueta en diagonal, como se mira una maqueta sobre una mesa
+    3: { pos: V(ux + 8.5, HY + 12.5, 15.5), look: V(ux + 1.2, HY + 0.2, 0) },
     4: { pos: V(ux, HY + 12, 4), look: V(ux - 0.2, HY + 0.6, 0) },
   };
   shots[5] = shots[4]!;
@@ -277,9 +329,25 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
           f.edge.color.copy(champCol).lerp(luzCol, st.hl);
           f.edge.opacity = 0.6 + 0.4 * st.hl;
         }
-        if (f.divMat) f.divMat.opacity = f.n === opts.hlFloor ? st.unit * 0.9 : 0;
+        // las divisiones en línea quedaron reemplazadas por los muros de la maqueta
+        if (f.divMat) f.divMat.opacity = 0;
       }
-      if (unitGlow) unitGlow.material.opacity = st.unit * 0.88;
+      // con la maqueta, el piso por fuera se retira (queda el contorno) y entra la maqueta
+      const hlF = floors[opts.hlFloor - 1];
+      if (hlF) {
+        for (const m of hlF.mats) {
+          if (m === hlF.edge) continue;
+          m.opacity *= 1 - st.unit;
+          m.visible = m.opacity > 0.01;
+        }
+        hlF.edge.opacity = (0.6 + 0.4 * st.hl) * (1 - st.unit * 0.7);
+      }
+      for (const m of maqMats) {
+        m.opacity = st.unit;
+        m.visible = st.unit > 0.01;
+        m.depthWrite = st.unit > 0.6;
+      }
+      if (unitGlow) unitGlow.material.opacity = st.unit * 0.1;
       cam.position.copy(camPos);
       cam.lookAt(camLook);
       renderer.render(scene, cam);

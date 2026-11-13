@@ -164,6 +164,12 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Planta del piso abierto horneada en Premium (`Level.realista`, `lote_plantas.py`): piso 1, tipo 2–5 y piso 6
 - [x] Del piso a la habitación sin cortes: la planta se desvanece al ritmo del edificio y la horneada entra directo (precargada)
 - [ ] Akuare: plantas de piso horneadas (cuando se retome Akuare)
+- [x] Coherencia fachada ↔ plano (D-077): 402, penthouse, estudio de esquina y planta tipo corregidos y horneados otra vez; validación en el build
+- [ ] Akuare: alcobas 2 y 3 del apartamento de tres alcobas sin ventana
+- [x] Sin bordes negros al abrir un piso, color libre/ocupada al pasar el mouse y dos toques en celular
+- [x] Portada del hotel como web de hotel real (D-078) y botón de reservar sobrio
+- [x] Página de Antesala: tema oscuro, maqueta en el paso 3, calculadora simple, Premium "hiperrealista" (D-079)
+- [x] Intro del hotel y suelo de la calle (D-080)
 - [x] Entorno apagado en Premium (vecinos sin color para que mande el edificio)
 - [ ] Más decoración en la maqueta realista (cojines, objetos, cocina y baño más detallados)
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield

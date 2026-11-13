@@ -32,24 +32,41 @@
     <polygon id="205" data-finish="madera" points="1107,25 1775,25 1775,595 1107,595"/>
   </g>
   <g id="openings">
+    <rect data-type="window" x="53.6" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="53.6" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="310.7" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="310.7" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="612.0" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="537.0" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="825.0" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="825.0" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="1112.0" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="1112.0" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="1339.3" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="1339.3" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="1596.4" y="1375" width="150.0" height="25"/>
+    <rect data-type="window" x="1596.4" y="0" width="150.0" height="25"/>
+    <rect data-type="window" x="0" y="80.0" width="25" height="120.0"/>
+    <rect data-type="window" x="1775" y="80.0" width="25" height="120.0"/>
+    <rect data-type="window" x="0" y="370.0" width="25" height="120.0"/>
+    <rect data-type="window" x="1775" y="360.0" width="25" height="120.0"/>
+    <rect data-type="window" x="0" y="640.0" width="25" height="120.0"/>
+    <rect data-type="window" x="1775" y="640.0" width="25" height="120.0"/>
+    <rect data-type="window" x="0" y="910.0" width="25" height="120.0"/>
+    <rect data-type="window" x="1775" y="920.0" width="25" height="120.0"/>
+    <rect data-type="window" x="0" y="1200.0" width="25" height="120.0"/>
+    <rect data-type="window" x="1775" y="1200.0" width="25" height="120.0"/>
     <rect data-type="door" x="250" y="790" width="90" height="15"/>
     <rect data-type="door" x="70" y="1035" width="80" height="10"/>
-    <rect data-type="window" x="138.4" y="1375" width="340.2" height="25"/>
     <rect data-type="door" x="800" y="790" width="90" height="15"/>
     <rect data-type="door" x="652" y="1035" width="80" height="10"/>
-    <rect data-type="window" x="704.0" y="1375" width="291.0" height="25"/>
     <rect data-type="door" x="1350" y="790" width="90" height="15"/>
     <rect data-type="door" x="1152" y="1035" width="80" height="10"/>
-    <rect data-type="window" x="1240.6" y="1375" width="400.8" height="25"/>
     <rect data-type="door" x="300" y="595" width="90" height="15"/>
     <rect data-type="door" x="70" y="355" width="80" height="10"/>
-    <rect data-type="window" x="158.4" y="0" width="400.2" height="25"/>
     <rect data-type="door" x="1400" y="595" width="90" height="15"/>
     <rect data-type="door" x="1152" y="355" width="80" height="10"/>
-    <rect data-type="window" x="1240.6" y="0" width="400.8" height="25"/>
     <rect data-type="door" x="840" y="595" width="120" height="15"/>
-    <rect data-type="window" x="0" y="640" width="25" height="120"/>
-    <rect data-type="window" x="1775" y="640" width="25" height="120"/>
   </g>
   <g id="furniture">
     <rect data-item="stairs" data-back="n" x="722" y="45" width="170" height="530"/>

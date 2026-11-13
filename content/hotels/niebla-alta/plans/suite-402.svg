@@ -14,14 +14,16 @@
     <polygon id="bano" points="25,485 250,485 250,705 25,705"/>
     <polygon id="sala" points="440,175 825,175 825,480 600,480 600,705 440,705"/>
     <polygon id="cocina" points="600,480 825,480 825,705 600,705"/>
-    <polygon id="balcon" points="460,20 830,20 830,150 460,150"/>
+    <polygon id="balcon" points="455,20 650,20 650,150 455,150"/>
   </g>
   <g id="openings">
     <rect data-type="window" x="110" y="150" width="230" height="25"/>
-    <rect data-type="door" x="520" y="150" width="240" height="25"/>
+    <rect data-type="door" x="470" y="150" width="140" height="25"/>
+    <rect data-type="window" x="660" y="150" width="140" height="25"/>
     <rect data-type="door" x="480" y="705" width="90" height="25"/>
     <rect data-type="door" x="425" y="560" width="15" height="90"/>
     <rect data-type="door" x="250" y="580" width="15" height="75"/>
+    <rect data-type="window" x="825" y="250" width="25" height="130"/>
     <rect data-type="window" x="825" y="540" width="25" height="120"/>
   </g>
   <g id="furniture">
@@ -38,7 +40,7 @@
     <rect data-item="table" x="690" y="380" width="110" height="75"/>
     <rect data-item="counter" x="765" y="480" width="60" height="225"/>
     <rect data-item="counter" x="620" y="645" width="145" height="60"/>
-    <rect data-item="table" x="700" y="50" width="60" height="60"/>
+    <rect data-item="table" x="530" y="55" width="60" height="60"/>
     <rect data-item="rug" x="130" y="212" width="200" height="196"/>
     <rect data-item="chair" data-back="s" x="332" y="238" width="48" height="45"/>
     <rect data-item="rug" x="545" y="228" width="125" height="205"/>
@@ -47,9 +49,8 @@
     <rect data-item="chair" data-back="w" x="640" y="395" width="46" height="46"/>
     <rect data-item="plant" x="775" y="190" width="45" height="45"/>
     <rect data-item="lamp" x="447" y="445" width="40" height="40"/>
-    <rect data-item="chair" data-back="w" x="652" y="58" width="44" height="44"/>
-    <rect data-item="chair" data-back="e" x="764" y="58" width="44" height="44"/>
-    <rect data-item="plant" x="470" y="30" width="50" height="50"/>
-    <rect data-item="plant" x="775" y="100" width="45" height="45"/>
+    <rect data-item="chair" data-back="w" x="482" y="63" width="44" height="44"/>
+    <rect data-item="chair" data-back="e" x="594" y="63" width="44" height="44"/>
+    <rect data-item="plant" x="602" y="22" width="40" height="40"/>
   </g>
 </svg>

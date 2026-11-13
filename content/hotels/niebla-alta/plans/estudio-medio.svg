@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 550">
+  <title>Estudio (entre medianeras) · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="580" height="25"/>
+    <rect x="0" y="525" width="580" height="25"/>
+    <rect x="0" y="0" width="25" height="550"/>
+    <rect x="555" y="0" width="25" height="550"/>
+    <rect x="25" y="325" width="185" height="15"/>
+    <rect x="195" y="340" width="15" height="185"/>
+  </g>
+  <g id="spaces">
+    <polygon id="descanso" points="25,25 290,25 290,325 25,325"/>
+    <polygon id="sala" points="290,25 555,25 555,325 290,325"/>
+    <polygon id="cocina" points="210,325 555,325 555,525 210,525"/>
+    <polygon id="bano" points="25,340 195,340 195,525 25,525"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="70" y="0" width="180" height="25"/>
+    <rect data-type="window" x="330" y="0" width="180" height="25"/>
+    <rect data-type="door" x="240" y="525" width="90" height="25"/>
+    <rect data-type="door" x="195" y="380" width="15" height="75"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" x="25" y="95" width="200" height="160"/>
+    <rect data-item="nightstand" x="25" y="45" width="45" height="40"/>
+    <rect data-item="wardrobe" x="25" y="270" width="160" height="55"/>
+    <rect data-item="desk" x="330" y="25" width="110" height="55"/>
+    <rect data-item="sofa" x="470" y="110" width="85" height="190"/>
+    <rect data-item="coffee" x="375" y="160" width="60" height="80"/>
+    <rect data-item="counter" x="495" y="340" width="60" height="185"/>
+    <rect data-item="table" x="330" y="365" width="75" height="75"/>
+    <rect data-item="shower" x="25" y="340" width="90" height="90"/>
+    <rect data-item="sink" x="25" y="465" width="50" height="45"/>
+    <rect data-item="toilet" x="140" y="470" width="40" height="55"/>
+    <rect data-item="rug" x="120" y="70" width="170" height="210"/>
+    <rect data-item="chair" data-back="s" x="362" y="84" width="48" height="45"/>
+    <rect data-item="rug" x="345" y="115" width="115" height="170"/>
+    <rect data-item="plant" x="495" y="38" width="55" height="55"/>
+    <rect data-item="lamp" x="300" y="275" width="40" height="40"/>
+    <rect data-item="chair" data-back="w" x="276" y="380" width="46" height="46"/>
+    <rect data-item="chair" data-back="e" x="413" y="380" width="46" height="46"/>
+  </g>
+</svg>

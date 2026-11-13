@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 550">
-  <title>Estudio 201 · plano en centímetros</title>
+  <title>Estudio de esquina 201 · plano en centímetros</title>
   <g id="walls">
     <rect x="0" y="0" width="580" height="25"/>
     <rect x="0" y="525" width="580" height="25"/>
@@ -17,6 +17,8 @@
   <g id="openings">
     <rect data-type="window" x="70" y="0" width="180" height="25"/>
     <rect data-type="window" x="330" y="0" width="180" height="25"/>
+    <rect data-type="window" x="0" y="100" width="25" height="150"/>
+    <rect data-type="window" x="0" y="390" width="25" height="90"/>
     <rect data-type="door" x="240" y="525" width="90" height="25"/>
     <rect data-type="door" x="195" y="380" width="15" height="75"/>
   </g>

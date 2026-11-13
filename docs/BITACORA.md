@@ -25,6 +25,28 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-13 (mediodía) · Ventanas coherentes, web de hotel real, intro y tema oscuro
+
+**Hecho**
+- **Coherencia fachada ↔ plano (D-077):** la 402 tenía 3 ventanas afuera y 2 en el plano. Se corrigieron la 402 (balcón en el módulo del medio), el penthouse, el estudio de esquina (variante `estudio-medio` para los del medio) y la planta tipo, y se hornearon otra vez. Akuare (tres alcobas) también. Regla 9 en `CLAUDE.md`, lista en `CONTENIDO.md` §9 y validación en el build.
+- **Visor:**
+  - sin bordes negros al abrir un piso (caras de adentro de la fachada horneada fuera);
+  - verde/terracota al pasar el mouse;
+  - dos toques en celular;
+  - sin piezas flotando al elegir un espacio.
+- **Portada del hotel como web real (D-078)** y botón de reservar sobrio.
+- **Página de Antesala (D-079):**
+  - tema oscuro;
+  - maqueta en el paso 3;
+  - el plano abre la demo en otra pestaña;
+  - calculadora de 3 datos;
+  - Premium "hiperrealista".
+- **Intro del hotel y suelo gris en baldosas (D-080).**
+- Verificado en capturas (escritorio y celular), sin errores.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo revise la portada nueva en el celular real. Pendientes: Akuare (alcobas sin ventana, horneado), horneado nocturno.
+
 ## 2026-11-13 (mañana) · Revisión de Premium: pisos abiertos horneados, 360° y transición sin cortes
 
 **Hecho**

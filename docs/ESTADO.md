@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-13 (mañana)
+**Actualizado:** 2026-11-13 (mediodía)
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---
@@ -105,7 +105,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 |---|---|---|---|---|
 | **Esencial** | Fotos y 360° de cada espacio, botón de reserva o WhatsApp. Sin 3D. | Lista de Niebla Alta | $5 – 9 M | $250 – 400 mil |
 | **Inmersivo** (recomendado para empezar) | Edificio 3D con su barrio, pisos y habitaciones que se tocan, planos y maqueta amoblada. Todo Esencial. | Niebla Alta en 3D | $12 – 22 M | $450 – 850 mil |
-| **Premium** | Fotos profesionales de cada espacio, video de entrada (de la calle a la habitación), portada con puntos tocables. Todo Inmersivo. | Niebla Alta en Premium: 3D realista horneado (edificio, pisos abiertos, habitaciones y 360°) | $25 – 45 M | $0,9 – 1,5 M |
+| **Premium** | 3D hiperrealista (edificio, pisos y habitaciones), fotos profesionales de cada espacio, portada con puntos tocables. Todo Inmersivo. | Niebla Alta en Premium: 3D realista horneado (edificio, pisos abiertos, habitaciones y 360°) | $25 – 45 M | $0,9 – 1,5 M |
 | **A la medida** | Varias sedes o cadenas | — | Se cotiza | Se cotiza |
 
 - **Piloto sugerido:** $12 – 15 M con alcance limitado.
@@ -147,6 +147,11 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - **Del piso a la habitación sin cortes:** la planta se desvanece al ritmo del edificio y la habitación realista entra directo, precargada.
   - **Entorno apagado:** en Premium los edificios vecinos pierden el color para que el hotel sea el protagonista.
   - **Costo de producción medido:** unos 15 min de Blender por planta de piso y unos 20 por unidad tipo, en el PC de Jacobo. Niebla Alta completa (3 unidades tipo, 3 plantas y la fachada) es unas 3 horas de máquina, casi sin trabajo manual.
+- **Hecho al mediodía (D-077 a D-080):**
+  - **Ventanas coherentes:** la fachada y los planos cuentan las mismas ventanas, y el build lo valida. Es la regla 9 del proyecto, para no tener sorpresas con clientes.
+  - **La portada del hotel parece la web de un hotel real:** consulta de fechas, habitaciones, zonas comunes, ubicación, preguntas y pie, con un botón de reservar sobrio.
+  - **Intro del hotel más elegante** y suelo de la calle en concreto gris.
+  - **Página de Antesala:** tema oscuro, maqueta en el paso 3 y calculadora más simple.
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---

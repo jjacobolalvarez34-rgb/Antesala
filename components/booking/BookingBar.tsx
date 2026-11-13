@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { formatCOP, OFFER } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Offer } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import type { WhatsAppContext } from '@/lib/whatsapp';
 
 import { ReserveButton } from './ReserveSheet';
@@ -110,9 +111,11 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
 }
 
 /**
- * Barra inferior fija: etapa, atrás y Reservar siempre visible (DISENO.md §3).
- * En escritorio va en la esquina derecha para no tapar el edificio, la portada
- * ni los clics (pedido de Jacobo, 2026-11-12).
+ * Barra de reserva: etapa, atrás y Reservar siempre visible (DISENO.md §3).
+ * En celular, franja sólida de borde a borde. En escritorio, sobre el 3D, una
+ * tarjeta en la esquina (no tapa el edificio ni los clics); en las demás páginas
+ * la reserva está en el encabezado fijo. Sin vidrio ni cápsula: "se veía muy IA"
+ * (Jacobo, 2026-11-13).
  */
 export function BookingBar({ data }: { data: BookingSummary }) {
   const segments = useSelectedLayoutSegments();
@@ -120,34 +123,40 @@ export function BookingBar({ data }: { data: BookingSummary }) {
   // el panel es para el gerente del hotel: sin barra de reserva
   if (segments[0] === 'panel') return null;
 
+  // en las páginas sin 3D, en escritorio, la reserva va en el encabezado fijo (HotelHeader)
+  const inScene = segments[0] === 'explorar' || segments[0] === 'piso' || segments[0] === 'unidad';
+
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[calc(0.75rem+var(--safe-bottom))] md:px-6">
-      <nav
-        aria-label="Reserva"
-        className="glass pointer-events-auto mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center md:mr-0 md:max-w-md gap-2 rounded-2xl border border-white/60 py-2 pr-2 pl-2 shadow-[0_8px_32px_-12px_rgb(28_27_25/0.28)]"
-      >
+    <div
+      className={cn(
+        'fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[var(--safe-bottom)]',
+        'md:inset-x-auto md:right-6 md:bottom-6 md:w-[26rem] md:rounded-md md:border md:pb-0 md:shadow-[0_18px_40px_-24px_rgb(28_27_25/0.45)]',
+        !inScene && 'md:hidden',
+      )}
+    >
+      <nav aria-label="Reserva" className="mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center gap-3 px-3 md:px-3">
         {stage.back ? (
           <Link
             href={stage.back}
             aria-label={stage.backLabel}
-            className="grid size-11 shrink-0 place-items-center rounded-xl text-ink transition-colors hover:bg-ink/6"
+            className="grid size-11 shrink-0 place-items-center text-ink transition-colors hover:text-accent"
           >
-            <ArrowLeft aria-hidden className="size-5" />
+            <ArrowLeft aria-hidden className="size-5" strokeWidth={1.5} />
           </Link>
         ) : (
-          <span aria-hidden className="w-2 shrink-0" />
+          <span aria-hidden className="w-1 shrink-0" />
         )}
         <div className="relative min-w-0 flex-1" aria-live="polite">
           <div key={stage.label} className="animate-in duration-300 ease-out fade-in slide-in-from-bottom-1">
-              <p className="truncate text-sm font-medium text-ink">{stage.label}</p>
-              {stage.detail ? <p className="truncate text-xs text-muted-foreground">{stage.detail}</p> : null}
+            <p className="truncate font-display text-lg leading-tight text-ink">{stage.label}</p>
+            {stage.detail ? <p className="truncate text-xs text-muted-foreground">{stage.detail}</p> : null}
           </div>
         </div>
         {stage.occupied ? (
           stage.occupied.href ? (
             <Link
               href={stage.occupied.href}
-              className="inline-flex min-h-12 shrink-0 items-center gap-1.5 rounded-xl bg-ink px-4 text-sm font-medium text-bone transition-colors hover:bg-ink/85"
+              className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[3px] bg-ink px-4 text-[0.75rem] font-medium tracking-[0.12em] text-bone uppercase transition-colors hover:bg-accent"
             >
               <span className="hidden sm:inline">
                 Ver {data.offer && data.offer !== 'noche' ? '' : 'la '}
@@ -158,13 +167,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
             </Link>
           ) : null
         ) : (
-          <ReserveButton
-            context={stage.context}
-            price={stage.price}
-            capacity={stage.capacity}
-            offer={data.offer}
-            className="shrink-0 rounded-xl"
-          />
+          <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} offer={data.offer} className="shrink-0" />
         )}
       </nav>
     </div>

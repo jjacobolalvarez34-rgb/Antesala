@@ -1781,3 +1781,111 @@
 .book {
   color: var(--txt);
 }
+
+/* ===== tema oscuro (D-079): las secciones en marfil pasan a azul noche ===== */
+.temaTxt {
+  display: inline;
+}
+@media (max-width: 860px) {
+  .temaTxt {
+    display: none;
+  }
+}
+:global(html[data-tema='oscuro']) .ivory {
+  background: var(--hondo);
+  color: var(--txt);
+  /* tokens de Tailwind dentro de la sección (calculadora) */
+  --hotel-ink: #f1eee7;
+  --background: #0b1224;
+  --foreground: #f1eee7;
+  --card: #111b33;
+  --secondary: #1c2b4c;
+  --muted: #1c2b4c;
+  --muted-foreground: rgb(241 238 231 / 0.62);
+  --border: rgb(210 184 140 / 0.22);
+  --calc-panel: #1c2b4c;
+}
+:global(html[data-tema='oscuro']) .ivory .lead {
+  color: var(--txt-2);
+}
+:global(html[data-tema='oscuro']) .ivory .kicker {
+  color: var(--champ);
+}
+/* modo ligero en oscuro: el plano en trazos claros sobre azul noche */
+:global(html[data-tema='oscuro']) .stage[data-modo='ligero'] {
+  background: var(--hondo);
+  color: var(--txt);
+}
+:global(html[data-tema='oscuro']) .plano {
+  color: var(--luz);
+}
+:global(html[data-tema='oscuro']) .trazo {
+  stroke: var(--luz);
+}
+:global(html[data-tema='oscuro']) .planoTxt,
+:global(html[data-tema='oscuro']) .planoTxtFuerte {
+  fill: var(--luz);
+}
+:global(html[data-tema='oscuro']) .planoRotulo rect {
+  stroke: var(--luz);
+}
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .card {
+  background: rgb(11 18 36 / 0.88);
+  border-color: var(--line);
+  color: var(--txt);
+  box-shadow: none;
+}
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .card dd,
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .lead {
+  color: var(--txt-2);
+}
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .num,
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .card dt,
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .kicker {
+  color: var(--champ);
+}
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .heroCard {
+  color: var(--txt);
+}
+:global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .btn:not(.solid) {
+  color: var(--txt);
+  border-color: var(--champ);
+}
+:global(html[data-tema='oscuro']) .stage[data-modo='ligero'] .rail button,
+:global(html[data-tema='oscuro']) .stage[data-modo='ligero'] .scrollhint {
+  color: var(--txt-3);
+}
+:global(html[data-tema='oscuro']) .stage[data-modo='ligero'] .rail button[aria-current='step'] {
+  color: var(--champ);
+}
+:global(html[data-tema='oscuro']) .stage[data-modo='ligero'] .rail button::after {
+  background: var(--line);
+}
+@media (max-width: 860px) {
+  :global(html[data-tema='oscuro']) .steps[data-modo='ligero'] .heroCard {
+    background: rgb(11 18 36 / 0.8);
+  }
+}
+/* textos y líneas que en marfil iban en azul noche */
+:global(html[data-tema='oscuro']) .three {
+  border-top-color: var(--line);
+}
+:global(html[data-tema='oscuro']) .three > div {
+  border-color: var(--line-2);
+}
+:global(html[data-tema='oscuro']) .three p,
+:global(html[data-tema='oscuro']) .faq p {
+  color: var(--txt-2);
+}
+:global(html[data-tema='oscuro']) .src {
+  color: var(--txt-3);
+}
+:global(html[data-tema='oscuro']) .web {
+  border-color: var(--line);
+}
+:global(html[data-tema='oscuro']) .web ul {
+  color: var(--txt-2);
+}
+:global(html[data-tema='oscuro']) .faq details {
+  border-bottom-color: var(--line);
+}

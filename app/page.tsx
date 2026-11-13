@@ -6,6 +6,7 @@ import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { ElevationArt, TerrainArt } from '@/components/producto/DemoArt';
 import { Intro, INTRO_PREPAINT } from '@/components/producto/Intro';
+import { TEMA_PREPAINT } from '@/components/producto/tema';
 import { Nav, QuoteForm, RecorridoConAviso, ReplayIntro } from '@/components/producto/Interactivos';
 import s from '@/components/producto/landing.module.css';
 import type { RecorridoData } from '@/components/producto/Recorrido';
@@ -76,8 +77,8 @@ const PRICES: {
   },
   {
     name: 'Premium',
-    for: 'Inmersivo con producción visual de cine.',
-    items: ['Fotos profesionales de cada espacio', 'Video de entrada, de la calle a la habitación', 'Portada con puntos tocables', 'Todo lo de Inmersivo'],
+    for: 'Inmersivo con producción hiperrealista.',
+    items: ['3D hiperrealista: edificio, pisos y habitaciones', 'Fotos profesionales de cada espacio', 'Portada con puntos tocables', 'Todo lo de Inmersivo'],
     impl: '$25 – 45 M',
     month: '$0,9 – 1,5 M',
     example: { label: 'Ver ejemplo', href: `/h/${ANTESALA.demoSlug}?nivel=premium` },
@@ -223,6 +224,7 @@ export default async function Home() {
     <div className={`${s.root} marca-antesala`}>
       {/* antes de pintar: decide si hay intro y tapa la página desde el primer cuadro */}
       <script dangerouslySetInnerHTML={{ __html: INTRO_PREPAINT }} />
+      <script dangerouslySetInnerHTML={{ __html: TEMA_PREPAINT }} />
       <Intro />
       <Nav />
 

@@ -8,7 +8,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import type { BuildingFrame, Facade } from '@/lib/building';
 
 import { VIEW_ONLY_LAYER } from './Backdrop';
-import { muteNeighbor, neighborFacadeTexture, neighborLitTexture } from './textures';
+import { muteNeighbor, neighborFacadeTexture, neighborLitTexture, paved } from './textures';
 import type { LightUniforms } from './windows';
 
 /**
@@ -203,7 +203,8 @@ export function RealNeighbors({
       estuco: make('estuco', 37),
       roof: muteNeighbor(new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 })),
       road: new THREE.MeshStandardMaterial({ color: '#56585b', roughness: 0.95 }),
-      walk: new THREE.MeshStandardMaterial({ color: '#b9b5ad', roughness: 1 }),
+      // andén de concreto gris en baldosas (antes, casi blanco)
+      walk: paved(new THREE.MeshStandardMaterial({ color: '#868076', roughness: 0.92 }), 0.6),
     };
   }, []);
   useFrame(() => {

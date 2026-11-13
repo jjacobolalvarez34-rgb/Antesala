@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Moon, Sun } from 'lucide-react';
 import { useEffect, useId, useState } from 'react';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
@@ -8,6 +9,7 @@ import { lessMotion } from '@/lib/motion';
 
 import s from './landing.module.css';
 import { setModo, useModo } from './modo';
+import { setTema, useTema } from './tema';
 import { Recorrido, type RecorridoData } from './Recorrido';
 
 /** Cambiar entre el modo cine (3D y video) y el ligero (plano y fotos). */
@@ -25,6 +27,25 @@ export function ModoToggle() {
     >
       <span className={s.modoDot} data-on={cine} />
       {cine ? 'Cine' : 'Ligero'}
+    </button>
+  );
+}
+
+/** Claro u oscuro (pedido de Jacobo, 2026-11-13). */
+export function TemaToggle() {
+  const tema = useTema();
+  if (!tema) return null;
+  const oscuro = tema === 'oscuro';
+  return (
+    <button
+      type="button"
+      className={s.modoBtn}
+      onClick={() => setTema(oscuro ? 'claro' : 'oscuro')}
+      aria-label={oscuro ? 'Tema oscuro: pasar al claro' : 'Tema claro: pasar al oscuro'}
+      title={oscuro ? 'Pasar al tema claro' : 'Pasar al tema oscuro'}
+    >
+      {oscuro ? <Sun aria-hidden size={14} strokeWidth={1.6} /> : <Moon aria-hidden size={14} strokeWidth={1.6} />}
+      <span className={s.temaTxt}>{oscuro ? 'Claro' : 'Oscuro'}</span>
     </button>
   );
 }
@@ -128,6 +149,7 @@ export function Nav() {
         </li>
       </ul>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <TemaToggle />
         <ModoToggle />
         <a className={`${s.btn} ${s.solid}`} href="#cotizar" style={{ minHeight: 40, padding: '0 16px' }}>
           Cotizar

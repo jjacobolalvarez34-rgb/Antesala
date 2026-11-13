@@ -157,6 +157,8 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         slug={hotel.slug}
         name={tokens.brand.name}
         place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
+        booking={{ phone: hotel.contact.whatsapp, hotelName: tokens.brand.name }}
+        offer={hotel.offer}
       />
       <div className="relative z-10 flex-1">{children}</div>
       <BookingBar data={summary} />
@@ -164,6 +166,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         name={tokens.brand.name}
         tagline={tokens.brand.tagline}
         base={`/h/${hotel.slug}`}
+        place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
         cover={(() => {
           const m = hotel.site.exterior.find((x) => x.kind === 'photo');
           return m ? mediaUrl(hotel.slug, m.src) : undefined;

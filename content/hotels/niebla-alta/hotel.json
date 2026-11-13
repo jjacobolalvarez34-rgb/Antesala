@@ -381,6 +381,7 @@
         {
           "facade": 3,
           "windows": [
+            3,
             4
           ]
         }
@@ -778,6 +779,7 @@
         {
           "facade": 3,
           "windows": [
+            3,
             4
           ]
         }
@@ -1288,7 +1290,7 @@
           "id": "balcon",
           "name": "Balcón",
           "type": "balcon",
-          "areaM2": 4.8,
+          "areaM2": 2.5,
           "description": "Balcón hacia el oriente, con mesa para dos. Recibe el sol de la mañana.",
           "features": [
             "Mesa y dos sillas",
@@ -1814,7 +1816,7 @@
           "id": "balcon",
           "name": "Balcón",
           "type": "balcon",
-          "areaM2": 4.8,
+          "areaM2": 2.5,
           "description": "Balcón hacia el oriente, con mesa para dos. Recibe el sol de la mañana.",
           "features": [
             "Mesa y dos sillas",
@@ -2232,6 +2234,12 @@
           "facade": 1,
           "windows": [
             0,
+            1
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
             1
           ]
         }
@@ -2762,7 +2770,9 @@
             3
           ]
         }
-      ]
+      ],
+      "plan": "plans/estudio-medio.svg",
+      "realista": "media/realista/estudio-medio.glb"
     },
     {
       "sameAs": "402",
@@ -2857,7 +2867,9 @@
           ]
         }
       ],
-      "occupied": true
+      "occupied": true,
+      "plan": "plans/estudio-medio.svg",
+      "realista": "media/realista/estudio-medio.glb"
     },
     {
       "sameAs": "402",
@@ -2953,6 +2965,7 @@
         {
           "facade": 3,
           "windows": [
+            3,
             4
           ]
         }
@@ -2974,7 +2987,9 @@
           ]
         }
       ],
-      "occupied": true
+      "occupied": true,
+      "plan": "plans/estudio-medio.svg",
+      "realista": "media/realista/estudio-medio.glb"
     },
     {
       "sameAs": "402",
@@ -3045,6 +3060,7 @@
         {
           "facade": 3,
           "windows": [
+            3,
             4
           ]
         }
@@ -3066,7 +3082,9 @@
             3
           ]
         }
-      ]
+      ],
+      "plan": "plans/estudio-medio.svg",
+      "realista": "media/realista/estudio-medio.glb"
     },
     {
       "sameAs": "402",

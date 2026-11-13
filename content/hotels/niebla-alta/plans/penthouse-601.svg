@@ -17,8 +17,11 @@
     <polygon id="terraza" points="0,0 1000,0 1000,200 0,200"/>
   </g>
   <g id="openings">
-    <rect data-type="window" x="100" y="200" width="260" height="25"/>
-    <rect data-type="door" x="540" y="200" width="360" height="25"/>
+    <rect data-type="window" x="50" y="200" width="140" height="25"/>
+    <rect data-type="window" x="245" y="200" width="140" height="25"/>
+    <rect data-type="window" x="475" y="200" width="120" height="25"/>
+    <rect data-type="door" x="630" y="200" width="160" height="25"/>
+    <rect data-type="window" x="820" y="200" width="135" height="25"/>
     <rect data-type="door" x="540" y="925" width="100" height="25"/>
     <rect data-type="door" x="440" y="700" width="15" height="90"/>
     <rect data-type="door" x="300" y="720" width="15" height="80"/>

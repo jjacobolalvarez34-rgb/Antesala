@@ -71,6 +71,9 @@ export const OFFER: Record<
     /** "libre" / "disponible" */
     free: string;
     freePlural: string;
+    /** "Habitación" / "Apartamento" (títulos de la portada) */
+    unit: string;
+    units: string;
   }
 > = {
   noche: {
@@ -83,6 +86,8 @@ export const OFFER: Record<
     takenText: 'Puedes recorrerla igual. Para reservar, hay una igual libre.',
     free: 'libre',
     freePlural: 'libres',
+    unit: 'Habitación',
+    units: 'Habitaciones',
   },
   mes: {
     suffix: ' / mes',
@@ -94,6 +99,8 @@ export const OFFER: Record<
     takenText: 'Puedes recorrerlo igual. Hay uno igual disponible.',
     free: 'disponible',
     freePlural: 'disponibles',
+    unit: 'Apartamento',
+    units: 'Apartamentos',
   },
   venta: {
     suffix: '',
@@ -105,6 +112,8 @@ export const OFFER: Record<
     takenText: 'Puedes recorrerlo igual. Hay uno igual disponible.',
     free: 'disponible',
     freePlural: 'disponibles',
+    unit: 'Apartamento',
+    units: 'Apartamentos',
   },
 };
 

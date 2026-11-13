@@ -97,3 +97,21 @@ Desde `site.building`:
 - **Splat interior:** video lento recorriendo el cuarto, procesado en Postshot, Polycam o KIRI.
 - **Plano:** lo entrega el hotel o se levanta con medidas; luego se dibuja en SVG siguiendo §4.
 - **Derechos:** el contrato define quién es dueño de las fotos, los panoramas y los modelos, y qué pasa al terminar.
+
+## 9. Coherencia entre vistas (lista de revisión antes de mostrar un hotel)
+
+Un mismo lugar se ve de varias formas: fachada, planta del piso, maqueta de la unidad, 360°, fotos y textos. Tienen que contar lo mismo. Con clientes reales, una diferencia que alguien detecte (p. ej. "afuera tiene 3 ventanas y en el plano 2") pone en duda todo lo demás.
+
+**Lo valida el build** (`lib/content.ts`, falla si no cuadra):
+- **Ventanas fachada ↔ plano:** las ventanas que la fachada le marca a cada unidad (`exterior`) son las aberturas del plano hacia afuera: ventanas más puertas a balcón o terraza.
+- **Áreas:** el m² de cada espacio coincide con su polígono (con tolerancia).
+- **Espacios ↔ polígonos:** cada espacio tiene polígono y cada polígono, espacio.
+
+**Se revisa a ojo (capturas):**
+- **Orden de las aberturas:** el balcón está en el mismo módulo afuera y adentro (en la 402, en el del medio).
+- **Copias de una unidad tipo:** una de esquina tiene ventanas al costado y una entre medianeras no. Si el plano cambia, la copia usa una variante (`plan` y `realista` propios en la copia, p. ej. `estudio-medio.svg`).
+- **Planta del piso ↔ unidades:** una ventana por módulo de fachada, dentro de la habitación que corresponde y sin cruzar muros divisorios.
+- **Habitaciones sin ventana:** una alcoba sin ventana no es creíble (pendiente en Akuare: alcobas 2 y 3 del apartamento de tres alcobas).
+- **3D realista horneado:** si cambia un plano, se vuelve a hornear esa unidad (`pipeline/realista/lote.py`) y, si cambia una planta de piso, la planta (`lote_plantas.py`). La fachada horneada solo se rehace si cambia el edificio.
+- **Textos y fotos:** lo que dicen el texto y la foto existe en el plano (p. ej. "balcón con mesa para dos": el plano tiene balcón y la mesa cabe).
+- **Precios y disponibilidad** iguales en la fachada, el piso, la unidad, la lista y la barra de reserva.

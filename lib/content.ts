@@ -201,11 +201,14 @@ async function exists(file: string): Promise<boolean> {
 }
 
 /** Lo que una unidad copia puede cambiar de su tipo; el resto (plano, espacios, fotos) se hereda. */
-const COPY_KEYS = ['id', 'name', 'levelId', 'exterior', 'view', 'viewPremiumCOP', 'basePriceCOP', 'featured', 'occupied'] as const;
+// `plan` y `realista`: una variante del mismo tipo (p. ej. el estudio entre medianeras, sin las
+// ventanas del costado que sí tiene el de esquina). Debe tener los mismos espacios.
+const COPY_KEYS = ['id', 'name', 'levelId', 'exterior', 'view', 'viewPremiumCOP', 'basePriceCOP', 'featured', 'occupied', 'plan', 'realista'] as const;
 
 /**
  * Unidades tipo (D-047): `{ "sameAs": "201", "id": "202", ... }` hereda todo de la
- * unidad 201 y solo cambia número, piso, ventanas, vista y precio. Así un hotel
+ * unidad 201 y solo cambia número, piso, ventanas, vista y precio (y, si hace falta, una
+ * variante del plano con los mismos espacios). Así un hotel
  * con 40 habitaciones iguales describe una y lista las demás.
  */
 function expandCopies(raw: unknown, problems: string[]): unknown {
@@ -341,6 +344,30 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
       collect(s.media);
     }
     if (u.realista) mediaSrcs.add(u.realista);
+    // Coherencia fachada ↔ plano (regla 9 de CLAUDE.md): las ventanas que la fachada le marca a
+    // la unidad (exterior) tienen que ser las aberturas del plano hacia afuera: ventanas y
+    // puertas a balcón o terraza. Un huésped que cuenta ventanas afuera y adentro no puede
+    // encontrar una diferencia.
+    if (u.exterior?.length) {
+      const bays = u.exterior.reduce((n, e) => n + e.windows.length, 0);
+      const outdoor = u.spaces
+        .filter((s) => s.type === 'balcon' || s.type === 'terraza')
+        .flatMap((s) => (polygonIds.get(s.id) ? [polygonIds.get(s.id)!.points] : []));
+      const nearOutdoor = (o: { x: number; y: number; width: number; height: number }) =>
+        outdoor.some((pts) => {
+          const xs = pts.map((p) => p[0]);
+          const ys = pts.map((p) => p[1]);
+          const cx = o.x + o.width / 2;
+          const cy = o.y + o.height / 2;
+          return cx >= Math.min(...xs) - 30 && cx <= Math.max(...xs) + 30 && cy >= Math.min(...ys) - 30 && cy <= Math.max(...ys) + 30;
+        });
+      const openings = geometry.openings.filter((o) => o.type === 'window' || nearOutdoor(o)).length;
+      if (openings !== bays) {
+        problems.push(
+          `unidad "${u.id}" → la fachada le marca ${bays} ventanas (exterior) pero ${u.plan} tiene ${openings} aberturas hacia afuera (ventanas y puertas a balcón o terraza)`,
+        );
+      }
+    }
     for (const pid of polygonIds.keys()) {
       if (!spaceIds.has(pid)) problems.push(`unidad "${u.id}" → ${u.plan} tiene el polígono "${pid}" sin espacio en hotel.json`);
     }

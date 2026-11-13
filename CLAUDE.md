@@ -43,6 +43,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 6. **Nada pesado se sirve desde Vercel.** Los assets pesados van a R2 en producción.
 7. **Transparencia:** en la demo, todo medio lleva `fidelity: "ilustrativa"` y el banner de hotel ficticio es visible. Nunca usar fotos de hoteles reales identificables.
 8. **Animación con propósito:** GSAP para cámara y escenas, Motion para interfaz. No agregar otras librerías de animación. Las animaciones se ven aunque el sistema pida movimiento reducido (D-067); quien quiera menos movimiento usa el modo ligero.
+9. **Coherencia entre vistas (con clientes es lo más delicado).** Lo que se ve afuera tiene que ser lo que se ve adentro: un huésped o una constructora que cuenta y compara va a encontrar cualquier diferencia, y eso le resta credibilidad a todo. Antes de dar por bueno un hotel, revisa la lista de `docs/CONTENIDO.md` §9 (coherencia). La parte que se puede medir la valida el build (`lib/content.ts`); el resto se mira en las capturas.
 
 ## Forma de trabajar
 

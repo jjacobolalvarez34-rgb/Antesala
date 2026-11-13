@@ -395,3 +395,40 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - **Entorno:** en Premium los vecinos pierden el color (`NEIGHBOR_MUTE`) para que mande el edificio horneado.
   - **360° en vivo:** la cámara se ubica en el punto del cuarto más despejado de los muros (grilla dentro del polígono) y, entre esos, el más lejos de la ventana. Antes salía de la caja del espacio y en cuartos en L quedaba entre muros.
 - Por qué: en la revisión de Premium, el piso abierto era el paso más usado y el único que no se veía realista. El 360° del dormitorio del Penthouse se rompía (Jacobo, 2026-11-13).
+
+**D-077 · 2026-11-13 · Coherencia fachada ↔ plano como regla y como validación**
+- Decisión:
+  - Regla 9 de `CLAUDE.md` y lista de revisión en `docs/CONTENIDO.md` §9.
+  - El build falla si las ventanas que la fachada le marca a una unidad no son las aberturas del plano hacia afuera.
+  - Las copias de una unidad tipo pueden usar una variante del plano (`plan` y `realista`), p. ej. el estudio entre medianeras.
+  - Niebla Alta corregida:
+    - Suite 402: 3 aberturas al frente con el balcón en el medio, y 2 al costado.
+    - Penthouse: 5 al frente.
+    - Estudio de esquina: 2 al costado.
+    - Planta tipo: una ventana por módulo.
+  - Akuare (tres alcobas): de 4 a 6 aberturas.
+- Por qué: Jacobo vio que la 402 tenía 3 ventanas afuera y 2 en el plano. Con clientes, una diferencia así pone en duda todo lo demás.
+
+**D-078 · 2026-11-13 · La portada del hotel como la web de un hotel real**
+- Decisión:
+  - Encabezado fijo con secciones, "Recorrido 3D" y "Reservar".
+  - Portada a pantalla completa con una franja "Llegada · Salida · Huéspedes · Consultar disponibilidad" que termina en WhatsApp.
+  - Habitaciones en filas editoriales, zonas comunes con foto, servicios con íconos por palabra clave, ubicación, preguntas, cierre de reserva directa y pie con contacto. Todo sale de `hotel.json`.
+  - El botón de reservar es un rectángulo oscuro en mayúsculas espaciadas, sin globo de chat ni vidrio.
+  - La barra de reserva va sólida de borde a borde en celular. En escritorio va en una esquina sobre el 3D, y en las demás páginas la reemplaza el encabezado.
+- Por qué: Jacobo: "que aparezca un hotel de verdad profesional, diseñada para vender"; el botón anterior "se veía muy IA".
+
+**D-079 · 2026-11-13 · Página de Antesala: tema oscuro, maqueta en el paso 3 y calculadora simple**
+- Decisión:
+  - **Tema oscuro:** botón Claro/Oscuro junto a Cine/Ligero. Sin elección guardada sigue al sistema; se aplica antes de pintar.
+  - **Paso 3 del recorrido:** una maqueta sencilla del piso, con la unidad resaltada.
+  - **Paso 4:** el plano abre la demo en otra pestaña.
+  - **Calculadora:** tres datos (habitaciones, tarifa, ocupación baja/media/alta) y los dos supuestos en una frase con "Ajustar".
+  - **Premium:** "producción hiperrealista", y "3D hiperrealista" en lugar del video de entrada que no existe.
+- Por qué: pedidos de Jacobo. El paso 3 "no se entendía" y la calculadora tenía "muchos filtros".
+
+**D-080 · 2026-11-13 · Intro del hotel y suelo de la calle**
+- Decisión:
+  - **Telón de entrada:** marco fino, lugar en mayúsculas, nombre que sube desde una ranura, filete bronce y lema. Al salir, el telón se levanta; el botón es "Entrar".
+  - **Suelo de la calle:** andenes de concreto gris en baldosas y suelo de fondo gris tierra, hechos en el shader (`paved`, sin texturas). Antes era un color plano casi blanco.
+- Por qué: Jacobo: la intro "también vende"; "el piso en la vida real no es blanco".

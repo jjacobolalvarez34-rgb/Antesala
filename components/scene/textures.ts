@@ -225,6 +225,46 @@ uniform float uMute;`)
   return mat;
 }
 
+/**
+ * Piso de la calle (pedido de Jacobo, 2026-11-13: "el piso en la vida real no es blanco"):
+ * baldosas de concreto con juntas y una variación leve por baldosa, calculadas en el
+ * shader con la posición en el mundo (sirve para cualquier forma de andén, sin texturas).
+ * tile: tamaño de la baldosa en metros; tile 0 = sin juntas, solo la variación (tierra).
+ */
+export function paved<T extends THREE.Material>(mat: T, tile = 0.6, joint = 0.035): T {
+  mat.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `#include <common>
+varying vec3 vPave;`)
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+  vPave = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', `#include <common>
+varying vec3 vPave;
+float paveHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }`)
+      .replace(
+        '#include <map_fragment>',
+        `#include <map_fragment>
+  {
+    float t = ${tile.toFixed(3)};
+    vec2 q = t > 0.0 ? vPave.xz / t : vPave.xz / 3.0;
+    vec2 cell = floor(q);
+    float v = 0.93 + 0.1 * paveHash(cell);
+    float fine = 0.97 + 0.06 * paveHash(floor(vPave.xz * 9.0));
+    float j = 1.0;
+    if (t > 0.0) {
+      vec2 f = fract(q);
+      float d = min(min(f.x, 1.0 - f.x), min(f.y, 1.0 - f.y));
+      j = mix(0.72, 1.0, smoothstep(0.0, ${(joint * 1.6).toFixed(3)}, d));
+    }
+    diffuseColor.rgb *= v * fine * j;
+  }`,
+      );
+  };
+  mat.customProgramCacheKey = () => `piso-${tile}-${joint}`;
+  return mat;
+}
+
 export function neighborFacadeTexture(kind: 'ladrillo' | 'estuco', seed = 1) {
   const W = 512;
   const H = 256;

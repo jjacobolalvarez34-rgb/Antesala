@@ -32,8 +32,10 @@
     <rect data-type="door" x="440" y="600" width="10" height="80"/>
     <rect data-type="door" x="110" y="905" width="230" height="15"/>
     <rect data-type="window" x="0" y="60" width="15" height="180"/>
-    <rect data-type="window" x="0" y="380" width="15" height="480"/>
-    <rect data-type="window" x="490" y="905" width="260" height="15"/>
+    <rect data-type="window" x="0" y="380" width="15" height="210"/>
+    <rect data-type="window" x="0" y="650" width="15" height="210"/>
+    <rect data-type="window" x="475" y="905" width="125" height="15"/>
+    <rect data-type="window" x="640" y="905" width="125" height="15"/>
   </g>
   <g id="furniture">
     <rect data-item="kitchen" data-back="n" x="18" y="18" width="267" height="62"/>

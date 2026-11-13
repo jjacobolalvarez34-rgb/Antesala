@@ -9,7 +9,7 @@ import type { BuildingFrame, Facade } from '@/lib/building';
 import { VIEW_ONLY_LAYER } from './Backdrop';
 import { mergeBoxes, type Box } from './geometry';
 import { RealNeighbors, streetSpots, type LampSpot, type RealContextData } from './RealContext';
-import { muteNeighbor, neighborFacadeTexture, neighborLitTexture } from './textures';
+import { muteNeighbor, neighborFacadeTexture, neighborLitTexture, paved } from './textures';
 import type { LightUniforms } from './windows';
 
 /**
@@ -210,6 +210,8 @@ function Streets({ frame, shadows }: { frame: BuildingFrame; shadows: boolean })
     return { walks, curbs, marks };
   }, [cx, cz, frontStreet, sideStreet]);
   const walkGeo = useMemo(() => mergeBoxes(walks, 2), [walks]);
+  // andén de concreto gris en baldosas (antes, casi blanco)
+  const walkMat = useMemo(() => paved(new THREE.MeshStandardMaterial({ color: '#868076', roughness: 0.92 }), 0.6), []);
   const curbGeo = useMemo(() => mergeBoxes(curbs, 2), [curbs]);
   const markGeo = useMemo(() => mergeBoxes(marks), [marks]);
 
@@ -224,13 +226,11 @@ function Streets({ frame, shadows }: { frame: BuildingFrame; shadows: boolean })
         <meshStandardMaterial color="#47484a" roughness={0.95} />
       </mesh>
       {walkGeo ? (
-        <mesh geometry={walkGeo} receiveShadow={shadows}>
-          <meshStandardMaterial color="#c4bfb6" roughness={0.9} />
-        </mesh>
+        <mesh geometry={walkGeo} receiveShadow={shadows} material={walkMat} />
       ) : null}
       {curbGeo ? (
         <mesh geometry={curbGeo} receiveShadow={shadows}>
-          <meshStandardMaterial color="#d8d4cc" roughness={0.85} />
+          <meshStandardMaterial color="#a9a399" roughness={0.85} />
         </mesh>
       ) : null}
       {markGeo ? (
@@ -549,6 +549,8 @@ export function Context({
   footprint: [number, number][];
 }) {
   const realSpots = useMemo(() => (real ? streetSpots(real, footprint) : null), [real, footprint]);
+  // el suelo de fondo: tierra y pavimento gastado, no blanco
+  const groundMat = useMemo(() => paved(new THREE.MeshStandardMaterial({ color: '#4d4a44', roughness: 1 }), 0), []);
   const inCorridor = useCallback((x: number, z: number, pad: number) => inViewCorridor(x, z, frame, facades, pad), [frame, facades]);
   const [cx, cz] = frame.center;
   const sky = useMemo(
@@ -582,9 +584,8 @@ export function Context({
       <mesh scale={900} material={sky}>
         <sphereGeometry args={[1, 32, 16]} />
       </mesh>
-      <mesh rotation-x={-Math.PI / 2} position={[cx, -0.02, cz]} receiveShadow={shadows}>
+      <mesh rotation-x={-Math.PI / 2} position={[cx, -0.02, cz]} receiveShadow={shadows} material={groundMat}>
         <circleGeometry args={[480, 48]} />
-        <meshStandardMaterial color="#8a867e" roughness={1} />
       </mesh>
       {real && realSpots ? (
         <>

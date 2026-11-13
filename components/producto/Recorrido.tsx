@@ -197,9 +197,9 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
                 <b>{data.unitName.toUpperCase()}</b>
                 <span>{data.area} · plano de la unidad</span>
               </div>
-              <PlanSvg geometry={data.plan} spaces={data.planSpaces} title={`Plano de ${data.unitName}`} />
+              <PlanSvg geometry={data.plan} spaces={data.planSpaces} title={`Plano de ${data.unitName}`} newTab />
               <p className={s.planNote}>
-                Toque un espacio para entrar. <b>¿El baño está dentro?</b> Sí, junto al dormitorio.
+                Toque un espacio y entre a la demo (se abre en otra pestaña). <b>¿El baño está dentro?</b> Sí, junto al dormitorio.
               </p>
             </div>
           </div>
