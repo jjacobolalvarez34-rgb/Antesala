@@ -142,6 +142,47 @@
   letter-spacing: 0;
 }
 
+/* puerta al saltar entre secciones */
+.door {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  overflow: hidden;
+}
+.doorL,
+.doorR {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background: var(--noche);
+  transform: translateX(-101%);
+  will-change: transform;
+}
+.doorL {
+  left: 0;
+  border-right: 1px solid rgb(210 184 140 / 0.35);
+}
+.doorR {
+  right: 0;
+  transform: translateX(101%);
+  border-left: 1px solid rgb(210 184 140 / 0.35);
+}
+.doorSlit {
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  bottom: 18%;
+  width: 3px;
+  background: var(--luz);
+  box-shadow:
+    0 0 18px 4px rgb(242 232 214 / 0.55),
+    0 0 60px 12px rgb(210 184 140 / 0.25);
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
 /* nav */
 .nav {
   position: fixed;

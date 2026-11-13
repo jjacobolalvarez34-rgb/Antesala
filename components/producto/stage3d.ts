@@ -144,10 +144,11 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
         const dx = -Wd / 2 + d * 3;
         pts.push(new THREE.Vector3(dx, h * 0.9 + 0.06, -D / 2), new THREE.Vector3(dx, h * 0.9 + 0.06, D / 2));
       }
-      divMat = track(new THREE.LineBasicMaterial({ color: C.champ, transparent: true, opacity: 0 }));
+      divMat = track(new THREE.LineBasicMaterial({ color: C.champ, transparent: true, opacity: 0, depthWrite: false }));
       g.add(new THREE.LineSegments(track(new THREE.BufferGeometry().setFromPoints(pts)), divMat));
       if (n === opts.hlFloor) {
-        const gm = track(new THREE.MeshBasicMaterial({ color: C.luz, transparent: true, opacity: 0 }));
+        // sin escribir profundidad: invisible en los primeros pasos, igual tapaba las losas de atrás (el rectángulo raro)
+        const gm = track(new THREE.MeshBasicMaterial({ color: C.luz, transparent: true, opacity: 0, depthWrite: false }));
         unitGlow = new THREE.Mesh(track(new THREE.BoxGeometry(2.9, h * 0.9 + 0.02, D - 0.1)), gm);
         unitGlow.position.set(-4.5 + opts.hlUnit * 3, h * 0.45 + 0.05, 0);
         g.add(unitGlow);

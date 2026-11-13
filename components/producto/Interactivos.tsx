@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useId, useState } from 'react';
 
 import { AntesalaLogo } from '@/components/brand/AntesalaLogo';
+import { lessMotion } from '@/lib/motion';
 
 import s from './landing.module.css';
 import { setModo, useModo } from './modo';
@@ -28,6 +29,48 @@ export function ModoToggle() {
   );
 }
 
+/**
+ * Transición de puerta al saltar a una sección (pedido de Jacobo, 2026-11-12): dos
+ * paneles azul noche se cierran hacia el centro con la ranura de luz de la marca,
+ * la página se mueve detrás y la puerta se abre otra vez. Solo transform y
+ * opacidad. Si el destino está a menos de una pantalla, desliza sin puerta; en
+ * modo ligero también.
+ */
+function doorTo(target: HTMLElement, hash: string) {
+  const host = document.querySelector('.marca-antesala') ?? document.body;
+  const dist = Math.abs(target.getBoundingClientRect().top);
+  const go = () => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY);
+    document.documentElement.style.scrollBehavior = '';
+    history.replaceState(null, '', hash);
+  };
+  if (dist < window.innerHeight * 1.1 || lessMotion() || typeof document.body.animate !== 'function') {
+    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
+    history.replaceState(null, '', hash);
+    return;
+  }
+  const door = document.createElement('div');
+  door.className = s.door ?? "";
+  door.setAttribute('aria-hidden', 'true');
+  door.innerHTML = `<i class="${s.doorL}"></i><i class="${s.doorR}"></i><b class="${s.doorSlit}"></b>`;
+  host.appendChild(door);
+  const [l, r, slit] = Array.from(door.children) as HTMLElement[];
+  const ease = 'cubic-bezier(.7,0,.3,1)';
+  const shut = { duration: 460, easing: ease, fill: 'forwards' as const };
+  l!.animate([{ transform: 'translateX(-101%)' }, { transform: 'translateX(0)' }], shut);
+  r!.animate([{ transform: 'translateX(101%)' }, { transform: 'translateX(0)' }], shut);
+  slit!.animate([{ opacity: 0, transform: 'translateX(-50%) scaleY(.2)' }, { opacity: 1, transform: 'translateX(-50%) scaleY(1)' }], { duration: 380, delay: 240, easing: 'ease-out', fill: 'forwards' });
+  window.setTimeout(() => {
+    go();
+    const open = { duration: 620, delay: 140, easing: ease, fill: 'forwards' as const };
+    l!.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-101%)' }], open);
+    r!.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(101%)' }], open);
+    slit!.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: 'ease-in', fill: 'forwards' });
+    window.setTimeout(() => door.remove(), 900);
+  }, 520);
+}
+
 /** Barra superior: transparente sobre el escenario, sólida al bajar. */
 export function Nav() {
   const [solid, setSolid] = useState(false);
@@ -35,6 +78,20 @@ export function Nav() {
   const ligero = useModo() === 'ligero';
   // transparente solo arriba del todo: al bajar, los textos de los pasos pasan
   // por debajo y con la barra transparente se montaban sobre el logo
+  // los enlaces a secciones (menú, botones) pasan por la puerta
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      const a = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null;
+      const hash = a?.getAttribute('href') ?? '';
+      const target = hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
+      if (!a || !target) return;
+      e.preventDefault();
+      doorTo(target, hash);
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
   useEffect(() => {
     let raf = 0;
     const on = () => {
