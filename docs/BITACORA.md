@@ -39,6 +39,8 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
   - Calculadora que cabe en celular; "El huésped observa".
 - Piso abierto: las habitaciones vuelven a recibir clics y se ilumina con luz cálida la habitación bajo el mouse.
 
+- Esquinas negras de los muros resueltas: los segmentos del plano se superponían. En `amoblar.py` se unen los muros (remesh y simplificación de caras planas) y se volvieron a hornear las tres unidades (sin cambio de peso).
+
 **Problemas / bloqueos**
 - La tarjeta gráfica del PC de Jacobo no soporta el motor rápido de Blender 5.2 (Workbench o EEVEE): todo se calcula con Cycles en el procesador. Una unidad tarda unos 20 min y la fachada 1 h.
 - Akuare cancelado a pedido de Jacobo.

@@ -161,6 +161,29 @@ for o in list(bpy.context.scene.objects):
             s.material = M['vidrio']
         elif n.startswith('baranda'):
             s.material = M['aluminio']
+# muros: los segmentos del plano se superponen en las esquinas (caras dobles que el horneado deja
+# negras). Se unen en una sola malla y se funden los vértices que coinciden.
+muros = [o for o in bpy.context.scene.objects if o.type == 'MESH' and any(sl.material == M['muro'] for sl in o.material_slots)]
+if muros:
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in muros:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = muros[0]
+    if len(muros) > 1:
+        bpy.ops.object.join()
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.mesh.remove_doubles(threshold=0.002)
+    bpy.ops.mesh.normals_make_consistent(inside=False)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    rem = bpy.context.view_layer.objects.active.modifiers.new('unir', 'REMESH')
+    rem.mode = 'SHARP'
+    rem.octree_depth = 8
+    rem.use_remove_disconnected = False
+    # el remesh llena de triángulos las caras planas: se simplifican (los muros son planos)
+    dec = bpy.context.view_layer.objects.active.modifiers.new('plano', 'DECIMATE')
+    dec.decimate_type = 'DISSOLVE'
+    dec.angle_limit = math.radians(2)
 log('muros y pisos', len([o for o in bpy.context.scene.objects if o.type == 'MESH']))
 
 # ---------------------------------------------------------------- plano
