@@ -25,6 +25,27 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-12 (7, noche) · 3D realista en Premium: unidades y fachada de Niebla Alta, selector de nivel
+
+**Hecho**
+- Blender 5.2.4 portable en `D:/Herramientas`, con modelos y texturas CC0 de Poly Haven.
+- **Unidades horneadas** (estudio 201, suite 402, penthouse 601) con muebles modernos, cortinas, cuadros y luz de cielo y sol. Cubren las unidades 201, 301, 402, 502 y 601. Se ven en Premium.
+- **Fachada horneada** por piso, con la cubierta. Las ventanas siguen por código y los pisos se abren igual; de noche se oscurece.
+- **Selector "Ver como: Esencial · Inmersivo · Premium"** en la banda de demo (D-075). Los "Ver ejemplo" de los precios abren cada nivel.
+- Web de Antesala:
+  - Puerta al saltar entre secciones.
+  - Edificio del inicio sin el rectángulo raro: era una caja invisible que escribía profundidad.
+  - Intro sin "Saltar", más lenta y sin destello; botones del paso 6 a las demos.
+  - Calculadora que cabe en celular; "El huésped observa".
+- Piso abierto: las habitaciones vuelven a recibir clics y se ilumina con luz cálida la habitación bajo el mouse.
+
+**Problemas / bloqueos**
+- La tarjeta gráfica del PC de Jacobo no soporta el motor rápido de Blender 5.2 (Workbench o EEVEE): todo se calcula con Cycles en el procesador. Una unidad tarda unos 20 min y la fachada 1 h.
+- Akuare cancelado a pedido de Jacobo.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo revise Premium en Niebla Alta (portada, edificio de noche y de día, un piso, una unidad). Después: Akuare, el horneado nocturno, pulir las zonas oscuras y actualizar el PDF de estado (`pnpm estado`).
+
 ## 2026-11-12 (6) · Clics en el piso abierto, luz al pasar el mouse, rumbo del 3D realista y documento con capturas
 
 **Hecho**

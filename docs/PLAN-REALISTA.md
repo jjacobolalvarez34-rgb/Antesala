@@ -63,6 +63,20 @@ Higgsfield "use Blender" (`/use-blender`) es un MCP local para manejar Blender d
   - Las esquinas negras de los muros.
   - Más decoración: cortinas, cuadros, cojines.
 
+## Lote y fachada (2026-11-12, noche)
+
+- **Unidades:** con `pipeline/realista/lote.py` (exportar, amoblar, hornear, optimizar y registrar) quedaron horneados el estudio 201 (19 min, 0,9 MB), la suite 402 (19 min, 1,3 MB) y el penthouse 601 (13 min, 1,0 MB). Se cubren las unidades 201, 301, 402, 502 y 601. **Akuare se canceló a pedido de Jacobo** y queda para después.
+- **Fachada:**
+  - `exportar-edificio.spec.ts` exporta el grupo "edificio".
+  - `hornear_edificio.py` hornea por piso la losa, la fachada (ladrillo, concreto, marcos y jardineras) y la cubierta. Tardó 62 min y queda en 1,13 MB optimizada.
+  - En Premium (`building.realista`), cada piso muestra su pieza horneada y oculta las opacas por código. Esas piezas siguen recibiendo el mouse, y las ventanas siguen por código, así que de noche se encienden.
+  - La horneada se oscurece con la noche (tinte por `uNight`) y se entibia bajo el puntero.
+  - Render: `docs/estado/realista-fachada.jpg`.
+- **Pendiente:**
+  - Akuare (unidades y fachada).
+  - Horneado nocturno propio: hoy es el de día oscurecido.
+  - Pulir las zonas oscuras y las esquinas negras de los muros.
+
 ## Lo que queda listo de antes
 
 - Las fotos de Higgsfield (`media/premium/`, marcadas `tier: "premium"`) sirven como galería y portada del nivel Premium mientras tanto.

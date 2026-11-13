@@ -139,7 +139,8 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - **Blender** en el PC (gratis), manejado desde Claude Code con el conector "use Blender" de Higgsfield.
   - Materiales reales y luz de cielo **horneada** en el modelo: el mismo 3D interactivo se ve como render. Además da **360° fotográficos** de cada espacio.
   - Prueba primero con la Suite 402. Plan en `docs/PLAN-REALISTA.md`.
-- **Selector "Ver como: Esencial · Inmersivo · Premium":** queda para cuando exista el 3D realista; antes, dos niveles se verían casi iguales. Los medios ya están marcados por nivel (D-072).
+- **Hecho esta noche (D-074, D-075):** el **3D realista ya existe** en Niebla Alta. El estudio, la suite y el penthouse están amoblados, y la fachada horneada en Blender por piso. Todo se ve en Premium y sigue siendo interactivo.
+- **Selector "Ver como: Esencial · Inmersivo · Premium"** en la banda de las demos. Los "Ver ejemplo" de los precios abren cada nivel.
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---
