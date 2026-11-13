@@ -169,6 +169,8 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
    - verificar la marca en la SIC (clases 42 y 35), los dominios e Instagram.
 7. **Glamping (KingDome):** construir la variante solo si responden.
 8. **Trato en la web de Antesala:** hoy es de "usted" (dueños de hotel) y las páginas de los hoteles son de "tú" (huésped). ¿Se mantiene así?
+10. **Render realista "con engine" (investigado 2026-11-13).** Unreal con Pixel Streaming se ve como película, pero cobra por minuto de cada visitante (unos USD 800 al mes con 2.000 visitas de 4 minutos en Eagle 3D), depende de la señal y no cuadra con la mensualidad. Unreal directo en el navegador (5.9, WebGPU) todavía es experimental. Propuesta: no cambiar el visor; usar Unreal o Twinmotion para videos y renders de Premium; volver a mirarlo cuando salga estable.
+11. **Gaussian Splatting para hoteles reales.** Es un 3D fotográfico grabado con el celular, que ya usan Zillow y Matterport. **Prueba acordada:** Jacobo graba un apartamento de Akuare (fotos, 360° y video), y se mide cómo sale, cuánto pesa y cuánto tiempo toma (`docs/PRUEBA-CAPTURA-AKUARE.md`). Es el primer intento de captura real del producto. Hay que pedir permiso antes de entrar.
 9. **¿Premium ya se puede vender?** En Niebla Alta ya se ve completo. Falta Akuare (constructoras) y un horneado nocturno propio. ¿Se sale a vender ya con los tres niveles?
 
 ---
