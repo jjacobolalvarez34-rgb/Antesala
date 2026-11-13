@@ -377,3 +377,14 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: el realismo se logra en el mismo 3D interactivo, sin cambiar entre 3D y foto: materiales reales y luz de Cycles horneada en texturas (GLB), con Blender local manejado por el MCP `/use-blender` de Higgsfield. También da los 360° fotográficos. Plan: `docs/PLAN-REALISTA.md`.
 - Por qué: Jacobo: "si el realista no sirve, no hay producto: no podemos vender un plan que no existe". Las fotos encima del 3D se descartaron porque el cambio entre uno y otro se ve feo. Los splats y el 3D desde una imagen no dejan abrir pisos.
 
+**D-075 · 2026-11-12 · Selector de nivel y 3D realista por unidad**
+- Decisión:
+  - Las demos con contenido Premium muestran en la banda superior **"Ver como: Esencial · Inmersivo · Premium"** (`components/hotel/Nivel.tsx`). El nivel se guarda en la sesión y `?nivel=` lo fija desde un enlace; por defecto, Premium.
+  - **Esencial:** sin 3D (lista con fotos y 360°) y sin medios premium.
+  - **Inmersivo:** el 3D por código y los renders, sin medios premium.
+  - **Premium:** la maqueta horneada en Blender (`Unit.realista`), las fotos profesionales y la portada con puntos.
+  - Los "Ver ejemplo" de los precios abren cada nivel.
+  - Las unidades tipo se hornean en lote (`pipeline/realista/lote.py`): exportar, amoblar y hornear, optimizar y registrar.
+  - La fachada realista del edificio queda para otra sesión: sus ventanas encendidas y sus pisos que se abren están hechos por código y hay que rehacerlos con cuidado.
+- Por qué: Jacobo va a vender a hoteles de todas las gamas y necesita los tres niveles visibles y distintos, con Premium que se vea premium.
+

@@ -151,7 +151,12 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Piso abierto: las habitaciones reciben clics otra vez; luz cálida solo sobre la habitación bajo el mouse; enlace a Antesala sobre la escena
 - [x] Fuera "Así se entra" de la página de Antesala (D-073)
 - [ ] **3D realista con luz horneada en Blender (D-074, `docs/PLAN-REALISTA.md`)**: instalar Blender en D: y el MCP `/use-blender`; prueba con la Suite 402 y un 360° fotográfico
-- [ ] Selector "Ver como: Esencial · Inmersivo · Premium" (cuando exista el 3D realista)
+- [x] Blender 5.2.4 en D:; texturas y modelos CC0 de Poly Haven; `amoblar.py` (muebles modernos, cortinas, cuadros, sin caras coplanares); horneado y GLB con Draco
+- [x] Maqueta realista en el visor (`Unit.realista`), con los pisos para el mouse y el velo cálido
+- [x] Lote de todas las unidades tipo (402, 201, 601, Akuare 101 y 102) con `pipeline/realista/lote.py`
+- [x] Selector "Ver como: Esencial · Inmersivo · Premium" (D-075) y "Ver ejemplo" por nivel en los precios
+- [ ] Fachada realista del edificio (hornear el exterior sin perder las ventanas encendidas ni los pisos que se abren)
+- [ ] Pulir la maqueta realista: zonas más oscuras que en el render, esquinas negras de los muros, más decoración
 - [ ] Videos de entrada (desde las fotos aprobadas), en la web de Higgsfield
 - [ ] Modo Premium con Higgsfield (cuenta Prodigia, MCP en `.mcp.json`): Niebla Alta en los tres niveles con selector "Ver como: Esencial · Inmersivo · Premium"; renders del propio 3D pasados por Higgsfield y videos de entrada desde esas imágenes
 - [ ] Modo Premium para Akuare: fachada desde el render del 3D (catastro) con fotos propias de Jacobo desde la calle como referencia (no Google Maps ni Street View: sus términos lo prohíben); interiores ilustrativos
