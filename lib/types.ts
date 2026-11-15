@@ -153,6 +153,8 @@ export interface Building {
     ground?: 'lobby' | 'residencial';
     /** cubierta: "terraza" = pérgola de madera (por defecto); "plana" = solo antepecho y baranda */
     roof?: 'terraza' | 'plana';
+    /** primer piso residencial módulo por módulo, de izquierda a derecha en la fachada principal */
+    groundBays?: ('garaje' | 'local' | 'puerta')[];
   };
   /** el último piso se retranquea con terraza al frente (por defecto sí) */
   topSetback?: boolean;

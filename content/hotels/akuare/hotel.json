@@ -36,7 +36,22 @@
       "style": {
         "cladding": "ladrillo",
         "ground": "residencial",
-        "roof": "plana"
+        "roof": "plana",
+        "groundBays": [
+          "garaje",
+          "garaje",
+          "garaje",
+          "local",
+          "local",
+          "puerta",
+          "local",
+          "local",
+          "garaje",
+          "garaje",
+          "garaje",
+          "garaje",
+          "garaje"
+        ]
       },
       "topSetback": false
     },
@@ -72,9 +87,9 @@
     "pois": [
       {
         "id": "lobby",
-        "name": "Portería",
+        "name": "Entrada y portería",
         "levelId": "1",
-        "description": "Entrada pequeña con portería las 24 horas; el ascensor queda al fondo del pasillo.",
+        "description": "Una sola entrada peatonal, angosta, con portería. Un pasillo largo lleva al ascensor y a la escalera, con puertas a los parqueaderos a cada lado.",
         "position": [
           14.8,
           1.5,
@@ -84,13 +99,13 @@
       },
       {
         "id": "salon-social",
-        "name": "Salón social y BBQ",
+        "name": "Salón comunal",
         "levelId": "1",
-        "description": "Salón para reuniones con zona de BBQ, en el primer piso.",
+        "description": "Salón comunal en el primer piso, a la derecha de la entrada.",
         "position": [
-          31,
+          18.9,
           1.5,
-          4.6
+          16.4
         ],
         "media": []
       }
@@ -158,34 +173,15 @@
   ],
   "units": [
     {
-      "id": "101",
-      "name": "Apartamento 101",
+      "id": "201",
+      "name": "Apartamento 201",
       "categoryId": "tres-alcobas",
-      "levelId": "1",
+      "levelId": "2",
       "capacity": 6,
       "beds": "3 alcobas · 2 baños",
       "areaM2": 73,
-      "basePriceCOP": 252000000,
-      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
+      "basePriceCOP": 255000000,
       "plan": "plans/tres-alcobas.svg",
-      "exterior": [
-        {
-          "facade": 2,
-          "windows": [
-            10,
-            11,
-            12
-          ]
-        },
-        {
-          "facade": 3,
-          "windows": [
-            0,
-            1,
-            2
-          ]
-        }
-      ],
       "spaces": [
         {
           "id": "cocina",
@@ -853,28 +849,37 @@
             }
           ]
         }
-      ]
-    },
-    {
-      "id": "102",
-      "name": "Apartamento 102",
-      "categoryId": "dos-alcobas",
-      "levelId": "1",
-      "capacity": 4,
-      "beds": "2 alcobas · 1 baño",
-      "areaM2": 50,
-      "basePriceCOP": 158000000,
-      "view": "Hacia el interior de la manzana: la más silenciosa.",
-      "plan": "plans/dos-alcobas.svg",
+      ],
       "exterior": [
         {
           "facade": 2,
           "windows": [
-            8,
-            9
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1,
+            2
           ]
         }
       ],
+      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa."
+    },
+    {
+      "id": "202",
+      "name": "Apartamento 202",
+      "categoryId": "dos-alcobas",
+      "levelId": "2",
+      "capacity": 4,
+      "beds": "2 alcobas · 1 baño",
+      "areaM2": 50,
+      "basePriceCOP": 160000000,
+      "plan": "plans/dos-alcobas.svg",
       "spaces": [
         {
           "id": "cocina",
@@ -1406,58 +1411,6 @@
           ]
         }
       ],
-      "occupied": true
-    },
-    {
-      "sameAs": "102",
-      "id": "103",
-      "name": "Apartamento 103",
-      "levelId": "1",
-      "basePriceCOP": 158000000,
-      "view": "Hacia el interior de la manzana: la más silenciosa.",
-      "exterior": [
-        {
-          "facade": 2,
-          "windows": [
-            3,
-            4
-          ]
-        }
-      ]
-    },
-    {
-      "sameAs": "101",
-      "id": "201",
-      "name": "Apartamento 201",
-      "levelId": "2",
-      "basePriceCOP": 255000000,
-      "view": "Esquinero, con dos fachadas. Hacia el interior de la manzana: la más silenciosa.",
-      "exterior": [
-        {
-          "facade": 2,
-          "windows": [
-            10,
-            11,
-            12
-          ]
-        },
-        {
-          "facade": 3,
-          "windows": [
-            0,
-            1,
-            2
-          ]
-        }
-      ]
-    },
-    {
-      "sameAs": "102",
-      "id": "202",
-      "name": "Apartamento 202",
-      "levelId": "2",
-      "basePriceCOP": 160000000,
-      "view": "Hacia el interior de la manzana: la más silenciosa.",
       "exterior": [
         {
           "facade": 2,
@@ -1466,10 +1419,11 @@
             9
           ]
         }
-      ]
+      ],
+      "view": "Hacia el interior de la manzana: la más silenciosa."
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "203",
       "name": "Apartamento 203",
       "levelId": "2",
@@ -1487,7 +1441,7 @@
       "occupied": true
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "204",
       "name": "Apartamento 204",
       "levelId": "2",
@@ -1513,7 +1467,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "205",
       "name": "Apartamento 205",
       "levelId": "2",
@@ -1540,7 +1494,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "206",
       "name": "Apartamento 206",
       "levelId": "2",
@@ -1557,7 +1511,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "207",
       "name": "Apartamento 207",
       "levelId": "2",
@@ -1575,7 +1529,7 @@
       "occupied": true
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "208",
       "name": "Apartamento 208",
       "levelId": "2",
@@ -1601,7 +1555,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "301",
       "name": "Apartamento 301",
       "levelId": "3",
@@ -1628,7 +1582,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "302",
       "name": "Apartamento 302",
       "levelId": "3",
@@ -1645,7 +1599,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "303",
       "name": "Apartamento 303",
       "levelId": "3",
@@ -1662,7 +1616,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "304",
       "name": "Apartamento 304",
       "levelId": "3",
@@ -1689,7 +1643,7 @@
       "occupied": true
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "305",
       "name": "Apartamento 305",
       "levelId": "3",
@@ -1715,7 +1669,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "306",
       "name": "Apartamento 306",
       "levelId": "3",
@@ -1733,7 +1687,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "307",
       "name": "Apartamento 307",
       "levelId": "3",
@@ -1750,7 +1704,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "308",
       "name": "Apartamento 308",
       "levelId": "3",
@@ -1776,7 +1730,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "401",
       "name": "Apartamento 401",
       "levelId": "4",
@@ -1802,7 +1756,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "402",
       "name": "Apartamento 402",
       "levelId": "4",
@@ -1820,7 +1774,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "403",
       "name": "Apartamento 403",
       "levelId": "4",
@@ -1837,7 +1791,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "404",
       "name": "Apartamento 404",
       "levelId": "4",
@@ -1863,7 +1817,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "405",
       "name": "Apartamento 405",
       "levelId": "4",
@@ -1890,7 +1844,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "406",
       "name": "Apartamento 406",
       "levelId": "4",
@@ -1907,7 +1861,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "407",
       "name": "Apartamento 407",
       "levelId": "4",
@@ -1924,7 +1878,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "408",
       "name": "Apartamento 408",
       "levelId": "4",
@@ -1951,7 +1905,7 @@
       "occupied": true
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "501",
       "name": "Apartamento 501",
       "levelId": "5",
@@ -1977,7 +1931,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "502",
       "name": "Apartamento 502",
       "levelId": "5",
@@ -1994,7 +1948,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "503",
       "name": "Apartamento 503",
       "levelId": "5",
@@ -2012,7 +1966,7 @@
       "occupied": true
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "504",
       "name": "Apartamento 504",
       "levelId": "5",
@@ -2038,7 +1992,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "505",
       "name": "Apartamento 505",
       "levelId": "5",
@@ -2064,7 +2018,7 @@
       ]
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "506",
       "name": "Apartamento 506",
       "levelId": "5",
@@ -2082,7 +2036,7 @@
       "occupied": true
     },
     {
-      "sameAs": "102",
+      "sameAs": "202",
       "id": "507",
       "name": "Apartamento 507",
       "levelId": "5",
@@ -2099,7 +2053,7 @@
       ]
     },
     {
-      "sameAs": "101",
+      "sameAs": "201",
       "id": "508",
       "name": "Apartamento 508",
       "levelId": "5",

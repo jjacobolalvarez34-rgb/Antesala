@@ -249,7 +249,12 @@ float paveHash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.54
     float t = ${tile.toFixed(3)};
     vec2 q = t > 0.0 ? vPave.xz / t : vPave.xz / 3.0;
     vec2 cell = floor(q);
-    float v = 0.93 + 0.1 * paveHash(cell);
+    // con baldosas, un tono por baldosa; sin baldosas (tierra), manchas suaves sin bordes
+    vec2 g = vPave.xz / 9.0;
+    vec2 gi = floor(g);
+    vec2 gf = smoothstep(0.0, 1.0, fract(g));
+    float n = mix(mix(paveHash(gi), paveHash(gi + vec2(1.0, 0.0)), gf.x), mix(paveHash(gi + vec2(0.0, 1.0)), paveHash(gi + vec2(1.0, 1.0)), gf.x), gf.y);
+    float v = t > 0.0 ? 0.93 + 0.1 * paveHash(cell) : 0.94 + 0.1 * n;
     float fine = 0.97 + 0.06 * paveHash(floor(vPave.xz * 9.0));
     float j = 1.0;
     if (t > 0.0) {

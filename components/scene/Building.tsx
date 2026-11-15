@@ -165,7 +165,9 @@ function addWindow(
 
 /** Fachada del primer piso residencial (D-059): garaje (persiana), local (vitrina) o puerta. */
 type GroundBay = 'garaje' | 'local' | 'puerta';
-export function residentialGround(bays: number): GroundBay[] {
+export function residentialGround(bays: number, custom?: GroundBay[]): GroundBay[] {
+  // el hotel puede describir su primer piso módulo por módulo (style.groundBays, en hotel.json)
+  if (custom?.length === bays) return custom;
   const first = Math.max(1, Math.round(bays * 0.23));
   return Array.from({ length: bays }, (_, b) => (b < first ? 'garaje' : b < first + 2 ? 'local' : b === first + 2 ? 'puerta' : 'garaje'));
 }
@@ -208,7 +210,7 @@ function floorParts(
     });
 
     if (isGround && building.style?.ground === 'residencial' && e.index === front) {
-      const kinds = residentialGround(bays);
+      const kinds = residentialGround(bays, building.style?.groundBays);
       const top = ceil - 0.45;
       for (let b = 0; b < bays; b++) {
         const t0 = b * bw;
@@ -817,7 +819,7 @@ function Entrance({
       // edificio residencial (D-059): solo una placa con el nombre sobre la puerta pequeña y un aplique
       const bays = bayCount(e.length);
       const bw = e.length / bays;
-      const door = (residentialGround(bays).indexOf('puerta') + 0.5) * bw;
+      const door = (residentialGround(bays, building.style?.groundBays).indexOf('puerta') + 0.5) * bw;
       return {
         canopy: null,
         sign: at(door, 0.06, 2.5, 1.5, 0.26, 0.04),

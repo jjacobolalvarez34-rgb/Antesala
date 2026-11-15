@@ -569,6 +569,14 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   useEffect(() => {
     backdrop.current?.invalidate(2);
   }, [environment]);
+  // el fondo (barrio y cielo) se dibuja aparte y solo cuando se le pide: al cambiar de nivel
+  // (Inmersivo ↔ Premium) cambian los vecinos y la luz de la escena, y quedaba el fondo viejo
+  // hasta pasar a día y volver a noche (reporte de Jacobo, 2026-11-14)
+  useEffect(() => {
+    backdrop.current?.invalidate(2);
+    const ts = [300, 1200, 3000].map((ms) => window.setTimeout(() => backdrop.current?.invalidate(2), ms));
+    return () => ts.forEach((t) => window.clearTimeout(t));
+  }, [nivel]);
 
   // vista desde la ventana: se pide desde el panel de la unidad y se renderiza aquí
   const viewRequest = useTour((s) => s.viewRequest);
