@@ -193,7 +193,7 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Oferta por hotel: noche, mes o venta (D-057)
 - [x] 37 apartamentos sobre la huella real, modo venta (D-058)
 - [x] Primer piso real de Akuare (D-081): sin apartamentos (entrada angosta, local, salón comunal, pasillo y parqueaderos); unidades tipo 201 y 202, 32 apartamentos
-- [ ] Akuare: 3D realista de las unidades 201 y 202, las plantas del piso 1 y del tipo, y la fachada (horneando, 2026-11-14)
+- [x] Akuare: 3D realista de las unidades 201 y 202, las plantas del piso 1 y del tipo, y la fachada
 - [x] Cambio de nivel de noche (Inmersivo → Premium): el fondo se vuelve a dibujar
 - [x] Fachada con primer piso residencial y planta del piso 1 alineada
 - [x] Sección "Elige una demo" en la página de Antesala (sección Demos)
@@ -207,7 +207,8 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [ ] Script de Blender para el splat sintético (cámaras + exportación COLMAP), probado en baja calidad en el PC actual
 - [ ] Megascans (gratis en Fab desde 2026-11-05) en las maquetas: Jacobo crea cuenta de Epic y los agrega a su biblioteca
 - [ ] Jacobo: decidir la compra (mejora del T440p, 200 a 300 mil, o ahorrar para un PC con NVIDIA)
-- [ ] Visor de splat por espacio (`kind: "splat"` ya existe en el contenido, sin visor), cargado solo al entrar al espacio
+- [x] Visor de splat por espacio (Spark, D-082); probado con un splat sintético de prueba
+- [ ] Visor de splat: probar con un splat real (la captura de Akuare) en el celular de Jacobo; medir peso y FPS
 - [ ] Fotos y 360° reales de la prueba en Akuare con `fidelity: "exacta"`, revisados contra el plano (regla 9)
 - [ ] **El piso abierto sigue fallando (reporte de Jacobo, 2026-11-08, en Vercel).** Reproducir en su equipo antes de tocar código. Revisar: profundidad de las fachadas retiradas, pisos atenuados encima de la planta y orden de dibujo de la planta frente a los vidrios.
 - [x] Sombras congeladas mientras un piso está abierto (D-064). ~~Propuesta de Jacobo: sin sombras mientras un piso está abierto (no aportan y cuestan). Opción: apagar el mapa de sombras del sol en la etapa de piso, o congelarlo, y volver a encenderlo en la vista del edificio.~~

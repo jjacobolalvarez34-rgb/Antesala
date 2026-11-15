@@ -25,6 +25,26 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-14/15 (noche y madrugada) · Akuare realista, su primer piso real y el visor de splats
+
+**Hecho**
+- **Primer piso de Akuare según Jacobo (D-081):**
+  - sin apartamentos;
+  - entrada angosta, local a la izquierda y salón comunal a la derecha;
+  - pasillo hasta la escalera y los ascensores, con puertas a los parqueaderos;
+  - garajes en los costados.
+  - Unidades tipo 201 y 202 (32 apartamentos). `style.groundBays` en `hotel.json`.
+- **Akuare en Premium:** las unidades 201 y 202, las plantas del piso 1 y del tipo, y la fachada horneadas (unos 75 min en total). Nuevo `pipeline/realista/lote_fachada.py`. Los lotes ya no se caen al escribir tildes en la consola de Windows.
+- **Cambio de nivel de noche:** el fondo (barrio y cielo) se vuelve a dibujar al cambiar de nivel. No se pudo reproducir en la prueba automática (la cámara seguía moviéndose y el fondo se redibujaba solo); Jacobo debe confirmarlo en su pantalla.
+- **Suelo de fondo** con manchas suaves (se veía como un tablero).
+- **Visor de splats (D-082):** Spark 2.4, botón "Recorrer en 3D" en la ficha del espacio, a pantalla completa y cargado solo al tocar. Probado con un splat sintético temporal (no quedó en el contenido). JS inicial: 165 KB de 180.
+
+**Problemas / bloqueos**
+- La primera corrida del lote de Akuare se cayó en la 202 por una tilde en la consola; se arregló y se reanudó.
+
+**Siguiente sesión**
+- Empezar por: que Jacobo confirme el arreglo de la noche y revise Akuare en Premium. Pendientes: la distribución real del apartamento de tres alcobas (dos alcobas sin ventana), la prueba de captura y Megascans.
+
 ## 2026-11-14 · Investigación del ultra realista y del PC
 
 **Hecho**

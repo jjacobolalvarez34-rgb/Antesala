@@ -24,7 +24,7 @@ RES = os.environ.get('RES', '3072')
 
 def log(*a):
     line = time.strftime('%H:%M:%S ') + ' '.join(str(x) for x in a)
-    print(line, flush=True)
+    print(line.encode('ascii', 'replace').decode(), flush=True)
     with open(LOG, 'a', encoding='utf-8') as f:
         f.write(line + '\n')
 

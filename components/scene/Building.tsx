@@ -845,7 +845,7 @@ function Entrance({
       planters: mergeBoxes([at(mid - 2.6, 0.75, 0.38, 0.9, 0.76, 0.9), at(mid + 2.6, 0.75, 0.38, 0.9, 0.76, 0.9)]),
       plants: [at(mid - 2.6, 0.75, 1.15, 0, 0, 0), at(mid + 2.6, 0.75, 1.15, 0, 0, 0)],
     };
-  }, [e, glassTop, canopyW, residential]);
+  }, [e, glassTop, canopyW, residential, building.style?.groundBays]);
 
   return (
     <group>

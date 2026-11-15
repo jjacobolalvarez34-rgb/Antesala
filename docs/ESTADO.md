@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-13 (mediodía)
+**Actualizado:** 2026-11-15
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---
@@ -152,6 +152,11 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - **La portada del hotel parece la web de un hotel real:** consulta de fechas, habitaciones, zonas comunes, ubicación, preguntas y pie, con un botón de reservar sobrio.
   - **Intro del hotel más elegante** y suelo de la calle en concreto gris.
   - **Página de Antesala:** tema oscuro, maqueta en el paso 3 y calculadora más simple.
+- **Hecho el 2026-11-14/15 (D-081, D-082):**
+  - **Akuare tiene su Premium realista:** fachada horneada, plantas del piso 1 y del piso tipo, y los apartamentos de dos y tres alcobas.
+  - **El primer piso de Akuare es como el real:** sin apartamentos, con la entrada angosta, el local, el salón comunal, el pasillo y los parqueaderos. Quedan 32 apartamentos.
+  - **Arreglado el cambio de Inmersivo a Premium de noche.**
+  - **Visor de splats listo** para la prueba de captura real.
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---

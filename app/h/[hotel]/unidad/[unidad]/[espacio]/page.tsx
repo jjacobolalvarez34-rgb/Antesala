@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { Gallery } from '@/components/gallery/Gallery';
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
 import { SpaceSheet } from '@/components/hotel/SpaceSheet';
+import { SplatButton } from '@/components/splat/SplatButton';
 import { SpaceChips } from '@/components/hotel/SpaceChips';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
@@ -56,9 +57,13 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
       tier: m.tier,
     }));
 
+  // recorrido 3D fotográfico del espacio (Gaussian Splatting, D-082), si lo hay
+  const splatMedia = space.media.find((m) => m.kind === 'splat');
+  const splat = splatMedia ? { url: mediaUrl(hotel.slug, splatMedia.src), exact: splatMedia.fidelity === 'exacta' } : undefined;
+
   return (
     <main>
-      <SpaceSheet slug={hotel.slug} unit={unit} space={space} photos={photos} />
+      <SpaceSheet slug={hotel.slug} unit={unit} space={space} photos={photos} splat={splat} />
       {/* Modo lista (sin escena) */}
       <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
@@ -81,6 +86,7 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
           </p>
           <h1 className="mt-2 font-display text-display md:text-6xl">{space.name}</h1>
           {space.description ? <p className="mt-4 text-pretty md:text-lg">{space.description}</p> : null}
+          {splat ? <SplatButton url={splat.url} title={space.name} exact={splat.exact} className="mt-5" /> : null}
 
           {space.features.length ? (
             <section aria-labelledby="dotacion" className="mt-8">

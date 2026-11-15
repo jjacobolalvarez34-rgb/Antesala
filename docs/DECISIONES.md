@@ -444,3 +444,10 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - `style.groundBays` describe el primer piso residencial módulo por módulo (garaje, local o puerta) en `hotel.json`, sin código por hotel.
 - Por qué: el modelo tenía tres apartamentos en el primer piso que no existen. Con un edificio real, eso es justo el tipo de diferencia que resta credibilidad (regla 9).
 - La fachada y el plano se hicieron con la descripción de Jacobo, no con imágenes de Google Maps ni Street View (sus términos lo prohíben).
+
+**D-082 · 2026-11-15 · Visor de Gaussian Splatting por espacio (Spark)**
+- Decisión:
+  - Si un espacio tiene un medio `kind: "splat"` (PLY, SPZ o SOG), su ficha muestra "Recorrer en 3D" ("Recorrer en 3D real" si es `fidelity: "exacta"`). El botón abre el splat a pantalla completa con Spark 2.4 (`@sparkjsdev/spark`, de World Labs, sobre three.js), en su propio lienzo.
+  - Spark y el archivo se bajan solo al tocar el botón, así que no pesan en el resto del recorrido.
+  - El archivo se gira 180° en X: la salida de los entrenadores viene con Y hacia abajo (COLMAP).
+- Por qué: hace falta para la prueba de captura real en Akuare y, más adelante, para el splat sintético del ultra realista (`docs/RECURSOS-REALISTA.md`). Va aparte del visor del edificio para no tocar lo que ya funciona.

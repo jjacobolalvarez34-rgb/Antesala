@@ -3,6 +3,7 @@ import { Check } from 'lucide-react';
 
 import { Gallery, type GalleryItem } from '@/components/gallery/Gallery';
 import { SpaceSheetFrame } from '@/components/scene/SpaceViewControls';
+import { SplatButton } from '@/components/splat/SplatButton';
 import { formatArea } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 import type { Space, Unit } from '@/lib/types';
@@ -18,11 +19,14 @@ export function SpaceSheet({
   unit,
   space,
   photos,
+  splat,
 }: {
   slug: string;
   unit: Unit;
   space: Space;
   photos: GalleryItem[];
+  /** recorrido 3D fotográfico del espacio (D-082) */
+  splat?: { url: string; exact: boolean };
 }) {
   return (
     <section
@@ -41,6 +45,7 @@ export function SpaceSheet({
           </p>
           <h1 className="mt-1 font-display text-title leading-none">{space.name}</h1>
           {space.description ? <p className="mt-2 text-sm text-pretty">{space.description}</p> : null}
+          {splat ? <SplatButton url={splat.url} title={space.name} exact={splat.exact} className="mt-3" /> : null}
           {space.features.length ? (
             <ul className="mt-3 grid grid-cols-1 gap-1.5 text-sm sm:grid-cols-2">
               {space.features.map((f) => (

@@ -22,6 +22,10 @@ const TYPES: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.png': 'image/png',
   '.glb': 'model/gltf-binary',
+  // Gaussian Splatting (D-082)
+  '.ply': 'application/octet-stream',
+  '.spz': 'application/octet-stream',
+  '.sog': 'application/octet-stream',
   // contexto real del edificio (media/context.json, D-056)
   '.json': 'application/json',
 };
