@@ -172,6 +172,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 9. **¿Premium ya se puede vender?** En Niebla Alta ya se ve completo. Falta Akuare (constructoras) y un horneado nocturno propio. ¿Se sale a vender ya con los tres niveles?
 10. **Render realista "con engine" (investigado 2026-11-13).** Unreal con Pixel Streaming se ve como película, pero cobra por minuto de cada visitante (unos USD 800 al mes con 2.000 visitas de 4 minutos en Eagle 3D), depende de la señal y no cuadra con la mensualidad. Unreal directo en el navegador (5.9, WebGPU) todavía es experimental. Propuesta: no cambiar el visor; usar Unreal o Twinmotion para videos y renders de Premium; volver a mirarlo cuando salga estable.
 11. **Gaussian Splatting para hoteles reales.** Es un 3D fotográfico grabado con el celular, que ya usan Zillow y Matterport. **Prueba acordada:** Jacobo graba un apartamento de Akuare (fotos, 360° y video), y se mide cómo sale, cuánto pesa y cuánto tiempo toma (`docs/PRUEBA-CAPTURA-AKUARE.md`). Es el primer intento de captura real del producto. Hay que pedir permiso antes de entrar.
+12. **Equipo para el ultra realista (2026-11-14).** El PC de Jacobo (ThinkPad T440p, 2014) no tiene tarjeta gráfica y no se le puede poner. El ultra realista (splat sintético, Twinmotion, renders pesados) necesita una NVIDIA: un PC usado con RTX 3060, de 2,5 a 4 millones, o alquilarla por horas (USD 0,34 a 0,90 la hora). Por ahora no se compra ni se alquila: se ahorra. Detalle y recursos en `docs/RECURSOS-REALISTA.md`.
 
 ---
 

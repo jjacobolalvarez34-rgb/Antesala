@@ -25,6 +25,22 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-14 · Investigación del ultra realista y del PC
+
+**Hecho**
+- Investigación completa en `docs/RECURSOS-REALISTA.md`:
+  - por qué hoy no se ve ultra realista;
+  - el camino recomendado (splat sintético desde Blender);
+  - tabla de recursos: Megascans gratis, Twinmotion, D5, Lumion, ComfyUI/Flux, Marble, Higgsfield; OpenHiggsfield no sirve; Unreal con Pixel Streaming no cuadra.
+- Prueba de captura real en Akuare: `docs/PRUEBA-CAPTURA-AKUARE.md`.
+- Revisión del PC: ThinkPad T440p sin tarjeta gráfica, que no se puede agregar. Procesador cambiable (i7-4710MQ/4800MQ) y RAM hasta 16 GB.
+
+**Decisiones**
+- No se alquila GPU por ahora. Jacobo ahorra para un PC con NVIDIA; mientras tanto se sigue con el PC actual (§4 del documento de recursos).
+
+**Siguiente sesión**
+- Empezar por: el visor de splats (Spark), que sirve para la prueba de Akuare y para el splat sintético después, o el script de cámaras del splat sintético.
+
 ## 2026-11-13 (mediodía) · Ventanas coherentes, web de hotel real, intro y tema oscuro
 
 **Hecho**
