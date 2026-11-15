@@ -192,6 +192,9 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Edificio y barrio reales desde el catastro y OpenStreetMap (`pnpm catastro`, D-056)
 - [x] Oferta por hotel: noche, mes o venta (D-057)
 - [x] 37 apartamentos sobre la huella real, modo venta (D-058)
+- [x] Primer piso real de Akuare (D-081): sin apartamentos (entrada angosta, local, salón comunal, pasillo y parqueaderos); unidades tipo 201 y 202, 32 apartamentos
+- [ ] Akuare: 3D realista de las unidades 201 y 202, las plantas del piso 1 y del tipo, y la fachada (horneando, 2026-11-14)
+- [x] Cambio de nivel de noche (Inmersivo → Premium): el fondo se vuelve a dibujar
 - [x] Fachada con primer piso residencial y planta del piso 1 alineada
 - [x] Sección "Elige una demo" en la página de Antesala (sección Demos)
 - [x] `pnpm renders -g akuare`: 16 fotos ilustrativas (fachada de día y de noche, piso 5, espacios de los tipos 101 y 102), revisadas

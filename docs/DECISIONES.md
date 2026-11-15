@@ -432,3 +432,15 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - **Telón de entrada:** marco fino, lugar en mayúsculas, nombre que sube desde una ranura, filete bronce y lema. Al salir, el telón se levanta; el botón es "Entrar".
   - **Suelo de la calle:** andenes de concreto gris en baldosas y suelo de fondo gris tierra, hechos en el shader (`paved`, sin texturas). Antes era un color plano casi blanco.
 - Por qué: Jacobo: la intro "también vende"; "el piso en la vida real no es blanco".
+
+**D-081 · 2026-11-14 · Akuare: el primer piso real y la fachada del primer piso desde hotel.json**
+- Decisión:
+  - **Piso 1 de Akuare sin apartamentos**, según lo que conoce Jacobo del edificio:
+    - una sola entrada peatonal, angosta, con portería;
+    - un local a la izquierda y el salón comunal a la derecha;
+    - un pasillo largo hasta la escalera y los ascensores, con una puerta a cada lado hacia los parqueaderos;
+    - garajes en los costados de la fachada.
+  - Las unidades tipo pasan a ser la 201 (tres alcobas) y la 202 (dos alcobas). Quedan 32 apartamentos.
+  - `style.groundBays` describe el primer piso residencial módulo por módulo (garaje, local o puerta) en `hotel.json`, sin código por hotel.
+- Por qué: el modelo tenía tres apartamentos en el primer piso que no existen. Con un edificio real, eso es justo el tipo de diferencia que resta credibilidad (regla 9).
+- La fachada y el plano se hicieron con la descripción de Jacobo, no con imágenes de Google Maps ni Street View (sus términos lo prohíben).
