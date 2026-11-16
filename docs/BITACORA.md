@@ -25,6 +25,59 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-16 (tarde) · Notas del papá de Jacobo: sencillo, intuitivo y que jamás se trabe
+
+**Contexto**
+El papá de Jacobo probó las demos. Su crítica: tiene que ser muy sencillo e intuitivo. Sus notas:
+
+1. La flecha de volver junto a "Reservar" no funciona.
+2. Hay muchos botones. No se entiende que se toca el piso y luego el apartamento. En Niebla Alta los números de piso están corridos. El paso de piso a apartamento se traba: **que jamás se trabe**, sobre todo al presentar y en el hiperrealista.
+3. La página de Antesala tiene que mejorar: estética propia (bordes, botones, fuentes), que no se vea genérica ni "hecha con IA".
+4. Al abrir un piso, una rayita por apartamento como la de los pisos: primer toque muestra si está libre u ocupado; segundo toque entra.
+5. En celular no hay cómo devolverse.
+6. El panel del espacio (360°, maqueta, fotos, otros espacios) se ve saturado y no se entiende que se puede bajar.
+
+**Hecho y subido**
+- **KTX2:** instalado KTX-Software 4.4.2 en `D:\Herramientas\KTX-Software` (con permiso de Jacobo). El visor lee KTX2 (`components/scene/gltf.ts`); el pipeline lo usa con `optimizar.py`; `reoptimizar.py` pasa lo ya horneado sin volver a hornear.
+- **Fachada de Niebla Alta en atlas:** de 7 texturas a 2; 328 KB.
+- **El horneado de Cénit no se había hecho:** el módulo `gpu.py` chocaba con uno interno de Blender. Se renombró a `render_gpu.py` y los lotes borran la salida vieja antes de llamar a Blender.
+- **Celular, página de Antesala:**
+  - el menú cabe (tema y modo solo con ícono);
+  - en el recorrido, la tarjeta del paso activo va fija abajo y cambia con un fundido (ya no tapa el plano ni las fotos, ni se desfasa);
+  - el edificio 3D ya no sale cortado.
+- **Aviso de unidad ocupada en una línea** sobre el 3D (tapaba media pantalla en el 501).
+
+**Hecho en el código, sin subir todavía (falta verificarlo)**
+- **1 y 5, volver:** la barra de reserva no tenía `pointer-events-auto`, así que con la escena activa el toque se iba al canvas. Verificado con Playwright: ya lleva al edificio.
+- **2, números de piso:** nunca se salen de la pantalla (en celular quedaban medio cortados).
+- **2, fluidez piso → apartamento (D-089):**
+  - la habitación compila sus shaders en segundo plano (`compileAsync`) y la cámara espera en el piso hasta que está lista (máximo 5 s);
+  - en producción se apaga `checkShaderErrors`, que obligaba a esperar la compilación.
+  - Medido antes: Premium tenía una congelada de 3 s; Inmersivo, tirones de 167 ms. Con la primera parte, Inmersivo quedó en 41 fps (peor tirón 133 ms); Premium sigue congelándose. Falta medir con lo de `checkShaderErrors`.
+- **4, letreros por apartamento** (`components/scene/UnitTags.tsx`): número con punto verde o terracota y línea fina. Primer toque: nombre, precio u "Ocupada" y "Toca otra vez para entrar". Segundo toque: entra. Con mouse se abre al pasar.
+- **6, panel del espacio:** arriba, los espacios del apartamento en una fila; debajo, 360° / Maqueta y el botón "Fotos y detalles", que despliega fotos, descripción y dotación.
+- **`pnpm transicion`:** mide la fluidez de una transición cuadro por cuadro en celular simulado.
+
+**En curso**
+- Horneado de la fachada de Cénit en atlas (desde las 3:21 p. m.; lento porque el PC está ocupado). Después, `reoptimizar.py` pasa todo a KTX2.
+- Compilación del sitio para medir la fluidez con `checkShaderErrors` apagado.
+
+**Mediciones** (celular simulado, CPU 4×)
+- Piso 5 → Suite 502:
+  - Premium antes: 11 fps, congelada de 3 s;
+  - Inmersivo antes: 36 fps, tirón de 167 ms;
+  - Inmersivo con la compilación previa: 41 fps, tirón de 133 ms.
+- Ojo: el celular simulado compila los shaders por software, mucho más lento que la GPU de un celular real. Sirve para encontrar los tirones; los números reales serán mejores.
+
+**Siguiente**
+1. Medir la fluidez con `checkShaderErrors` apagado; si sigue el tirón, precompilar al abrir el piso.
+2. Capturas en celular de los letreros de apartamento, el panel nuevo, volver y los números de piso. Luego subir.
+3. KTX2 de todo, comparación de cerca y medición de Cénit Premium contra los 2 fps de la mañana.
+4. **Rediseño de la página de Antesala (nota 3)** con estética propia.
+5. Pendientes: revisar en el celular las páginas de los hoteles; el entorno más creíble; las fotos que faltan; la sombra de la sala que a veces falla (preguntar a Jacobo en qué modo y desde dónde).
+
+---
+
 ## 2026-11-16 · Rendimiento en celular, arreglos de Cénit y plan de render
 
 **Hecho**

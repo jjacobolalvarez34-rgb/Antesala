@@ -222,6 +222,17 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 
   Sin Google Maps ni fotos reales. Cuidar el presupuesto de rendimiento de arriba: el fondo debe ser barato (instanciado, sin sombras de los lejanos)
 
+### Notas del papá de Jacobo (2026-11-16): sencillo, intuitivo y que jamás se trabe
+
+- [ ] Volver junto a "Reservar" (no respondía: faltaba `pointer-events-auto`), también en celular. Arreglado en el código, sin subir
+- [ ] Números de piso dentro de la pantalla en celular. Arreglado en el código, sin subir
+- [ ] **Que jamás se trabe el paso de piso a apartamento** (D-089: compilar los shaders antes del vuelo). Medir con `pnpm transicion`; aplicar lo mismo a abrir un piso y a entrar a un espacio
+- [ ] Letreros por apartamento con dos toques (`UnitTags.tsx`). Hecho, falta verlo en el celular
+- [ ] Panel del espacio más simple (fila de espacios arriba; "Fotos y detalles"). Hecho, falta verlo en el celular
+- [ ] **Rediseño de la página de Antesala:** estética propia (bordes, botones, fuentes), que no se vea genérica ni hecha con IA
+- [ ] Menos botones en general: revisar cada pantalla de la demo y quitar lo que no hace falta
+- [ ] La sombra de la sala a veces falla (preguntar a Jacobo en qué modo y desde dónde)
+
 ### Celular (pedido de Jacobo, 2026-11-16)
 
 - [ ] **Revisar todo el sitio en el celular:** la página se ve cortada y mal diseñada en varios puntos. Recorrer la página de Antesala y las demos a 390 px (y en el celular real de Jacobo), anotar cada problema con captura y arreglarlos uno por uno
