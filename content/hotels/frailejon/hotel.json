@@ -263,7 +263,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/encenillo.glb"
     },
     {
       "id": "laguna",
@@ -373,7 +374,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/laguna.glb"
     },
     {
       "id": "piedra",
@@ -482,7 +484,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/piedra.glb"
     },
     {
       "id": "casa",
@@ -636,7 +639,8 @@
             }
           ]
         }
-      ]
+      ],
+      "realista": "media/realista/casa.glb"
     }
   ],
   "isDemo": true,
@@ -695,6 +699,11 @@
         "q": "¿Hay señal de celular?",
         "a": "Hay señal en la recepción y en la fogata; en los refugios es débil a propósito."
       }
+    ],
+    "direct": [
+      "Eliges tu refugio en el mapa",
+      "Desayuno de campo incluido",
+      "Respuesta por WhatsApp en minutos"
     ]
   }
 }

@@ -1,0 +1,1742 @@
+{
+  "slug": "cenit",
+  "name": "Hotel Cénit",
+  "city": "Bogotá",
+  "neighborhood": "Parque de la 93",
+  "intro": "Una torre angosta de quince pisos junto al Parque de la 93. Cincuenta y dos habitaciones en esquina, spa en el segundo piso y bar en la terraza; desde el piso diez, los cerros y la ciudad por encima de las torres vecinas.",
+  "locale": "es",
+  "contact": {
+    "whatsapp": "573204871882"
+  },
+  "site": {
+    "kind": "edificio",
+    "building": {
+      "footprint": [
+        [
+          0,
+          13.5
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          16.2,
+          0
+        ],
+        [
+          16.2,
+          13.5
+        ]
+      ],
+      "floors": 15,
+      "floorHeightM": 3.2,
+      "style": {
+        "cladding": "concreto",
+        "ground": "lobby",
+        "roof": "terraza",
+        "windows": "muro-cortina"
+      },
+      "topSetback": false
+    },
+    "exterior": [],
+    "pois": [
+      {
+        "id": "lobby",
+        "name": "Lobby",
+        "levelId": "1",
+        "description": "Lobby de doble altura, con recepción las 24 horas.",
+        "position": [
+          8.1,
+          1.6,
+          12
+        ],
+        "media": []
+      },
+      {
+        "id": "restaurante",
+        "name": "Restaurante",
+        "levelId": "1",
+        "description": "Cocina de producto colombiano, desayuno incluido.",
+        "position": [
+          2.5,
+          1.6,
+          7
+        ],
+        "media": []
+      },
+      {
+        "id": "bar",
+        "name": "Bar",
+        "levelId": "1",
+        "description": "Bar de coctelería, abierto hasta la medianoche.",
+        "position": [
+          13.7,
+          1.6,
+          7
+        ],
+        "media": []
+      },
+      {
+        "id": "spa",
+        "name": "Spa",
+        "levelId": "2",
+        "description": "Spa con sala de masajes, sauna y turco.",
+        "position": [
+          12,
+          4.8,
+          10
+        ],
+        "media": []
+      },
+      {
+        "id": "gimnasio",
+        "name": "Gimnasio",
+        "levelId": "2",
+        "description": "Gimnasio abierto las 24 horas.",
+        "position": [
+          4,
+          4.8,
+          10
+        ],
+        "media": []
+      }
+    ]
+  },
+  "levels": [
+    {
+      "id": "1",
+      "name": "Lobby",
+      "kind": "piso",
+      "order": 1,
+      "plan": "plans/piso-1.svg"
+    },
+    {
+      "id": "2",
+      "name": "Spa",
+      "kind": "piso",
+      "order": 2,
+      "plan": "plans/piso-2.svg"
+    },
+    {
+      "id": "3",
+      "name": "Piso 3",
+      "kind": "piso",
+      "order": 3,
+      "plan": "plans/piso-3.svg"
+    },
+    {
+      "id": "4",
+      "name": "Piso 4",
+      "kind": "piso",
+      "order": 4,
+      "plan": "plans/piso-4.svg"
+    },
+    {
+      "id": "5",
+      "name": "Piso 5",
+      "kind": "piso",
+      "order": 5,
+      "plan": "plans/piso-5.svg"
+    },
+    {
+      "id": "6",
+      "name": "Piso 6",
+      "kind": "piso",
+      "order": 6,
+      "plan": "plans/piso-6.svg"
+    },
+    {
+      "id": "7",
+      "name": "Piso 7",
+      "kind": "piso",
+      "order": 7,
+      "plan": "plans/piso-7.svg"
+    },
+    {
+      "id": "8",
+      "name": "Piso 8",
+      "kind": "piso",
+      "order": 8,
+      "plan": "plans/piso-8.svg"
+    },
+    {
+      "id": "9",
+      "name": "Piso 9",
+      "kind": "piso",
+      "order": 9,
+      "plan": "plans/piso-9.svg"
+    },
+    {
+      "id": "10",
+      "name": "Piso 10",
+      "kind": "piso",
+      "order": 10,
+      "plan": "plans/piso-10.svg"
+    },
+    {
+      "id": "11",
+      "name": "Piso 11",
+      "kind": "piso",
+      "order": 11,
+      "plan": "plans/piso-11.svg"
+    },
+    {
+      "id": "12",
+      "name": "Piso 12",
+      "kind": "piso",
+      "order": 12,
+      "plan": "plans/piso-12.svg"
+    },
+    {
+      "id": "13",
+      "name": "Piso 13",
+      "kind": "piso",
+      "order": 13,
+      "plan": "plans/piso-13.svg"
+    },
+    {
+      "id": "14",
+      "name": "Piso 14",
+      "kind": "piso",
+      "order": 14,
+      "plan": "plans/piso-14.svg"
+    },
+    {
+      "id": "15",
+      "name": "Piso 15",
+      "kind": "piso",
+      "order": 15,
+      "plan": "plans/piso-15.svg"
+    }
+  ],
+  "categories": [
+    {
+      "id": "deluxe",
+      "name": "Deluxe King",
+      "tagline": "En la esquina de la torre, con cinco ventanas de piso a techo.",
+      "highlights": [
+        "Cama king",
+        "Tina en el baño",
+        "Vestier"
+      ]
+    },
+    {
+      "id": "superior",
+      "name": "Superior",
+      "tagline": "Esquina silenciosa, con ventanas a dos lados.",
+      "highlights": [
+        "Cama queen",
+        "Ducha de lluvia",
+        "Escritorio"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "301",
+      "name": "Deluxe King 301",
+      "categoryId": "deluxe",
+      "levelId": "3",
+      "capacity": 2,
+      "beds": "1 cama king",
+      "areaM2": 44,
+      "basePriceCOP": 980000,
+      "viewPremiumCOP": 0,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "plan": "plans/deluxe-izq.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "habitacion",
+          "name": "Habitación",
+          "type": "dormitorio",
+          "areaM2": 25.9,
+          "description": "Cama king frente a cinco ventanas de piso a techo, en la esquina de la torre.",
+          "features": [
+            "Cama king",
+            "Sala de lectura",
+            "Escritorio"
+          ],
+          "media": []
+        },
+        {
+          "id": "vestier",
+          "name": "Vestier",
+          "type": "vestier",
+          "areaM2": 6.6,
+          "description": "Vestier con clóset abierto y banca.",
+          "features": [
+            "Clóset abierto",
+            "Banca"
+          ],
+          "media": []
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 6.2,
+          "description": "Baño con tina, mármol y lavamanos amplio.",
+          "features": [
+            "Tina",
+            "Mármol",
+            "Amenidades de la casa"
+          ],
+          "media": []
+        }
+      ],
+      "featured": true
+    },
+    {
+      "id": "302",
+      "name": "Deluxe King 302",
+      "categoryId": "deluxe",
+      "levelId": "3",
+      "capacity": 2,
+      "beds": "1 cama king",
+      "areaM2": 44,
+      "basePriceCOP": 980000,
+      "viewPremiumCOP": 0,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "plan": "plans/deluxe-der.svg",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "habitacion",
+          "name": "Habitación",
+          "type": "dormitorio",
+          "areaM2": 25.9,
+          "description": "Cama king frente a cinco ventanas de piso a techo, en la esquina de la torre.",
+          "features": [
+            "Cama king",
+            "Sala de lectura",
+            "Escritorio"
+          ],
+          "media": []
+        },
+        {
+          "id": "vestier",
+          "name": "Vestier",
+          "type": "vestier",
+          "areaM2": 6.6,
+          "description": "Vestier con clóset abierto y banca.",
+          "features": [
+            "Clóset abierto",
+            "Banca"
+          ],
+          "media": []
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 6.2,
+          "description": "Baño con tina, mármol y lavamanos amplio.",
+          "features": [
+            "Tina",
+            "Mármol",
+            "Amenidades de la casa"
+          ],
+          "media": []
+        }
+      ]
+    },
+    {
+      "id": "303",
+      "name": "Superior 303",
+      "categoryId": "superior",
+      "levelId": "3",
+      "capacity": 2,
+      "beds": "1 cama queen",
+      "areaM2": 29,
+      "basePriceCOP": 720000,
+      "viewPremiumCOP": 0,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "plan": "plans/superior-der.svg",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "habitacion",
+          "name": "Habitación",
+          "type": "dormitorio",
+          "areaM2": 21.8,
+          "description": "Cama queen en la esquina, con ventanas a dos lados.",
+          "features": [
+            "Cama queen",
+            "Escritorio",
+            "Sillón de lectura"
+          ],
+          "media": []
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 3.8,
+          "description": "Baño con ducha de lluvia.",
+          "features": [
+            "Ducha de lluvia",
+            "Amenidades de la casa"
+          ],
+          "media": []
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "id": "304",
+      "name": "Superior 304",
+      "categoryId": "superior",
+      "levelId": "3",
+      "capacity": 2,
+      "beds": "1 cama queen",
+      "areaM2": 29,
+      "basePriceCOP": 720000,
+      "viewPremiumCOP": 0,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "plan": "plans/superior-izq.svg",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "spaces": [
+        {
+          "id": "habitacion",
+          "name": "Habitación",
+          "type": "dormitorio",
+          "areaM2": 21.8,
+          "description": "Cama queen en la esquina, con ventanas a dos lados.",
+          "features": [
+            "Cama queen",
+            "Escritorio",
+            "Sillón de lectura"
+          ],
+          "media": []
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 3.8,
+          "description": "Baño con ducha de lluvia.",
+          "features": [
+            "Ducha de lluvia",
+            "Amenidades de la casa"
+          ],
+          "media": []
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "401",
+      "name": "Deluxe King 401",
+      "levelId": "4",
+      "viewPremiumCOP": 12000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "402",
+      "name": "Deluxe King 402",
+      "levelId": "4",
+      "viewPremiumCOP": 12000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "403",
+      "name": "Superior 403",
+      "levelId": "4",
+      "viewPremiumCOP": 12000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "404",
+      "name": "Superior 404",
+      "levelId": "4",
+      "viewPremiumCOP": 12000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "301",
+      "id": "501",
+      "name": "Deluxe King 501",
+      "levelId": "5",
+      "viewPremiumCOP": 24000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "502",
+      "name": "Deluxe King 502",
+      "levelId": "5",
+      "viewPremiumCOP": 24000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "503",
+      "name": "Superior 503",
+      "levelId": "5",
+      "viewPremiumCOP": 24000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "504",
+      "name": "Superior 504",
+      "levelId": "5",
+      "viewPremiumCOP": 24000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "601",
+      "name": "Deluxe King 601",
+      "levelId": "6",
+      "viewPremiumCOP": 36000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "302",
+      "id": "602",
+      "name": "Deluxe King 602",
+      "levelId": "6",
+      "viewPremiumCOP": 36000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "603",
+      "name": "Superior 603",
+      "levelId": "6",
+      "viewPremiumCOP": 36000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "604",
+      "name": "Superior 604",
+      "levelId": "6",
+      "viewPremiumCOP": 36000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "701",
+      "name": "Deluxe King 701",
+      "levelId": "7",
+      "viewPremiumCOP": 48000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "702",
+      "name": "Deluxe King 702",
+      "levelId": "7",
+      "viewPremiumCOP": 48000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "303",
+      "id": "703",
+      "name": "Superior 703",
+      "levelId": "7",
+      "viewPremiumCOP": 48000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "704",
+      "name": "Superior 704",
+      "levelId": "7",
+      "viewPremiumCOP": 48000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "801",
+      "name": "Deluxe King 801",
+      "levelId": "8",
+      "viewPremiumCOP": 60000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "802",
+      "name": "Deluxe King 802",
+      "levelId": "8",
+      "viewPremiumCOP": 60000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "803",
+      "name": "Superior 803",
+      "levelId": "8",
+      "viewPremiumCOP": 60000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "304",
+      "id": "804",
+      "name": "Superior 804",
+      "levelId": "8",
+      "viewPremiumCOP": 60000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "901",
+      "name": "Deluxe King 901",
+      "levelId": "9",
+      "viewPremiumCOP": 72000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "902",
+      "name": "Deluxe King 902",
+      "levelId": "9",
+      "viewPremiumCOP": 72000,
+      "view": "Hacia el parque, entre las copas de los árboles.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "903",
+      "name": "Superior 903",
+      "levelId": "9",
+      "viewPremiumCOP": 72000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "904",
+      "name": "Superior 904",
+      "levelId": "9",
+      "viewPremiumCOP": 72000,
+      "view": "Hacia el interior de la manzana, la más silenciosa.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "301",
+      "id": "1001",
+      "name": "Deluxe King 1001",
+      "levelId": "10",
+      "viewPremiumCOP": 174000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "1002",
+      "name": "Deluxe King 1002",
+      "levelId": "10",
+      "viewPremiumCOP": 174000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "1003",
+      "name": "Superior 1003",
+      "levelId": "10",
+      "viewPremiumCOP": 174000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "1004",
+      "name": "Superior 1004",
+      "levelId": "10",
+      "viewPremiumCOP": 174000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "1101",
+      "name": "Deluxe King 1101",
+      "levelId": "11",
+      "viewPremiumCOP": 186000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "302",
+      "id": "1102",
+      "name": "Deluxe King 1102",
+      "levelId": "11",
+      "viewPremiumCOP": 186000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "1103",
+      "name": "Superior 1103",
+      "levelId": "11",
+      "viewPremiumCOP": 186000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "1104",
+      "name": "Superior 1104",
+      "levelId": "11",
+      "viewPremiumCOP": 186000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "1201",
+      "name": "Deluxe King 1201",
+      "levelId": "12",
+      "viewPremiumCOP": 198000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "1202",
+      "name": "Deluxe King 1202",
+      "levelId": "12",
+      "viewPremiumCOP": 198000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "303",
+      "id": "1203",
+      "name": "Superior 1203",
+      "levelId": "12",
+      "viewPremiumCOP": 198000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "1204",
+      "name": "Superior 1204",
+      "levelId": "12",
+      "viewPremiumCOP": 198000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "1301",
+      "name": "Deluxe King 1301",
+      "levelId": "13",
+      "viewPremiumCOP": 210000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "1302",
+      "name": "Deluxe King 1302",
+      "levelId": "13",
+      "viewPremiumCOP": 210000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "1303",
+      "name": "Superior 1303",
+      "levelId": "13",
+      "viewPremiumCOP": 210000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "304",
+      "id": "1304",
+      "name": "Superior 1304",
+      "levelId": "13",
+      "viewPremiumCOP": 210000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "301",
+      "id": "1401",
+      "name": "Deluxe King 1401",
+      "levelId": "14",
+      "viewPremiumCOP": 222000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "1402",
+      "name": "Deluxe King 1402",
+      "levelId": "14",
+      "viewPremiumCOP": 222000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "1403",
+      "name": "Superior 1403",
+      "levelId": "14",
+      "viewPremiumCOP": 222000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "1404",
+      "name": "Superior 1404",
+      "levelId": "14",
+      "viewPremiumCOP": 222000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ],
+      "occupied": true
+    },
+    {
+      "sameAs": "301",
+      "id": "1501",
+      "name": "Deluxe King 1501",
+      "levelId": "15",
+      "viewPremiumCOP": 234000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "302",
+      "id": "1502",
+      "name": "Deluxe King 1502",
+      "levelId": "15",
+      "viewPremiumCOP": 234000,
+      "view": "Vista panorámica a los cerros y a la ciudad, por encima de las torres vecinas.",
+      "exterior": [
+        {
+          "facade": 0,
+          "windows": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "303",
+      "id": "1503",
+      "name": "Superior 1503",
+      "levelId": "15",
+      "viewPremiumCOP": 234000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            0,
+            1
+          ]
+        },
+        {
+          "facade": 1,
+          "windows": [
+            3,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "sameAs": "304",
+      "id": "1504",
+      "name": "Superior 1504",
+      "levelId": "15",
+      "viewPremiumCOP": 234000,
+      "view": "Hacia los cerros orientales, sobre los techos del barrio.",
+      "exterior": [
+        {
+          "facade": 2,
+          "windows": [
+            4,
+            5
+          ]
+        },
+        {
+          "facade": 3,
+          "windows": [
+            0,
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "isDemo": true,
+  "demoNote": "Hotel ficticio · imágenes ilustrativas",
+  "offer": "noche",
+  "info": {
+    "address": "A media cuadra del Parque de la 93, en Bogotá.",
+    "nearby": [
+      {
+        "name": "Parque de la 93",
+        "time": "1 min a pie"
+      },
+      {
+        "name": "Zona T",
+        "time": "10 min en carro"
+      },
+      {
+        "name": "Usaquén",
+        "time": "15 min en carro"
+      },
+      {
+        "name": "Aeropuerto El Dorado",
+        "time": "35 min en carro"
+      }
+    ],
+    "checkIn": "3:00 p. m.",
+    "checkOut": "12:00 m.",
+    "amenities": [
+      "Recepción las 24 horas",
+      "Desayuno incluido en el restaurante",
+      "Spa con sauna y turco",
+      "Gimnasio las 24 horas",
+      "Bar en la terraza",
+      "Wifi de fibra",
+      "Servicio a la habitación",
+      "Valet parking"
+    ],
+    "policies": [
+      "Cancelación sin costo hasta 72 horas antes de la llegada.",
+      "Llegada temprana y salida tarde sujetas a disponibilidad.",
+      "Mascotas pequeñas con aviso previo.",
+      "Edificio libre de humo."
+    ],
+    "faq": [
+      {
+        "q": "¿Puedo pedir un piso alto?",
+        "a": "Sí. En el recorrido eliges la habitación exacta y el piso; desde el diez tienes vista panorámica, con un valor adicional."
+      },
+      {
+        "q": "¿El desayuno está incluido?",
+        "a": "Sí, en el restaurante del primer piso, de 6:30 a 10:30 a. m."
+      },
+      {
+        "q": "¿Tienen parqueadero?",
+        "a": "Sí, con valet parking."
+      },
+      {
+        "q": "¿Cómo reservo?",
+        "a": "Por WhatsApp, directo con el hotel. Respondemos con la disponibilidad y el valor total de la estadía."
+      }
+    ],
+    "direct": [
+      "Eliges el piso y la vista",
+      "Desayuno incluido",
+      "Llegada temprana según disponibilidad",
+      "Respuesta por WhatsApp en minutos"
+    ]
+  }
+}

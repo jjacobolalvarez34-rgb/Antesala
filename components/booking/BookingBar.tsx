@@ -132,7 +132,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
     <div
       className={cn(
         'fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[var(--safe-bottom)]',
-        'md:inset-x-auto md:right-6 md:bottom-6 md:w-[26rem] md:rounded-md md:border md:pb-0 md:shadow-[0_18px_40px_-24px_rgb(28_27_25/0.45)]',
+        'md:inset-x-auto md:right-6 md:bottom-6 md:w-[26rem] md:rounded-[var(--hotel-r-card,6px)] md:border md:pb-0 md:shadow-[0_18px_40px_-24px_rgb(28_27_25/0.45)]',
         !inScene && 'md:hidden',
       )}
     >
@@ -158,7 +158,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
           stage.occupied.href ? (
             <Link
               href={stage.occupied.href}
-              className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[3px] bg-ink px-4 text-[0.75rem] font-medium tracking-[0.12em] text-bone uppercase transition-colors hover:bg-accent"
+              className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[var(--hotel-r-btn,3px)] bg-ink px-4 text-[0.75rem] font-medium tracking-[0.12em] text-bone uppercase transition-colors hover:bg-accent"
             >
               <span className="hidden sm:inline">
                 Ver {data.offer && data.offer !== 'noche' ? '' : 'la '}

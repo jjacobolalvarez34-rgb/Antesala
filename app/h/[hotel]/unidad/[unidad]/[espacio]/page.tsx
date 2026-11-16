@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { Gallery } from '@/components/gallery/Gallery';
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
 import { SpaceSheet } from '@/components/hotel/SpaceSheet';
+import { PanoButton } from '@/components/pano/PanoButton';
 import { SplatButton } from '@/components/splat/SplatButton';
 import { SpaceChips } from '@/components/hotel/SpaceChips';
 import { PlanSvg } from '@/components/plan/PlanSvg';
@@ -60,6 +61,9 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
   // recorrido 3D fotográfico del espacio (Gaussian Splatting, D-082), si lo hay
   const splatMedia = space.media.find((m) => m.kind === 'splat');
   const splat = splatMedia ? { url: mediaUrl(hotel.slug, splatMedia.src), exact: splatMedia.fidelity === 'exacta' } : undefined;
+  // 360° renderizado desde un punto fijo (D-084): en el modo sin 3D (y en Esencial) se mira aquí
+  const panoMedia = space.media.find((m) => m.kind === 'pano360' && !m.src.endsWith('.svg'));
+  const pano360 = panoMedia ? { url: mediaUrl(hotel.slug, panoMedia.src), yaw: panoMedia.yaw } : undefined;
 
   return (
     <main>
@@ -86,7 +90,12 @@ export default async function EspacioPage({ params }: PageProps<'/h/[hotel]/unid
           </p>
           <h1 className="mt-2 font-display text-display md:text-6xl">{space.name}</h1>
           {space.description ? <p className="mt-4 text-pretty md:text-lg">{space.description}</p> : null}
-          {splat ? <SplatButton url={splat.url} title={space.name} exact={splat.exact} className="mt-5" /> : null}
+          {splat || pano360 ? (
+            <div className="mt-5 flex flex-wrap gap-2">
+              {pano360 ? <PanoButton url={pano360.url} title={space.name} yaw={pano360.yaw} /> : null}
+              {splat ? <SplatButton url={splat.url} title={space.name} exact={splat.exact} /> : null}
+            </div>
+          ) : null}
 
           {space.features.length ? (
             <section aria-labelledby="dotacion" className="mt-8">

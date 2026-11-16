@@ -3193,6 +3193,11 @@
         "q": "¿Sirve para quedarse a trabajar?",
         "a": "Sí. Todas las unidades tienen escritorio o mesa junto a la ventana, y el cowork del primer piso tiene cabinas para llamadas."
       }
+    ],
+    "direct": [
+      "Eliges tu habitación exacta",
+      "Sin comisión de intermediarios",
+      "Respuesta por WhatsApp en minutos"
     ]
   }
 }

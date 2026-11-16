@@ -49,7 +49,7 @@ export function BookingWidget({
     <form
       onSubmit={(e) => e.preventDefault()}
       aria-label="Consultar disponibilidad"
-      className={cn('grid overflow-hidden rounded-[3px] border border-border bg-background shadow-[0_24px_48px_-32px_rgb(28_27_25/0.5)] md:grid-cols-[1fr_1fr_0.8fr_auto]', className)}
+      className={cn('grid overflow-hidden rounded-[var(--hotel-r-card,3px)] border border-border bg-background shadow-[0_24px_48px_-32px_rgb(28_27_25/0.5)] md:grid-cols-[1fr_1fr_0.8fr_auto]', className)}
     >
       <div className="grid grid-cols-2 divide-x divide-border md:contents">
         <label htmlFor={ids.in} className={cn(cell, 'md:border-r md:border-border')}>

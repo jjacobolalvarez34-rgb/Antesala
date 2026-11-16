@@ -260,6 +260,21 @@ function floorParts(
       return;
     }
 
+    // muro cortina (D-085): vidrio de piso a techo entre columnas delgadas y el canto de la losa
+    // marcado; la torre de lujo se lee moderna y liviana
+    if (building.style?.windows === 'muro-cortina') {
+      const mull = 0.16;
+      for (let b = 0; b <= bays; b++) p.concrete.push(onEdge(e, b * bw, wallOff + 0.05, (SLAB + ceil) / 2, mull, ceil - SLAB, WALL + 0.1));
+      p.concrete.push(onEdge(e, e.length / 2, wallOff + 0.06, ceil - 0.11, e.length + 0.1, 0.22, WALL + 0.12));
+      for (let b = 0; b < bays; b++) {
+        const tc = (b + 0.5) * bw;
+        const style = rand() < 0.35 ? STYLE.sheer : STYLE.panels;
+        addWindow(p, e, tc, SLAB + 0.06, bw - mull - 0.04, ceil - SLAB - 0.3, specFor(b, style), false);
+        // antepecho de vidrio oscuro a la altura de la baranda (una línea fina)
+        p.frame.push(onEdge(e, tc, 0.02, SLAB + 1.0, bw - mull, 0.04, 0.05));
+      }
+      return;
+    }
     const winW = Math.min(1.7, bw - 0.9);
     const winY = SLAB + SILL;
     const winTop = winY + WIN_H;

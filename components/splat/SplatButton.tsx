@@ -17,7 +17,7 @@ export function SplatButton({ url, title, exact, className }: { url: string; tit
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          'inline-flex min-h-11 items-center gap-2 rounded-[3px] bg-ink px-5 text-[0.75rem] font-medium tracking-[0.14em] text-bone uppercase transition-colors hover:bg-accent',
+          'inline-flex min-h-11 items-center gap-2 rounded-[var(--hotel-r-btn,3px)] bg-ink px-5 text-[0.75rem] font-medium tracking-[0.14em] text-bone uppercase transition-colors hover:bg-accent',
           className,
         )}
       >

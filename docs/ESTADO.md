@@ -185,6 +185,15 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 10. **Render realista "con engine" (investigado 2026-11-13).** Unreal con Pixel Streaming se ve como película, pero cobra por minuto de cada visitante (unos USD 800 al mes con 2.000 visitas de 4 minutos en Eagle 3D), depende de la señal y no cuadra con la mensualidad. Unreal directo en el navegador (5.9, WebGPU) todavía es experimental. Propuesta: no cambiar el visor; usar Unreal o Twinmotion para videos y renders de Premium; volver a mirarlo cuando salga estable.
 11. **Gaussian Splatting para hoteles reales.** Es un 3D fotográfico grabado con el celular, que ya usan Zillow y Matterport. **Prueba acordada:** Jacobo graba un apartamento de Akuare (fotos, 360° y video), y se mide cómo sale, cuánto pesa y cuánto tiempo toma (`docs/PRUEBA-CAPTURA-AKUARE.md`). Es el primer intento de captura real del producto. Hay que pedir permiso antes de entrar.
 12. **Equipo para el ultra realista (2026-11-14).** El PC de Jacobo (ThinkPad T440p, 2014) no tiene tarjeta gráfica y no se le puede poner. El ultra realista (splat sintético, Twinmotion, renders pesados) necesita una NVIDIA: un PC usado con RTX 3060, de 2,5 a 4 millones, o alquilarla por horas (USD 0,34 a 0,90 la hora). Por ahora no se compra ni se alquila: se ahorra. Detalle y recursos en `docs/RECURSOS-REALISTA.md`.
+13. **Idea nueva de mercado: finca raíz (Jacobo, 2026-11-15).** Además de hoteles y constructoras, vender Antesala a quien vende o arrienda inmuebles: inmobiliarias, agentes de finca raíz y dueños que publican en Finca Raíz, Metrocuadrado o Ciencuadras. Para planear:
+    - **Qué se les vende:** la unidad exacta en 3D, con su plano, fotos, 360° y la vista desde la ventana, para publicar con un enlace o un código QR en el aviso. Y para proyectos sobre planos, el edificio entero con lo disponible y lo vendido (la demo de constructora).
+    - **Por qué les sirve:** el aviso se diferencia de los demás, filtra visitas que no van a comprar (el cliente ya vio el plano y la vista) y sirve para vender sobre planos, cuando todavía no hay nada que mostrar.
+    - **Preguntas para la estrategia:**
+      - ¿Precio por inmueble publicado (pago único) o mensualidad por cartera?
+      - ¿Paquete "un apartamento" barato (plano, fotos y 360°, sin edificio 3D) para agentes sueltos?
+      - ¿Alianza con una inmobiliaria mediana como primer cliente?
+      - ¿Captura con cámara 360 hecha por nosotros o por el agente?
+    - **Legal:** con un edificio real hace falta el permiso del dueño o de la constructora. Por eso la demo de constructora nueva es ficticia, y Akuare (real, "no oficial") queda solo como prueba interna.
 
 ---
 

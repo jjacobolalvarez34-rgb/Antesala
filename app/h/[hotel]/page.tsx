@@ -141,6 +141,9 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
   ].filter((f) => f !== null);
 
   const eyebrow = 'text-[0.6875rem] font-medium tracking-[0.24em] uppercase';
+  // identidad de la web de cada hotel (D-086)
+  const centered = tokens.look?.hero === 'centro';
+  const upper = tokens.look?.title === 'mayusculas';
   const h2 = 'font-display text-[2.5rem] leading-[1.02] tracking-tight text-balance md:text-[3.75rem]';
 
   return (
@@ -162,10 +165,21 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
         {/* arriba, para leer el menú; abajo, para el nombre */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-ink/70 to-transparent" />
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
-        <div className="mx-auto w-full max-w-7xl px-5 pb-28 md:px-10 md:pb-36">
+        <div className={`mx-auto w-full max-w-7xl px-5 pb-28 md:px-10 md:pb-36 ${centered ? 'text-center' : ''}`}>
           <p className={`${eyebrow} text-bone/80`}>{place}</p>
-          <h1 className="mt-4 font-display text-[4rem] leading-[0.88] tracking-tight text-balance md:text-[8.5rem]">{tokens.brand.name}</h1>
-          {tokens.brand.tagline ? <p className="mt-5 max-w-xl font-display text-[1.375rem] text-bone/90 italic md:text-[2rem]">{tokens.brand.tagline}</p> : null}
+          <h1
+            className={
+              upper
+                ? 'mt-5 font-display text-[2.75rem] leading-[1] tracking-[0.18em] text-balance uppercase md:text-[6rem]'
+                : 'mt-4 font-display text-[4rem] leading-[0.88] tracking-tight text-balance md:text-[8.5rem]'
+            }
+          >
+            {tokens.brand.name}
+          </h1>
+          {centered ? <span aria-hidden className="mx-auto mt-6 block h-px w-24 bg-accent-on-dark" /> : null}
+          {tokens.brand.tagline ? (
+            <p className={`mt-5 font-display text-[1.375rem] text-bone/90 italic md:text-[2rem] ${centered ? 'mx-auto max-w-2xl' : 'max-w-xl'}`}>{tokens.brand.tagline}</p>
+          ) : null}
         </div>
         {hero ? <FidelityBadge fidelity={hero.fidelity} className="absolute top-[8.75rem] right-4 md:top-auto md:right-10 md:bottom-28" /> : null}
       </section>
@@ -174,6 +188,17 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
       <div className="relative z-10 mx-auto -mt-16 max-w-5xl px-4 md:-mt-12 md:px-10">
         <BookingWidget context={booking} maxGuests={maxGuests} from={from} suffix={offer.suffix} />
       </div>
+
+      {info.direct?.length ? (
+        <ul aria-label="Al reservar directo" className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-2 px-5 text-[0.8125rem] text-ink/75 md:px-10">
+          {info.direct.map((d) => (
+            <li key={d} className="flex items-center gap-2">
+              <Check aria-hidden className="size-3.5 text-accent" strokeWidth={2} />
+              {d}
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         {/* El hotel en pocas palabras */}
@@ -225,7 +250,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
             {categories.map((c, i) => (
               <li key={c.id} className="border-b border-border py-12 md:py-20">
                 <article className="grid items-center gap-8 md:grid-cols-12 md:gap-14">
-                  <div className={`relative overflow-hidden rounded-[3px] md:col-span-7 ${i % 2 ? 'md:order-2' : ''}`}>
+                  <div className={`relative overflow-hidden rounded-[var(--hotel-r-card,3px)] md:col-span-7 ${i % 2 ? 'md:order-2' : ''}`}>
                     {c.show ? (
                       <Link href={routes.unidad(hotel.slug, c.show.id)} aria-label={`Ver ${c.name}`} className="group block">
                         <NivelImg
@@ -325,7 +350,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
             </ol>
             <Link
               href={routes.explorar(hotel.slug)}
-              className="mt-10 inline-flex min-h-12 items-center gap-2 rounded-[3px] bg-bone px-7 text-[0.75rem] font-medium tracking-[0.16em] text-ink uppercase transition-colors hover:bg-white"
+              className="mt-10 inline-flex min-h-12 items-center gap-2 rounded-[var(--hotel-r-btn,3px)] bg-bone px-7 text-[0.75rem] font-medium tracking-[0.16em] text-ink uppercase transition-colors hover:bg-white"
             >
               <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
               Empezar el recorrido
@@ -349,7 +374,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
                   return (
                     <li key={p.id}>
                       <figure>
-                        <div className="relative overflow-hidden rounded-[3px] bg-secondary">
+                        <div className="relative overflow-hidden rounded-[var(--hotel-r-card,3px)] bg-secondary">
                           <NivelImg premium={ph.premium} base={ph.base} className="aspect-[4/5] w-full object-cover" />
                           {ph.any ? <FidelityBadge fidelity={ph.any.fidelity} className="absolute top-3 left-3" /> : null}
                         </div>
@@ -367,7 +392,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
               </ul>
             ) : null}
             {info.amenities?.length ? (
-              <ul className="mt-16 grid grid-cols-2 gap-px overflow-hidden border border-border bg-border md:grid-cols-4">
+              <ul className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--hotel-r-card,0px)] border border-border bg-border md:grid-cols-4">
                 {info.amenities.map((a) => {
                   const Icon = amenityIcon(a);
                   return (

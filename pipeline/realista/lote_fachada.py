@@ -40,7 +40,7 @@ out = f'.tmp/realista/{hotel}-fachada'
 final = f'content/hotels/{hotel}/media/realista/fachada.glb'
 log('=== fachada', hotel)
 log('  exportando del visor')
-if not run('npx playwright test -c pipeline/renders.config.ts exportar-edificio', env={**ENV, 'HOTEL': hotel}):
+if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar-edificio.spec.ts', env={**ENV, 'HOTEL': hotel}):
     sys.exit(1)
 log(f'  Blender: horneado de la fachada por piso ({samples} muestras, más o menos una hora)')
 if not run(f'"{BLENDER}" -b -P pipeline/realista/hornear_edificio.py -- {src} {out} {samples}') or not os.path.exists(out + '.glb'):

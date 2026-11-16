@@ -159,6 +159,8 @@ export interface Building {
     ground?: 'lobby' | 'residencial';
     /** cubierta: "terraza" = pérgola de madera (por defecto); "plana" = solo antepecho y baranda */
     roof?: 'terraza' | 'plana';
+    /** ventanas: las de siempre (vano en muro) o muro cortina de piso a techo (torre moderna, D-085) */
+    windows?: 'vano' | 'muro-cortina';
     /** primer piso residencial módulo por módulo, de izquierda a derecha en la fachada principal */
     groundBays?: ('garaje' | 'local' | 'puerta')[];
   };
@@ -243,6 +245,8 @@ export interface HotelInfo {
   amenities?: string[];
   policies?: string[];
   faq?: { q: string; a: string }[];
+  /** beneficios de reservar directo, bajo la consulta de fechas (D-086) */
+  direct?: string[];
 }
 
 /** Tokens visuales por hotel: content/hotels/<slug>/tokens.json */
@@ -259,6 +263,15 @@ export interface HotelTokens {
   };
   font: { display: DisplayFont; text: TextFont };
   voice: string;
+  /**
+   * Identidad de la web del hotel (D-086), además del color: las esquinas de botones y
+   * tarjetas, cómo va el texto sobre la portada y si el nombre va en mayúsculas espaciadas.
+   */
+  look?: {
+    corners?: 'rectas' | 'suaves' | 'redondas';
+    hero?: 'abajo' | 'centro';
+    title?: 'normal' | 'mayusculas';
+  };
 }
 
 /** Fuentes registradas en lib/fonts.ts. Para sumar una, se registra allí y aquí. */

@@ -40,7 +40,7 @@ def forma(svg_path):
     """La planta sin los números de unidad ni el título: dos pisos iguales dan lo mismo."""
     s = open(svg_path, encoding='utf-8').read()
     s = re.sub(r'<title>.*?</title>', '', s)
-    return re.sub(r'"\d0(\d)"', r'"X0\1"', s)
+    return re.sub(r'"\d{1,2}0(\d)"', r'"X0\1"', s)
 
 
 trabajos = sys.argv[1:]
@@ -58,7 +58,7 @@ for t in trabajos:
     log('---', hotel, 'piso', piso, plan)
 
     log('  exportando del visor')
-    if not run('npx playwright test -c pipeline/renders.config.ts exportar-planta', env={**ENV, 'HOTEL': hotel, 'PISO': piso}):
+    if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar-planta.spec.ts', env={**ENV, 'HOTEL': hotel, 'PISO': piso}):
         continue
     log(f'  Blender: muebles, render y horneado ({RES} px, {SAMPLES} muestras)')
     if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} {SAMPLES} {RES}',

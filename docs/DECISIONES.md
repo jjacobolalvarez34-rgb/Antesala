@@ -470,3 +470,36 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - **Reutiliza** la cámara (`CameraRig`, con entrada propia `introFrom`), la maqueta de unidad, el 3D realista, la reserva y el nivel.
   - **Fotos:** salen de la misma escena (`pnpm renders -g frailejon`): el valle de día y de noche, la vista aérea, cada refugio por fuera (`?enfocar=`) y cada espacio.
 - Por qué: pedido de Jacobo. Cubre el tercer mercado (glampings, como KingDome) con el mismo producto, y la experiencia del terreno es distinta de la del edificio.
+
+**D-084 · 2026-11-15 · Fotos y 360° de cada espacio renderizados en Blender**
+- Decisión:
+  - `amoblar.py` con `FOTOS=1` (y `SIN_HORNEAR=1`), por cada espacio:
+    - un 360° equirectangular (2048 × 1024) desde el punto más despejado;
+    - una foto amplia y una de detalle, con techo y luz interior.
+  - `pipeline/realista/lote_fotos.py` las registra en `hotel.json`: el 360° reemplaza el marcador SVG, con el rumbo hacia la ventana, y las fotos reemplazan los marcadores grises.
+  - En el modo sin 3D, el botón "Mirar en 360°" abre un visor a pantalla completa (`components/pano/PanoViewer.tsx`): se gira libre y se acerca con la rueda o con dos dedos.
+  - Más decoración en las maquetas: objetos en el mesón, toallas, florero y cojines.
+  - Con un hotel real, ese 360° lo da una cámara 360 en trípode (`docs/PRUEBA-CAPTURA-AKUARE.md`).
+- Por qué: Jacobo: el espacio del Penthouse "no deja girar", "que sea 360 desde posiciones específicas"; "agrégale todas las fotos porque está incompleto".
+
+**D-085 · 2026-11-15 · Cuarto demo: Hotel Cénit, torre de lujo de 15 pisos**
+- Decisión:
+  - *Cénit*, hotel ficticio de lujo junto al Parque de la 93: torre angosta de 16,2 × 13,5 m y 15 pisos, con 52 habitaciones (Deluxe King adelante y Superior atrás, todas en esquina), lobby, restaurante y bar en el piso 1, y spa y gimnasio en el 2.
+  - Todo sale de `pipeline/gen_cenit.py`, con las ventanas de cada plano en el centro de un módulo de fachada (regla 9).
+  - Fachada nueva en el visor: `style.windows: "muro-cortina"` (vidrio de piso a techo entre columnas delgadas y el canto de la losa). La vista inicial de una torre va más baja, para sentir la altura.
+  - Identidad casi negra con bronce.
+- Por qué: Jacobo quiere otro ejemplo además de Niebla Alta, más alto y de lujo, para mostrar cómo se ve un hotel grande. Es ficticio porque no hay permiso para usar un edificio real (Akuare queda solo como prueba interna).
+
+**D-086 · 2026-11-15 · Identidad de la web de cada hotel y reserva directa**
+- Decisión:
+  - Además del color, cada hotel define en `tokens.json` su `look`:
+    - las esquinas de botones y tarjetas (`rectas`, `suaves` o `redondas`, como variables `--hotel-r-btn` y `--hotel-r-card`);
+    - el texto de la portada (abajo o centrado, con un filete);
+    - el nombre normal o en mayúsculas espaciadas (también en el encabezado).
+  - Bajo la consulta de fechas va una franja con los beneficios de reservar directo (`info.direct`, máximo 4), como en las webs de hotel que convierten.
+  - Asignado:
+    - Niebla Alta: suaves y abajo;
+    - Akuare: rectas;
+    - Frailejón: redondas y centrado;
+    - Cénit: rectas, centrado y en mayúsculas.
+- Por qué: Jacobo: la web de los hoteles "está muy genérica"; cada una necesita su identidad. Investigado: las webs de hotel de 2026 ponen la reserva directa y sus beneficios arriba, con la historia del lugar antes que el motor de reserva ([MediaBoom](https://mediaboom.com/news/luxury-hotel-website-design/), [Storebox](https://www.storebox.ai/blogs/hotel-website-design-direct-bookings-seo-guide), [Colorlib](https://colorlib.com/wp/hotel-websites/)). No se inventan reseñas: serían falsas.

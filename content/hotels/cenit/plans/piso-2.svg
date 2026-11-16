@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 1350">
+  <title>Piso 2 · spa y gimnasio</title>
+  <g id="walls">
+    <rect x="0" y="0" width="1620" height="15"/>
+    <rect x="0" y="1335" width="1620" height="15"/>
+    <rect x="0" y="0" width="15" height="1350"/>
+    <rect x="1605" y="0" width="15" height="1350"/>
+    <rect x="540" y="15" width="10" height="525"/>
+    <rect x="1070" y="15" width="10" height="525"/>
+    <rect x="15" y="540" width="1590" height="10"/>
+  </g>
+  <g id="spaces">
+    <polygon id="gimnasio" data-label="Gimnasio" data-finish="concreto" points="15,550 810,550 810,1335 15,1335"/>
+    <polygon id="spa" data-label="Spa" data-finish="piedra" points="810,550 1605,550 1605,1335 810,1335"/>
+    <polygon id="vestidores" data-label="Vestidores" data-finish="baldosa" points="15,15 540,15 540,540 15,540"/>
+    <polygon id="sauna" data-label="Sauna y turco" data-finish="madera" points="1080,15 1605,15 1605,540 1080,540"/>
+    <polygon id="nucleo" data-label="Ascensores y escalera" data-finish="concreto" points="550,15 1070,15 1070,540 550,540"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="25" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="25" y="0" width="220" height="15"/>
+    <rect data-type="window" x="295" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="295" y="0" width="220" height="15"/>
+    <rect data-type="window" x="565" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="565" y="0" width="220" height="15"/>
+    <rect data-type="window" x="835" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="835" y="0" width="220" height="15"/>
+    <rect data-type="window" x="1105" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="1105" y="0" width="220" height="15"/>
+    <rect data-type="window" x="1375" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="1375" y="0" width="220" height="15"/>
+    <rect data-type="window" x="0" y="25" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="25" width="15" height="220"/>
+    <rect data-type="window" x="0" y="295" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="295" width="15" height="220"/>
+    <rect data-type="window" x="0" y="565" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="565" width="15" height="220"/>
+    <rect data-type="window" x="0" y="835" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="835" width="15" height="220"/>
+    <rect data-type="window" x="0" y="1105" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="1105" width="15" height="220"/>
+    <rect data-type="door" x="680" y="540" width="260" height="10"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bench" x="60" y="870" width="100" height="60"/>
+    <rect data-item="bench" x="230" y="870" width="100" height="60"/>
+    <rect data-item="bench" x="400" y="870" width="100" height="60"/>
+    <rect data-item="bench" x="570" y="870" width="100" height="60"/>
+    <rect data-item="lounger" x="870" y="930" width="70" height="210"/>
+    <rect data-item="lounger" x="990" y="930" width="70" height="210"/>
+    <rect data-item="bathtub" x="1310" y="1060" width="250" height="230"/>
+    <rect data-item="shower" x="60" y="60" width="100" height="100"/>
+    <rect data-item="shower" x="200" y="60" width="100" height="100"/>
+  </g>
+</svg>

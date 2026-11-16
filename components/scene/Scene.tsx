@@ -42,6 +42,7 @@ import { useNivel } from '@/components/hotel/Nivel';
 
 import { ExportHook } from './ExportHook';
 import { NEIGHBOR_MUTE } from './textures';
+import { type FloorTag, FloorTagLayer, FloorTagProjector } from './FloorTags';
 import { prefetchBaked } from './bakedCache';
 import { panoEye, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
@@ -376,6 +377,25 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
   const [planHovered, setPlanHovered] = useState<string | null>(null);
   const floorAnchors = useRef(new Map<string, HTMLElement>());
+  // los pisos pegados al costado del edificio (FloorTags): en la vista exterior y dentro de un piso
+  const tagAnchors = useRef(new Map<string, HTMLElement>());
+  const floorTags = useMemo<FloorTag[]>(
+    () =>
+      data.floors.map((f) => {
+        const units = data.units.filter((u) => u.levelId === f.id);
+        const free = units.filter((u) => !u.occupied).length;
+        const word = data.offer && data.offer !== 'noche' ? (free === 1 ? 'disponible' : 'disponibles') : free === 1 ? 'libre' : 'libres';
+        const pois = data.pois.filter((p) => p.levelName === f.name).map((p) => p.name);
+        return {
+          id: f.id,
+          order: f.order,
+          name: f.name,
+          href: routes.piso(data.slug, f.id),
+          note: units.length ? (free ? `${free} ${word}` : data.offer === 'venta' ? 'vendido' : 'sin cupo') : pois.join(' · ') || f.name,
+        };
+      }),
+    [data.floors, data.units, data.pois, data.offer, data.slug],
+  );
   const levelPlans = useLevelPlans(data.levelPlanSources, stage.kind === 'piso' ? stage.levelId : null);
   const floorLabels = useMemo(() => {
     if (stage.kind !== 'piso') return [];
@@ -740,7 +760,15 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         <ViewLayerController on={vpData !== null} />
         <ShadowFreeze frozen={stage.kind === 'piso' && shadows} />
         <ReadySignal />
+        <FloorTagProjector
+          tags={floorTags}
+          anchors={tagAnchors}
+          footprint={data.building.footprint as [number, number][]}
+          floorHeight={frame.floorHeight}
+          visible={active && !inUnit && vpData === null}
+        />
       </Canvas>
+      <FloorTagLayer tags={floorTags} anchors={tagAnchors} visible={active && !inUnit && vpData === null} currentId={selectedId} />
       <PoiLayer pois={data.pois} anchors={anchors} visible={showPois} />
       {stage.kind === 'explorar' && active ? <ViewpointOverlay pois={data.pois} /> : null}
       <SpaceLabelLayer

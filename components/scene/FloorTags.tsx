@@ -1,0 +1,149 @@
+'use client';
+
+import { useFrame, useThree } from '@react-three/fiber';
+import Link from 'next/link';
+import type { Route } from 'next';
+import { useRef, type RefObject } from 'react';
+import * as THREE from 'three';
+
+import { useTour } from '@/lib/store';
+import { cn } from '@/lib/utils';
+
+export interface FloorTag {
+  id: string;
+  order: number;
+  name: string;
+  href: Route;
+  /** "3 libres", "Lobby"… */
+  note: string;
+}
+
+type Anchors = RefObject<Map<string, HTMLElement>>;
+
+/**
+ * Pisos pegados al edificio (pedido de Jacobo, 2026-11-15): en vez de tocar el piso en el 3D
+ * o de un panel aparte, cada número queda al costado derecho del edificio, a la altura de su
+ * piso, con una línea fina que sale de la fachada. Se ve como parte del modelo.
+ *
+ * Dentro del Canvas: en cada cuadro busca la esquina del edificio que queda más a la derecha
+ * en pantalla (sirve en cualquier fachada y mientras la cámara gira) y ancla ahí cada número.
+ */
+export function FloorTagProjector({
+  tags,
+  anchors,
+  footprint,
+  floorHeight,
+  visible,
+}: {
+  tags: FloorTag[];
+  anchors: Anchors;
+  footprint: [number, number][];
+  floorHeight: number;
+  visible: boolean;
+}) {
+  const camera = useThree((s) => s.camera);
+  const size = useThree((s) => s.size);
+  const v = useRef(new THREE.Vector3());
+  useFrame(() => {
+    if (!visible) return;
+    for (const t of tags) {
+      const el = anchors.current.get(t.id);
+      if (!el) continue;
+      const y = (t.order - 0.5) * floorHeight;
+      let best = -Infinity;
+      let by = 0;
+      let behind = true;
+      for (const [x, z] of footprint) {
+        v.current.set(x, y, z).project(camera);
+        if (v.current.z > 1) continue;
+        behind = false;
+        if (v.current.x > best) {
+          best = v.current.x;
+          by = v.current.y;
+        }
+      }
+      if (behind) {
+        el.style.visibility = 'hidden';
+        continue;
+      }
+      el.style.visibility = 'visible';
+      const px = ((best + 1) / 2) * size.width;
+      const py = ((1 - by) / 2) * size.height;
+      el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) translateY(-50%)`;
+    }
+  });
+  return null;
+}
+
+/** Fuera del Canvas: los números (enlaces) con su línea fina hacia la fachada. */
+export function FloorTagLayer({
+  tags,
+  anchors,
+  visible,
+  currentId,
+}: {
+  tags: FloorTag[];
+  anchors: Anchors;
+  visible: boolean;
+  currentId: string | null;
+}) {
+  const hovered = useTour((s) => s.hoveredLevelId);
+  const setHovered = useTour((s) => s.setHoveredLevel);
+  return (
+    <div className={cn('pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500', visible ? 'opacity-100' : 'opacity-0')}>
+      <ol aria-label="Pisos del edificio">
+        {[...tags]
+          .sort((a, b) => b.order - a.order)
+          .map((t) => {
+            const active = t.id === currentId;
+            const hot = t.id === hovered;
+            return (
+              <li
+                key={t.id}
+                ref={(el) => {
+                  if (el) anchors.current.set(t.id, el);
+                  else anchors.current.delete(t.id);
+                }}
+                className={cn('absolute top-0 left-0', visible && 'pointer-events-auto')}
+                style={{ visibility: 'hidden' }}
+              >
+                <Link
+                  href={t.href}
+                  tabIndex={visible ? 0 : -1}
+                  aria-current={active ? 'page' : undefined}
+                  aria-label={`${t.name}: ${t.note}`}
+                  onPointerEnter={(e) => e.pointerType !== 'touch' && setHovered(t.id)}
+                  onPointerLeave={(e) => e.pointerType !== 'touch' && setHovered(null)}
+                  onFocus={() => setHovered(t.id)}
+                  onBlur={() => setHovered(null)}
+                  className="group flex items-center py-1.5 outline-none"
+                >
+                  {/* la línea fina que sale de la fachada */}
+                  <span
+                    aria-hidden
+                    className={cn('block h-px transition-[width,background-color] duration-300', active || hot ? 'w-10 bg-bone' : 'w-6 bg-bone/50')}
+                  />
+                  <span
+                    className={cn(
+                      'ml-1.5 flex items-center gap-2 rounded-[3px] border px-2 py-0.5 whitespace-nowrap transition-[background-color,border-color,color] duration-300',
+                      active ? 'border-bone bg-bone text-ink' : hot ? 'border-bone/80 bg-ink/70 text-bone' : 'border-bone/30 bg-ink/40 text-bone backdrop-blur-[2px]',
+                    )}
+                  >
+                    <span className="font-display text-[1.05rem] leading-none tabular-nums">{t.order}</span>
+                    <span
+                      className={cn(
+                        'grid text-[0.625rem] tracking-[0.12em] uppercase transition-[grid-template-columns,opacity] duration-300',
+                        hot || active ? 'grid-cols-[1fr] opacity-100' : 'grid-cols-[0fr] opacity-0',
+                      )}
+                    >
+                      <span className="overflow-hidden">{t.note}</span>
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+      </ol>
+    </div>
+  );
+}

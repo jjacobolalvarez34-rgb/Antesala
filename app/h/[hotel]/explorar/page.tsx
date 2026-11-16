@@ -10,7 +10,10 @@ import { getHotelBundle } from '@/lib/content';
 import { levelSummary, sortedLevels } from '@/lib/hotel';
 import { routes } from '@/lib/routes';
 
-export const metadata: Metadata = { title: 'Explorar el edificio' };
+export async function generateMetadata({ params }: PageProps<'/h/[hotel]/explorar'>): Promise<Metadata> {
+  const bundle = await getHotelBundle((await params).hotel);
+  return { title: bundle?.hotel.site.kind === 'terreno' ? 'Explorar el terreno' : 'Explorar el edificio' };
+}
 
 /**
  * Vista exterior. Con 3D: el edificio ocupa la pantalla y esta página aporta
@@ -44,19 +47,7 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
         </p>
       </div>
 
-      {/* Con escena: capas sobre el edificio */}
-      <div className="pointer-events-none fixed inset-x-0 top-28 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.5rem)] hidden scene:block viewpoint:hidden md:top-32">
-        <div className="mx-auto flex h-full max-w-6xl items-start justify-between gap-4 px-4 md:px-10">
-          {/* el edificio es el protagonista: solo el selector de pisos, compacto */}
-          <span />
-          <LevelPicker
-            slug={hotel.slug}
-            levels={levels}
-            variant="scene"
-            className="pointer-events-auto my-auto animate-in duration-500 fade-in slide-in-from-right-2"
-          />
-        </div>
-      </div>
+      {/* Con escena: los pisos van pegados al costado del edificio (FloorTags, en la escena) */}
       {/* en escritorio va a la esquina izquierda, a la altura de la barra de reserva: el centro queda libre */}
       {hotel.site.building ? (
         <div className="pointer-events-none fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-20 hidden justify-center scene:flex viewpoint:hidden md:inset-x-auto md:bottom-[calc(0.75rem+var(--safe-bottom)+0.5rem)] md:left-6">

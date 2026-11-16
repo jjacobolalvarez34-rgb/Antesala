@@ -106,6 +106,7 @@ const hotelSchema = z.object({
             ground: z.enum(['lobby', 'residencial']).optional(),
             roof: z.enum(['terraza', 'plana']).optional(),
             groundBays: z.array(z.enum(['garaje', 'local', 'puerta'])).optional(),
+            windows: z.enum(['vano', 'muro-cortina']).optional(),
           })
           .optional(),
         topSetback: z.boolean().optional(),
@@ -167,6 +168,7 @@ const hotelSchema = z.object({
       amenities: z.array(z.string().min(1)).optional(),
       policies: z.array(z.string().min(1)).optional(),
       faq: z.array(z.object({ q: z.string().min(1), a: z.string().min(1) })).optional(),
+      direct: z.array(z.string().min(1)).max(4).optional(),
     })
     .optional(),
 }) satisfies z.ZodType<Hotel>;
@@ -176,6 +178,13 @@ const tokensSchema = z.object({
   color: z.object({ accent: hex, accentOnDark: hex.optional(), base: hex, stone: hex.optional(), ink: hex }),
   font: z.object({ display: z.enum(['Instrument Serif']), text: z.enum(['Inter']) }),
   voice: z.string(),
+  look: z
+    .object({
+      corners: z.enum(['rectas', 'suaves', 'redondas']).optional(),
+      hero: z.enum(['abajo', 'centro']).optional(),
+      title: z.enum(['normal', 'mayusculas']).optional(),
+    })
+    .optional(),
 }) satisfies z.ZodType<HotelTokens>;
 
 export interface HotelBundle {

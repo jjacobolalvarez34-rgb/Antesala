@@ -343,6 +343,11 @@ def coffee(L, D):
     box(0, 0, 0.0, L - 0.12, D - 0.12, 0.30, M['roble'], 0.01)
     for i in range(3):
         box(-L * 0.18, -D * 0.12 + i * 0.0, 0.35 + i * 0.03, 0.22, 0.16, 0.028, M[('terciopelo', 'lino_claro', 'roble')[i]], 0.003)
+    # florero con ramas y una bandeja
+    cyl(L * 0.2, D * 0.1, 0.35, 0.055, 0.22, M['ceramica'], verts=20)
+    for k in range(3):
+        cyl(L * 0.2 + (k - 1) * 0.025, D * 0.1, 0.55, 0.006, 0.22 + k * 0.05, M['roble'], verts=6)
+    box(L * 0.05, -D * 0.18, 0.35, 0.3, 0.2, 0.015, M['laton'], 0.003)
 
 
 def chair(L, D):
@@ -364,6 +369,7 @@ def sofa(L, D):
         box(x, -0.08, 0.32, w - 0.02, D - 0.32, 0.13, M['lino_sofa'], 0.05)
         box(x, D / 2 - 0.26, 0.42, w - 0.08, 0.16, 0.36, M['lino_sofa'], 0.07)
     box(-L / 2 + arm + 0.25, D / 2 - 0.36, 0.46, 0.38, 0.12, 0.34, M['terciopelo'], 0.06)
+    box(L / 2 - arm - 0.25, D / 2 - 0.36, 0.46, 0.36, 0.12, 0.32, M['lana'], 0.06)  # otro cojín
     art(0, D / 2 + GAP['v'] - 0.03, 1.35, min(1.1, L * 0.55), 0.7)
     for s in (-1, 1):
         cyl(s * (L / 2 - 0.08), D / 2 - 0.08, 0, 0.018, 0.08, M['metal'], verts=10)
@@ -391,6 +397,10 @@ def counter(L, D):
         box(x, -D / 2 - 0.002, 0.12, 0.004, 0.004, 0.72, M['metal'], 0)
     if L > 1.2:
         cyl(L * 0.15, D / 2 - 0.12, 0.895, 0.015, 0.28, M['laton'], verts=12)
+        # objetos sobre el mesón: tabla de picar, hervidor y un bowl
+        box(-L * 0.28, 0.0, 0.895, 0.36, 0.24, 0.02, M['roble'], 0.004)
+        cyl(L * 0.32, -0.02, 0.895, 0.08, 0.2, M['metal'], verts=20)
+        cyl(-L * 0.05, 0.02, 0.895, 0.1, 0.07, M['ceramica'], verts=24)
 
 
 def kitchen(L, D):
@@ -414,6 +424,9 @@ def sink(L, D):
     box(0, 0.0, 0.855, min(0.42, L * 0.7), min(0.32, D * 0.6), 0.12, M['ceramica'], 0.04)
     cyl(0, D / 2 - 0.05, 0.855, 0.012, 0.2, M['laton'], verts=12)
     box(0, D / 2 - 0.01, 1.15, min(0.7, L), 0.02, 0.75, M['espejo'], 0.003)
+    # toallas dobladas junto al lavamanos
+    box(L / 2 - 0.12, -0.02, 0.855, 0.2, 0.26, 0.06, M['lino_claro'], 0.02)
+    box(L / 2 - 0.12, -0.02, 0.915, 0.18, 0.24, 0.05, M['lino_claro'], 0.02)
 
 
 def toilet(L, D):
@@ -668,6 +681,131 @@ sofa_f = next((f for f in FURN if f['item'] == 'sofa'), None)
 tgt = Vector((sofa_f['cx'], sofa_f['cy'], 0.4)) if sofa_f else center
 if os.environ.get('DOS_TOMAS'):
     shot(OUT + '-muestra-2.jpg', tgt + Vector((1.9, -2.6, 3.0)), tgt + Vector((0.6, 0.2, 0)))
+
+# ---------------------------------------------------------------- fotos y 360° por espacio
+FOTOS = bool(os.environ.get('FOTOS'))
+if FOTOS:
+    import json
+
+    WALL_TOP = 2.6
+    win_rects = []
+    for g in root.iter():
+        if g.tag.endswith('g') and g.get('id') == 'openings':
+            for r in g.iter():
+                if r.tag.endswith('rect') and r.get('data-type') == 'window':
+                    x, y = float(r.get('x')) * 0.01, float(r.get('y')) * 0.01
+                    w, h = float(r.get('width')) * 0.01, float(r.get('height')) * 0.01
+                    win_rects.append((x + w / 2 - PW / 2, -(y + h / 2 - PH / 2), max(w, h)))
+    wall_rects = WALLS
+    xs_w = [w['cx'] - w['sx'] / 2 for w in wall_rects] + [w['cx'] + w['sx'] / 2 for w in wall_rects]
+    ys_w = [w['cy'] - w['sy'] / 2 for w in wall_rects] + [w['cy'] + w['sy'] / 2 for w in wall_rects]
+    # techo (solo para las fotos): un plano blanco sobre los muros
+    bpy.ops.mesh.primitive_plane_add(size=1, location=((min(xs_w) + max(xs_w)) / 2, (min(ys_w) + max(ys_w)) / 2, WALL_TOP))
+    techo = bpy.context.active_object
+    techo.scale = (max(xs_w) - min(xs_w), max(ys_w) - min(ys_w), 1)
+    techo.data.materials.append(plain('techo-fotos', '#f2efe9', 0.9))
+    # luz de techo suave por espacio: con techo, adentro quedaba oscuro
+    luces = []
+    for sid, poly in SPACES:
+        if any(k in sid for k in ('balcon', 'terraza', 'deck', 'porche')):
+            continue
+        xs_ = [p_[0] for p_ in poly]
+        ys_ = [p_[1] for p_ in poly]
+        ld = bpy.data.lights.new(f'techo-{sid}', 'AREA')
+        ld.shape = 'RECTANGLE'
+        ld.size = max(0.5, (max(xs_) - min(xs_)) * 0.6)
+        ld.size_y = max(0.5, (max(ys_) - min(ys_)) * 0.6)
+        ld.energy = 30 * (max(xs_) - min(xs_)) * (max(ys_) - min(ys_))
+        ld.color = srgb('#ffe6c4')
+        lo = bpy.data.objects.new(f'techo-{sid}', ld)
+        lo.location = ((max(xs_) + min(xs_)) / 2, (max(ys_) + min(ys_)) / 2, WALL_TOP - 0.05)
+        sc.collection.objects.link(lo)
+        luces.append(lo)
+
+    def in_poly(px, py, poly):
+        c = False
+        for i in range(len(poly)):
+            (x1, y1), (x2, y2) = poly[i], poly[i - 1]
+            if (y1 > py) != (y2 > py) and px < (x2 - x1) * (py - y1) / (y2 - y1 + 1e-12) + x1:
+                c = not c
+        return c
+
+    def clearance(px, py, poly):
+        d = 1e9
+        for i in range(len(poly)):
+            (ax, ay), (bx, by) = poly[i - 1], poly[i]
+            vx, vy = bx - ax, by - ay
+            t = max(0, min(1, ((px - ax) * vx + (py - ay) * vy) / (vx * vx + vy * vy or 1)))
+            d = min(d, math.hypot(px - ax - vx * t, py - ay - vy * t))
+        for f in FURN:
+            if f['item'] in ('rug',):
+                continue
+            dx = max(abs(px - f['cx']) - f['sx'] / 2, 0)
+            dy = max(abs(py - f['cy']) - f['sy'] / 2, 0)
+            d = min(d, math.hypot(dx, dy) + 0.15)
+        return d
+
+    def look(loc, target, lens, path, res):
+        cam.data.type = 'PERSP'
+        cam.data.lens = lens
+        shot(path, loc, target, res=res, samples=max(24, SAMPLES // 2))
+
+    sc.cycles.use_denoising = True
+    info = {}
+    for sid, poly in SPACES:
+        outdoor = any(k in sid for k in ('balcon', 'terraza', 'deck', 'porche'))
+        xs = [p[0] for p in poly]
+        ys = [p[1] for p in poly]
+        cand = []
+        y0 = min(ys)
+        while y0 <= max(ys):
+            x0 = min(xs)
+            while x0 <= max(xs):
+                if in_poly(x0, y0, poly):
+                    cand.append((x0, y0, clearance(x0, y0, poly)))
+                x0 += 0.12
+            y0 += 0.12
+        if not cand:
+            continue
+        cxs, cys = sum(xs) / len(xs), sum(ys) / len(ys)
+        # ventana del espacio: la más cercana a su polígono
+        wins = sorted(win_rects, key=lambda w: min(math.hypot(w[0] - p[0], w[1] - p[1]) for p in poly))
+        win = wins[0] if wins and min(math.hypot(wins[0][0] - p[0], wins[0][1] - p[1]) for p in poly) < 3 else None
+        best = max(c[2] for c in cand)
+        ok = [c for c in cand if c[2] >= min(0.55, best * 0.8)]
+        # 360°: el punto más despejado, cerca del centro
+        eye = max(ok, key=lambda c: c[2] - 0.15 * math.hypot(c[0] - cxs, c[1] - cys))
+        target = (win[0], win[1], 1.3) if win else (cxs, cys, 1.0)
+        # dirección hacia la ventana, en la convención del visor (escena: x = x, z = -y de Blender)
+        yaw = math.atan2(-(target[1] - eye[1]), target[0] - eye[0])
+        h = 1.15 if outdoor else 1.45
+        cam.data.type = 'PANO'
+        try:
+            cam.data.panorama_type = 'EQUIRECTANGULAR'
+        except AttributeError:
+            cam.data.cycles.panorama_type = 'EQUIRECTANGULAR'
+        cam.location = (eye[0], eye[1], h)
+        # el centro de la imagen mira al norte del plano (+Y de Blender, -z de la escena)
+        cam.rotation_euler = (math.radians(90), 0, 0)
+        sc.render.resolution_x, sc.render.resolution_y = 2048, 1024
+        sc.cycles.samples = max(24, SAMPLES // 2)
+        sc.render.filepath = os.path.abspath(f'{OUT}-{sid}-360.jpg')
+        bpy.ops.render.render(write_still=True)
+        log('360', sid)
+        # amplia: desde el punto despejado más lejano a la ventana, mirándola
+        far = max(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) + c[2] * 0.5)
+        look(Vector((far[0], far[1], h)), target, 16, f'{OUT}-{sid}-amplia.jpg', (1600, 1000))
+        # detalle: desde cerca de la ventana, mirando hacia adentro, un poco más bajo
+        near = min(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) - c[2] * 0.3)
+        look(Vector((near[0], near[1], h - 0.25)), (cxs + (cxs - near[0]) * 0.3, cys + (cys - near[1]) * 0.3, 0.8), 24, f'{OUT}-{sid}-detalle.jpg', (1600, 1000))
+        info[sid] = {'yaw': round(yaw, 4), 'eye': [round(eye[0], 3), round(-eye[1], 3)]}
+    json.dump(info, open(f'{OUT}-fotos.json', 'w'))
+    bpy.data.objects.remove(techo, do_unlink=True)
+    for lo in luces:
+        bpy.data.objects.remove(lo, do_unlink=True)
+    if os.environ.get('SIN_HORNEAR'):
+        log('fotos listas (sin horneado)')
+        sys.exit(0)
 
 # ---------------------------------------------------------------- horneado
 for o in [o for o in sc.objects if o.type == 'MESH' and o.modifiers]:

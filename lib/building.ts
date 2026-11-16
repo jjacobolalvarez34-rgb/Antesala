@@ -225,10 +225,12 @@ export function facadePose(
   const portrait = aspect < 1;
   const toFacade = Math.hypot(facade.center[0] - f.center[0], facade.center[1] - f.center[1]);
   const radius = fitRect(facade.length + 4, f.height + 4, fov, aspect, portrait ? 1.1 : 1.6);
+  // torre (más alta que ancha): la cámara baja y mira un poco hacia arriba (D-085)
+  const tower = f.height > Math.max(f.width, f.depth) * 1.8;
   return {
-    target: [f.center[0], f.height * 0.47, f.center[1]],
+    target: [f.center[0], f.height * (tower ? 0.5 : 0.47), f.center[1]],
     radius: radius + toFacade,
-    polar: 82 * DEG,
+    polar: (tower ? 86 : 82) * DEG,
     azimuth: facade.azimuth + 14 * DEG,
     shiftX: panelSide ? 0.02 : portrait ? 0.035 : 0,
     shiftY: portrait ? -0.02 : -0.03,

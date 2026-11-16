@@ -278,7 +278,8 @@ export default async function Home() {
                     <span className={s.badge}>{d.badge}</span>
                     <h3 style={{ marginTop: 10 }}>{d.name}</h3>
                     <p>{d.text}</p>
-                    <Link className={`${s.btn} ${s.solid}`} href={d.href}>
+                    {/* la demo en otra pestaña: la página de Antesala queda abierta (Jacobo, 2026-11-15) */}
+                    <Link className={`${s.btn} ${s.solid}`} href={d.href} target="_blank" rel="noopener">
                       Entrar <span className={s.arr}>→</span>
                     </Link>
                   </div>
@@ -432,7 +433,7 @@ export default async function Home() {
                       {p.example.label} <span className={s.arr}>→</span>
                     </a>
                   ) : (
-                    <Link className={s.ex} href={p.example.href as Route}>
+                    <Link className={s.ex} href={p.example.href as Route} target="_blank" rel="noopener">
                       {p.example.label} <span className={s.arr}>→</span>
                     </Link>
                   )}

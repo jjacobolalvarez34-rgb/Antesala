@@ -49,7 +49,7 @@ for t in trabajos:
     log('---', hotel, unidad, plan)
 
     log('  exportando del visor')
-    if not run(f'npx playwright test -c pipeline/renders.config.ts exportar', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
+    if not run(f'npx playwright test -c pipeline/renders.config.ts realista/exportar.spec.ts', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
         continue
     log('  Blender: muebles, render y horneado (unos 20 min)')
     if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} 48 2048'):

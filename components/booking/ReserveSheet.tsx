@@ -19,7 +19,7 @@ export const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMo
 export const longDate = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long' });
 /** Botón de reserva sobrio (como en la web de un hotel): rectángulo, mayúsculas espaciadas, sin íconos. */
 export const BTN =
-  'inline-flex min-h-11 items-center justify-center rounded-[3px] px-6 text-[0.75rem] font-medium tracking-[0.16em] uppercase transition-[background-color,color,transform] duration-200 active:scale-[0.98]';
+  'inline-flex min-h-11 items-center justify-center rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.75rem] font-medium tracking-[0.16em] uppercase transition-[background-color,color,transform] duration-200 active:scale-[0.98]';
 export const BTN_INK = 'bg-ink text-bone hover:bg-accent';
 export const BTN_BONE = 'bg-bone text-ink hover:bg-white';
 
@@ -131,7 +131,7 @@ export function ReserveButton({
                   setCheckIn(e.target.value);
                   if (e.target.value >= checkOut) setCheckOut(iso(addDays(parse(e.target.value), 1)));
                 }}
-                className="mt-1 block min-h-11 w-full rounded-[3px] border border-border bg-background px-3 text-[0.9375rem]"
+                className="mt-1 block min-h-11 w-full rounded-[var(--hotel-r-btn,3px)] border border-border bg-background px-3 text-[0.9375rem]"
               />
             </label>
             <label htmlFor={ids.out} className="block">
@@ -142,7 +142,7 @@ export function ReserveButton({
                 min={iso(addDays(parse(checkIn), 1))}
                 value={checkOut}
                 onChange={(e) => setCheckOut(e.target.value)}
-                className="mt-1 block min-h-11 w-full rounded-[3px] border border-border bg-background px-3 text-[0.9375rem]"
+                className="mt-1 block min-h-11 w-full rounded-[var(--hotel-r-btn,3px)] border border-border bg-background px-3 text-[0.9375rem]"
               />
             </label>
           </div>
@@ -152,7 +152,7 @@ export function ReserveButton({
               id={ids.guests}
               value={guests}
               onChange={(e) => setGuests(Number(e.target.value))}
-              className="mt-1 block min-h-11 w-full rounded-[3px] border border-border bg-background px-3 text-[0.9375rem]"
+              className="mt-1 block min-h-11 w-full rounded-[var(--hotel-r-btn,3px)] border border-border bg-background px-3 text-[0.9375rem]"
             >
               {Array.from({ length: maxGuests }, (_, i) => i + 1).map((n) => (
                 <option key={n} value={n}>
@@ -162,7 +162,7 @@ export function ReserveButton({
             </select>
           </label>
 
-          <div className="mt-4 flex items-center gap-2 rounded-[3px] bg-secondary px-4 py-3 text-sm">
+          <div className="mt-4 flex items-center gap-2 rounded-[var(--hotel-r-btn,3px)] bg-secondary px-4 py-3 text-sm">
             <CalendarDays aria-hidden className="size-4 shrink-0 text-accent" />
             {valid ? (
               <p className="flex-1">
@@ -187,7 +187,7 @@ export function ReserveButton({
             rel="noopener noreferrer"
             onClick={() => valid && setOpen(false)}
             className={cn(
-              'mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[3px] bg-ink px-5 text-[0.75rem] font-medium tracking-[0.16em] text-bone uppercase transition-colors hover:bg-accent',
+              'mt-4 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[var(--hotel-r-btn,3px)] bg-ink px-5 text-[0.75rem] font-medium tracking-[0.16em] text-bone uppercase transition-colors hover:bg-accent',
               !valid && 'pointer-events-none opacity-50',
             )}
           >

@@ -32,7 +32,10 @@ export function HotelHeader({
   booking,
   offer,
   listLabel = 'Pisos y unidades',
+  upper = false,
 }: {
+  /** el nombre en mayúsculas espaciadas (identidad del hotel, D-086) */
+  upper?: boolean;
   /** "Pisos y unidades" o, en un glamping, "Los refugios" */
   listLabel?: string;
   slug: string;
@@ -85,7 +88,7 @@ export function HotelHeader({
     >
       <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-6 px-5 md:px-10">
         <Link href={routes.hotel(slug)} className="flex min-h-11 flex-col justify-center">
-          <span className="font-display text-[1.5rem] leading-none tracking-tight">{name}</span>
+          <span className={upper ? 'font-display text-[1.125rem] leading-none tracking-[0.2em] uppercase' : 'font-display text-[1.5rem] leading-none tracking-tight'}>{name}</span>
           <span className={cn('mt-1 text-[0.625rem] tracking-[0.22em] uppercase', over ? 'text-bone/75' : 'text-muted-foreground')}>{place}</span>
         </Link>
         <nav aria-label="Secciones" className="ml-auto hidden items-center gap-7 text-[0.8125rem] lg:flex">

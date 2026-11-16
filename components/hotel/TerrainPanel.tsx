@@ -40,7 +40,7 @@ export function TerrainPanel({
   const setHovered = useTour((s) => s.setHoveredUnit);
   const night = useTour((s) => s.night);
   const setNight = useTour((s) => s.setNight);
-  const tab = 'inline-flex min-h-9 items-center rounded-[3px] px-3 text-[0.6875rem] tracking-[0.16em] uppercase transition-colors';
+  const tab = 'inline-flex min-h-9 items-center rounded-[var(--hotel-r-btn,3px)] px-3 text-[0.6875rem] tracking-[0.16em] uppercase transition-colors';
   return (
     <div className="flex w-full flex-col gap-2 md:w-[21rem]">
       <div className="flex items-center gap-1.5 rounded-md p-1.5 glass-dark">
@@ -55,7 +55,7 @@ export function TerrainPanel({
           onClick={() => setNight(!night)}
           aria-pressed={night}
           aria-label={night ? 'Ver de día' : 'Ver de noche'}
-          className="ml-auto grid size-9 place-items-center rounded-[3px] text-bone/85 transition-colors hover:bg-bone/12"
+          className="ml-auto grid size-9 place-items-center rounded-[var(--hotel-r-btn,3px)] text-bone/85 transition-colors hover:bg-bone/12"
         >
           {night ? <Sun aria-hidden className="size-4" /> : <Moon aria-hidden className="size-4" />}
         </button>

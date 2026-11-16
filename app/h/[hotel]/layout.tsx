@@ -205,6 +205,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
         booking={{ phone: hotel.contact.whatsapp, hotelName: tokens.brand.name }}
         listLabel={hotel.site.kind === 'terreno' ? 'Los refugios' : undefined}
+        upper={tokens.look?.title === 'mayusculas'}
         offer={hotel.offer}
       />
       <div className="relative z-10 flex-1">{children}</div>
@@ -215,7 +216,9 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         base={`/h/${hotel.slug}`}
         place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
         cover={(() => {
-          const m = hotel.site.exterior.find((x) => x.kind === 'photo');
+          // solo una foto profesional (Premium): una captura del 3D detrás del telón se veía
+          // como una maqueta mal hecha (Jacobo, 2026-11-15); sin ella queda la niebla
+          const m = hotel.site.exterior.find((x) => x.kind === 'photo' && x.tier === 'premium');
           return m ? mediaUrl(hotel.slug, m.src) : undefined;
         })()}
       />

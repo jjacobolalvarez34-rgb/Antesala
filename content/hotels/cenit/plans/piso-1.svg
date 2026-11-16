@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 1350">
+  <title>Piso 1 · lobby, restaurante y bar</title>
+  <g id="walls">
+    <rect x="0" y="0" width="1620" height="15"/>
+    <rect x="0" y="1335" width="1620" height="15"/>
+    <rect x="0" y="0" width="15" height="1350"/>
+    <rect x="1605" y="0" width="15" height="1350"/>
+    <rect x="540" y="15" width="10" height="525"/>
+    <rect x="1070" y="15" width="10" height="525"/>
+    <rect x="15" y="540" width="1590" height="10"/>
+  </g>
+  <g id="spaces">
+    <polygon id="lobby" data-label="Lobby" data-finish="piedra" points="540,550 1080,550 1080,1335 540,1335"/>
+    <polygon id="restaurante" data-label="Restaurante" data-finish="madera" points="15,15 540,15 540,1335 15,1335"/>
+    <polygon id="bar" data-label="Bar" data-finish="madera" points="1080,15 1605,15 1605,1335 1080,1335"/>
+    <polygon id="nucleo" data-label="Ascensores y escalera" data-finish="concreto" points="550,15 1070,15 1070,540 550,540"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="25" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="25" y="0" width="220" height="15"/>
+    <rect data-type="window" x="295" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="295" y="0" width="220" height="15"/>
+    <rect data-type="window" x="565" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="565" y="0" width="220" height="15"/>
+    <rect data-type="window" x="835" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="835" y="0" width="220" height="15"/>
+    <rect data-type="window" x="1105" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="1105" y="0" width="220" height="15"/>
+    <rect data-type="window" x="1375" y="1335" width="220" height="15"/>
+    <rect data-type="window" x="1375" y="0" width="220" height="15"/>
+    <rect data-type="window" x="0" y="25" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="25" width="15" height="220"/>
+    <rect data-type="window" x="0" y="295" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="295" width="15" height="220"/>
+    <rect data-type="window" x="0" y="565" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="565" width="15" height="220"/>
+    <rect data-type="window" x="0" y="835" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="835" width="15" height="220"/>
+    <rect data-type="window" x="0" y="1105" width="15" height="220"/>
+    <rect data-type="window" x="1605" y="1105" width="15" height="220"/>
+    <rect data-type="door" x="680" y="540" width="260" height="10"/>
+    <rect data-type="door" x="675" y="1335" width="270" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="reception" data-back="n" x="600" y="850" width="240" height="60"/>
+    <rect data-item="sofa" data-back="s" x="830" y="1080" width="220" height="85"/>
+    <rect data-item="coffee" x="880" y="970" width="120" height="80"/>
+    <rect data-item="table" x="75" y="655" width="90" height="90"/>
+    <rect data-item="chair" data-back="s" x="75" y="605" width="45" height="45"/>
+    <rect data-item="chair" data-back="n" x="120" y="750" width="45" height="45"/>
+    <rect data-item="table" x="285" y="655" width="90" height="90"/>
+    <rect data-item="chair" data-back="s" x="285" y="605" width="45" height="45"/>
+    <rect data-item="chair" data-back="n" x="330" y="750" width="45" height="45"/>
+    <rect data-item="table" x="75" y="955" width="90" height="90"/>
+    <rect data-item="chair" data-back="s" x="75" y="905" width="45" height="45"/>
+    <rect data-item="chair" data-back="n" x="120" y="1050" width="45" height="45"/>
+    <rect data-item="table" x="285" y="955" width="90" height="90"/>
+    <rect data-item="chair" data-back="s" x="285" y="905" width="45" height="45"/>
+    <rect data-item="chair" data-back="n" x="330" y="1050" width="45" height="45"/>
+    <rect data-item="table" x="75" y="1205" width="90" height="90"/>
+    <rect data-item="chair" data-back="s" x="75" y="1155" width="45" height="45"/>
+    <rect data-item="chair" data-back="n" x="120" y="1300" width="45" height="45"/>
+    <rect data-item="bar" data-back="e" x="1540" y="810" width="65" height="420"/>
+    <rect data-item="stool" x="1480" y="830" width="40" height="40"/>
+    <rect data-item="stool" x="1480" y="910" width="40" height="40"/>
+    <rect data-item="stool" x="1480" y="990" width="40" height="40"/>
+    <rect data-item="stool" x="1480" y="1070" width="40" height="40"/>
+    <rect data-item="stool" x="1480" y="1150" width="40" height="40"/>
+    <rect data-item="booth" data-back="n" x="1100" y="30" width="490" height="90"/>
+  </g>
+</svg>
