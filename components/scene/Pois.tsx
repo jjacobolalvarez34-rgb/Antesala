@@ -50,7 +50,16 @@ export function groupPois(pois: ScenePoi[], dist = 9): PoiGroup[] {
  * Dentro del Canvas: proyecta la posición 3D de cada zona común y mueve su
  * etiqueta HTML (sin re-render; escribe el transform directamente).
  */
-export function PoiProjector({ pois, anchors }: { pois: { id: string; position: [number, number, number] }[]; anchors: PoiAnchors }) {
+export function PoiProjector({
+  pois,
+  anchors,
+  anchor = 'center',
+}: {
+  pois: { id: string; position: [number, number, number] }[];
+  anchors: PoiAnchors;
+  /** 'bottom': el borde de abajo del letrero queda en el punto (letreros con línea hacia abajo) */
+  anchor?: 'center' | 'bottom';
+}) {
   const camera = useThree((s) => s.camera);
   const size = useThree((s) => s.size);
   const v = useRef(new THREE.Vector3());
@@ -63,7 +72,7 @@ export function PoiProjector({ pois, anchors }: { pois: { id: string; position: 
       el.style.visibility = hidden ? 'hidden' : 'visible';
       const x = ((v.current.x + 1) / 2) * size.width;
       const y = ((1 - v.current.y) / 2) * size.height;
-      el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+      el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, ${anchor === 'bottom' ? '-100%' : '-50%'})`;
     }
   });
   return null;

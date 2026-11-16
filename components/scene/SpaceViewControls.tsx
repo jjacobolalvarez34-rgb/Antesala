@@ -1,37 +1,48 @@
 'use client';
 
-import { Box, ChevronUp, MapPin, Orbit } from 'lucide-react';
-import { useState } from 'react';
+import { Box, ChevronDown, Images, MapPin, Orbit } from 'lucide-react';
+import { useState, type ReactNode } from 'react';
 
 import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
 /**
- * Marco del panel del espacio en modo escena: alterna entre el 360° y la
- * maqueta, y se pliega (en celular y en escritorio) para dejar ver el espacio:
- * empieza recogido, como un panel desplegable.
+ * Marco del panel del espacio en modo escena (rediseñado el 2026-11-16 con las notas del papá
+ * de Jacobo: "no sabía que podía bajar", "se ve saturado", "no es intuitivo").
+ *
+ * Siempre a la vista, en este orden:
+ * 1. los espacios de la unidad en una fila (lo que más se usa: cambiar de espacio);
+ * 2. 360° / Maqueta, el punto del 360° si hay dos, y un botón con texto "Fotos y detalles".
+ *
+ * Lo demás (fotos, descripción, dotación) se despliega con ese botón; empieza recogido para
+ * que el espacio sea el protagonista.
  */
 export function SpaceSheetFrame({
   hasPano,
   title,
+  nav,
   children,
 }: {
   hasPano: boolean;
   title: string;
-  children: React.ReactNode;
+  /** la fila de espacios de la unidad */
+  nav?: ReactNode;
+  children: ReactNode;
 }) {
   const view360 = useTour((s) => s.view360);
   const setView360 = useTour((s) => s.setView360);
   const panoSpot = useTour((s) => s.panoSpot);
   const panoSpots = useTour((s) => s.panoSpots);
   const setPanoSpot = useTour((s) => s.setPanoSpot);
-  // en móvil empieza recogido: el espacio (360° o maqueta) es el protagonista
-  const [folded, setFolded] = useState(true);
+  const [open, setOpen] = useState(false);
   const on360 = hasPano && view360;
 
   return (
     <div className="flex min-h-0 flex-col">
-      <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
+      {/* asa: se ve que es un panel que se despliega */}
+      <span aria-hidden className="mx-auto mt-2 block h-1 w-9 rounded-full bg-ink/15 md:hidden" />
+      {nav ? <div className="px-3 pt-2 md:pt-3">{nav}</div> : null}
+      <div className="flex flex-wrap items-center gap-2 px-3 py-2.5">
         {hasPano ? (
           <div role="group" aria-label="Vista del espacio" className="flex rounded-full bg-secondary p-1">
             <button
@@ -69,22 +80,19 @@ export function SpaceSheetFrame({
             Punto {panoSpot + 1}/{panoSpots}
           </button>
         ) : null}
-        {/* toda la franja abre y cierra (antes solo la flecha: Jacobo tocaba el nombre y no pasaba nada) */}
         <button
           type="button"
-          onClick={() => setFolded((f) => !f)}
-          aria-expanded={!folded}
-          aria-label={folded ? `Mostrar detalles de ${title}` : 'Ocultar detalles'}
-          className="group -my-1 ml-auto flex min-h-10 min-w-0 flex-1 items-center gap-2 rounded-full pl-1 text-left"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-label={open ? `Ocultar fotos y detalles de ${title}` : `Ver fotos y detalles de ${title}`}
+          className="ml-auto inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-3 text-sm font-medium transition-colors hover:border-ink/40"
         >
-          <span className="min-w-0 flex-1 truncate text-sm font-medium">{folded ? title : ''}</span>
-          <span className="grid size-10 shrink-0 place-items-center rounded-full transition-colors group-hover:bg-secondary">
-            {/* en celular el panel está abajo y se despliega hacia arriba; en escritorio, arriba y hacia abajo */}
-            <ChevronUp aria-hidden className={cn('size-5 transition-transform duration-300 md:rotate-180', !folded && 'rotate-180 md:rotate-0')} />
-          </span>
+          <Images aria-hidden className="size-4" />
+          {open ? 'Ocultar' : 'Fotos y detalles'}
+          <ChevronDown aria-hidden className={cn('size-4 transition-transform duration-300', open && 'rotate-180')} />
         </button>
       </div>
-      <div className={cn('min-h-0 overflow-y-auto', folded && 'hidden')}>{children}</div>
+      <div className={cn('min-h-0 overflow-y-auto border-t border-border', !open && 'hidden')}>{children}</div>
     </div>
   );
 }

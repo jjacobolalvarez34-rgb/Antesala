@@ -131,7 +131,9 @@ export function BookingBar({ data }: { data: BookingSummary }) {
   return (
     <div
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[var(--safe-bottom)]',
+        // pointer-events-auto: con la escena activa la capa de la página deja pasar los toques al 3D; sin
+        // esto la flecha de volver no respondía (el toque se iba al canvas; reporte de Jacobo, 2026-11-16)
+        'pointer-events-auto fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[var(--safe-bottom)]',
         'md:inset-x-auto md:right-6 md:bottom-6 md:w-[26rem] md:rounded-[var(--hotel-r-card,6px)] md:border md:pb-0 md:shadow-[0_18px_40px_-24px_rgb(28_27_25/0.45)]',
         !inScene && 'md:hidden',
       )}

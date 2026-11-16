@@ -67,7 +67,10 @@ export function FloorTagProjector({
         continue;
       }
       el.style.visibility = 'visible';
-      const px = ((best + 1) / 2) * size.width;
+      // nunca fuera de la pantalla: en celular el edificio llena el ancho y los números quedaban
+      // medio cortados en el borde (Jacobo, 2026-11-16). Si no caben, se quedan dentro del borde
+      // y la línea se acorta. ~72 px: la línea más el número.
+      const px = Math.min(((best + 1) / 2) * size.width, size.width - 72);
       const py = ((1 - by) / 2) * size.height;
       el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) translateY(-50%)`;
     }

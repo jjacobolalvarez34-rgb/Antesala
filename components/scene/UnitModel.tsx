@@ -1,6 +1,6 @@
 'use client';
 
-import type { ThreeEvent } from '@react-three/fiber';
+import { useThree, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -160,6 +160,8 @@ export function UnitModel({
   interior = false,
   onHover,
   onSelect,
+  onReady,
+  warm = false,
 }: {
   /** recorrido por dentro (360° en vivo): el cielo raso hace sombra y la luz entra por las ventanas */
   interior?: boolean;
@@ -179,6 +181,10 @@ export function UnitModel({
   realista?: string;
   onHover: (id: string | null) => void;
   onSelect: (id: string) => void;
+  /** avisa cuando sus shaders están compilados: la cámara no vuela antes (D-089) */
+  onReady?: () => void;
+  /** prepararse escondida (desde el piso, al señalar la unidad): cargar y compilar sin mostrarse */
+  warm?: boolean;
 }) {
   const group = useRef<THREE.Group>(null);
   usePrecompile(group, 0);
@@ -318,12 +324,46 @@ export function UnitModel({
   }, [realista, uni]);
   const waiting = !!realista && !real && !fallback;
 
+  // Compilar antes de mostrar (D-089, pedido de Jacobo: "que JAMÁS se trabe"). La primera vez
+  // que aparece un material nuevo, el navegador compila su shader de golpe y congela la página
+  // (en un celular, segundos). Aquí se compila en segundo plano (KHR_parallel_shader_compile)
+  // mientras el piso se sigue viendo fluido; cuando termina, la cámara vuela. Si tarda más de
+  // 5 s, vuela igual.
+  const gl = useThree((s) => s.gl);
+  const camera = useThree((s) => s.camera);
+  const scene = useThree((s) => s.scene);
+  const readySent = useRef(false);
+  const visibleRef = useRef(visible);
+  useEffect(() => {
+    visibleRef.current = visible;
+  });
+  useEffect(() => {
+    if (!(visible || warm) || waiting || readySent.current || !onReady) return;
+    const g = group.current;
+    if (!g) return;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      readySent.current = true;
+      // recién ahora se deja dibujar: si se mostraba antes, el primer cuadro compilaba de golpe
+      if (visibleRef.current && group.current) group.current.visible = true;
+      onReady();
+    };
+    // compileAsync recoge los materiales con traverse (no mira si se ven): el grupo sigue
+    // escondido mientras compila y el piso se dibuja fluido
+    const t = window.setTimeout(finish, 5000);
+    gl.compileAsync(g, camera, scene).then(finish, finish);
+    return () => window.clearTimeout(t);
+  }, [visible, warm, waiting, onReady, gl, camera, scene]);
+
   // aparece y desaparece con fundido. El retardo de entrada cuenta desde que se pidió
   // mostrar la unidad: si la horneada llega a mitad de camino, entra a tiempo (no empieza de cero)
   const shownAt = useRef(0);
   useLayoutEffect(() => {
     const g = group.current;
-    if (visible && g) g.visible = true;
+    // con aviso de "lista" (onReady), se muestra cuando terminó de compilar (ver arriba)
+    if (visible && g && (readySent.current || !onReady)) g.visible = true;
     const now = performance.now() / 1000;
     if (!visible) shownAt.current = 0;
     else if (!shownAt.current) shownAt.current = now;

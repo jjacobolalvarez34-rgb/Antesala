@@ -28,6 +28,7 @@ import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, Offer, PlanGeometry } from '@/lib/types';
 
+import { UnitTagLayer } from './UnitTags';
 import { setGltfRenderer } from './gltf';
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
 import { Backdrop, VIEW_ONLY_LAYER, type BackdropApi } from './Backdrop';
@@ -205,9 +206,12 @@ function Rig({
   pano,
   vp,
   in360,
+  hold,
 }: Pick<Props, 'data' | 'stage' | 'reduced' | 'intro'> & {
   facade: Facade;
   in360: boolean;
+  /** la habitación aún compila sus shaders: la cámara se queda en su piso (D-089) */
+  hold: boolean;
   pano: { yaw: number; eye: [number, number, number]; live: boolean } | null;
   vp: { key: string; position: [number, number, number]; yaw: number } | null;
 }) {
@@ -236,6 +240,15 @@ function Rig({
     pose = floorPose(frame, floorOrder, facade, FOV, aspect, layout);
     stageKey = `piso-${floorOrder}`;
     depth = 2;
+  } else if (stage.kind === 'unidad' && hold) {
+    // primero se compila la habitación (en segundo plano) y luego la cámara vuela: así el vuelo no se traba
+    const lv = data.units.find((u) => u.id === stage.unitId)?.levelId;
+    const order = data.floors.find((f) => f.id === lv)?.order;
+    if (order !== undefined) {
+      pose = floorPose(frame, order, facade, FOV, aspect, layout);
+      stageKey = `piso-${order}`;
+      depth = 2;
+    }
   } else if (stage.kind === 'unidad') {
     const anchor = unitAnchor(data, frame, stage.unitId);
     const plan = data.unitPlans[stage.unitId]?.plan;
@@ -381,6 +394,12 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const spaceId = stage.kind === 'unidad' ? stage.spaceId : null;
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
   const [planHovered, setPlanHovered] = useState<string | null>(null);
+  // la unidad que se prepara escondida (D-089): la última señalada en el piso abierto (primer
+  // toque del letrero o mouse encima). Se carga y compila mientras se lee su precio; al
+  // entrar, la cámara vuela sin esperar
+  const [warmUnit, setWarmUnit] = useState<string | null>(null);
+  if (stage.kind === 'piso' && planHovered && planHovered !== warmUnit && data.unitPlans[planHovered]) setWarmUnit(planHovered);
+  const modelUnit = unitId ?? (stage.kind === 'piso' ? warmUnit : null);
   const floorAnchors = useRef(new Map<string, HTMLElement>());
   const poiGroups = useMemo(() => groupPois(data.pois), [data.pois]);
   // los pisos pegados al costado del edificio (FloorTags): en la vista exterior y dentro de un piso
@@ -422,11 +441,14 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       return [
         {
           id: sp.unitId,
-          name: unit.occupied
-            ? `${unit.name} · ${OFFER[data.offer ?? 'noche'].takenShort}`
+          short: unit.name.match(/\d+[A-Za-z]?$/)?.[0] ?? unit.name,
+          name: unit.name,
+          detail: unit.occupied
+            ? OFFER[data.offer ?? 'noche'].takenShort
             : unit.price !== undefined
-              ? `${unit.name} · ${formatCOP(unit.price)}`
-              : unit.name,
+              ? `${formatCOP(unit.price)}${OFFER[data.offer ?? 'noche'].suffix ?? ''}`
+              : 'Libre',
+          occupied: !!unit.occupied,
           position: [x, y, z] as [number, number, number],
           href: unit.href,
         },
@@ -451,6 +473,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   // punto de vista del 360: centro del espacio a 1,5 m del piso. Por dentro de la
   // maqueta (demo) retrocede hacia el muro opuesto a la ventana: se ve el cuarto y la ventana
   const panoSpot = useTour((s) => s.panoSpot);
+  const unitReady = useTour((s) => s.unitReady);
+  const setUnitReady = useTour((s) => s.setUnitReady);
+  // la cámara espera en el piso hasta que la habitación compila sus shaders (D-089)
+  const holdCamera = stage.kind === 'unidad' && unitReady !== `${stage.unitId}-${nivel}`;
   // los puntos del 360° en vivo del espacio (uno o dos: ver panoEyes)
   const spots = useMemo<[number, number][]>(() => {
     if (!unitId || !spaceId || !data.liveInterior) return [];
@@ -735,15 +761,16 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         <ExportHook />
         <PoiProjector pois={poiGroups} anchors={anchors} />
 
-        {/* maqueta de la unidad actual (bloque 3); solo se monta la que se ve */}
-        {unitId && data.unitPlans[unitId] && unitAnchor(data, frame, unitId) ? (
+        {/* maqueta de la unidad actual (bloque 3), o la que se prepara escondida desde el piso */}
+        {modelUnit && data.unitPlans[modelUnit] && unitAnchor(data, frame, modelUnit) ? (
           <UnitModel
-            key={`${unitId}-${nivel}`}
-            plan={data.unitPlans[unitId]!.plan}
-            spaces={data.unitPlans[unitId]!.spaces}
-            realista={nivel === 'premium' ? data.unitPlans[unitId]!.realista : undefined}
-            position={unitAnchor(data, frame, unitId)!}
+            key={`${modelUnit}-${nivel}`}
+            plan={data.unitPlans[modelUnit]!.plan}
+            spaces={data.unitPlans[modelUnit]!.spaces}
+            realista={nivel === 'premium' ? data.unitPlans[modelUnit]!.realista : undefined}
+            position={unitAnchor(data, frame, modelUnit)!}
             visible={inUnit && active}
+            warm={!inUnit && active}
             selectedSpace={spaceId}
             hoveredSpace={hoveredSpace}
             reduced={reduced}
@@ -752,17 +779,18 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
             focus={spaceId !== null && !in360 ? spaceId : null}
             interior={in360Pano && data.liveInterior}
             onHover={setHoveredSpace}
-            onSelect={(sid) => router.push(routes.espacio(data.slug, unitId, sid))}
+            onSelect={(sid) => router.push(routes.espacio(data.slug, modelUnit, sid))}
+            onReady={() => setUnitReady(`${modelUnit}-${nivel}`)}
           />
         ) : null}
         <PoiProjector pois={spaceLabels} anchors={spaceAnchors} />
-        <PoiProjector pois={floorLabels} anchors={floorAnchors} />
+        <PoiProjector pois={floorLabels} anchors={floorAnchors} anchor="bottom" />
         {currentPano && eye && !data.liveInterior ? (
           <PanoSphere key={spaceId} url={currentPano.url} position={eye} visible={in360} reduced={reduced} />
         ) : null}
         <PoiProjector pois={panoLinks} anchors={panoAnchors} />
 
-        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} in360={in360} pano={in360Pano && currentPano && eye ? { yaw: currentPano.yaw, eye, live: data.liveInterior } : null}
+        <Rig data={data} stage={stage} facade={facade} reduced={reduced} intro={intro} in360={in360} hold={holdCamera} pano={in360Pano && currentPano && eye ? { yaw: currentPano.yaw, eye, live: data.liveInterior } : null}
           vp={vpData && vpPoi ? { key: `${vpPoi.id}-${vpData.id}`, position: vpData.position, yaw: vpData.yaw } : null}
         />
 
@@ -798,16 +826,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       <FloorTagLayer tags={floorTags} anchors={tagAnchors} visible={active && !inUnit && vpData === null} currentId={selectedId} />
       <PoiLayer pois={poiGroups} anchors={anchors} visible={showPois} />
       {stage.kind === 'explorar' && active ? <ViewpointOverlay pois={data.pois} /> : null}
-      <SpaceLabelLayer
-        labels={floorLabels}
-        anchors={floorAnchors}
-        visible={stage.kind === 'piso' && active}
-        current={null}
-        hovered={planHovered}
-        onHover={setPlanHovered}
-        ariaLabel="Unidades del piso"
-        reveal
-      />
+      <UnitTagLayer tags={floorLabels} anchors={floorAnchors} visible={stage.kind === 'piso' && active} hovered={planHovered} onHover={setPlanHovered} />
       <SpaceLabelLayer
         labels={panoLinks}
         anchors={panoAnchors}

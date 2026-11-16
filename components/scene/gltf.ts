@@ -17,6 +17,10 @@ let ktx2: KTX2Loader | null = null;
 
 export function setGltfRenderer(gl: THREE.WebGLRenderer) {
   renderer = gl;
+  // En producción no se revisan los errores de cada shader nuevo: esa revisión obliga a esperar
+  // a que la compilación termine y congelaba la página al entrar a una habitación (D-089).
+  // En desarrollo se deja, para ver los errores.
+  if (process.env.NODE_ENV === 'production') gl.debug.checkShaderErrors = false;
 }
 
 async function getKtx2() {

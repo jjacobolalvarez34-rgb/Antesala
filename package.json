@@ -15,6 +15,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "shots": "playwright test",
     "perf": "node tests/perf.mjs",
+    "transicion": "node tests/transicion.mjs",
     "assets": "echo \"pipeline de assets: llega en el bloque 5\"",
     "placeholders": "node pipeline/placeholders.mjs",
     "estado": "node pipeline/estado-pdf.mjs",

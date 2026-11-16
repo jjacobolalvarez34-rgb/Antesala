@@ -34,6 +34,8 @@ interface TourState {
   view: { unitId: string; src: string } | null;
   /** en el detalle de un espacio: 360° (true) o maqueta (false) */
   view360: boolean;
+  /** unidad cuyos shaders ya están compilados (la cámara espera a que esté lista; D-089) */
+  unitReady: string | null;
   /** punto del 360° en vivo dentro del espacio (los espacios largos tienen dos) */
   panoSpot: number;
   /** cuántos puntos tiene el espacio abierto */
@@ -57,6 +59,7 @@ interface TourState {
   setSelectedUnit: (id: string | null) => void;
   setView: (v: TourState['view']) => void;
   setView360: (on: boolean) => void;
+  setUnitReady: (key: string | null) => void;
   setPanoSpot: (i: number) => void;
   requestView: (unitId: string | null) => void;
   setViewpoint: (v: TourState['viewpoint']) => void;
@@ -76,6 +79,7 @@ export const useTour = create<TourState>((set) => ({
   selectedUnit: null,
   view: null,
   view360: true,
+  unitReady: null,
   panoSpot: 0,
   panoSpots: 0,
   viewRequest: null,
@@ -111,6 +115,7 @@ export const useTour = create<TourState>((set) => ({
   setSelectedUnit: (selectedUnit) => set({ selectedUnit }),
   setView: (view) => set({ view }),
   setView360: (view360) => set({ view360 }),
+  setUnitReady: (unitReady) => set({ unitReady }),
   setPanoSpot: (panoSpot) => set({ panoSpot }),
   requestView: (viewRequest) => set({ viewRequest }),
   setViewpoint: (viewpoint) => set({ viewpoint }),
