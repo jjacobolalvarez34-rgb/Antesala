@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16000 12000">
+  <title>Frailejón · mapa del terreno (160 × 120 m)</title>
+  <g id="walls">
+  </g>
+  <g id="spaces">
+    <polygon id="encenillo" data-finish="madera" points="4000,6020 4600,6020 4600,6780 4000,6780"/>
+    <polygon id="laguna" data-finish="madera" points="11040,3630 11760,3630 11760,4370 11040,4370"/>
+    <polygon id="piedra" data-finish="madera" points="6580,2990 7220,2990 7220,3610 6580,3610"/>
+    <polygon id="casa" data-finish="madera" points="9840,7800 10760,7800 10760,8800 9840,8800"/>
+    <polygon id="recepcion" data-label="Recepción y café" data-finish="deck" points="7300,9900 8700,9900 8700,10700 7300,10700"/>
+    <polygon id="fogata" data-label="Fogata" data-finish="deck" points="8300,6700 8900,6700 8900,7300 8300,7300"/>
+    <polygon id="laguna-poi" data-label="La laguna" data-finish="piedra" points="12300,1200 14600,1300 15000,2600 13600,3200 12200,2500"/>
+    <polygon id="mirador" data-label="Mirador" data-finish="piedra" points="2200,1600 3000,1600 3000,2400 2200,2400"/>
+  </g>
+  <g id="openings">
+  </g>
+  <g id="furniture">
+  </g>
+</svg>

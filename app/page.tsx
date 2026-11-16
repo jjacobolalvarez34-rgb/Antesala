@@ -117,6 +117,7 @@ const FAQ = [
 export default async function Home() {
   const niebla = await getHotelBundle(ANTESALA.demoSlug);
   const akuare = await getHotelBundle('akuare');
+  const frailejon = await getHotelBundle('frailejon');
 
   // la unidad del recorrido: la suite con balcón del piso 5 de Niebla Alta
   let recorrido: RecorridoData | null = null;
@@ -218,6 +219,32 @@ export default async function Home() {
           href: routes.hotel('akuare'),
         }
       : null,
+    frailejon
+      ? {
+          key: 'frailejon',
+          img: null,
+          imgAlt: '',
+          art: (() => {
+            // cada refugio en su lugar del mapa real del terreno (plans/terreno.svg)
+            const level = frailejon.hotel.levels.find((l) => l.plan);
+            const map = level?.plan ? frailejon.plans[level.plan] : undefined;
+            const refugios = map
+              ? frailejon.hotel.units.flatMap((u) => {
+                  const poly = map.spaces.find((x) => x.id === u.id);
+                  if (!poly) return [];
+                  const xs = poly.points.map((p) => p[0]);
+                  const ys = poly.points.map((p) => p[1]);
+                  return [{ name: u.name, x: (Math.min(...xs) + Math.max(...xs)) / 2 / map.width, y: (Math.min(...ys) + Math.max(...ys)) / 2 / map.height }];
+                })
+              : undefined;
+            return <TerrainArt refugios={refugios} />;
+          })(),
+          badge: 'Glamping · páramo · Guasca',
+          name: frailejon.hotel.name,
+          text: `${frailejon.hotel.units.length} refugios sueltos en un valle de páramo: se llega desde arriba, se elige el refugio en el mapa y se entra a verlo por dentro.`,
+          href: routes.hotel('frailejon'),
+        }
+      : null,
   ].filter((d) => d !== null);
 
   return (
@@ -257,20 +284,6 @@ export default async function Home() {
                   </div>
                 </article>
               ))}
-              <article className={`${s.dcard} ${s.soon}`}>
-                <div className={s.ph}>
-                  <TerrainArt />
-                  <span className={s.tag}>Ilustración</span>
-                </div>
-                <div className={s.dbody}>
-                  <span className={s.badge}>Glamping</span>
-                  <h3 style={{ marginTop: 10 }}>Domos en la montaña</h3>
-                  <p>En vez de pisos, el mapa del terreno y cada domo o cabaña.</p>
-                  <button className={s.btn} type="button" disabled>
-                    Próximamente
-                  </button>
-                </div>
-              </article>
               <article className={`${s.dcard} ${s.yours}`}>
                 <div className={s.dbody} style={{ justifyContent: 'center' }}>
                   <h3>
@@ -287,7 +300,7 @@ export default async function Home() {
                 </div>
               </article>
             </div>
-            <p className={s.fict}>Niebla Alta es un hotel ficticio; Akuare, una demostración no oficial con datos públicos. Imágenes ilustrativas.</p>
+            <p className={s.fict}>Niebla Alta y Frailejón son ficticios; Akuare es una demostración no oficial con datos públicos. Imágenes ilustrativas.</p>
           </div>
         </section>
 
@@ -554,7 +567,7 @@ export default async function Home() {
             <span>
               © 2026 {ANTESALA.company} · {ANTESALA.city}
             </span>
-            <span>Niebla Alta es un hotel ficticio. Imágenes ilustrativas.</span>
+            <span>Niebla Alta y Frailejón son ficticios. Imágenes ilustrativas.</span>
           </div>
         </div>
       </footer>

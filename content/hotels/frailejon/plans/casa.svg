@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 1000">
+  <title>Casa Frailejón · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="920" height="15"/>
+    <rect x="0" y="785" width="920" height="15"/>
+    <rect x="0" y="0" width="15" height="800"/>
+    <rect x="905" y="0" width="15" height="800"/>
+    <rect x="380" y="15" width="10" height="355"/>
+    <rect x="600" y="15" width="10" height="355"/>
+    <rect x="15" y="360" width="375" height="10"/>
+    <rect x="600" y="360" width="305" height="10"/>
+    <rect x="390" y="260" width="210" height="10"/>
+    <rect x="610" y="370" width="10" height="230"/>
+  </g>
+  <g id="spaces">
+    <polygon id="alcoba" data-finish="madera" points="15,15 380,15 380,360 15,360"/>
+    <polygon id="bano" data-finish="baldosa" points="390,15 600,15 600,260 390,260"/>
+    <polygon id="alcoba-2" data-finish="madera" points="610,15 905,15 905,360 610,360"/>
+    <polygon id="sala" data-finish="madera" points="390,270 600,270 600,370 610,370 610,785 15,785 15,370 390,370"/>
+    <polygon id="cocina" data-finish="piedra" points="620,370 905,370 905,785 620,785"/>
+    <polygon id="porche" data-finish="deck" points="200,800 720,800 720,1000 200,1000"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="290" y="360" width="80" height="10"/>
+    <rect data-type="door" x="620" y="360" width="80" height="10"/>
+    <rect data-type="door" x="450" y="260" width="80" height="10"/>
+    <rect data-type="door" x="420" y="785" width="90" height="15"/>
+    <rect data-type="window" x="80" y="0" width="220" height="15"/>
+    <rect data-type="window" x="700" y="0" width="160" height="15"/>
+    <rect data-type="window" x="905" y="100" width="15" height="200"/>
+    <rect data-type="window" x="440" y="0" width="120" height="15"/>
+    <rect data-type="window" x="60" y="785" width="320" height="15"/>
+    <rect data-type="window" x="0" y="450" width="15" height="250"/>
+    <rect data-type="window" x="905" y="450" width="15" height="200"/>
+    <rect data-type="window" x="680" y="785" width="180" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" data-back="w" x="15" y="100" width="200" height="180"/>
+    <rect data-item="nightstand" x="15" y="50" width="45" height="45"/>
+    <rect data-item="nightstand" x="15" y="285" width="45" height="45"/>
+    <rect data-item="wardrobe" data-back="e" x="320" y="30" width="60" height="220"/>
+    <rect data-item="bed" data-back="w" x="610" y="40" width="190" height="90"/>
+    <rect data-item="bed" data-back="w" x="610" y="170" width="190" height="90"/>
+    <rect data-item="nightstand" x="610" y="135" width="45" height="30"/>
+    <rect data-item="shower" x="390" y="15" width="100" height="100"/>
+    <rect data-item="sink" data-back="e" x="520" y="20" width="80" height="90"/>
+    <rect data-item="toilet" data-back="s" x="400" y="200" width="40" height="55"/>
+    <rect data-item="sofa" data-back="n" x="60" y="420" width="240" height="85"/>
+    <rect data-item="coffee" x="130" y="560" width="120" height="80"/>
+    <rect data-item="armchair" x="330" y="560" width="80" height="80"/>
+    <rect data-item="rug" x="90" y="530" width="210" height="150"/>
+    <rect data-item="table" x="400" y="600" width="160" height="90"/>
+    <rect data-item="chair" data-back="s" x="410" y="560" width="40" height="40"/>
+    <rect data-item="chair" data-back="s" x="510" y="560" width="40" height="40"/>
+    <rect data-item="chair" data-back="n" x="410" y="690" width="40" height="40"/>
+    <rect data-item="chair" data-back="n" x="510" y="690" width="40" height="40"/>
+    <rect data-item="kitchen" data-back="e" x="845" y="400" width="60" height="380"/>
+    <rect data-item="island" x="700" y="500" width="80" height="200"/>
+    <rect data-item="bench" data-back="s" x="230" y="930" width="200" height="55"/>
+    <rect data-item="chair" data-back="s" x="500" y="900" width="60" height="60"/>
+    <rect data-item="chair" data-back="s" x="590" y="900" width="60" height="60"/>
+    <rect data-item="plant" x="210" y="820" width="50" height="50"/>
+  </g>
+</svg>

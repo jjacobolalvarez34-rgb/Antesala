@@ -1,0 +1,700 @@
+{
+  "slug": "frailejon",
+  "name": "Frailejón",
+  "city": "Cundinamarca",
+  "neighborhood": "Páramo de Guasca",
+  "intro": "Cuatro refugios sueltos en un valle de páramo, a hora y media de Bogotá. Cada uno con su vista, separados por frailejones y senderos, con fogata cada noche y desayuno de campo.",
+  "locale": "es",
+  "contact": {
+    "whatsapp": "573204871882"
+  },
+  "site": {
+    "kind": "terreno",
+    "exterior": [
+      {
+        "id": "render-exterior-1",
+        "kind": "photo",
+        "src": "media/renders/valle-dia.jpg",
+        "alt": "El valle de Frailejón en la tarde (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-2",
+        "kind": "photo",
+        "src": "media/renders/valle-noche.jpg",
+        "alt": "El valle de Frailejón de noche, con los refugios encendidos (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-3",
+        "kind": "photo",
+        "src": "media/renders/vista-aerea.jpg",
+        "alt": "El terreno de Frailejón visto desde arriba (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-4",
+        "kind": "photo",
+        "src": "media/renders/encenillo-exterior.jpg",
+        "alt": "Cabaña Encenillo por fuera (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-5",
+        "kind": "photo",
+        "src": "media/renders/laguna-exterior.jpg",
+        "alt": "Refugio Laguna por fuera (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-6",
+        "kind": "photo",
+        "src": "media/renders/piedra-exterior.jpg",
+        "alt": "Refugio de Piedra por fuera (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-7",
+        "kind": "photo",
+        "src": "media/renders/casa-exterior.jpg",
+        "alt": "Casa Frailejón por fuera (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      }
+    ],
+    "pois": [
+      {
+        "id": "recepcion",
+        "name": "Recepción y café",
+        "levelId": "terreno",
+        "description": "Llegada, café de la casa y desayuno de campo cada mañana.",
+        "position": [
+          0,
+          2,
+          43
+        ],
+        "media": []
+      },
+      {
+        "id": "fogata",
+        "name": "Fogata",
+        "levelId": "terreno",
+        "description": "Fogata cada noche, con cobijas y chocolate caliente.",
+        "position": [
+          6,
+          2,
+          10
+        ],
+        "media": []
+      },
+      {
+        "id": "laguna-poi",
+        "name": "La laguna",
+        "levelId": "terreno",
+        "description": "Laguna pequeña de páramo, a cinco minutos a pie.",
+        "position": [
+          56,
+          2,
+          -38
+        ],
+        "media": []
+      },
+      {
+        "id": "mirador",
+        "name": "Mirador",
+        "levelId": "terreno",
+        "description": "Mirador sobre el valle, al final del sendero alto.",
+        "position": [
+          -54,
+          2,
+          -40
+        ],
+        "media": []
+      }
+    ]
+  },
+  "levels": [
+    {
+      "id": "terreno",
+      "name": "El terreno",
+      "kind": "zona",
+      "order": 1,
+      "plan": "plans/terreno.svg"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cabana",
+      "name": "Cabaña de madera",
+      "tagline": "Madera, cobijas de lana y el valle al frente.",
+      "highlights": [
+        "Cama queen",
+        "Ventanal al norte",
+        "Cocineta"
+      ]
+    },
+    {
+      "id": "vidrio",
+      "name": "Refugio de vidrio",
+      "tagline": "Muro de vidrio y tina caliente afuera, frente a la laguna.",
+      "highlights": [
+        "Tina caliente en el deck",
+        "Cama king",
+        "Vista a la laguna"
+      ]
+    },
+    {
+      "id": "piedra",
+      "name": "Refugio de piedra",
+      "tagline": "Muros de piedra, cocina completa y silencio.",
+      "highlights": [
+        "Cocina completa",
+        "Comedor para cuatro",
+        "Cama queen"
+      ]
+    },
+    {
+      "id": "casa",
+      "name": "Casa Frailejón",
+      "tagline": "Dos alcobas y porche, para ir en familia.",
+      "highlights": [
+        "Dos alcobas",
+        "Cocina con isla",
+        "Porche"
+      ]
+    }
+  ],
+  "units": [
+    {
+      "id": "encenillo",
+      "name": "Cabaña Encenillo",
+      "categoryId": "cabana",
+      "levelId": "terreno",
+      "capacity": 2,
+      "beds": "1 cama queen",
+      "areaM2": 41,
+      "basePriceCOP": 420000,
+      "view": "Al borde del bosque de encenillos, con el valle al frente.",
+      "plan": "plans/encenillo.svg",
+      "cabin": {
+        "style": "madera",
+        "roof": "dos-aguas"
+      },
+      "featured": false,
+      "spaces": [
+        {
+          "id": "dormitorio",
+          "name": "Dormitorio",
+          "type": "dormitorio",
+          "areaM2": 17.4,
+          "description": "Cama queen bajo el ventanal del norte: se amanece mirando el valle.",
+          "features": [
+            "Cama queen",
+            "Cobijas de lana",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "render-encenillo-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/encenillo-dormitorio.jpg",
+              "alt": "Dormitorio de Cabaña Encenillo (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "estar",
+          "name": "Estar y cocineta",
+          "type": "sala",
+          "areaM2": 18.4,
+          "description": "Sofá, mesa para dos y cocineta bajo la ventana del sur.",
+          "features": [
+            "Sofá",
+            "Cocineta con greca",
+            "Mesa para dos"
+          ],
+          "media": [
+            {
+              "id": "render-encenillo-estar",
+              "kind": "photo",
+              "src": "media/renders/encenillo-estar.jpg",
+              "alt": "Estar y cocineta de Cabaña Encenillo (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 4.8,
+          "description": "Ducha con agua caliente y ventana pequeña.",
+          "features": [
+            "Ducha",
+            "Toallas"
+          ],
+          "media": [
+            {
+              "id": "render-encenillo-bano",
+              "kind": "photo",
+              "src": "media/renders/encenillo-bano.jpg",
+              "alt": "Baño de Cabaña Encenillo (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "laguna",
+      "name": "Refugio Laguna",
+      "categoryId": "vidrio",
+      "levelId": "terreno",
+      "capacity": 2,
+      "beds": "1 cama king",
+      "areaM2": 34,
+      "basePriceCOP": 520000,
+      "view": "Frente a la laguna, con la tina caliente en el deck.",
+      "plan": "plans/laguna.svg",
+      "cabin": {
+        "style": "vidrio",
+        "roof": "plano"
+      },
+      "featured": true,
+      "spaces": [
+        {
+          "id": "dormitorio",
+          "name": "Dormitorio",
+          "type": "dormitorio",
+          "areaM2": 20.7,
+          "description": "Cama king frente al muro de vidrio que da a la laguna.",
+          "features": [
+            "Cama king",
+            "Muro de vidrio",
+            "Escritorio"
+          ],
+          "media": [
+            {
+              "id": "render-laguna-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/laguna-dormitorio.jpg",
+              "alt": "Dormitorio de Refugio Laguna (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "estar",
+          "name": "Estar",
+          "type": "sala",
+          "areaM2": 7.8,
+          "description": "Sofá, cocineta y la puerta al deck.",
+          "features": [
+            "Sofá",
+            "Cocineta",
+            "Salida al deck"
+          ],
+          "media": [
+            {
+              "id": "render-laguna-estar",
+              "kind": "photo",
+              "src": "media/renders/laguna-estar.jpg",
+              "alt": "Estar de Refugio Laguna (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 5.9,
+          "description": "Ducha amplia con agua caliente.",
+          "features": [
+            "Ducha",
+            "Lavamanos doble"
+          ],
+          "media": [
+            {
+              "id": "render-laguna-bano",
+              "kind": "photo",
+              "src": "media/renders/laguna-bano.jpg",
+              "alt": "Baño de Refugio Laguna (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "deck",
+          "name": "Deck con tina",
+          "type": "terraza",
+          "areaM2": 14.4,
+          "description": "Tina caliente al aire libre y dos asoleadoras, frente a la laguna.",
+          "features": [
+            "Tina caliente",
+            "Dos asoleadoras",
+            "Vista a la laguna"
+          ],
+          "media": [
+            {
+              "id": "render-laguna-deck",
+              "kind": "photo",
+              "src": "media/renders/laguna-deck.jpg",
+              "alt": "Deck con tina de Refugio Laguna (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "piedra",
+      "name": "Refugio de Piedra",
+      "categoryId": "piedra",
+      "levelId": "terreno",
+      "capacity": 2,
+      "beds": "1 cama queen",
+      "areaM2": 35,
+      "basePriceCOP": 460000,
+      "view": "En lo alto del terreno, entre frailejones y rocas.",
+      "plan": "plans/piedra.svg",
+      "cabin": {
+        "style": "piedra",
+        "roof": "dos-aguas"
+      },
+      "featured": false,
+      "spaces": [
+        {
+          "id": "dormitorio",
+          "name": "Dormitorio",
+          "type": "dormitorio",
+          "areaM2": 10.5,
+          "description": "Muros de piedra que guardan el calor y una cama queen con plumón.",
+          "features": [
+            "Cama queen",
+            "Plumón de pluma",
+            "Clóset"
+          ],
+          "media": [
+            {
+              "id": "render-piedra-dormitorio",
+              "kind": "photo",
+              "src": "media/renders/piedra-dormitorio.jpg",
+              "alt": "Dormitorio de Refugio de Piedra (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala",
+          "type": "sala",
+          "areaM2": 10.2,
+          "description": "Sala con sofá y ventanas al oriente y al sur.",
+          "features": [
+            "Sofá",
+            "Biblioteca de páramo"
+          ],
+          "media": [
+            {
+              "id": "render-piedra-sala",
+              "kind": "photo",
+              "src": "media/renders/piedra-sala.jpg",
+              "alt": "Sala de Refugio de Piedra (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "cocina",
+          "name": "Cocina y comedor",
+          "type": "cocina",
+          "areaM2": 9.4,
+          "description": "Cocina completa y comedor para cuatro.",
+          "features": [
+            "Cocina completa",
+            "Comedor para cuatro",
+            "Greca y prensa francesa"
+          ],
+          "media": [
+            {
+              "id": "render-piedra-cocina",
+              "kind": "photo",
+              "src": "media/renders/piedra-cocina.jpg",
+              "alt": "Cocina y comedor de Refugio de Piedra (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 5.1,
+          "description": "Baño junto al dormitorio, con ducha caliente.",
+          "features": [
+            "Ducha",
+            "Toallas"
+          ],
+          "media": [
+            {
+              "id": "render-piedra-bano",
+              "kind": "photo",
+              "src": "media/renders/piedra-bano.jpg",
+              "alt": "Baño de Refugio de Piedra (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "casa",
+      "name": "Casa Frailejón",
+      "categoryId": "casa",
+      "levelId": "terreno",
+      "capacity": 5,
+      "beds": "1 cama king + 2 sencillas",
+      "areaM2": 66,
+      "basePriceCOP": 690000,
+      "view": "Cerca de la recepción y de la fogata, para ir en familia.",
+      "plan": "plans/casa.svg",
+      "cabin": {
+        "style": "clara",
+        "roof": "dos-aguas"
+      },
+      "featured": false,
+      "spaces": [
+        {
+          "id": "alcoba",
+          "name": "Alcoba principal",
+          "type": "dormitorio",
+          "areaM2": 12.6,
+          "description": "Cama king y ventana al norte, hacia los frailejones.",
+          "features": [
+            "Cama king",
+            "Clóset",
+            "Cobijas de lana"
+          ],
+          "media": [
+            {
+              "id": "render-casa-alcoba",
+              "kind": "photo",
+              "src": "media/renders/casa-alcoba.jpg",
+              "alt": "Alcoba principal de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "alcoba-2",
+          "name": "Alcoba de los niños",
+          "type": "dormitorio",
+          "areaM2": 10.2,
+          "description": "Dos camas sencillas y ventana al oriente.",
+          "features": [
+            "Dos camas sencillas",
+            "Mesa de noche"
+          ],
+          "media": [
+            {
+              "id": "render-casa-alcoba-2",
+              "kind": "photo",
+              "src": "media/renders/casa-alcoba-2.jpg",
+              "alt": "Alcoba de los niños de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "sala",
+          "name": "Sala y comedor",
+          "type": "sala",
+          "areaM2": 26.8,
+          "description": "Sala con ventanal al sur y comedor para seis.",
+          "features": [
+            "Sofá",
+            "Comedor para seis",
+            "Juegos de mesa"
+          ],
+          "media": [
+            {
+              "id": "render-casa-sala",
+              "kind": "photo",
+              "src": "media/renders/casa-sala.jpg",
+              "alt": "Sala y comedor de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "cocina",
+          "name": "Cocina",
+          "type": "cocina",
+          "areaM2": 11.8,
+          "description": "Cocina completa con isla, abierta a la sala.",
+          "features": [
+            "Cocina completa",
+            "Isla",
+            "Nevera"
+          ],
+          "media": [
+            {
+              "id": "render-casa-cocina",
+              "kind": "photo",
+              "src": "media/renders/casa-cocina.jpg",
+              "alt": "Cocina de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "bano",
+          "name": "Baño",
+          "type": "bano",
+          "areaM2": 5.1,
+          "description": "Baño entre las dos alcobas.",
+          "features": [
+            "Ducha",
+            "Toallas"
+          ],
+          "media": [
+            {
+              "id": "render-casa-bano",
+              "kind": "photo",
+              "src": "media/renders/casa-bano.jpg",
+              "alt": "Baño de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        },
+        {
+          "id": "porche",
+          "name": "Porche",
+          "type": "terraza",
+          "areaM2": 10.4,
+          "description": "Porche con banca y dos sillas, mirando al valle.",
+          "features": [
+            "Banca",
+            "Dos sillas"
+          ],
+          "media": [
+            {
+              "id": "render-casa-porche",
+              "kind": "photo",
+              "src": "media/renders/casa-porche.jpg",
+              "alt": "Porche de Casa Frailejón (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "isDemo": true,
+  "demoNote": "Glamping ficticio · imágenes ilustrativas",
+  "offer": "noche",
+  "info": {
+    "address": "Vereda del páramo, Guasca (Cundinamarca), a hora y media de Bogotá.",
+    "nearby": [
+      {
+        "name": "La laguna",
+        "time": "5 min a pie"
+      },
+      {
+        "name": "Mirador del valle",
+        "time": "15 min a pie"
+      },
+      {
+        "name": "Guasca, el pueblo",
+        "time": "25 min en carro"
+      },
+      {
+        "name": "Bogotá",
+        "time": "1 h 30 en carro"
+      }
+    ],
+    "checkIn": "3:00 p. m.",
+    "checkOut": "12:00 m.",
+    "amenities": [
+      "Desayuno de campo incluido",
+      "Fogata cada noche",
+      "Senderos al páramo",
+      "Café de la casa en la recepción",
+      "Wifi en la recepción",
+      "Parqueadero en la entrada"
+    ],
+    "policies": [
+      "Mínimo dos noches los fines de semana.",
+      "Cancelación sin costo hasta 72 horas antes de la llegada.",
+      "Mascotas con aviso previo en la Casa Frailejón.",
+      "No se hacen fogatas fuera de la fogata común: el páramo es frágil."
+    ],
+    "faq": [
+      {
+        "q": "¿Qué tan frío es?",
+        "a": "De noche baja a 4 o 6 °C. Cada refugio tiene cobijas de lana y plumón, y la tina del Refugio Laguna es caliente."
+      },
+      {
+        "q": "¿Se llega en cualquier carro?",
+        "a": "Sí. Los últimos 3 km son destapados pero firmes; el parqueadero está en la entrada y se camina 3 a 5 minutos a cada refugio."
+      },
+      {
+        "q": "¿Puedo elegir el refugio?",
+        "a": "Sí. En el recorrido ves cada refugio por dentro y dónde queda en el terreno; al reservar, el mensaje ya dice cuál elegiste."
+      },
+      {
+        "q": "¿Hay señal de celular?",
+        "a": "Hay señal en la recepción y en la fogata; en los refugios es débil a propósito."
+      }
+    ]
+  }
+}

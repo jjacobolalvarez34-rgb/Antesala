@@ -12,10 +12,14 @@ import { can3d, useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
 import type { SceneData, SceneDataWire, SceneStage } from './Scene';
+import type { TerrainData, TerrainDataWire } from './terrain/types';
 
 /** El JS de three.js se descarga solo cuando hace falta (ARQUITECTURA.md §6). */
 const loadScene = () => import('./Scene');
 const Scene = dynamic(loadScene, { ssr: false });
+/** terrenos (glamping, D-083): su propia escena, también bajo demanda */
+const loadTerrain = () => import('./terrain/TerrainScene');
+const TerrainScene = dynamic(loadTerrain, { ssr: false });
 
 /**
  * Capa persistente del layout: decide la calidad, monta la escena la primera
@@ -23,16 +27,17 @@ const Scene = dynamic(loadScene, { ssr: false });
  * Marca <html data-scene="on"> cuando la escena está visible y lista; las
  * páginas usan la variante `scene:` para pasar de lista a paneles sobre el 3D.
  */
-export function SceneLayer({ data: wire }: { data: SceneDataWire }) {
-  const data = useMemo<SceneData>(() => {
+export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWire }) {
+  const data = useMemo<SceneData | TerrainData>(() => {
     const { unitPlanTypes, unitPlanOf, ...rest } = wire;
     const unitPlans: SceneData['unitPlans'] = {};
     for (const [unit, key] of Object.entries(unitPlanOf)) {
       const t = unitPlanTypes[key];
       if (t) unitPlans[unit] = t;
     }
-    return { ...rest, unitPlans };
+    return { ...rest, unitPlans } as SceneData | TerrainData;
   }, [wire]);
+  const terrain = 'kind' in data && data.kind === 'terreno';
   const router = useRouter();
   const [stageName, param, spaceParam] = useSelectedLayoutSegments();
   const reduced = useReducedMotion();
@@ -66,7 +71,7 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire }) {
     const run = () => {
       if (done) return;
       done = true;
-      loadScene().catch(() => {});
+      (terrain ? loadTerrain() : loadScene()).catch(() => {});
       prefetch('dia');
     };
     if (window.matchMedia('(pointer: coarse)').matches && stageName !== 'explorar') {
@@ -82,7 +87,7 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire }) {
     const idle = 'requestIdleCallback' in window;
     const id = idle ? window.requestIdleCallback(run, { timeout: 4000 }) : window.setTimeout(run, 2500);
     return () => (idle ? window.cancelIdleCallback(id) : window.clearTimeout(id));
-  }, [allowed, sceneMounted, stageName]);
+  }, [allowed, sceneMounted, stageName, terrain]);
 
   useEffect(() => {
     if (wants3d) mountScene(stage?.kind === 'explorar');
@@ -110,15 +115,26 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire }) {
         active ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
       )}
     >
-      <Scene
-        data={data}
-        stage={stage ?? { kind: 'explorar' }}
-        active={wants3d}
-        quality={quality}
-        qualityLocked={qualityLocked}
-        reduced={reduced}
-        intro={intro}
-      />
+      {terrain ? (
+        <TerrainScene
+          data={data as TerrainData}
+          stage={stage ?? { kind: 'explorar' }}
+          active={wants3d}
+          quality={quality}
+          reduced={reduced}
+          intro={intro}
+        />
+      ) : (
+        <Scene
+          data={data as SceneData}
+          stage={stage ?? { kind: 'explorar' }}
+          active={wants3d}
+          quality={quality}
+          qualityLocked={qualityLocked}
+          reduced={reduced}
+          intro={intro}
+        />
+      )}
     </div>
   );
 }

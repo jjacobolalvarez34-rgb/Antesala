@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { LevelPicker } from '@/components/hotel/LevelPicker';
+import { TerrainExplorar } from '@/components/hotel/TerrainExplorar';
 import { FacadePicker } from '@/components/scene/FacadePicker';
 import { SceneStatus } from '@/components/scene/SceneStatus';
 import { getHotelBundle } from '@/lib/content';
@@ -19,6 +20,7 @@ export default async function ExplorarPage({ params }: PageProps<'/h/[hotel]/exp
   const bundle = await getHotelBundle((await params).hotel);
   if (!bundle) notFound();
   const { hotel } = bundle;
+  if (hotel.site.kind === 'terreno') return <TerrainExplorar hotel={hotel} aerial={false} />;
   const levels = sortedLevels(hotel).map((l) => ({
     id: l.id,
     name: l.name,

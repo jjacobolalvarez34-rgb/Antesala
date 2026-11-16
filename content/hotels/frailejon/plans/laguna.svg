@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 740">
+  <title>Refugio Laguna · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="720" height="15"/>
+    <rect x="0" y="525" width="720" height="15"/>
+    <rect x="0" y="0" width="15" height="540"/>
+    <rect x="705" y="0" width="15" height="540"/>
+    <rect x="420" y="15" width="10" height="510"/>
+    <rect x="430" y="230" width="275" height="10"/>
+  </g>
+  <g id="spaces">
+    <polygon id="dormitorio" data-finish="madera" points="15,15 420,15 420,525 15,525"/>
+    <polygon id="bano" data-finish="baldosa" points="430,15 705,15 705,230 430,230"/>
+    <polygon id="estar" data-finish="madera" points="430,240 705,240 705,525 430,525"/>
+    <polygon id="deck" data-finish="deck" points="0,540 720,540 720,740 0,740"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="60" y="525" width="320" height="15"/>
+    <rect data-type="window" x="0" y="150" width="15" height="230"/>
+    <rect data-type="door" x="420" y="300" width="10" height="80"/>
+    <rect data-type="door" x="600" y="230" width="80" height="10"/>
+    <rect data-type="window" x="500" y="0" width="140" height="15"/>
+    <rect data-type="door" x="470" y="525" width="100" height="15"/>
+    <rect data-type="window" x="590" y="525" width="100" height="15"/>
+    <rect data-type="window" x="705" y="300" width="15" height="160"/>
+    <rect data-type="door" x="705" y="120" width="15" height="80"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" data-back="w" x="15" y="170" width="200" height="160"/>
+    <rect data-item="nightstand" x="15" y="115" width="45" height="45"/>
+    <rect data-item="nightstand" x="15" y="335" width="45" height="45"/>
+    <rect data-item="desk" data-back="n" x="250" y="15" width="150" height="55"/>
+    <rect data-item="chair" data-back="n" x="300" y="75" width="45" height="45"/>
+    <rect data-item="armchair" x="300" y="400" width="100" height="100"/>
+    <rect data-item="rug" x="230" y="170" width="170" height="210"/>
+    <rect data-item="shower" x="430" y="15" width="100" height="100"/>
+    <rect data-item="sink" data-back="n" x="540" y="20" width="60" height="90"/>
+    <rect data-item="toilet" data-back="s" x="450" y="170" width="40" height="55"/>
+    <rect data-item="sofa" data-back="n" x="450" y="250" width="220" height="85"/>
+    <rect data-item="coffee" x="520" y="370" width="90" height="60"/>
+    <rect data-item="kitchen" data-back="w" x="430" y="360" width="60" height="160"/>
+    <rect data-item="bathtub" x="60" y="580" width="180" height="100"/>
+    <rect data-item="lounger" x="290" y="590" width="70" height="130"/>
+    <rect data-item="lounger" x="380" y="590" width="70" height="130"/>
+    <rect data-item="plant" x="650" y="690" width="50" height="45"/>
+  </g>
+</svg>

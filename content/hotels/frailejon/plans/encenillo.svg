@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760">
+  <title>Cabaña Encenillo · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="600" height="15"/>
+    <rect x="0" y="745" width="600" height="15"/>
+    <rect x="0" y="0" width="15" height="760"/>
+    <rect x="585" y="0" width="15" height="760"/>
+    <rect x="15" y="320" width="570" height="10"/>
+    <rect x="15" y="510" width="225" height="10"/>
+    <rect x="230" y="520" width="10" height="225"/>
+  </g>
+  <g id="spaces">
+    <polygon id="dormitorio" data-finish="madera" points="15,15 585,15 585,320 15,320"/>
+    <polygon id="bano" data-finish="baldosa" points="15,520 230,520 230,745 15,745"/>
+    <polygon id="estar" data-finish="madera" points="15,330 585,330 585,745 240,745 240,510 15,510"/>
+  </g>
+  <g id="openings">
+    <rect data-type="window" x="170" y="0" width="260" height="15"/>
+    <rect data-type="window" x="585" y="90" width="15" height="160"/>
+    <rect data-type="door" x="440" y="320" width="80" height="10"/>
+    <rect data-type="window" x="0" y="360" width="15" height="120"/>
+    <rect data-type="door" x="230" y="560" width="10" height="80"/>
+    <rect data-type="window" x="0" y="600" width="15" height="90"/>
+    <rect data-type="door" x="450" y="745" width="80" height="15"/>
+    <rect data-type="window" x="260" y="745" width="160" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" data-back="n" x="210" y="30" width="160" height="200"/>
+    <rect data-item="nightstand" x="160" y="30" width="45" height="45"/>
+    <rect data-item="nightstand" x="375" y="30" width="45" height="45"/>
+    <rect data-item="wardrobe" data-back="w" x="15" y="60" width="60" height="240"/>
+    <rect data-item="rug" x="190" y="230" width="200" height="70"/>
+    <rect data-item="armchair" x="470" y="230" width="90" height="80"/>
+    <rect data-item="sofa" data-back="e" x="500" y="380" width="85" height="220"/>
+    <rect data-item="coffee" x="400" y="440" width="70" height="120"/>
+    <rect data-item="armchair" x="270" y="350" width="80" height="80"/>
+    <rect data-item="rug" x="300" y="420" width="180" height="180"/>
+    <rect data-item="counter" data-back="s" x="260" y="685" width="160" height="60"/>
+    <rect data-item="table" x="300" y="580" width="100" height="70"/>
+    <rect data-item="chair" data-back="w" x="255" y="590" width="40" height="40"/>
+    <rect data-item="chair" data-back="e" x="405" y="590" width="40" height="40"/>
+    <rect data-item="shower" x="15" y="650" width="95" height="95"/>
+    <rect data-item="toilet" data-back="s" x="150" y="690" width="40" height="55"/>
+    <rect data-item="sink" data-back="w" x="15" y="530" width="55" height="90"/>
+    <rect data-item="plant" x="535" y="690" width="45" height="45"/>
+  </g>
+</svg>

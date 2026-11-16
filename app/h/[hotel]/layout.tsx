@@ -7,6 +7,7 @@ import { DemoBanner } from '@/components/hotel/DemoBanner';
 import { HotelHeader } from '@/components/hotel/HotelHeader';
 import { PoweredBy } from '@/components/hotel/PoweredBy';
 import type { SceneDataWire } from '@/components/scene/Scene';
+import type { TerrainDataWire } from '@/components/scene/terrain/types';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
 import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice, freeAlternative } from '@/lib/hotel';
@@ -46,6 +47,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
     whatsapp: hotel.contact.whatsapp,
     priceFrom: priceFrom(hotel),
     offer: hotel.offer,
+    siteKind: hotel.site.kind,
     levels: sortedLevels(hotel).map(({ id, name }) => ({ id, name })),
     units: hotel.units.map((u) => ({
       id: u.id,
@@ -59,21 +61,47 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
     })),
   };
 
+  // cada plano viaja una vez (D-058): las copias de una unidad tipo lo comparten
+  const unitPlanOf = Object.fromEntries(hotel.units.filter((u) => bundle.plans[u.plan]).map((u) => [u.id, u.plan]));
+  const unitPlanTypes = Object.fromEntries(
+    [...new Map(hotel.units.map((u) => [u.plan, u])).values()].flatMap((u) => {
+      const plan = bundle.plans[u.plan];
+      if (!plan) return [];
+      const spaces = u.spaces.map(({ id, name, type, media }) => {
+        const pano = media.find((m) => m.kind === 'pano360');
+        return {
+          id,
+          name,
+          type,
+          pano: pano
+            ? {
+                url: mediaUrl(hotel.slug, pano.src),
+                yaw: pano.yaw ?? 0,
+                hotspots: (pano.hotspots ?? []).map(({ yaw, pitch, label, target }) => ({ yaw, pitch, label, target })),
+              }
+            : undefined,
+        };
+      });
+      return [[u.plan, { plan, spaces, realista: u.realista ? mediaUrl(hotel.slug, u.realista) : undefined }]];
+    }),
+  );
+  const scenePois = hotel.site.pois.map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    position: p.position,
+    levelName: p.levelId ? findLevel(hotel, p.levelId)?.name : undefined,
+    href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
+    viewpoints: p.viewpoints,
+  }));
+
   const building = hotel.site.kind === 'edificio' ? hotel.site.building : undefined;
   const scene: SceneDataWire | null = building
     ? {
         slug: hotel.slug,
         building,
         floors: sortedLevels(hotel).map((l) => ({ id: l.id, order: l.order, name: l.name })),
-        pois: hotel.site.pois.map((p) => ({
-          id: p.id,
-          name: p.name,
-          description: p.description,
-          position: p.position,
-          levelName: p.levelId ? findLevel(hotel, p.levelId)?.name : undefined,
-          href: p.levelId ? routes.piso(hotel.slug, p.levelId) : undefined,
-          viewpoints: p.viewpoints,
-        })),
+        pois: scenePois,
         colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
         brandName: tokens.brand.name,
         offer: hotel.offer,
@@ -113,30 +141,48 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
             return [[l.id, { url: mediaUrl(hotel.slug, l.plan), spaces, realista: l.realista ? mediaUrl(hotel.slug, l.realista) : undefined }]];
           }),
         ),
-        // cada plano viaja una vez (D-058): las copias de una unidad tipo lo comparten
-        unitPlanOf: Object.fromEntries(hotel.units.filter((u) => bundle.plans[u.plan]).map((u) => [u.id, u.plan])),
-        unitPlanTypes: Object.fromEntries(
-          [...new Map(hotel.units.map((u) => [u.plan, u])).values()].flatMap((u) => {
-            const plan = bundle.plans[u.plan];
-            if (!plan) return [];
-            const spaces = u.spaces.map(({ id, name, type, media }) => {
-              const pano = media.find((m) => m.kind === 'pano360');
-              return {
-                id,
-                name,
-                type,
-                pano: pano
-                  ? {
-                      url: mediaUrl(hotel.slug, pano.src),
-                      yaw: pano.yaw ?? 0,
-                      hotspots: (pano.hotspots ?? []).map(({ yaw, pitch, label, target }) => ({ yaw, pitch, label, target })),
-                    }
-                  : undefined,
-              };
-            });
-            return [[u.plan, { plan, spaces, realista: u.realista ? mediaUrl(hotel.slug, u.realista) : undefined }]];
-          }),
-        ),
+        unitPlanOf,
+        unitPlanTypes,
+      }
+    : null;
+
+  // glamping (D-083): refugios sueltos en un terreno; su lugar sale del mapa (plans/terreno.svg)
+  const mapLevel = hotel.site.kind === 'terreno' ? hotel.levels.find((l) => l.plan) : undefined;
+  const map = mapLevel?.plan ? bundle.plans[mapLevel.plan] : undefined;
+  const terrain: TerrainDataWire | null = map
+    ? {
+        kind: 'terreno',
+        slug: hotel.slug,
+        brandName: tokens.brand.name,
+        offer: hotel.offer,
+        colors: { accent: tokens.color.accentOnDark ?? tokens.color.accent },
+        liveInterior: hotel.isDemo === true,
+        mapSize: [map.width / 100, map.height / 100],
+        pois: scenePois,
+        cabins: hotel.units.flatMap((u) => {
+          const poly = map.spaces.find((s) => s.id === u.id);
+          if (!poly || !u.cabin) return [];
+          const xs = poly.points.map((p) => p[0]);
+          const ys = poly.points.map((p) => p[1]);
+          return [
+            {
+              id: u.id,
+              name: u.name,
+              category: findCategory(hotel, u.categoryId)?.name,
+              href: routes.unidad(hotel.slug, u.id),
+              price: unitPrice(u),
+              occupied: u.occupied === true,
+              view: u.view,
+              capacity: u.capacity,
+              x: ((Math.min(...xs) + Math.max(...xs)) / 2 - map.width / 2) / 100,
+              z: ((Math.min(...ys) + Math.max(...ys)) / 2 - map.height / 2) / 100,
+              style: u.cabin.style,
+              roof: u.cabin.roof,
+            },
+          ];
+        }),
+        unitPlanOf,
+        unitPlanTypes,
       }
     : null;
 
@@ -145,7 +191,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
       style={tokensToStyle(tokens)}
       className="relative flex min-h-dvh flex-col bg-background text-foreground scene:pointer-events-none scene:bg-transparent"
     >
-      {scene ? <SceneLayer data={scene} /> : null}
+      {scene ? <SceneLayer data={scene} /> : terrain ? <SceneLayer data={terrain} /> : null}
       {hotel.isDemo ? (
         <DemoBanner
           note={hotel.demoNote}
@@ -158,6 +204,7 @@ export default async function HotelLayout({ children, params }: LayoutProps<'/h/
         name={tokens.brand.name}
         place={[hotel.neighborhood, hotel.city].filter(Boolean).join(' · ')}
         booking={{ phone: hotel.contact.whatsapp, hotelName: tokens.brand.name }}
+        listLabel={hotel.site.kind === 'terreno' ? 'Los refugios' : undefined}
         offer={hotel.offer}
       />
       <div className="relative z-10 flex-1">{children}</div>

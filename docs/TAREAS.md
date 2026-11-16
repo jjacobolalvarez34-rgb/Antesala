@@ -181,7 +181,11 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 ## Aparcado (no construir sin que Jacobo lo pida)
 
-- [ ] **Variante glamping** (terreno + domos) para KingDome. Se activa si KingDome responde. El modelo ya la soporta.
+- [x] **Variante glamping** (D-083): demo *Frailejón*, 4 refugios en el páramo de Guasca, con escena propia (bajada desde el cielo, letreros delgados, valle y vista aérea, día y noche, entrada al refugio)
+- [x] Fotos del glamping desde la escena (`pnpm renders -g frailejon`) y tarjeta en la página de Antesala con el mapa real
+- [ ] Glamping: 3D realista horneado de los 4 refugios (lote.py)
+- [ ] Glamping: revisar en el celular real de Jacobo (fluidez del valle con la vegetación instanciada)
+- [ ] Glamping: domos (techo curvo) cuando haga falta para KingDome; hoy los planos solo admiten muros rectos
 - [ ] **Splat "wow" del Penthouse.** Opciones: Marble Pro (~$35 USD/mes, con uso comercial) o Apple SHARP (gratis; la licencia de los pesos no está clara). Desde una sola imagen, el splat solo aguanta movimientos cortos de cámara.
 - [ ] Supabase, panel administrativo y dominios por hotel (Fase 1)
 - [ ] Analytics reales

@@ -18,6 +18,8 @@ export interface BookingSummary {
   whatsapp: string;
   priceFrom?: number;
   offer?: Offer;
+  /** glamping (D-083): "el terreno" en vez de "el edificio" */
+  siteKind?: 'edificio' | 'terreno';
   levels: { id: string; name: string }[];
   units: {
     id: string;
@@ -76,13 +78,13 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
       label: level?.name ?? 'Piso',
       detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))}${t.suffix}` : from,
       back: routes.explorar(data.slug),
-      backLabel: 'Volver al edificio',
+      backLabel: data.siteKind === 'terreno' ? 'Volver al valle' : 'Volver al edificio',
       context: base,
     };
   }
   if (stage === 'explorar') {
     return {
-      label: 'Explorar el edificio',
+      label: data.siteKind === 'terreno' ? 'Explorar el terreno' : 'Explorar el edificio',
       detail: from,
       back: routes.hotel(data.slug),
       backLabel: 'Volver a la entrada',
@@ -100,7 +102,7 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
   }
   if (stage === 'lista') {
     return {
-      label: 'Pisos y unidades',
+      label: data.siteKind === 'terreno' ? 'Los refugios' : 'Pisos y unidades',
       detail: from,
       back: routes.hotel(data.slug),
       backLabel: 'Volver a la entrada',

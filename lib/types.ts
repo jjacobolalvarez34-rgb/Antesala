@@ -87,6 +87,12 @@ export interface Unit {
    * windows: índices de ventana vistos desde afuera, de izquierda a derecha.
    */
   exterior?: { facade: number; windows: number[] }[];
+  /**
+   * Refugio suelto en un terreno (glamping, D-083): el exterior se levanta desde el plano
+   * (mismos muros, ventanas y puertas) con este acabado y este techo. Su lugar sale del
+   * polígono con el mismo id en el mapa del terreno.
+   */
+  cabin?: { style: 'madera' | 'vidrio' | 'piedra' | 'clara'; roof: 'dos-aguas' | 'plano' };
   spaces: Space[];
   featured?: boolean;
   /**

@@ -451,3 +451,22 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Spark y el archivo se bajan solo al tocar el botón, así que no pesan en el resto del recorrido.
   - El archivo se gira 180° en X: la salida de los entrenadores viene con Y hacia abajo (COLMAP).
 - Por qué: hace falta para la prueba de captura real en Akuare y, más adelante, para el splat sintético del ultra realista (`docs/RECURSOS-REALISTA.md`). Va aparte del visor del edificio para no tocar lo que ya funciona.
+
+**D-083 · 2026-11-15 · Tercer demo: glamping en el páramo (Frailejón)**
+- Decisión:
+  - **Contenido:** *Frailejón*, glamping ficticio en el páramo de Guasca con cuatro refugios sueltos: Cabaña Encenillo (madera), Refugio Laguna (vidrio, tina en el deck), Refugio de Piedra y Casa Frailejón (familiar, con porche).
+  - Todo sale de `pipeline/gen_frailejon.py`: los planos, el mapa del terreno (`plans/terreno.svg`, que es el "piso" de tipo `zona`) y las unidades.
+  - **Coherencia (regla 9):** el exterior de cada refugio se levanta desde su plano (`Unit.cabin`: acabado y techo), con los mismos muros, ventanas y puertas que la maqueta de adentro. El build valida que el rectángulo del mapa mida lo mismo que el plano.
+  - **Escena propia** (`components/scene/terrain/`), sin tocar la del edificio:
+    - valle de páramo calculado (relieve, laguna, senderos, frailejones, pajonal, rocas, bosque de encenillos, cerros, niebla, cielo con estrellas);
+    - la recepción y la fogata.
+  - **La experiencia:**
+    - la cámara baja desde el cielo a través de la niebla cuando se levanta el telón;
+    - el valle con letreros delgados colgados de una línea fina (bajo el puntero se abren con precio y capacidad; en el celular, un toque los abre y el segundo entra);
+    - panel con los refugios sincronizado con el 3D;
+    - "El valle" y "Vista aérea";
+    - día y noche (ventanas encendidas y fogata que titila);
+    - al entrar a un refugio, la cámara vuela, el techo sube y se desvanece, los muros se van y queda la maqueta con sus espacios.
+  - **Reutiliza** la cámara (`CameraRig`, con entrada propia `introFrom`), la maqueta de unidad, el 3D realista, la reserva y el nivel.
+  - **Fotos:** salen de la misma escena (`pnpm renders -g frailejon`): el valle de día y de noche, la vista aérea, cada refugio por fuera (`?enfocar=`) y cada espacio.
+- Por qué: pedido de Jacobo. Cubre el tercer mercado (glampings, como KingDome) con el mismo producto, y la experiencia del terreno es distinta de la del edificio.

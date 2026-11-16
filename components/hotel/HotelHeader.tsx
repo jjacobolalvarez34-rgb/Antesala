@@ -31,7 +31,10 @@ export function HotelHeader({
   place,
   booking,
   offer,
+  listLabel = 'Pisos y unidades',
 }: {
+  /** "Pisos y unidades" o, en un glamping, "Los refugios" */
+  listLabel?: string;
   slug: string;
   name: string;
   place: string;
@@ -65,7 +68,7 @@ export function HotelHeader({
           href={routes.lista(slug)}
           className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap scene:max-md:hidden border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
         >
-          Pisos y unidades
+          {listLabel}
         </Link>
       </header>
     );

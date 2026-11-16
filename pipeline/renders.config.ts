@@ -16,6 +16,8 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     locale: 'es-CO',
     browserName: 'chromium',
+    // Chrome con la GPU real: en el Chromium de Playwright la apertura de los refugios del glamping no terminaba
+    channel: 'chrome',
     viewport: { width: 1600, height: 1000 },
     reducedMotion: 'reduce',
   },

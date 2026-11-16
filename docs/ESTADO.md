@@ -40,7 +40,7 @@ Es la página principal (`/`). Le habla de "usted" al dueño del hotel. Tiene la
 4. **Demos: "Pruébelo usted".** Cuatro tarjetas:
    - **Niebla Alta** (hotel ficticio): su planta del piso 5 con habitaciones libres y ocupadas.
    - **Akuare** (edificio real de Suba, en venta): su fachada dibujada con los apartamentos vendidos rayados.
-   - **Glamping** "Próximamente": mapa de terreno con domos.
+   - **Frailejón (glamping):** 4 refugios en un valle de páramo, con el mapa real del terreno en la tarjeta.
    - **"Su hotel aquí"**, que lleva a cotizar.
 5. **Para su hotel: "Lo que una galería no alcanza a explicar".** Tres beneficios (más reserva directa, categorías que se entienden, la unidad exacta), el bloque "¿Su hotel no tiene página web? Se la hacemos" y una calculadora de comisión ahorrada.
 6. **Cómo trabajamos: "De su edificio a su recorrido".** Cinco pasos: diagnóstico, captura, producción, revisión y publicación, mantenimiento. También la lista de lo que necesitamos del hotel.
@@ -124,7 +124,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 - **Prospectos verificados por internet:**
   - **Apartasuite Edificio Monir:** 23 suites, vende solo por plataformas y no tiene página propia.
   - **Nico Aparta-Suites:** sitio propio con motor Mirai. Antesala se le suma y no lo reemplaza.
-  - **KingDome Glamping:** espera la variante glamping.
+  - **KingDome Glamping:** la variante glamping ya existe (demo Frailejón). Se le puede escribir con el demo.
 - **Guion de venta:** 3 minutos con la demo en el celular, y mensajes de primer contacto para los tres mercados (`docs/VENTA.md`).
 
 ---
@@ -157,6 +157,13 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - **El primer piso de Akuare es como el real:** sin apartamentos, con la entrada angosta, el local, el salón comunal, el pasillo y los parqueaderos. Quedan 32 apartamentos.
   - **Arreglado el cambio de Inmersivo a Premium de noche.**
   - **Visor de splats listo** para la prueba de captura real.
+- **Hecho el 2026-11-15 (D-083): tercer demo, el glamping *Frailejón*.**
+  - Cuatro refugios sueltos en un valle de páramo: madera, vidrio con tina, piedra y una casa familiar.
+  - La cámara baja desde el cielo a través de la niebla.
+  - Cada refugio tiene un letrero delgado colgado de una línea fina; al pasar el mouse se abre con el precio.
+  - Panel con los refugios, "El valle" y "Vista aérea", día y noche.
+  - Al entrar a un refugio, el techo se levanta y queda la maqueta por dentro.
+  - El exterior de cada refugio sale de su plano, así que afuera y adentro coinciden.
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---
@@ -172,7 +179,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
    - pasar Vercel a Pro antes de la primera factura;
    - revisión legal del contrato (licencia del visor y transferencia);
    - verificar la marca en la SIC (clases 42 y 35), los dominios e Instagram.
-7. **Glamping (KingDome):** construir la variante solo si responden.
+7. **Glamping (KingDome):** la variante ya está hecha (D-083). ¿Se le escribe ya con el demo? Sus unidades son domos: haría falta el techo curvo.
 8. **Trato en la web de Antesala:** hoy es de "usted" (dueños de hotel) y las páginas de los hoteles son de "tú" (huésped). ¿Se mantiene así?
 9. **¿Premium ya se puede vender?** En Niebla Alta ya se ve completo. Falta Akuare (constructoras) y un horneado nocturno propio. ¿Se sale a vender ya con los tres niveles?
 10. **Render realista "con engine" (investigado 2026-11-13).** Unreal con Pixel Streaming se ve como película, pero cobra por minuto de cada visitante (unos USD 800 al mes con 2.000 visitas de 4 minutos en Eagle 3D), depende de la señal y no cuadra con la mensualidad. Unreal directo en el navegador (5.9, WebGPU) todavía es experimental. Propuesta: no cambiar el visor; usar Unreal o Twinmotion para videos y renders de Premium; volver a mirarlo cuando salga estable.

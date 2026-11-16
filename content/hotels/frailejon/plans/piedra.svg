@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 620">
+  <title>Refugio de Piedra · plano en centímetros</title>
+  <g id="walls">
+    <rect x="0" y="0" width="640" height="15"/>
+    <rect x="0" y="605" width="640" height="15"/>
+    <rect x="0" y="0" width="15" height="620"/>
+    <rect x="625" y="0" width="15" height="620"/>
+    <rect x="230" y="15" width="10" height="235"/>
+    <rect x="15" y="250" width="315" height="10"/>
+    <rect x="320" y="260" width="10" height="345"/>
+  </g>
+  <g id="spaces">
+    <polygon id="bano" data-finish="baldosa" points="15,15 230,15 230,250 15,250"/>
+    <polygon id="cocina" data-finish="piedra" points="240,15 625,15 625,260 240,260"/>
+    <polygon id="dormitorio" data-finish="madera" points="15,260 320,260 320,605 15,605"/>
+    <polygon id="sala" data-finish="madera" points="330,260 625,260 625,605 330,605"/>
+  </g>
+  <g id="openings">
+    <rect data-type="door" x="120" y="250" width="80" height="10"/>
+    <rect data-type="door" x="320" y="400" width="10" height="80"/>
+    <rect data-type="door" x="420" y="605" width="90" height="15"/>
+    <rect data-type="window" x="540" y="605" width="70" height="15"/>
+    <rect data-type="window" x="80" y="605" width="180" height="15"/>
+    <rect data-type="window" x="0" y="330" width="15" height="170"/>
+    <rect data-type="window" x="380" y="0" width="180" height="15"/>
+    <rect data-type="window" x="625" y="330" width="15" height="150"/>
+    <rect data-type="window" x="60" y="0" width="100" height="15"/>
+  </g>
+  <g id="furniture">
+    <rect data-item="bed" data-back="n" x="90" y="270" width="160" height="200"/>
+    <rect data-item="nightstand" x="40" y="270" width="45" height="45"/>
+    <rect data-item="nightstand" x="255" y="270" width="45" height="45"/>
+    <rect data-item="wardrobe" data-back="s" x="15" y="500" width="165" height="60"/>
+    <rect data-item="kitchen" data-back="n" x="300" y="15" width="300" height="60"/>
+    <rect data-item="table" x="380" y="140" width="140" height="80"/>
+    <rect data-item="chair" data-back="s" x="395" y="100" width="45" height="40"/>
+    <rect data-item="chair" data-back="s" x="460" y="100" width="45" height="40"/>
+    <rect data-item="chair" data-back="n" x="395" y="220" width="45" height="40"/>
+    <rect data-item="chair" data-back="n" x="460" y="220" width="45" height="40"/>
+    <rect data-item="sofa" data-back="n" x="360" y="300" width="220" height="85"/>
+    <rect data-item="coffee" x="420" y="420" width="100" height="60"/>
+    <rect data-item="armchair" x="350" y="510" width="80" height="80"/>
+    <rect data-item="rug" x="380" y="400" width="180" height="160"/>
+    <rect data-item="shower" x="15" y="15" width="100" height="100"/>
+    <rect data-item="toilet" data-back="n" x="160" y="15" width="40" height="55"/>
+    <rect data-item="sink" data-back="w" x="15" y="160" width="55" height="80"/>
+  </g>
+</svg>

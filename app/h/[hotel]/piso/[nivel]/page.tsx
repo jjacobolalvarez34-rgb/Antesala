@@ -7,6 +7,7 @@ import { ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
 import { Breadcrumbs } from '@/components/hotel/Breadcrumbs';
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { FloorSheet } from '@/components/hotel/FloorSheet';
+import { TerrainOverlay } from '@/components/hotel/TerrainExplorar';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import { getHotelBundle } from '@/lib/content';
 import { findCategory, findLevel, formatArea, formatCOP, offerOf, pluralize, poisOnLevel, sortedLevels, unitPrice, unitsOnLevel } from '@/lib/hotel';
@@ -42,9 +43,14 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
   const units = unitsOnLevel(hotel, level.id);
   const pois = poisOnLevel(hotel, level.id);
 
+  // glamping (D-083): el "piso" es el mapa del terreno; sobre el 3D, la vista aérea con su panel
+  const terrain = hotel.site.kind === 'terreno';
+
   return (
     <main>
+      {terrain ? <TerrainOverlay hotel={hotel} aerial /> : null}
       <FloorSheet
+        hidden={terrain}
         offer={hotel.offer}
         slug={hotel.slug}
         level={level}
@@ -57,18 +63,16 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
       {/* Modo lista (sin escena) */}
       <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">
       <div className="pt-6 md:pt-10">
-        <Breadcrumbs items={[{ label: 'Pisos', href: routes.lista(hotel.slug) }, { label: level.name }]} />
+        <Breadcrumbs items={[{ label: terrain ? 'Refugios' : 'Pisos', href: routes.lista(hotel.slug) }, { label: level.name }]} />
       </div>
       <header className="mt-4 flex items-end justify-between gap-6">
         <div>
-          <p className="eyebrow">
-            {level.name} de {levels.length}
-          </p>
+          <p className="eyebrow">{terrain ? 'Mapa del terreno' : `${level.name} de ${levels.length}`}</p>
           <h1 className="mt-2 font-display text-display md:text-6xl">{level.name}</h1>
           <p className="mt-3 text-muted-foreground">
             {[
-              units.length ? pluralize(units.length, 'unidad', 'unidades') : null,
-              pois.length ? pois.map((p) => p.name).join(' y ') : null,
+              units.length ? pluralize(units.length, terrain ? 'refugio' : 'unidad', terrain ? 'refugios' : 'unidades') : null,
+              pois.length ? (terrain ? pois.map((p) => p.name).join(', ') : pois.map((p) => p.name).join(' y ')) : null,
             ]
               .filter(Boolean)
               .join(' · ') || 'Fuera del recorrido de la demo'}
@@ -99,7 +103,7 @@ export default async function PisoPage({ params }: PageProps<'/h/[hotel]/piso/[n
       {level.plan && plans[level.plan] ? (
         <section aria-labelledby="planta" className="mt-8 rounded-3xl border border-border bg-secondary p-4 sm:p-8 md:mt-12">
           <h2 id="planta" className="eyebrow">
-            {units.length ? 'Planta del piso · toca una unidad' : 'Planta del piso'}
+            {terrain ? 'Mapa del terreno · toca un refugio' : units.length ? 'Planta del piso · toca una unidad' : 'Planta del piso'}
           </h2>
           <PlanSvg
             geometry={plans[level.plan]!}

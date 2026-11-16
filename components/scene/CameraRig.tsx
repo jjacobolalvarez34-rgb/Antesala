@@ -34,6 +34,9 @@ interface Props {
   intro: boolean;
   reduced: boolean;
   autoRotate: boolean;
+  /** entrada propia (terreno, D-083): de dónde parte la cámara y cuánto dura */
+  introFrom?: CameraPose;
+  introDuration?: number;
 }
 
 interface State {
@@ -86,7 +89,7 @@ function readState(camera: THREE.Camera, controls: OrbitControlsImpl | null, shi
   };
 }
 
-export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }: Props) {
+export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate, introFrom, introDuration }: Props) {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as OrbitControlsImpl | null;
   const gl = useThree((s) => s.gl);
@@ -112,7 +115,7 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
     prev.current = { key: stageKey, depth };
 
     const from = first
-      ? toState(intro && !reduced ? introPose(poseRef.current) : poseRef.current)
+      ? toState(intro && !reduced ? (introFrom ?? introPose(poseRef.current)) : poseRef.current)
       : readState(camera, controls, shift.current);
 
     // camino corto en azimut
@@ -124,7 +127,7 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate }:
       ? 0
       : first
         ? intro
-          ? INTRO_DURATION
+          ? (introDuration ?? INTRO_DURATION)
           : 0
         : facadeTurn
           ? 2.6

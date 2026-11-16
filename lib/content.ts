@@ -76,6 +76,7 @@ const unit = z.object({
       }),
     )
     .optional(),
+  cabin: z.object({ style: z.enum(['madera', 'vidrio', 'piedra', 'clara']), roof: z.enum(['dos-aguas', 'plano']) }).optional(),
   spaces: z.array(space).min(1),
   featured: z.boolean().optional(),
   occupied: z.boolean().optional(),
@@ -394,6 +395,18 @@ async function loadBundle(slug: string): Promise<HotelBundle> {
     const ids = new Set(geometry.spaces.map((s) => s.id));
     for (const u of hotel.units.filter((x) => x.levelId === level.id)) {
       if (!ids.has(u.id)) problems.push(`piso "${level.id}" → ${level.plan} no tiene el polígono de la unidad "${u.id}"`);
+      // refugio en el mapa del terreno (D-083): el rectángulo del mapa mide lo mismo que su plano (regla 9)
+      const own = plans[u.plan];
+      const poly = geometry.spaces.find((s) => s.id === u.id);
+      if (u.cabin && own && poly) {
+        const xs = poly.points.map((p) => p[0]);
+        const ys = poly.points.map((p) => p[1]);
+        const w = Math.max(...xs) - Math.min(...xs);
+        const h = Math.max(...ys) - Math.min(...ys);
+        if (Math.abs(w - own.width) > 5 || Math.abs(h - own.height) > 5) {
+          problems.push(`unidad "${u.id}" → en ${level.plan} mide ${w}×${h} cm pero su plano mide ${own.width}×${own.height} cm`);
+        }
+      }
     }
   }
 

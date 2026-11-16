@@ -19,7 +19,10 @@ export function FloorSheet({
   above,
   below,
   offer = 'noche',
+  hidden = false,
 }: {
+  /** el glamping usa su propio panel (TerrainOverlay) */
+  hidden?: boolean;
   offer?: Offer;
   slug: string;
   level: Level;
@@ -30,6 +33,7 @@ export function FloorSheet({
   below?: Level;
 }) {
   const free = units.filter((u) => !u.occupied);
+  if (hidden) return null;
   const prices = free.map(unitPrice).filter((p): p is number => p !== undefined);
   const from = prices.length ? Math.min(...prices) : undefined;
   return (

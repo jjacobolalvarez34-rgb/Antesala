@@ -72,6 +72,10 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
   const info = hotel.info ?? {};
   const from = priceFrom(hotel);
   const offer = offerOf(hotel);
+  // glamping (D-083): refugios sueltos en un terreno, no pisos de un edificio
+  const terrain = hotel.site.kind === 'terreno';
+  const unitsLabel = terrain ? 'Refugios' : offer.units;
+  const unitLabel = terrain ? 'refugio' : offer.unit.toLowerCase();
   const place = [hotel.neighborhood, hotel.city].filter(Boolean).join(', ');
   const floors = hotel.site.building?.floors ?? hotel.levels.length;
   const url = (m: Media) => mediaUrl(hotel.slug, m.src);
@@ -105,7 +109,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
             : undefined,
         }))
       : [];
-  const openFloor = exterior.find((m) => /piso/i.test(m.src));
+  const openFloor = exterior.find((m) => /piso|aerea/i.test(m.src));
   const night = pair(exterior.filter((m) => /noche/i.test(m.src)));
 
   // una fila por categoría: precio desde, área y capacidad, y la unidad que se muestra
@@ -121,7 +125,8 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
       capacity: show?.capacity,
       beds: show?.beds,
       show,
-      photo: show ? pair(unitPhotos(show)) : undefined,
+      // en un glamping, el refugio por fuera dice más que un espacio de adentro
+      photo: show ? pair([...hotel.site.exterior.filter((m) => m.src.includes(`/${show.id}-exterior`)), ...unitPhotos(show)]) : undefined,
     };
   });
 
@@ -129,8 +134,8 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
   const whatsapp = buildWhatsAppUrl({ ...booking, visit: (hotel.offer ?? 'noche') !== 'noche' });
   const maxGuests = Math.max(...hotel.units.map((u) => u.capacity ?? 2));
   const facts = [
-    { label: 'Pisos', value: String(floors) },
-    { label: offer.units, value: String(hotel.units.length) },
+    terrain ? null : { label: 'Pisos', value: String(floors) },
+    { label: unitsLabel, value: String(hotel.units.length) },
     from !== undefined ? { label: 'Desde', value: formatCOP(from), hint: offer.fromHint } : null,
     info.checkIn ? { label: 'Llegada', value: info.checkIn, hint: info.checkOut ? `Salida ${info.checkOut}` : undefined } : null,
   ].filter((f) => f !== null);
@@ -181,7 +186,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
               className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-ink pb-1 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
             >
               <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
-              Recorrer el edificio en 3D
+              {terrain ? 'Recorrer el terreno en 3D' : 'Recorrer el edificio en 3D'}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
@@ -202,17 +207,17 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
         <section id="habitaciones" aria-labelledby="titulo-habitaciones" className="mt-24 scroll-mt-24 md:mt-40">
           <div className="flex flex-wrap items-end justify-between gap-6 border-b border-border pb-8">
             <div>
-              <p className={`${eyebrow} text-accent`}>{pluralize(hotel.units.length, offer.unit.toLowerCase(), offer.units.toLowerCase())}</p>
+              <p className={`${eyebrow} text-accent`}>{pluralize(hotel.units.length, unitLabel, unitsLabel.toLowerCase())}</p>
               <h2 id="titulo-habitaciones" className={`mt-3 ${h2}`}>
-                {offer.units}
+                {unitsLabel}
               </h2>
             </div>
             <div className="flex gap-6 text-sm">
               <Link href={routes.comparar(hotel.slug)} className="inline-flex min-h-11 items-center gap-1.5 underline-offset-[6px] hover:underline">
                 Comparar <ArrowRight aria-hidden className="size-4" />
               </Link>
-              <Link href={routes.lista(hotel.slug)} className="inline-flex min-h-11 items-center gap-1.5 underline-offset-[6px] hover:underline">
-                Todas por piso <ArrowRight aria-hidden className="size-4" />
+              <Link href={terrain && hotel.levels[0] ? routes.piso(hotel.slug, hotel.levels[0].id) : routes.lista(hotel.slug)} className="inline-flex min-h-11 items-center gap-1.5 underline-offset-[6px] hover:underline">
+                {terrain ? 'Ver el mapa' : 'Todas por piso'} <ArrowRight aria-hidden className="size-4" />
               </Link>
             </div>
           </div>
@@ -293,13 +298,21 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
           <div className="px-6 py-14 md:px-16 md:py-24">
             <p className={`${eyebrow} text-accent-on-dark`}>Antes de reservar</p>
             <h2 id="recorrido" className={`mt-4 ${h2}`}>
-              Elige tu habitación viéndola.
+              {terrain ? 'Elige tu refugio viéndolo.' : 'Elige tu habitación viéndola.'}
             </h2>
             <ol className="mt-10 flex flex-col border-t border-bone/15">
               {[
-                ['Abre un piso', 'El piso sale del edificio y se ve la planta amoblada.'],
-                ['Toca tu habitación', 'Con su precio, su vista y el piso en que queda.'],
-                ['Mírala por dentro', 'Cada espacio, y la vista desde la ventana.'],
+                ...(terrain
+                  ? [
+                      ['Mira el valle', 'Llegas desde arriba y ves dónde queda cada refugio.'],
+                      ['Toca tu refugio', 'Con su precio, su vista y a cuánto queda de la fogata.'],
+                      ['Míralo por dentro', 'El techo se levanta y se ve cada espacio, amoblado.'],
+                    ]
+                  : [
+                      ['Abre un piso', 'El piso sale del edificio y se ve la planta amoblada.'],
+                      ['Toca tu habitación', 'Con su precio, su vista y el piso en que queda.'],
+                      ['Mírala por dentro', 'Cada espacio, y la vista desde la ventana.'],
+                    ]),
               ].map(([t, d], i) => (
                 <li key={t} className="flex gap-5 border-b border-bone/15 py-5">
                   <span className="font-display text-2xl leading-none text-accent-on-dark">{i + 1}</span>
@@ -507,7 +520,7 @@ export default async function EntradaPage({ params }: PageProps<'/h/[hotel]'>) {
             <ul className="mt-4 flex flex-col gap-2 text-sm">
               <li>
                 <a href="#habitaciones" className="hover:text-bone">
-                  {offer.units}
+                  {unitsLabel}
                 </a>
               </li>
               <li>

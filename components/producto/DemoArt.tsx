@@ -121,8 +121,11 @@ export function ElevationArt({
   );
 }
 
-/** Mapa de terreno con curvas de nivel y domos (glamping, próximamente). */
-export function TerrainArt() {
+/**
+ * Mapa del terreno del glamping (D-083): curvas de nivel y cada refugio en su lugar del mapa
+ * real (x, y de 0 a 1), con su nombre. Sin datos, cuatro refugios de ejemplo.
+ */
+export function TerrainArt({ refugios }: { refugios?: { name: string; x: number; y: number }[] } = {}) {
   const W = 480;
   const H = 300;
   const hill = (cx: number, cy: number, rx: number, ry: number, rot: number, n: number) =>
@@ -142,32 +145,36 @@ export function TerrainArt() {
         />
       );
     });
-  const domes: [number, number][] = [
-    [128, 196],
-    [196, 150],
-    [262, 182],
-    [330, 128],
-    [372, 200],
-  ];
+  const pts = (refugios ?? [
+    { name: 'Refugio 1', x: 0.27, y: 0.55 },
+    { name: 'Refugio 2', x: 0.43, y: 0.3 },
+    { name: 'Refugio 3', x: 0.7, y: 0.36 },
+    { name: 'Refugio 4', x: 0.64, y: 0.7 },
+  ]).map((r) => ({ ...r, px: 30 + r.x * (W - 60), py: 24 + r.y * (H - 64) }));
+  const start = { px: W * 0.5, py: H - 30 };
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Mapa de terreno con cinco domos (ilustración)" preserveAspectRatio="xMidYMid slice">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Mapa del terreno con ${pts.length} refugios (ilustración)`} preserveAspectRatio="xMidYMid slice">
       <rect width={W} height={H} fill={C.noche} />
-      {hill(170, 170, 210, 120, -12, 8)}
-      {hill(360, 150, 150, 95, 18, 6)}
-      {/* sendero */}
-      <path
-        d={`M40 260 C 90 240, 110 215, ${domes.map(([x, y]) => `${x} ${y}`).join(' S ')}`}
-        fill="none"
-        stroke={C.papel}
-        strokeOpacity="0.45"
-        strokeDasharray="3 5"
-      />
-      {domes.map(([x, y], i) => (
+      {hill(170, 150, 210, 120, -12, 8)}
+      {hill(360, 120, 150, 95, 18, 6)}
+      {/* senderos desde la recepción */}
+      {pts.map((p, i) => (
+        <path
+          key={`s${i}`}
+          d={`M${start.px} ${start.py} Q ${(start.px + p.px) / 2 + (i % 2 ? 24 : -24)} ${(start.py + p.py) / 2}, ${p.px} ${p.py + 8}`}
+          fill="none"
+          stroke={C.papel}
+          strokeOpacity="0.4"
+          strokeDasharray="3 5"
+        />
+      ))}
+      <rect x={start.px - 7} y={start.py - 4} width="14" height="8" fill={C.champ} fillOpacity="0.7" />
+      {pts.map((p, i) => (
         <g key={i}>
-          <path d={`M${x - 11} ${y} A 11 11 0 0 1 ${x + 11} ${y} Z`} fill={C.noche} stroke={C.champ} strokeWidth="1.3" />
-          <path d={`M${x - 6} ${y} A 6 9 0 0 1 ${x + 6} ${y} M${x} ${y - 11} V${y}`} fill="none" stroke={C.champ} strokeOpacity="0.6" />
-          <text x={x} y={y + 15} textAnchor="middle" fontSize="8.5" fill={C.papel} fillOpacity="0.7" fontFamily="var(--f-body)">
-            Domo {i + 1}
+          {/* refugio con techo a dos aguas */}
+          <path d={`M${p.px - 10} ${p.py + 6} V${p.py - 2} L${p.px} ${p.py - 10} L${p.px + 10} ${p.py - 2} V${p.py + 6} Z`} fill={C.noche} stroke={C.champ} strokeWidth="1.3" />
+          <text x={p.px} y={p.py + 19} textAnchor="middle" fontSize="8.5" fill={C.papel} fillOpacity="0.75" fontFamily="var(--f-body)">
+            {p.name}
           </text>
         </g>
       ))}
@@ -177,7 +184,7 @@ export function TerrainArt() {
         <path d="M0 -9 L4 5 L0 2 L-4 5 Z" fill={C.champ} stroke="none" />
       </g>
       <text x="24" y={H - 12} fontSize="8.5" letterSpacing="2" fill={C.papel} fillOpacity="0.5" fontFamily="var(--f-body)">
-        MAPA DEL TERRENO · CURVAS CADA 5 M
+        MAPA DEL TERRENO · ILUSTRATIVO
       </text>
     </svg>
   );
