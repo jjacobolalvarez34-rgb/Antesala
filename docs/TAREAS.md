@@ -183,7 +183,14 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 - [x] **Variante glamping** (D-083): demo *Frailejón*, 4 refugios en el páramo de Guasca, con escena propia (bajada desde el cielo, letreros delgados, valle y vista aérea, día y noche, entrada al refugio)
 - [x] Fotos del glamping desde la escena (`pnpm renders -g frailejon`) y tarjeta en la página de Antesala con el mapa real
-- [ ] Glamping: 3D realista horneado de los 4 refugios (lote.py)
+- [x] Glamping: 3D realista horneado de los 4 refugios (lote.py)
+- [x] **Hotel Cénit** (D-085): torre de lujo de 15 pisos y 52 habitaciones, fachada de muro cortina, generada con `gen_cenit.py`
+- [ ] Cénit: fotos de la escena, fotos y 360° de Blender, 3D realista de las 4 habitaciones tipo, plantas y fachada (tanda de la noche del 2026-11-15)
+- [x] Pisos pegados al costado del edificio (FloorTags), en vez de tocar el piso o de la columna
+- [x] Identidad de la web de cada hotel (D-086) y franja de reserva directa
+- [x] Demos y Ver ejemplo en otra pestaña
+- [x] Fotos y 360° por espacio en Blender (D-084), visor "Mirar en 360°" y más decoración en las maquetas
+- [ ] Revisar en la mañana: fotos y 360° de Niebla Alta, Frailejón y Cénit (tanda de la noche)
 - [ ] Glamping: revisar en el celular real de Jacobo (fluidez del valle con la vegetación instanciada)
 - [ ] Glamping: domos (techo curvo) cuando haga falta para KingDome; hoy los planos solo admiten muros rectos
 - [ ] **Splat "wow" del Penthouse.** Opciones: Marble Pro (~$35 USD/mes, con uso comercial) o Apple SHARP (gratis; la licencia de los pesos no está clara). Desde una sola imagen, el splat solo aguanta movimientos cortos de cámara.

@@ -25,6 +25,28 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-15 (tarde y noche) · Glamping Frailejón, Hotel Cénit, identidad por hotel y 360° renderizados
+
+**Hecho**
+- **Glamping Frailejón (D-083):**
+  - 4 refugios en el páramo;
+  - escena propia: bajada desde el cielo, letreros delgados, el valle y la vista aérea, día y noche, entrada al refugio;
+  - fotos desde la escena;
+  - los 4 refugios horneados para Premium.
+- **Hotel Cénit (D-085):** torre de lujo de 15 pisos y 52 habitaciones, fachada nueva de muro cortina, vista inicial más baja en torres.
+- **Pisos pegados al edificio (FloorTags):** cada número al costado de su piso, con una línea fina. Reemplaza tocar el piso en el 3D y la columna aparte (pedido de Jacobo).
+- **Identidad de la web de cada hotel (D-086)** y franja de reserva directa. Demos y Ver ejemplo en otra pestaña.
+- **Telón de marca:** sin capturas del 3D de fondo (se veían como una maqueta mal hecha); solo fotos profesionales.
+- **Fotos y 360° de cada espacio desde Blender (D-084)**, con el visor "Mirar en 360°". Más decoración en las maquetas.
+- **Idea de finca raíz** anotada en ESTADO (decisión abierta 13).
+
+**Problemas / bloqueos**
+- Las fotos de los refugios por dentro salían con la apertura a medias en el Chromium de Playwright: ahora se capturan con Chrome.
+- Los lotes del 3D realista corrían todas las pruebas de exportación (el filtro `exportar` coincidía con las tres): ahora apuntan al archivo exacto.
+
+**Siguiente sesión**
+- Empezar por: revisar lo que dejó la tanda de la noche (`.tmp/noche.sh` y `.tmp/realista/lote.log`): fotos de Cénit, fotos y 360° de Niebla Alta, Frailejón y Cénit, y el realista de Cénit (habitaciones, plantas y fachada). Registrar en `hotel.json` lo que haya quedado, compilar, revisar en capturas y subir.
+
 ## 2026-11-14/15 (noche y madrugada) · Akuare realista, su primer piso real y el visor de splats
 
 **Hecho**

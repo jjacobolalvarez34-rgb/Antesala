@@ -164,6 +164,12 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
   - Panel con los refugios, "El valle" y "Vista aérea", día y noche.
   - Al entrar a un refugio, el techo se levanta y queda la maqueta por dentro.
   - El exterior de cada refugio sale de su plano, así que afuera y adentro coinciden.
+- **Hecho el 2026-11-15 en la noche (D-084 a D-086):**
+  - **Cuarto demo: Hotel Cénit.** Torre de lujo de 15 pisos y 52 habitaciones junto al Parque de la 93, con fachada moderna de vidrio de piso a techo, spa y bar. Muestra cómo se ve un hotel grande.
+  - **Los pisos se eligen en el mismo modelo:** cada número va pegado al costado del edificio con una línea fina. Al pasar el mouse dice cuántas habitaciones quedan libres.
+  - **Cada hotel tiene su propia identidad en la web:** esquinas de los botones, portada y nombre. Hay además una franja de "reserva directa" con los beneficios de reservar con el hotel.
+  - **Fotos y 360° de cada espacio**, renderizados desde la maqueta amoblada. En un hotel real se toman con una cámara 360.
+  - **Las demos abren en otra pestaña.**
 - **Akuare:** la fachada fotográfica espera fotos de Jacobo desde la calle (no Google Maps ni Street View: sus términos lo prohíben).
 
 ---
