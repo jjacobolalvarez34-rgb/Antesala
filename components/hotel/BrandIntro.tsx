@@ -17,7 +17,8 @@ import { can3d, useTour } from '@/lib/store';
  * - Animada la primera vez de la sesión; después, el nombre quieto (el script en
  *   línea marca <html data-intro="seen"> antes de pintar).
  * - Dura al menos lo que la animación; como máximo 20 s aunque el 3D no llegue.
- * - Solo CSS (sin GSAP en el JS inicial). "Entrar" levanta el telón de inmediato.
+ * - Solo CSS (sin GSAP en el JS inicial). Sin botón "Entrar" (Jacobo, 2026-11-16): dejaba ver
+ *   la escena a medio cargar y en el celular se sentía trabada; el telón se va cuando hay escena.
  */
 const KEY = 'antesala:intro';
 const MIN_ANIMATED_MS = 2900;
@@ -117,14 +118,6 @@ export function BrandIntro({
             <span className="text-[0.625rem] tracking-[0.32em] text-bone/55 uppercase">Preparando el recorrido</span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setPhase('leaving')}
-          className="brand-intro-enter absolute right-6 bottom-[calc(1.75rem+var(--safe-bottom))] inline-flex min-h-11 items-center gap-2 px-2 text-[0.6875rem] tracking-[0.28em] text-bone/75 uppercase transition-colors hover:text-bone md:right-12 md:bottom-12"
-        >
-          Entrar
-          <span aria-hidden className="h-px w-6 bg-current" />
-        </button>
       </div>
     </>
   );

@@ -14,6 +14,8 @@ import sys
 import time
 
 import bpy
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from gpu import hiper, usar_gpu  # noqa: E402
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]
@@ -149,7 +151,7 @@ bpy.context.scene.collection.objects.link(sun)
 
 sc = bpy.context.scene
 sc.render.engine = 'CYCLES'
-sc.cycles.device = 'CPU'
+usar_gpu(sc)
 sc.cycles.samples = SAMPLES
 sc.cycles.use_denoising = True
 sc.view_settings.view_transform = 'AgX'

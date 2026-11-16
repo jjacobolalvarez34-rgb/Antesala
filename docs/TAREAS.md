@@ -197,19 +197,22 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 
 Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s en mostrar la escena, baja 7,3 MB y corre a **2 fps**; Inmersivo, 10 s, 3,8 MB y 51 fps. La causa principal: la fachada realista tiene una textura de luz por piso (15 de 2048 px + 15 de 1024 px ≈ 420 MB de memoria de video).
 
-- [ ] Fachada realista en un solo atlas compartido por todos los pisos (`hornear_edificio.py`) y rehornear Cénit y Niebla Alta
+- [x] Fachada realista en un solo atlas compartido por todos los pisos (`hornear_edificio.py`) y rehornear Cénit y Niebla Alta
 - [ ] Texturas comprimidas para la GPU (KTX2/Basis) en vez de WebP: ocupan 4 a 6 veces menos memoria de video
-- [ ] Cargas por tandas: el cielo de noche (1,6 MB) solo al encender la noche; las plantas realistas solo al abrir el piso (o al pasar sobre él); nada pesado antes de que la escena se vea
+- [x] Cargas por tandas: el cielo de noche solo al pedirlo, cielo de 512 px en celular, las plantas realistas solo al abrir el piso (D-087)
+- [x] La calidad no baja durante la carga y se recupera; piso de resolución 1,25 en celular ("se ve pixelado")
+- [ ] Medir con `pnpm perf` Cénit y Niebla Premium con las fachadas en atlas y anotarlo en `docs/CARGA.md` §1
+- [ ] Pedir permiso a Jacobo para instalar KTX-Software (`toktx`) y pasar las texturas a KTX2
 - [ ] Cambiar entre Inmersivo y Premium sin trabarse: precargar lo de Premium en segundo plano y cambiar cuando ya esté listo
-- [ ] Quitar el botón "Entrar" del telón de carga (dejaba ver la escena a medio cargar)
-- [ ] Subir la sensibilidad al girar (maqueta y 360°)
-- [ ] Dos puntos de 360° en los espacios largos (la habitación de Cénit incluye el pasillo: el 360° de hoy muestra la puerta y no la cama)
-- [ ] Investigar cómo cargan D5 Render, Matterport y otros visores profesionales, y escribir `docs/CARGA.md` (qué se carga y cuándo, presupuestos por nivel y por dispositivo)
-- [ ] Escribir `docs/RENDER.md`: plan paso a paso para el render hiperrealista en el PC prestado (qué, en qué orden, con qué ajustes y cuánto tarda), sin depender de esta conversación
+- [x] Quitar el botón "Entrar" del telón de carga (dejaba ver la escena a medio cargar)
+- [x] Subir la sensibilidad al girar (maqueta y 360°)
+- [x] Dos puntos de 360° en los espacios largos (la habitación de Cénit incluye el pasillo: el 360° de hoy muestra la puerta y no la cama)
+- [x] Investigar cómo cargan D5 Render, Matterport y otros visores profesionales, y escribir `docs/CARGA.md` (qué se carga y cuándo, presupuestos por nivel y por dispositivo)
+- [x] Escribir `docs/RENDER.md`: plan paso a paso para el render hiperrealista en el PC prestado (qué, en qué orden, con qué ajustes y cuánto tarda), sin depender de esta conversación
 
 ### Primera vista y entorno (pedido de Jacobo, 2026-11-16)
 
-- [ ] **La primera vista es una panorámica del edificio:** al llegar, la cámara queda en un ángulo en 3/4 (dos fachadas a la vista, un poco desde arriba), donde el edificio se aprecia completo. Hoy arranca de frente, y en Cénit muy de frente y muy bajo. Revisarlo en los cuatro hoteles y a 390 px
+- [x] **La primera vista es una panorámica del edificio** (hecho el 2026-11-16; revisar en el celular de Jacobo): al llegar, la cámara queda en un ángulo en 3/4 (dos fachadas a la vista, un poco desde arriba), donde el edificio se aprecia completo. Hoy arranca de frente, y en Cénit muy de frente y muy bajo. Revisarlo en los cuatro hoteles y a 390 px
 - [ ] **El fondo no parece un lugar real:** hoy se ve como un decorado genérico pegado atrás (bloques iguales, montaña plana). Hay que hacer que el barrio se sienta como un sitio:
   - variedad de alturas, colores y retiros en los vecinos;
   - calles con andenes, cruces y árboles que sigan la trama;

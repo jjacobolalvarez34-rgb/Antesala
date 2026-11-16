@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "shots": "playwright test",
+    "perf": "node tests/perf.mjs",
     "assets": "echo \"pipeline de assets: llega en el bloque 5\"",
     "placeholders": "node pipeline/placeholders.mjs",
     "estado": "node pipeline/estado-pdf.mjs",

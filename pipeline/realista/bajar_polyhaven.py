@@ -4,7 +4,7 @@ import json
 import os
 import urllib.request
 
-DEST = 'D:/Herramientas/assets-polyhaven'
+DEST = os.environ.get('POLYHAVEN', 'D:/Herramientas/assets-polyhaven')
 TEXTURAS = ['laminate_floor_02', 'beige_wall_001', 'floor_tiles_06', 'marble_01', 'oak_veneer_01', 'rough_linen', 'velour_velvet', 'caban']
 MODELOS = ['potted_plant_02', 'potted_plant_04', 'ceramic_vase_01', 'decorative_book_set_01', 'modern_arm_chair_01', 'coffee_table_round_01', 'modern_ceiling_lamp_01']
 UA = {'User-Agent': 'antesala-pipeline/1.0'}

@@ -336,7 +336,7 @@ function Rig({
         maxDistance={pose.radius * 1.35}
         minPolarAngle={0.05}
         maxPolarAngle={inUnit ? 1.2 : 1.32}
-        rotateSpeed={0.55}
+        rotateSpeed={0.8}
       />
       {/* antes de la bajada, la cámara espera arriba, sobre la niebla */}
       {descend ? (

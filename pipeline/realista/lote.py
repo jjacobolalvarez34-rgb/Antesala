@@ -12,12 +12,13 @@ import subprocess
 import sys
 import time
 
-BLENDER = 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe'
+# en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
+BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
 TODAS = ['niebla-alta:402', 'niebla-alta:201', 'niebla-alta:601', 'akuare:101', 'akuare:102']
 LOG = '.tmp/realista/lote.log'
 os.makedirs('.tmp/realista', exist_ok=True)
-ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': r'D:\Repositorios\Prodigia\compilacion\ms-playwright',
-       'TMP': r'D:\Repositorios\Antesala\.tmp', 'TEMP': r'D:\Repositorios\Antesala\.tmp'}
+ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': os.environ.get('PLAYWRIGHT_BROWSERS_PATH', r'D:\Repositorios\Prodigia\compilacion\ms-playwright'),
+       'TMP': os.path.abspath('.tmp'), 'TEMP': os.path.abspath('.tmp')}
 
 
 def log(*a):
@@ -52,7 +53,7 @@ for t in trabajos:
     if not run(f'npx playwright test -c pipeline/renders.config.ts realista/exportar.spec.ts', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
         continue
     log('  Blender: muebles, render y horneado (unos 20 min)')
-    if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} 48 2048'):
+    if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} {os.environ.get("MUESTRAS", "48")} {os.environ.get("RES", "2048")}'):
         continue
     if not os.path.exists(salida + '.glb'):
         log('  sin GLB de salida')

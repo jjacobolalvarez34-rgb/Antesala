@@ -15,6 +15,8 @@ import sys
 import time
 
 import bpy
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from gpu import hiper, usar_gpu  # noqa: E402
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]
@@ -170,7 +172,7 @@ sun.data.color = (1.0, 0.95, 0.88)
 sun.rotation_euler = (math.radians(52), 0, math.radians(-35))
 sc.collection.objects.link(sun)
 sc.render.engine = 'CYCLES'
-sc.cycles.device = 'CPU'
+usar_gpu(sc)
 sc.cycles.use_denoising = True
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Base Contrast'
@@ -196,42 +198,61 @@ log('muestra')
 if os.environ.get('SOLO_MUESTRA'):
     sys.exit(0)
 
-# --- horneado por pieza
+# --- horneado en atlas (D-087): todas las piezas de un grupo comparten UNA imagen.
+# Antes había una textura por piso (Cénit: 15 de 2048 px + 15 de 1024 px, ~420 MB de memoria
+# de video en el celular: 2 fps). Ahora: un atlas para fachadas y cubierta, otro para losas.
 sc.cycles.samples = SAMPLES
-sc.render.bake.margin = 4
-for k, ob in joined.items():
-    res = 2048 if k.endswith('fachada') else 1024
+sc.render.bake.margin = 3
+ATLAS = int(os.environ.get('ATLAS', '4096'))
+grupos = {
+    'fachada': [ob for k, ob in joined.items() if k.endswith('fachada') or k == 'cubierta'],
+    'losa': [ob for k, ob in joined.items() if k.endswith('losa')],
+}
+for nombre, obs in grupos.items():
+    if not obs:
+        continue
+    res = ATLAS if nombre == 'fachada' else ATLAS // 2
+    # UV de luz de todas las piezas del grupo, empacadas juntas en el mismo espacio 0-1
     bpy.ops.object.select_all(action='DESELECT')
-    ob.select_set(True)
-    bpy.context.view_layer.objects.active = ob
-    uv = ob.data.uv_layers.new(name='luz')
-    ob.data.uv_layers.active = uv
+    for ob in obs:
+        uv = ob.data.uv_layers.new(name='luz')
+        ob.data.uv_layers.active = uv
+        ob.select_set(True)
+    bpy.context.view_layer.objects.active = obs[0]
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.003)
+    bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.002)
     bpy.ops.object.mode_set(mode='OBJECT')
-    img = bpy.data.images.new(f'luz-{k}', res, res)
-    for s in ob.material_slots:
-        nt = s.material.node_tree
-        node = nt.nodes.new('ShaderNodeTexImage')
-        node.image = img
-        nt.nodes.active = node
+    img = bpy.data.images.new(f'luz-{nombre}', res, res)
+    vistos = set()
+    for ob in obs:
+        for s in ob.material_slots:
+            if s.material is None or s.material.name in vistos:
+                continue
+            vistos.add(s.material.name)
+            nt = s.material.node_tree
+            node = nt.nodes.new('ShaderNodeTexImage')
+            node.image = img
+            nt.nodes.active = node
     bpy.ops.object.bake(type='COMBINED', pass_filter={'DIRECT', 'INDIRECT', 'DIFFUSE', 'GLOSSY', 'EMIT'})
-    baked = bpy.data.materials.new(f'horneado-{k}')
-    baked.use_nodes = True
-    bn = baked.node_tree.nodes
-    tex = bn.new('ShaderNodeTexImage')
-    tex.image = img
-    uvn = bn.new('ShaderNodeUVMap')
-    uvn.uv_map = 'luz'
-    baked.node_tree.links.new(uvn.outputs['UV'], tex.inputs['Vector'])
-    baked.node_tree.links.new(tex.outputs['Color'], bn['Principled BSDF'].inputs['Base Color'])
-    ob.data.materials.clear()
-    ob.data.materials.append(baked)
-    for layer in [layer for layer in ob.data.uv_layers if layer.name != 'luz']:
-        ob.data.uv_layers.remove(layer)
     img.pack()
-    log('horneado', k, res)
+    # un material por pieza (el visor las identifica por nombre), todos con la misma imagen
+    for ob in obs:
+        k = ob.name
+        baked = bpy.data.materials.new(f'horneado-{k}')
+        baked.use_nodes = True
+        bn = baked.node_tree.nodes
+        tex = bn.new('ShaderNodeTexImage')
+        tex.image = img
+        uvn = bn.new('ShaderNodeUVMap')
+        uvn.uv_map = 'luz'
+        baked.node_tree.links.new(uvn.outputs['UV'], tex.inputs['Vector'])
+        baked.node_tree.links.new(tex.outputs['Color'], bn['Principled BSDF'].inputs['Base Color'])
+        ob.data.materials.clear()
+        ob.data.materials.append(baked)
+        for layer in [layer for layer in ob.data.uv_layers if layer.name != 'luz']:
+            ob.data.uv_layers.remove(layer)
+    log('atlas', nombre, res, len(obs), 'piezas')
 
 bpy.data.objects.remove(suelo, do_unlink=True)
 bpy.ops.object.select_all(action='DESELECT')

@@ -503,3 +503,25 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
     - Frailejón: redondas y centrado;
     - Cénit: rectas, centrado y en mayúsculas.
 - Por qué: Jacobo: la web de los hoteles "está muy genérica"; cada una necesita su identidad. Investigado: las webs de hotel de 2026 ponen la reserva directa y sus beneficios arriba, con la historia del lugar antes que el motor de reserva ([MediaBoom](https://mediaboom.com/news/luxury-hotel-website-design/), [Storebox](https://www.storebox.ai/blogs/hotel-website-design-direct-bookings-seo-guide), [Colorlib](https://colorlib.com/wp/hotel-websites/)). No se inventan reseñas: serían falsas.
+
+**D-087 · 2026-11-16 · Carga por tandas y presupuesto de memoria de video**
+- Decisión:
+  - El orden de carga de las demos y el tamaño de todo lo que sale del pipeline se rigen por `docs/CARGA.md`. Tiene cinco tandas (T0–T4) y presupuestos por dispositivo, con **≤ 150 MB de memoria de video en celular**.
+  - Cambios hechos:
+    - la fachada horneada va en un atlas compartido;
+    - cada planta realista se carga al abrir su piso;
+    - el cielo es de 512 px en celular y el de noche solo se baja al pedirlo;
+    - la calidad no se mide durante la carga y se recupera;
+    - el piso de resolución en celular es 1,25;
+    - el telón ya no tiene botón "Entrar";
+    - la primera vista es una panorámica en 3/4;
+    - los espacios largos tienen dos puntos de 360°;
+    - se mide con `pnpm perf`.
+- Por qué: en el celular de Jacobo, Cénit Premium "va muy lento" (2 fps medidos). La fachada tenía una textura por piso (~420 MB de video) y las 13 plantas iguales se decodificaban al llegar (~290 MB). Investigado cómo lo hacen D5 Render (texturas solo en cámara, LOD) y Matterport (360° por teselas): fuentes en `docs/CARGA.md` §2.
+
+**D-088 · 2026-11-16 · Render en el PC prestado con GPU y modo hiperrealista**
+- Decisión:
+  - Los scripts de Blender aceptan `GPU=1` (`pipeline/realista/gpu.py`: OptiX, CUDA, HIP, oneAPI o Metal) y `HIPER=1` (más rebotes, menos ruido, 360° maestro de 8K con copia web de 4K, fotos de 3200 px).
+  - Las rutas de este PC (Blender, Playwright, Poly Haven) son variables de entorno.
+  - El plan de la sesión está en `docs/RENDER.md`: en el T440p se prepara y se prueba en baja, y en el PC prestado solo se corren los lotes finales.
+- Por qué: un amigo le presta a Jacobo su PC un día para los renders, y Jacobo quiere hiperrealista. Sin el historial de esta conversación, todo tiene que estar escrito. Sigue sin alquilar GPU (presupuesto).

@@ -131,6 +131,14 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 ## 6. Qué está en curso
 
+- **Hecho el 2026-11-16: rendimiento en celular (D-087) y plan de render (D-088).**
+  - **El problema:** en el celular de Jacobo, Cénit Premium iba "muy lento" (2 cuadros por segundo medidos). La fachada realista ocupaba ~420 MB de memoria de video y las plantas de los 13 pisos iguales se cargaban al llegar.
+  - **El arreglo:** una fachada en un solo atlas; cada planta se carga al abrir su piso; cielo liviano en celular; la resolución ya no se queda baja para siempre (el "se ve pixelado"); sin botón "Entrar" en el telón. El orden de carga está en `docs/CARGA.md`.
+  - **En las demos:** la primera vista es una panorámica en 3/4, las zonas comunes van en un solo punto con su lista, los espacios largos tienen dos puntos de 360° y se gira con más sensibilidad.
+  - **Página de Antesala:** Cénit tiene su tarjeta, y el plano pregunta antes de llevar a las demos.
+  - **Render hiperrealista:** el plan para el día en el PC prestado está en `docs/RENDER.md` (qué renderizar, en qué orden, con qué ajustes y qué falta para el salto a hiperrealista). Los scripts ya usan la tarjeta gráfica.
+  - **Pendiente:** revisar todo el sitio en el celular (se ve cortado en varias partes) y un entorno que parezca un lugar real.
+
 - **Hecho hoy:**
   - 30 fotos de nivel profesional generadas en la web de Higgsfield, sin costo con el plan Ultra, desde los renders del 3D.
   - Están en la portada de Niebla Alta y en cada espacio, y se pueden "mirar" moviendo la cámara.
@@ -200,6 +208,9 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
       - ¿Alianza con una inmobiliaria mediana como primer cliente?
       - ¿Captura con cámara 360 hecha por nosotros o por el agente?
     - **Legal:** con un edificio real hace falta el permiso del dueño o de la constructora. Por eso la demo de constructora nueva es ficticia, y Akuare (real, "no oficial") queda solo como prueba interna.
+
+- **14. Instalar KTX-Software (`toktx`) en el PC.** Las texturas comprimidas para la GPU (KTX2) gastan de 4 a 8 veces menos memoria de video en el celular. Es un programa gratuito de Khronos; hace falta el permiso de Jacobo para instalarlo.
+- **15. Cuándo es el día de render en el PC prestado.** Antes conviene hacer las mejoras de `docs/RENDER.md` §4 (muebles con forma, materiales con relieve, luz de arquitecto), para que esa sesión no se gaste descubriendo errores.
 
 ---
 

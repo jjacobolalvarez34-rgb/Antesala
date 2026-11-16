@@ -131,10 +131,14 @@ export function FloorPlanModel({
     };
   }, [meshes, meta, finishes]);
 
-  // planta horneada (Premium): se carga al montarse; mientras tanto se ve la de código
+  // planta horneada (Premium): se carga la primera vez que se abre (o se señala) su piso, no al
+  // montarse. Antes los 15 pisos de Cénit la bajaban al llegar: la misma planta decodificada 13
+  // veces, ~290 MB de memoria de video en el celular (D-087). Mientras llega, se ve la de código.
+  const [wanted, setWanted] = useState(false);
+  if (visible && !wanted) setWanted(true);
   const [baked, setBaked] = useState<{ obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null>(null);
   useEffect(() => {
-    if (!realista) return;
+    if (!realista || !wanted) return;
     let alive = true;
     let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null = null;
     void (async () => {
@@ -175,9 +179,12 @@ export function FloorPlanModel({
     })();
     return () => {
       alive = false;
-      loaded?.all.forEach((m) => m.dispose());
+      loaded?.all.forEach((m) => {
+        m.map?.dispose();
+        m.dispose();
+      });
     };
-  }, [realista]);
+  }, [realista, wanted]);
   // con la horneada, la de código no se dibuja: los pisos de las unidades siguen
   // recibiendo el mouse y las ocupadas quedan con un velo gris
   useEffect(() => {

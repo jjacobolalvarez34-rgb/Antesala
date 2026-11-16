@@ -56,3 +56,15 @@ export function detectCapability(): Capability {
 
 /** Nunca baja a lista: el peor caso del 3D es "bajo". */
 export const lowerQuality = (q: Quality): Quality => (q === 'alto' ? 'medio' : q === 'medio' ? 'bajo' : q);
+/** Sube un paso, sin pasar del techo (la calidad con la que arrancó el equipo). */
+export const raiseQuality = (q: Quality, ceiling: Quality): Quality => {
+  const order: Quality[] = ['bajo', 'medio', 'alto'];
+  const next = order[Math.min(order.indexOf(q) + 1, order.indexOf(ceiling))];
+  return next ?? q;
+};
+/** Mientras algo pesado se está cargando (texturas, GLB) no se mide la fluidez. */
+let loadingUntil = 0;
+export const markLoading = (ms = 6000) => {
+  loadingUntil = Math.max(loadingUntil, performance.now() + ms);
+};
+export const isLoading = () => performance.now() < loadingUntil;

@@ -13,11 +13,12 @@ import subprocess
 import sys
 import time
 
-BLENDER = 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe'
+# en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
+BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
 LOG = '.tmp/realista/lote.log'
 os.makedirs('.tmp/realista', exist_ok=True)
-ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': r'D:\Repositorios\Prodigia\compilacion\ms-playwright',
-       'TMP': r'D:\Repositorios\Antesala\.tmp', 'TEMP': r'D:\Repositorios\Antesala\.tmp'}
+ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': os.environ.get('PLAYWRIGHT_BROWSERS_PATH', r'D:\Repositorios\Prodigia\compilacion\ms-playwright'),
+       'TMP': os.path.abspath('.tmp'), 'TEMP': os.path.abspath('.tmp')}
 SAMPLES = os.environ.get('MUESTRAS', '40')
 RES = os.environ.get('RES', '3072')
 

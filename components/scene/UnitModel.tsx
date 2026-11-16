@@ -476,14 +476,19 @@ export function spaceCenter(plan: PlanGeometry, spaceId: string): [number, numbe
 }
 
 /**
- * Punto de vista del 360° en vivo, en metros relativos al centro de la unidad.
- * Se busca en una grilla dentro del polígono (sirve para cuartos en L): el punto
- * más despejado de los muros y, entre los bien despejados, el que más se aleja de
- * la ventana, para ver el cuarto y la ventana a la vez.
+ * Puntos de vista del 360° en vivo, en metros relativos al centro de la unidad.
+ *
+ * Antes se tomaba el punto más alejado de la ventana; en la habitación de Cénit (con el
+ * pasillo de entrada dentro del mismo espacio) caía en el pasillo y el 360° mostraba la
+ * puerta y no la cama (Jacobo, 2026-11-16). Ahora:
+ * 1. el primer punto es el que más superficie del espacio ve (línea de vista dentro del
+ *    polígono), bien despejado de los muros y un poco de espaldas a la ventana;
+ * 2. si desde ahí queda sin ver más de un 20 % del espacio (un pasillo, la otra pata de
+ *    una L), hay un segundo punto: el que más ve de lo que el primero no ve.
  */
-export function panoEye(plan: PlanGeometry, spaceId: string, dir: [number, number]): [number, number] | null {
+export function panoEyes(plan: PlanGeometry, spaceId: string, dir: [number, number]): [number, number][] {
   const s = plan.spaces.find((x) => x.id === spaceId);
-  if (!s || s.points.length < 3) return null;
+  if (!s || s.points.length < 3) return [];
   const pts = s.points.map(([x, y]) => [x / 100 - plan.width / 200, y / 100 - plan.height / 200] as [number, number]);
   const inside = (x: number, z: number) => {
     let r = false;
@@ -508,24 +513,57 @@ export function panoEye(plan: PlanGeometry, spaceId: string, dir: [number, numbe
   };
   const xs = pts.map((p) => p[0]);
   const zs = pts.map((p) => p[1]);
+  // grilla gruesa (30 cm): basta para elegir y se calcula una vez por espacio
+  const step = 0.3;
   const cand: { x: number; z: number; c: number }[] = [];
-  for (let x = Math.min(...xs); x <= Math.max(...xs); x += 0.1) {
-    for (let z = Math.min(...zs); z <= Math.max(...zs); z += 0.1) {
+  for (let x = Math.min(...xs) + step / 2; x <= Math.max(...xs); x += step) {
+    for (let z = Math.min(...zs) + step / 2; z <= Math.max(...zs); z += step) {
       if (inside(x, z)) cand.push({ x, z, c: clearance(x, z) });
     }
   }
-  if (!cand.length) return null;
+  if (!cand.length) return [];
+  const sees = (a: { x: number; z: number }, b: { x: number; z: number }) => {
+    const n = Math.max(2, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 0.15));
+    for (let k = 1; k < n; k++) {
+      const t = k / n;
+      if (!inside(a.x + (b.x - a.x) * t, a.z + (b.z - a.z) * t)) return false;
+    }
+    return true;
+  };
   const best = Math.max(...cand.map((p) => p.c));
-  // bien despejado: al menos 1,1 m de los muros (o lo más que dé el cuarto)
-  const need = Math.min(1.1, best * 0.85);
-  let pick = cand[0]!;
-  let score = -Infinity;
-  for (const p of cand) {
-    if (p.c < need) continue;
-    const sc = -(p.x * dir[0] + p.z * dir[1]) + p.c * 0.6;
-    if (sc > score) [pick, score] = [p, sc];
+  const need = Math.min(0.9, best * 0.8);
+  // el segundo punto puede ir en un pasillo (más angosto); el primero, bien despejado
+  const eyes = cand.filter((p) => p.c >= Math.min(0.45, need));
+  const vis = eyes.map((e) => cand.map((q) => sees(e, q)));
+  let first = 0;
+  let firstScore = -Infinity;
+  vis.forEach((v, i) => {
+    const e = eyes[i]!;
+    if (e.c < need) return;
+    // lo que ve manda; un poco de espaldas a la ventana y despejado desempatan
+    const sc = v.filter(Boolean).length / cand.length - (e.x * dir[0] + e.z * dir[1]) * 0.04 + e.c * 0.05;
+    if (sc > firstScore) [first, firstScore] = [i, sc];
+  });
+  const out: [number, number][] = [[eyes[first]!.x, eyes[first]!.z]];
+  const unseen = cand.map((_, k) => !vis[first]![k]);
+  const unseenCount = unseen.filter(Boolean).length;
+  if (unseenCount / cand.length > 0.2) {
+    let second = -1;
+    let secondScore = -Infinity;
+    vis.forEach((v, i) => {
+      if (i === first) return;
+      const gain = v.filter((ok, k) => ok && unseen[k]).length;
+      const sc = gain / unseenCount + eyes[i]!.c * 0.05;
+      if (sc > secondScore) [second, secondScore] = [i, sc];
+    });
+    if (second >= 0) out.push([eyes[second]!.x, eyes[second]!.z]);
   }
-  return [pick.x, pick.z];
+  return out;
+}
+
+/** El primer punto (compatibilidad). */
+export function panoEye(plan: PlanGeometry, spaceId: string, dir: [number, number]): [number, number] | null {
+  return panoEyes(plan, spaceId, dir)[0] ?? null;
 }
 
 /**

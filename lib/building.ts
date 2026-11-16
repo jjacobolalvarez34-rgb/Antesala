@@ -224,14 +224,21 @@ export function facadePose(
 ): CameraPose {
   const portrait = aspect < 1;
   const toFacade = Math.hypot(facade.center[0] - f.center[0], facade.center[1] - f.center[1]);
-  const radius = fitRect(facade.length + 4, f.height + 4, fov, aspect, portrait ? 1.1 : 1.6);
-  // torre (más alta que ancha): la cámara baja y mira un poco hacia arriba (D-085)
+  // panorámica en 3/4 (Jacobo, 2026-11-16: "la primera visión es una panorámica del edificio"):
+  // la cámara se corre hacia la esquina y sube un poco, así se ven dos fachadas y la cubierta.
+  // El ancho a encuadrar es el del edificio visto en diagonal, no solo el de la fachada.
+  const diag = Math.max(facade.length, Math.hypot(f.width, f.depth) * 0.92);
+  // torre (más alta que ancha, D-085): un poco menos desde arriba, para que se lea su altura
   const tower = f.height > Math.max(f.width, f.depth) * 1.8;
+  const polar = (tower ? 76 : 70) * DEG;
+  // de más arriba la altura aparente se acorta y la cubierta suma: se encuadra la proyección
+  const tall = f.height * Math.sin(polar) + diag * Math.cos(polar) * 0.6;
+  const radius = fitRect(diag + 4, tall + 4, fov, aspect, portrait ? 1.1 : 1.5);
   return {
-    target: [f.center[0], f.height * (tower ? 0.5 : 0.47), f.center[1]],
-    radius: radius + toFacade,
-    polar: (tower ? 86 : 82) * DEG,
-    azimuth: facade.azimuth + 14 * DEG,
+    target: [f.center[0], f.height * (tower ? 0.48 : 0.42), f.center[1]],
+    radius: radius + toFacade * 0.5,
+    polar,
+    azimuth: facade.azimuth + 32 * DEG,
     shiftX: panelSide ? 0.02 : portrait ? 0.035 : 0,
     shiftY: portrait ? -0.02 : -0.03,
   };

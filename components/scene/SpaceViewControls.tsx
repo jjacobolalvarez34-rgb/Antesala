@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, ChevronUp, Orbit } from 'lucide-react';
+import { Box, ChevronUp, MapPin, Orbit } from 'lucide-react';
 import { useState } from 'react';
 
 import { useTour } from '@/lib/store';
@@ -22,6 +22,9 @@ export function SpaceSheetFrame({
 }) {
   const view360 = useTour((s) => s.view360);
   const setView360 = useTour((s) => s.setView360);
+  const panoSpot = useTour((s) => s.panoSpot);
+  const panoSpots = useTour((s) => s.panoSpots);
+  const setPanoSpot = useTour((s) => s.setPanoSpot);
   // en móvil empieza recogido: el espacio (360° o maqueta) es el protagonista
   const [folded, setFolded] = useState(true);
   const on360 = hasPano && view360;
@@ -54,6 +57,17 @@ export function SpaceSheetFrame({
               <Box aria-hidden className="size-4" /> Maqueta
             </button>
           </div>
+        ) : null}
+        {on360 && panoSpots > 1 ? (
+          <button
+            type="button"
+            onClick={() => setPanoSpot((panoSpot + 1) % panoSpots)}
+            aria-label={`Mirar desde el punto ${((panoSpot + 1) % panoSpots) + 1} de ${panoSpots}`}
+            className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-medium transition-colors hover:bg-card"
+          >
+            <MapPin aria-hidden className="size-4" />
+            Punto {panoSpot + 1}/{panoSpots}
+          </button>
         ) : null}
         {/* toda la franja abre y cierra (antes solo la flecha: Jacobo tocaba el nombre y no pasaba nada) */}
         <button

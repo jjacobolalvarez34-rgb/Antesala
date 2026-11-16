@@ -25,6 +25,60 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-16 · Rendimiento en celular, arreglos de Cénit y plan de render
+
+**Hecho**
+- **Tanda de la noche revisada:**
+  - Cénit: fotos de la escena, sus 4 habitaciones realistas, plantas 1–3 y fachada;
+  - fotos y 360° de Niebla 402 y 201 y de Cénit 301 y 302.
+  
+  El resto de las fotos se cortó porque Jacobo necesitaba el PC; está en TAREAS con su comando.
+- **Mañana (pedidos de Jacobo desde el celular):**
+  - Cénit en la página de Antesala (alzado de torre).
+  - Zonas comunes cercanas en un solo punto con la lista.
+  - Sombra de torres altas sin cortarse.
+  - Vestier sin la franja negra (margen del espacio enfocado).
+  - El panel del espacio se abre tocando toda la franja.
+  - Esquinas negras de la fachada de Niebla Alta: eran caras pegadas; se hunden 3 mm antes de hornear.
+  - El plano de la página de Antesala pregunta antes de llevar a las demos.
+  - La puerta anima aunque la sección esté al lado.
+  - Al llegar desde la lista, la cámara entra volando.
+- **Rendimiento (D-087, `docs/CARGA.md`):**
+  - fachada horneada en un atlas compartido;
+  - cada planta realista se carga al abrir su piso;
+  - cielo de 512 px en celular y noche solo al pedirla;
+  - la calidad no se mide durante la carga y se recupera (el "se ve pixelado");
+  - piso de resolución 1,25;
+  - sin botón "Entrar" en el telón;
+  - más sensibilidad al girar;
+  - primera vista panorámica en 3/4;
+  - dos puntos de 360° en espacios largos (botón "Punto 1/2");
+  - `pnpm perf` para medir.
+- **Plan de render (D-088, `docs/RENDER.md`):**
+  - GPU y modo hiperrealista en los scripts de Blender;
+  - rutas por variable de entorno;
+  - la sesión en el PC prestado, paso a paso;
+  - qué falta para "hiperrealista".
+
+**Decisiones**
+- D-087 (carga por tandas y memoria de video) y D-088 (render con GPU en el PC prestado).
+
+**Problemas / bloqueos**
+- KTX2/Basis (texturas comprimidas en la GPU) necesita instalar KTX-Software: **pide permiso**.
+- Las fotos con Blender en CPU tardan 45–100 min por unidad: el render de calidad va al PC prestado.
+
+**Mediciones** (celular simulado: Pixel 7, CPU 4×, 4G)
+- Antes: Cénit Premium 11,1 s, 7,3 MB, **2 fps**; Cénit Inmersivo 9,8 s, 3,8 MB, 51 fps; Niebla Inmersivo 9,3 s, 4,0 MB, 56 fps.
+- Después: ver la tabla de `docs/CARGA.md` §1, cuando terminen de hornearse las fachadas en atlas.
+
+**Siguiente sesión**
+- Empezar por: medir con `pnpm perf` Cénit y Niebla Premium con las fachadas en atlas y anotar el resultado; luego:
+  1. revisión completa del sitio en el celular (TAREAS);
+  2. el entorno más creíble;
+  3. las fotos pendientes.
+
+---
+
 ## 2026-11-15 (tarde y noche) · Glamping Frailejón, Hotel Cénit, identidad por hotel y 360° renderizados
 
 **Hecho**

@@ -94,7 +94,7 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
         return;
       }
       if (!drag) return;
-      const k = (fov / 75) * 0.0042;
+      const k = (fov / 75) * 0.0058; // más sensible (Jacobo, 2026-11-16)
       vLon = -(e.clientX - drag.x) * k;
       vLat = (e.clientY - drag.y) * k;
       lon += vLon;

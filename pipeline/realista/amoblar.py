@@ -18,13 +18,15 @@ import time
 import xml.etree.ElementTree as ET
 
 import bpy
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from gpu import hiper, usar_gpu  # noqa: E402
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]
 SRC, SVG, OUT = argv[0], argv[1], argv[2]
 SAMPLES = int(argv[3]) if len(argv) > 3 else 64
 RES = int(argv[4]) if len(argv) > 4 else 2048
-A = 'D:/Herramientas/assets-polyhaven'
+A = os.environ.get('POLYHAVEN', 'D:/Herramientas/assets-polyhaven')
 HDRI = os.path.abspath('public/visor/env/dia.hdr')
 os.makedirs(os.path.dirname(os.path.abspath(OUT)), exist_ok=True)
 T0 = time.time()
@@ -655,23 +657,26 @@ cam.data.lens = 32
 sc.collection.objects.link(cam)
 sc.camera = cam
 sc.render.engine = 'CYCLES'
-sc.cycles.device = 'CPU'
+usar_gpu(sc)
 sc.cycles.use_denoising = True
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Base Contrast'
 sc.view_settings.exposure = -0.2
 sc.render.image_settings.file_format = 'JPEG'
 sc.render.image_settings.quality = 90
-# rápido en CPU: pocos rebotes y muestreo adaptativo (el filtro de ruido limpia el resto)
-sc.cycles.max_bounces = 6
-sc.cycles.diffuse_bounces = 3
-sc.cycles.glossy_bounces = 2
+# rápido en CPU: pocos rebotes y muestreo adaptativo (el filtro de ruido limpia el resto).
+# En modo hiperrealista (HIPER=1, PC con GPU) se quitan los atajos: ver docs/RENDER.md
+sc.cycles.max_bounces = 12 if hiper() else 6
+sc.cycles.diffuse_bounces = 6 if hiper() else 3
+sc.cycles.glossy_bounces = 4 if hiper() else 2
 sc.cycles.transmission_bounces = 4
 sc.cycles.transparent_max_bounces = 6
 sc.cycles.caustics_reflective = False
 sc.cycles.caustics_refractive = False
 sc.cycles.use_adaptive_sampling = True
-sc.cycles.adaptive_threshold = 0.04
+sc.cycles.adaptive_threshold = 0.01 if hiper() else 0.04
+PANO_W = int(os.environ.get('PANO_RES', '8192' if hiper() else '2048'))
+FOTO = (3200, 2000) if hiper() else (1600, 1000)
 
 
 def shot(path, loc, look_at, res=(1600, 900), samples=SAMPLES):
@@ -798,17 +803,26 @@ if FOTOS:
         cam.location = (eye[0], eye[1], h)
         # el centro de la imagen mira al norte del plano (+Y de Blender, -z de la escena)
         cam.rotation_euler = (math.radians(90), 0, 0)
-        sc.render.resolution_x, sc.render.resolution_y = 2048, 1024
+        sc.render.resolution_x, sc.render.resolution_y = PANO_W, PANO_W // 2
         sc.cycles.samples = max(24, SAMPLES // 2)
-        sc.render.filepath = os.path.abspath(f'{OUT}-{sid}-360.jpg')
+        pano_path = os.path.abspath(f'{OUT}-{sid}-360.jpg')
+        sc.render.filepath = pano_path.replace('-360.jpg', '-360-master.jpg') if PANO_W > 4096 else pano_path
         bpy.ops.render.render(write_still=True)
+        if PANO_W > 4096:
+            # la web usa 4096 × 2048 (muchos celulares no aceptan texturas más grandes); el maestro se guarda
+            im = bpy.data.images.load(sc.render.filepath)
+            im.scale(4096, 2048)
+            im.filepath_raw = pano_path
+            im.file_format = 'JPEG'
+            im.save()
+            bpy.data.images.remove(im)
         log('360', sid)
         # amplia: desde el punto despejado más lejano a la ventana, mirándola
         far = max(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) + c[2] * 0.5)
-        look(Vector((far[0], far[1], h)), target, 16, f'{OUT}-{sid}-amplia.jpg', (1600, 1000))
+        look(Vector((far[0], far[1], h)), target, 16, f'{OUT}-{sid}-amplia.jpg', FOTO)
         # detalle: desde cerca de la ventana, mirando hacia adentro, un poco más bajo
         near = min(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) - c[2] * 0.3)
-        look(Vector((near[0], near[1], h - 0.25)), (cxs + (cxs - near[0]) * 0.3, cys + (cys - near[1]) * 0.3, 0.8), 24, f'{OUT}-{sid}-detalle.jpg', (1600, 1000))
+        look(Vector((near[0], near[1], h - 0.25)), (cxs + (cxs - near[0]) * 0.3, cys + (cys - near[1]) * 0.3, 0.8), 24, f'{OUT}-{sid}-detalle.jpg', FOTO)
         info[sid] = {'yaw': round(yaw, 4), 'eye': [round(eye[0], 3), round(-eye[1], 3)]}
     json.dump(info, open(f'{OUT}-fotos.json', 'w'))
     bpy.data.objects.remove(techo, do_unlink=True)

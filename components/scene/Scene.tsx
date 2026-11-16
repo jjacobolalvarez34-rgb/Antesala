@@ -21,7 +21,7 @@ import {
   windowViewpoint,
   type Facade,
 } from '@/lib/building';
-import { lowerQuality, type Quality } from '@/lib/capabilities';
+import { isLoading, lowerQuality, markLoading, raiseQuality, type Quality } from '@/lib/capabilities';
 import { formatCOP, OFFER } from '@/lib/hotel';
 import { parsePlan, polygonLabelPoint } from '@/lib/plan';
 import { routes } from '@/lib/routes';
@@ -44,7 +44,7 @@ import { ExportHook } from './ExportHook';
 import { NEIGHBOR_MUTE } from './textures';
 import { type FloorTag, FloorTagLayer, FloorTagProjector } from './FloorTags';
 import { prefetchBaked } from './bakedCache';
-import { panoEye, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
+import { panoEyes, spaceCenter, UnitModel, type UnitSpaceMeta } from './UnitModel';
 import { UnitOverlay } from './UnitOverlay';
 import { ViewpointOverlay } from './ViewpointOverlay';
 import { createLightUniforms, envIntensity, MAX_UNITS, type LightUniforms } from './windows';
@@ -283,7 +283,7 @@ function Rig({
         maxDistance={in360 ? 0.06 : pose.radius * 1.3}
         minPolarAngle={in360 ? 0.35 : Math.max(0.2, pose.polar - 0.55)}
         maxPolarAngle={in360 ? 2.8 : Math.min(1.48, pose.polar + 0.14)}
-        rotateSpeed={in360 ? -0.35 : 0.6}
+        rotateSpeed={in360 ? -0.5 : 0.9}
       />
       <CameraRig pose={pose} stageKey={stageKey} depth={depth} intro={intro} reduced={reduced} autoRotate={false} />
     </>
@@ -333,6 +333,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const hoveredLevelId = useTour((s) => s.hoveredLevelId);
   const setHoveredLevel = useTour((s) => s.setHoveredLevel);
   const setQuality = useTour((s) => s.setQuality);
+  // techo de calidad: la del equipo al arrancar (al recuperarse no sube más allá)
+  const ceiling = useRef<Quality>(quality);
   const sceneReady = useTour((s) => s.sceneReady);
   const night = useTour((s) => s.night);
   const facadeIndex = useTour((s) => s.facade);
@@ -445,6 +447,19 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   }, [vpData]);
   // punto de vista del 360: centro del espacio a 1,5 m del piso. Por dentro de la
   // maqueta (demo) retrocede hacia el muro opuesto a la ventana: se ve el cuarto y la ventana
+  const panoSpot = useTour((s) => s.panoSpot);
+  // los puntos del 360° en vivo del espacio (uno o dos: ver panoEyes)
+  const spots = useMemo<[number, number][]>(() => {
+    if (!unitId || !spaceId || !data.liveInterior) return [];
+    const entry = data.unitPlans[unitId];
+    const yaw = entry?.spaces.find((s) => s.id === spaceId)?.pano?.yaw;
+    if (!entry || yaw === undefined) return [];
+    const [dx, , dz] = panoDirection(yaw, 0);
+    return panoEyes(entry.plan, spaceId, [dx, dz]);
+  }, [unitId, spaceId, data]);
+  useEffect(() => {
+    useTour.setState({ panoSpot: 0, panoSpots: spots.length });
+  }, [spots]);
   const eye = useMemo<[number, number, number] | null>(() => {
     if (!unitId || !spaceId) return null;
     const entry = data.unitPlans[unitId];
@@ -452,15 +467,10 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     const c = entry ? spaceCenter(entry.plan, spaceId) : null;
     if (!anchor || !c || !entry) return null;
     let [x, z] = c;
-    const yaw = entry.spaces.find((s) => s.id === spaceId)?.pano?.yaw;
-    const poly = entry.plan.spaces.find((s) => s.id === spaceId);
-    if (data.liveInterior && yaw !== undefined && poly) {
-      const [dx, , dz] = panoDirection(yaw, 0);
-      const p = panoEye(entry.plan, spaceId, [dx, dz]);
-      if (p) [x, z] = p;
-    }
+    const spot = spots[Math.min(panoSpot, spots.length - 1)];
+    if (spot) [x, z] = spot;
     return [anchor[0] + x, anchor[1] + 1.5, anchor[2] + z];
-  }, [unitId, spaceId, data, frame]);
+  }, [unitId, spaceId, data, frame, spots, panoSpot]);
   const panoAnchors = useRef(new Map<string, HTMLElement>());
   const panoLinks = useMemo(() => {
     if (!currentPano || !eye || !unitId) return [];
@@ -564,12 +574,14 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   useEffect(() => {
     if (!sceneReady) return;
     let alive = true;
+    markLoading(8000);
     loadEnvironment(ASSETS.envDia).then((t) => alive && setEnvs((e) => ({ ...e, dia: t })), () => {});
     if ((data.building.style?.cladding ?? 'estuco') === 'ladrillo') {
       loadBrick().then((m) => alive && setCladMaps(m), () => {});
     }
     loadLinen().then((l) => alive && setLinen(l.map), () => {});
-    const later = window.setTimeout(() => prefetch('noche'), 5000);
+    // la noche solo se adelanta en escritorio; en celular se baja al pedirla (no compite con Premium)
+    const later = window.matchMedia('(pointer: coarse)').matches ? 0 : window.setTimeout(() => prefetch('noche'), 12000);
     return () => {
       alive = false;
       window.clearTimeout(later);
@@ -594,6 +606,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   // (Inmersivo ↔ Premium) cambian los vecinos y la luz de la escena, y quedaba el fondo viejo
   // hasta pasar a día y volver a noche (reporte de Jacobo, 2026-11-14)
   useEffect(() => {
+    markLoading(8000);
     backdrop.current?.invalidate(2);
     const ts = [300, 1200, 3000].map((ms) => window.setTimeout(() => backdrop.current?.invalidate(2), ms));
     return () => ts.forEach((t) => window.clearTimeout(t));
@@ -650,7 +663,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         aria-hidden
         frameloop={active ? 'always' : 'never'}
         shadows={shadows ? 'soft' : false}
-        dpr={quality === 'alto' ? [1, 2] : quality === 'medio' ? [1, 1.5] : 1}
+        // en celular "bajo" no es 1: en pantallas de 3x se veía pixelado (reporte de un amigo de Jacobo)
+        dpr={quality === 'alto' ? [1, 2] : quality === 'medio' ? [1, 1.75] : [1, 1.25]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         camera={{ fov: FOV, near: 0.5, far: 3000, position: [cx + 60, 60, cz + 80] }}
         onPointerMissed={() => {
@@ -751,10 +765,19 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
 
         {!qualityLocked ? (
           <PerformanceMonitor
-            // durante una transición los cuadros bajan siempre: no cuenta. Nunca vuelve a subir.
+            // no cuenta durante una transición ni mientras carga algo pesado (al cargar Premium los
+            // cuadros siempre caen un momento y el celular quedaba para siempre en la resolución
+            // más baja). Si el equipo se recupera, sube otra vez hasta su techo.
             onDecline={() => {
-              if (document.documentElement.dataset.camera !== 'moving') setQuality(lowerQuality(quality));
+              if (document.documentElement.dataset.camera === 'moving' || isLoading()) return;
+              setQuality(lowerQuality(quality));
             }}
+            onIncline={() => {
+              if (isLoading()) return;
+              const up = raiseQuality(quality, ceiling.current);
+              if (up !== quality) setQuality(up);
+            }}
+            flipflops={4}
           />
         ) : null}
         <FovController wide={in360} reduced={reduced} />

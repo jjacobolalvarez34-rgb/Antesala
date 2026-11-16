@@ -12,11 +12,12 @@ import subprocess
 import sys
 import time
 
-BLENDER = 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe'
+# en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
+BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
 LOG = '.tmp/realista/lote.log'
 os.makedirs('.tmp/realista', exist_ok=True)
-ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': r'D:\Repositorios\Prodigia\compilacion\ms-playwright',
-       'TMP': r'D:\Repositorios\Antesala\.tmp', 'TEMP': r'D:\Repositorios\Antesala\.tmp'}
+ENV = {**os.environ, 'PLAYWRIGHT_BROWSERS_PATH': os.environ.get('PLAYWRIGHT_BROWSERS_PATH', r'D:\Repositorios\Prodigia\compilacion\ms-playwright'),
+       'TMP': os.path.abspath('.tmp'), 'TEMP': os.path.abspath('.tmp')}
 
 
 def log(*a):
@@ -42,7 +43,7 @@ log('=== fachada', hotel)
 log('  exportando del visor')
 if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar-edificio.spec.ts', env={**ENV, 'HOTEL': hotel}):
     sys.exit(1)
-log(f'  Blender: horneado de la fachada por piso ({samples} muestras, más o menos una hora)')
+log(f'  Blender: horneado de la fachada en atlas ({samples} muestras, más o menos una hora)')
 if not run(f'"{BLENDER}" -b -P pipeline/realista/hornear_edificio.py -- {src} {out} {samples}') or not os.path.exists(out + '.glb'):
     sys.exit(1)
 log('  optimizando')

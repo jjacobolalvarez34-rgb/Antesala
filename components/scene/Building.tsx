@@ -4,6 +4,8 @@ import { useFrame, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+
+import { markLoading } from '@/lib/capabilities';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import {
@@ -1060,6 +1062,7 @@ export function BuildingModel({
   useEffect(() => {
     if (!realista) return;
     let alive = true;
+    markLoading(10000);
     void (async () => {
       const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
         import('three/examples/jsm/loaders/GLTFLoader.js'),
@@ -1079,8 +1082,12 @@ export function BuildingModel({
         const mat = new THREE.MeshBasicMaterial({ map: src.map, transparent: true, toneMapped: false });
         mesh.material = mat;
         mesh.raycast = noRaycast;
-        // se identifica por el material ("horneado-piso-<id>-fachada"): el optimizador puede renombrar o unir nodos
-        const name = (src.name || mesh.name || '').replace(/^horneado-/, '').replace(/[._]\d+$/, '');
+        // se identifica por el nodo ("piso-<id>-fachada") o, en GLB viejos, por el material
+        // ("horneado-piso-<id>-fachada"). Con el atlas (todas las piezas comparten una imagen) el
+        // optimizador puede unir materiales iguales, así que el nombre del nodo va primero.
+        const clean = (n: string) => n.replace(/^horneado-/, '').replace(/[._]\d+$/, '');
+        const byNode = clean(mesh.name || '');
+        const name = /^(piso-.+-(fachada|losa)|cubierta)/.test(byNode) ? byNode : clean(src.name || mesh.name || '');
         const m = name.match(/^piso-(.+)-(fachada|losa)$/);
         if (m) {
           const id = m[1]!;

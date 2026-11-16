@@ -34,6 +34,10 @@ interface TourState {
   view: { unitId: string; src: string } | null;
   /** en el detalle de un espacio: 360° (true) o maqueta (false) */
   view360: boolean;
+  /** punto del 360° en vivo dentro del espacio (los espacios largos tienen dos) */
+  panoSpot: number;
+  /** cuántos puntos tiene el espacio abierto */
+  panoSpots: number;
   /** unidad de la que se pidió la vista desde la ventana (la renderiza la escena) */
   viewRequest: string | null;
   /** mirador activo (360° en vivo desde un punto de una zona común, p. ej. la terraza) */
@@ -53,6 +57,7 @@ interface TourState {
   setSelectedUnit: (id: string | null) => void;
   setView: (v: TourState['view']) => void;
   setView360: (on: boolean) => void;
+  setPanoSpot: (i: number) => void;
   requestView: (unitId: string | null) => void;
   setViewpoint: (v: TourState['viewpoint']) => void;
   mountScene: (intro: boolean) => void;
@@ -71,6 +76,8 @@ export const useTour = create<TourState>((set) => ({
   selectedUnit: null,
   view: null,
   view360: true,
+  panoSpot: 0,
+  panoSpots: 0,
   viewRequest: null,
   viewpoint: null,
   sceneMounted: false,
@@ -104,6 +111,7 @@ export const useTour = create<TourState>((set) => ({
   setSelectedUnit: (selectedUnit) => set({ selectedUnit }),
   setView: (view) => set({ view }),
   setView360: (view360) => set({ view360 }),
+  setPanoSpot: (panoSpot) => set({ panoSpot }),
   requestView: (viewRequest) => set({ viewRequest }),
   setViewpoint: (viewpoint) => set({ viewpoint }),
   mountScene: (intro) => set((s) => (s.sceneMounted ? s : { sceneMounted: true, intro })),
