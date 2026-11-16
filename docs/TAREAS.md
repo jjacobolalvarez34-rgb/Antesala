@@ -190,7 +190,26 @@ Leyenda: `[ ]` pendiente · `[x]` hecha · `[~]` en curso · `[-]` descartada (c
 - [x] Identidad de la web de cada hotel (D-086) y franja de reserva directa
 - [x] Demos y Ver ejemplo en otra pestaña
 - [x] Fotos y 360° por espacio en Blender (D-084), visor "Mirar en 360°" y más decoración en las maquetas
-- [ ] Revisar en la mañana: fotos y 360° de Niebla Alta, Frailejón y Cénit (tanda de la noche)
+- [x] Revisar la tanda de la noche: renders de la escena, 3D realista de habitaciones, plantas y fachada de Cénit; fotos y 360° de Niebla 402 y 201 y de Cénit 301 y 302
+- [ ] Fotos y 360° que faltan (se cortaron el 2026-11-16 porque Jacobo necesitaba el PC): Cénit 303 y 304, Penthouse 601, los 4 refugios de Frailejón. Comando: `MUESTRAS=32 python pipeline/realista/lote_fotos.py cenit:303 cenit:304 niebla-alta:601 frailejon:encenillo frailejon:laguna frailejon:piedra frailejon:casa`
+
+### Rendimiento y carga (pedido de Jacobo, 2026-11-16: "en el celular va muy lento")
+
+Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s en mostrar la escena, baja 7,3 MB y corre a **2 fps**; Inmersivo, 10 s, 3,8 MB y 51 fps. La causa principal: la fachada realista tiene una textura de luz por piso (15 de 2048 px + 15 de 1024 px ≈ 420 MB de memoria de video).
+
+- [ ] Fachada realista en un solo atlas compartido por todos los pisos (`hornear_edificio.py`) y rehornear Cénit y Niebla Alta
+- [ ] Texturas comprimidas para la GPU (KTX2/Basis) en vez de WebP: ocupan 4 a 6 veces menos memoria de video
+- [ ] Cargas por tandas: el cielo de noche (1,6 MB) solo al encender la noche; las plantas realistas solo al abrir el piso (o al pasar sobre él); nada pesado antes de que la escena se vea
+- [ ] Cambiar entre Inmersivo y Premium sin trabarse: precargar lo de Premium en segundo plano y cambiar cuando ya esté listo
+- [ ] Quitar el botón "Entrar" del telón de carga (dejaba ver la escena a medio cargar)
+- [ ] Subir la sensibilidad al girar (maqueta y 360°)
+- [ ] Dos puntos de 360° en los espacios largos (la habitación de Cénit incluye el pasillo: el 360° de hoy muestra la puerta y no la cama)
+- [ ] Investigar cómo cargan D5 Render, Matterport y otros visores profesionales, y escribir `docs/CARGA.md` (qué se carga y cuándo, presupuestos por nivel y por dispositivo)
+- [ ] Escribir `docs/RENDER.md`: plan paso a paso para el render hiperrealista en el PC prestado (qué, en qué orden, con qué ajustes y cuánto tarda), sin depender de esta conversación
+
+### Celular (pedido de Jacobo, 2026-11-16)
+
+- [ ] **Revisar todo el sitio en el celular:** la página se ve cortada y mal diseñada en varios puntos. Recorrer la página de Antesala y las demos a 390 px (y en el celular real de Jacobo), anotar cada problema con captura y arreglarlos uno por uno
 - [ ] Glamping: revisar en el celular real de Jacobo (fluidez del valle con la vegetación instanciada)
 - [ ] Glamping: domos (techo curvo) cuando haga falta para KingDome; hoy los planos solo admiten muros rectos
 - [ ] **Splat "wow" del Penthouse.** Opciones: Marble Pro (~$35 USD/mes, con uso comercial) o Apple SHARP (gratis; la licencia de los pesos no está clara). Desde una sola imagen, el splat solo aguanta movimientos cortos de cámara.
