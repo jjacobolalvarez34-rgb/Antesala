@@ -207,6 +207,18 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] Investigar cómo cargan D5 Render, Matterport y otros visores profesionales, y escribir `docs/CARGA.md` (qué se carga y cuándo, presupuestos por nivel y por dispositivo)
 - [ ] Escribir `docs/RENDER.md`: plan paso a paso para el render hiperrealista en el PC prestado (qué, en qué orden, con qué ajustes y cuánto tarda), sin depender de esta conversación
 
+### Primera vista y entorno (pedido de Jacobo, 2026-11-16)
+
+- [ ] **La primera vista es una panorámica del edificio:** al llegar, la cámara queda en un ángulo en 3/4 (dos fachadas a la vista, un poco desde arriba), donde el edificio se aprecia completo. Hoy arranca de frente, y en Cénit muy de frente y muy bajo. Revisarlo en los cuatro hoteles y a 390 px
+- [ ] **El fondo no parece un lugar real:** hoy se ve como un decorado genérico pegado atrás (bloques iguales, montaña plana). Hay que hacer que el barrio se sienta como un sitio:
+  - variedad de alturas, colores y retiros en los vecinos;
+  - calles con andenes, cruces y árboles que sigan la trama;
+  - cerros orientales con relieve y bruma por distancia;
+  - un cielo que case con la hora;
+  - transición suave del barrio al horizonte, sin un borde visible.
+
+  Sin Google Maps ni fotos reales. Cuidar el presupuesto de rendimiento de arriba: el fondo debe ser barato (instanciado, sin sombras de los lejanos)
+
 ### Celular (pedido de Jacobo, 2026-11-16)
 
 - [ ] **Revisar todo el sitio en el celular:** la página se ve cortada y mal diseñada en varios puntos. Recorrer la página de Antesala y las demos a 390 px (y en el celular real de Jacobo), anotar cada problema con captura y arreglarlos uno por uno
