@@ -26,7 +26,7 @@ export function ModoToggle() {
       title={cine ? 'Modo ligero: sin 3D ni video' : 'Modo cine: 3D y video'}
     >
       <span className={s.modoDot} data-on={cine} />
-      {cine ? 'Cine' : 'Ligero'}
+      <span className={s.modoTxt}>{cine ? 'Cine' : 'Ligero'}</span>
     </button>
   );
 }
@@ -149,10 +149,10 @@ export function Nav() {
           <a href="#mamut">Mamut Herd</a>
         </li>
       </ul>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <TemaToggle />
         <ModoToggle />
-        <a className={`${s.btn} ${s.solid}`} href="#cotizar" style={{ minHeight: 40, padding: '0 16px' }}>
+        <a className={`${s.btn} ${s.solid} ${s.navCta}`} href="#cotizar" style={{ minHeight: 40, padding: '0 16px' }}>
           Cotizar
         </a>
       </div>

@@ -43,7 +43,7 @@ export function UnitSheet({
             ) : null}
           </p>
         ) : null}
-        <OccupiedNotice hotel={hotel} unit={unit} tone="dark" className="mt-3" />
+        <OccupiedNotice hotel={hotel} unit={unit} tone="dark" compact className="mt-3" />
         <MobileCollapse>
           <p className="mt-3 text-sm text-bone/80">
             {formatArea(unit.areaM2)} · {pluralize(unit.capacity, 'persona', 'personas')} · {unit.beds}

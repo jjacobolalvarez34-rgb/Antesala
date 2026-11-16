@@ -86,6 +86,8 @@ export function Recorrido({ data, onReserve, onPlanPick }: { data: RecorridoData
   const stepsRef = useRef<HTMLDivElement>(null);
   const api = useRef<StageApi | null>(null);
   const [step, setStep] = useState(0);
+  // en celular la tarjeta del paso activo va fija abajo: solo mientras el recorrido está en pantalla
+  const [inView, setInView] = useState(true);
   const [no3d, setNo3d] = useState(false);
   const modo = useModo();
   const ligero = modo === 'ligero' || no3d;
@@ -148,6 +150,11 @@ export function Recorrido({ data, onReserve, onPlanPick }: { data: RecorridoData
         if (el.getBoundingClientRect().top <= mid) best = Number(el.dataset.step);
       });
       setStep((p) => (p === best ? p : best));
+      const sec = stepsRef.current?.parentElement?.getBoundingClientRect();
+      if (sec) {
+        const on = sec.top < window.innerHeight * 0.5 && sec.bottom > window.innerHeight * 0.75;
+        setInView((v) => (v === on ? v : on));
+      }
     };
     const on = () => {
       if (!raf) raf = requestAnimationFrame(pick);
@@ -307,7 +314,7 @@ export function Recorrido({ data, onReserve, onPlanPick }: { data: RecorridoData
         </div>
         {STEPS.map((st, i) => (
           <div key={st.t} className={s.step} data-step={i + 1} id={`paso-${i + 1}`}>
-            <div className={s.card}>
+            <div className={s.card} data-on={inView && step === i + 1}>
               <div className={s.num}>0{i + 1} / 06</div>
               <h2>{st.t}</h2>
               <p className={s.lead}>{typeof st.lead === 'function' ? st.lead(data) : st.lead}</p>

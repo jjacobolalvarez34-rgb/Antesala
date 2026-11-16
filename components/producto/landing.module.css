@@ -777,10 +777,45 @@
     align-items: flex-end;
     padding: 0 14px 4vh;
   }
+  /* celular (Jacobo, 2026-11-16: "se ve cortado"): la tarjeta del paso activo va fija abajo y
+     cambia con un fundido. Antes subía con el scroll, tapaba el plano y las fotos, y quedaba
+     desfasada (la del paso 3 sobre el plano del paso 4). Lo visual ocupa la mitad de arriba. */
   .card {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     max-width: none;
-    width: 100%;
-    padding: 22px 20px;
+    max-height: 44svh;
+    overflow: auto;
+    padding: 16px 18px 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition:
+      opacity 0.35s var(--ease),
+      transform 0.45s var(--ease);
+  }
+  .card[data-on='true'] {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .card h2 {
+    font-size: 22px;
+    margin: 10px 0 2px;
+  }
+  .card .lead {
+    font-size: 17px;
+    margin-top: 2px;
+  }
+  .card dl {
+    margin-top: 12px;
+    gap: 8px;
+  }
+  .card dd {
+    font-size: 14px;
+    line-height: 1.4;
   }
   .heroStep {
     padding-bottom: 12vh;
@@ -1799,6 +1834,25 @@
 @media (max-width: 860px) {
   .temaTxt {
     display: none;
+  }
+}
+/* menú en celular: los botones de tema y modo solo con su ícono, para que quepa "Cotizar" */
+@media (max-width: 520px) {
+  .modoTxt {
+    display: none;
+  }
+  .modoBtn {
+    min-height: 36px;
+    padding: 0 10px;
+  }
+  .navCta {
+    min-height: 36px !important;
+    padding: 0 12px !important;
+    letter-spacing: 0.14em !important;
+  }
+  .nav {
+    padding-inline: 14px;
+    gap: 10px;
   }
 }
 :global(html[data-tema='oscuro']) .ivory {

@@ -14,11 +14,14 @@ export function OccupiedNotice({
   hotel,
   unit,
   tone = 'light',
+  compact = false,
   className,
 }: {
   hotel: Hotel;
   unit: Unit;
   tone?: 'light' | 'dark';
+  /** una sola línea (sobre el 3D): el aviso completo tapaba media pantalla en el celular (Jacobo, 2026-11-16) */
+  compact?: boolean;
   className?: string;
 }) {
   if (!unit.occupied) return null;
@@ -26,6 +29,30 @@ export function OccupiedNotice({
   const altPrice = alt ? unitPrice(alt) : undefined;
   const dark = tone === 'dark';
   const t = offerOf(hotel);
+  if (compact) {
+    return (
+      <p
+        role="status"
+        className={cn(
+          'flex flex-wrap items-center gap-x-2 gap-y-1 rounded-full px-3 py-1.5 text-[0.8125rem]',
+          dark ? 'bg-bone/[0.08]' : 'bg-secondary',
+          className,
+        )}
+      >
+        <CalendarX2 aria-hidden className={cn('size-3.5 shrink-0', dark ? 'text-accent-on-dark' : 'text-accent')} />
+        <span className="font-medium">{t.taken}</span>
+        {alt ? (
+          <Link
+            href={routes.unidad(hotel.slug, alt.id)}
+            className={cn('inline-flex min-h-8 items-center gap-1 font-medium underline-offset-4 hover:underline', dark ? 'text-accent-on-dark' : 'text-accent')}
+          >
+            Ver {alt.name}
+            <ArrowRight aria-hidden className="size-3.5" />
+          </Link>
+        ) : null}
+      </p>
+    );
+  }
   return (
     <div
       role="status"

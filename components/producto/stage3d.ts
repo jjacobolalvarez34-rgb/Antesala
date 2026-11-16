@@ -253,6 +253,9 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
   const champCol = new THREE.Color(C.champ);
 
   let needsRender = true;
+  // pantalla vertical: la cámara se aleja para que el edificio quepa a lo ancho (en celular
+  // salía cortado a los lados; Jacobo, 2026-11-16)
+  let fit = 1;
   const resize = () => {
     const r = host.getBoundingClientRect();
     const w = Math.max(1, r.width);
@@ -266,6 +269,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
       cam.fov = 42;
       cam.setViewOffset(w, h, 0, h * 0.2, w, h); // celular: edificio arriba
     }
+    fit = w > 860 ? 1 : Math.min(1.75, Math.max(1, 0.8 / (w / h)));
     cam.updateProjectionMatrix();
     needsRender = true;
   };
@@ -285,6 +289,7 @@ export function initStage(canvas: HTMLCanvasElement, host: HTMLElement, opts: St
       const shot = shots[current] ?? shots[0]!;
       const look = looks[current] ?? looks[0]!;
       const tPos = shot.pos.clone();
+      if (fit !== 1) tPos.sub(shot.look).multiplyScalar(fit).add(shot.look);
       if (current === 0 && !RM && started) {
         orbit += dt * 0.07;
         const a = Math.atan2(tPos.x, tPos.z) + Math.sin(orbit) * 0.35;
