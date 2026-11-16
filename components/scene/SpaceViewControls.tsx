@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, ChevronDown, ChevronUp, Orbit } from 'lucide-react';
+import { Box, ChevronUp, Orbit } from 'lucide-react';
 import { useState } from 'react';
 
 import { useTour } from '@/lib/store';
@@ -55,15 +55,19 @@ export function SpaceSheetFrame({
             </button>
           </div>
         ) : null}
-        <p className="min-w-0 flex-1 truncate text-sm font-medium">{folded ? title : ''}</p>
+        {/* toda la franja abre y cierra (antes solo la flecha: Jacobo tocaba el nombre y no pasaba nada) */}
         <button
           type="button"
           onClick={() => setFolded((f) => !f)}
           aria-expanded={!folded}
-          aria-label={folded ? 'Mostrar detalles' : 'Ocultar detalles'}
-          className="ml-auto grid size-10 place-items-center rounded-full hover:bg-secondary"
+          aria-label={folded ? `Mostrar detalles de ${title}` : 'Ocultar detalles'}
+          className="group -my-1 ml-auto flex min-h-10 min-w-0 flex-1 items-center gap-2 rounded-full pl-1 text-left"
         >
-          {folded ? <ChevronUp aria-hidden className="size-5" /> : <ChevronDown aria-hidden className="size-5" />}
+          <span className="min-w-0 flex-1 truncate text-sm font-medium">{folded ? title : ''}</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-full transition-colors group-hover:bg-secondary">
+            {/* en celular el panel está abajo y se despliega hacia arriba; en escritorio, arriba y hacia abajo */}
+            <ChevronUp aria-hidden className={cn('size-5 transition-transform duration-300 md:rotate-180', !folded && 'rotate-180 md:rotate-0')} />
+          </span>
         </button>
       </div>
       <div className={cn('min-h-0 overflow-y-auto', folded && 'hidden')}>{children}</div>

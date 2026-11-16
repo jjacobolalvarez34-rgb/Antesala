@@ -132,7 +132,10 @@ ${SURFACE[surface]}`);
 }
 
 /** Rectángulo de un espacio en metros de la maqueta, con margen para que queden sus muros. */
-function focusRect(plan: PlanGeometry, spaceId: string, margin = 0.2): THREE.Vector4 | null {
+// margen corto: queda la cara del muro que mira al espacio; la del vecino se hunde con lo demás.
+// Con 20 cm quedaba la cara del lado del baño o la habitación, que en la maqueta horneada
+// está a oscuras, y se veía una franja negra (Jacobo, vestier de Cénit, 2026-11-16).
+function focusRect(plan: PlanGeometry, spaceId: string, margin = 0.05): THREE.Vector4 | null {
   const sp = plan.spaces.find((x) => x.id === spaceId);
   if (!sp || !sp.points.length) return null;
   const xs = sp.points.map((p) => p[0] * 0.01 - (plan.width * 0.01) / 2);

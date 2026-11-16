@@ -1899,3 +1899,36 @@
 :global(html[data-tema='oscuro']) .faq details {
   border-bottom-color: var(--line);
 }
+
+/* pregunta al tocar un espacio del plano del recorrido */
+.planAsk {
+  margin-top: 14px;
+  border-top: 1px solid currentColor;
+  border-top-color: color-mix(in oklab, currentColor 18%, transparent);
+  padding-top: 12px;
+  animation: planAsk 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.planAsk p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.planAsk > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+@keyframes planAsk {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+/* sobre el papel del plano: el botón secundario va en tinta (el de la página es claro sobre noche) */
+.planAsk .planAskNo {
+  color: #1c2236;
+  border-color: color-mix(in oklab, #1c2236 30%, transparent);
+}
+.planAsk .planAskNo:hover {
+  background: color-mix(in oklab, #1c2236 8%, transparent);
+}

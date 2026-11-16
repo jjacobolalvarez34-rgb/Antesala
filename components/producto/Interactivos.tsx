@@ -57,7 +57,7 @@ export function TemaToggle() {
  * opacidad. Si el destino está a menos de una pantalla, desliza sin puerta; en
  * modo ligero también.
  */
-function doorTo(target: HTMLElement, hash: string) {
+export function doorTo(target: HTMLElement, hash: string) {
   const host = document.querySelector('.marca-antesala') ?? document.body;
   const dist = Math.abs(target.getBoundingClientRect().top);
   const go = () => {
@@ -66,7 +66,8 @@ function doorTo(target: HTMLElement, hash: string) {
     document.documentElement.style.scrollBehavior = '';
     history.replaceState(null, '', hash);
   };
-  if (dist < window.innerHeight * 1.1 || lessMotion() || typeof document.body.animate !== 'function') {
+  // la puerta va siempre, aunque el destino esté al lado (Jacobo, 2026-11-16); solo un salto mínimo desliza
+  if (dist < 40 || lessMotion() || typeof document.body.animate !== 'function') {
     window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' });
     history.replaceState(null, '', hash);
     return;
@@ -161,7 +162,11 @@ export function Nav() {
 
 /** Recorrido: el botón de la reserva lleva a las demos (antes abría un aviso que tapaba la página). */
 export function RecorridoConAviso({ data }: { data: RecorridoData }) {
-  return <Recorrido data={data} onReserve={() => document.getElementById('demos')?.scrollIntoView({ behavior: 'smooth' })} />;
+  const toDemos = () => {
+    const el = document.getElementById('demos');
+    if (el) doorTo(el, '#demos');
+  };
+  return <Recorrido data={data} onReserve={toDemos} onPlanPick={toDemos} />;
 }
 
 /** Cotización sin backend: arma el mensaje y lo abre en WhatsApp o en el correo. */

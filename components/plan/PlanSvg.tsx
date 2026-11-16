@@ -33,6 +33,8 @@ interface Props {
   className?: string;
   /** abrir los espacios en otra pestaña (desde la página de Antesala hacia la demo) */
   newTab?: boolean;
+  /** si está, tocar un espacio lo llama en vez de navegar */
+  onPick?: (id: string) => void;
 }
 
 /**
@@ -40,7 +42,7 @@ interface Props {
  * Los polígonos reaccionan al puntero; las etiquetas son enlaces HTML
  * superpuestos (accesibles por teclado y lectores de pantalla).
  */
-export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive', title, className, newTab = false }: Props) {
+export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive', title, className, newTab = false, onPick }: Props) {
   const router = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
   const interactive = variant === 'interactive';
@@ -89,7 +91,11 @@ export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive',
                   )}
                   onPointerEnter={interactive ? () => setHovered(s.id) : undefined}
                   onPointerLeave={interactive ? () => setHovered(null) : undefined}
-                  onClick={interactive && info ? () => (newTab ? window.open(info.href, '_blank', 'noopener') : router.push(info.href)) : undefined}
+                  onClick={
+                    interactive && info
+                      ? () => (onPick ? onPick(s.id) : newTab ? window.open(info.href, '_blank', 'noopener') : router.push(info.href))
+                      : undefined
+                  }
                 />
               );
             })}
@@ -191,6 +197,14 @@ export function PlanSvg({ geometry, spaces, selectedId, variant = 'interactive',
                     href={info.href}
                     target={newTab ? '_blank' : undefined}
                     rel={newTab ? 'noopener' : undefined}
+                    onClick={
+                      onPick
+                        ? (e) => {
+                            e.preventDefault();
+                            onPick(l.id);
+                          }
+                        : undefined
+                    }
                     aria-current={active ? 'page' : undefined}
                     onPointerEnter={() => setHovered(l.id)}
                     onPointerLeave={() => setHovered(null)}

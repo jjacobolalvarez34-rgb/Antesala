@@ -79,7 +79,8 @@ declare global {
   }
 }
 
-export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve: () => void }) {
+export function Recorrido({ data, onReserve, onPlanPick }: { data: RecorridoData; onReserve: () => void; onPlanPick: () => void }) {
+  const [picked, setPicked] = useState<string | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stepsRef = useRef<HTMLDivElement>(null);
@@ -197,10 +198,33 @@ export function Recorrido({ data, onReserve }: { data: RecorridoData; onReserve:
                 <b>{data.unitName.toUpperCase()}</b>
                 <span>{data.area} · plano de la unidad</span>
               </div>
-              <PlanSvg geometry={data.plan} spaces={data.planSpaces} title={`Plano de ${data.unitName}`} newTab />
-              <p className={s.planNote}>
-                Toque un espacio y entre a la demo (se abre en otra pestaña). <b>¿El baño está dentro?</b> Sí, junto al dormitorio.
-              </p>
+              <PlanSvg geometry={data.plan} spaces={data.planSpaces} title={`Plano de ${data.unitName}`} onPick={setPicked} />
+              {picked ? (
+                <div className={s.planAsk} role="dialog" aria-label="Ver las demos">
+                  <p>
+                    <b>{data.planSpaces.find((x) => x.id === picked)?.name ?? 'Este espacio'}</b>: así se ve por dentro en las demos. ¿Quiere entrar a una?
+                  </p>
+                  <div>
+                    <button
+                      type="button"
+                      className={`${s.btn} ${s.solid}`}
+                      onClick={() => {
+                        setPicked(null);
+                        onPlanPick();
+                      }}
+                    >
+                      Ver las demos <span className={s.arr}>↓</span>
+                    </button>
+                    <button type="button" className={`${s.btn} ${s.planAskNo}`} onClick={() => setPicked(null)}>
+                      Seguir aquí
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className={s.planNote}>
+                  Toque un espacio para verlo en las demos. <b>¿El baño está dentro?</b> Sí, junto al dormitorio.
+                </p>
+              )}
             </div>
           </div>
 

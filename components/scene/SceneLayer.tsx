@@ -90,8 +90,10 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWi
   }, [allowed, sceneMounted, stageName, terrain]);
 
   useEffect(() => {
-    if (wants3d) mountScene(stage?.kind === 'explorar');
-  }, [wants3d, stage?.kind, mountScene]);
+    // la primera carga siempre entra volando (también si se llega directo a un piso o una
+    // habitación desde la lista: antes la cámara aparecía de golpe tras el telón)
+    if (wants3d) mountScene(true);
+  }, [wants3d, mountScene]);
 
   // Sin WebGL2, o si la persona eligió la lista: la vista exterior pasa a la lista
   useEffect(() => {

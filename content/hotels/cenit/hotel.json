@@ -477,7 +477,36 @@
             "Sala de lectura",
             "Escritorio"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-302-habitacion",
+              "kind": "pano360",
+              "alt": "Habitación en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-der/habitacion-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.4496
+            },
+            {
+              "id": "foto-302-habitacion-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/habitacion-amplia.jpg",
+              "alt": "Habitación: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-302-habitacion-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/habitacion-detalle.jpg",
+              "alt": "Habitación: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         },
         {
           "id": "vestier",
@@ -489,7 +518,36 @@
             "Clóset abierto",
             "Banca"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-302-vestier",
+              "kind": "pano360",
+              "alt": "Vestier en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-der/vestier-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.5097
+            },
+            {
+              "id": "foto-302-vestier-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/vestier-amplia.jpg",
+              "alt": "Vestier: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-302-vestier-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/vestier-detalle.jpg",
+              "alt": "Vestier: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         },
         {
           "id": "bano",
@@ -502,7 +560,36 @@
             "Mármol",
             "Amenidades de la casa"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-302-bano",
+              "kind": "pano360",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-der/bano-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.6351
+            },
+            {
+              "id": "foto-302-bano-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/bano-amplia.jpg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-302-bano-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-der/bano-detalle.jpg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         }
       ],
       "realista": "media/realista/deluxe-der.glb"

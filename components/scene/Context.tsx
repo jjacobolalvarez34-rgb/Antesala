@@ -491,6 +491,14 @@ export function DayNightLights({
 }) {
   const [cx, cz] = frame.center;
   const sun = useRef<THREE.DirectionalLight>(null);
+  // la sombra de una torre alta es larga: el encuadre de la sombra crece con la altura (si no,
+  // la sombra de Cénit salía cortada) y apunta al centro del edificio, no al origen
+  const half = Math.max(60, frame.height * 2.1 + frame.radius);
+  const target = useMemo(() => {
+    const o = new THREE.Object3D();
+    o.position.set(cx, 0, cz);
+    return o;
+  }, [cx, cz]);
   const hemi = useRef<THREE.HemisphereLight>(null);
   const daySun = useMemo(() => new THREE.Color('#ffe3c2'), []);
   const moon = useMemo(() => new THREE.Color('#9fb4d6'), []);
@@ -510,8 +518,10 @@ export function DayNightLights({
   return (
     <>
       <hemisphereLight ref={hemi} args={['#dce6ee', '#6f665a', 0.75]} />
+      <primitive object={target} />
       <directionalLight
         ref={sun}
+        target={target}
         position={[cx + 75, 62, cz + 58]}
         intensity={3.1}
         color="#ffe3c2"
@@ -519,12 +529,12 @@ export function DayNightLights({
         shadow-mapSize={high ? [2048, 2048] : [1024, 1024]}
         shadow-bias={-0.0003}
         shadow-normalBias={0.04}
-        shadow-camera-left={-60}
-        shadow-camera-right={60}
-        shadow-camera-top={60}
-        shadow-camera-bottom={-60}
+        shadow-camera-left={-half}
+        shadow-camera-right={half}
+        shadow-camera-top={half}
+        shadow-camera-bottom={-half}
         shadow-camera-near={10}
-        shadow-camera-far={280}
+        shadow-camera-far={280 + half}
       />
     </>
   );

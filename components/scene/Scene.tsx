@@ -35,7 +35,7 @@ import type { FloorPlanSpace } from './FloorPlanModel';
 import { CameraRig } from './CameraRig';
 import { Context, DayNightLights } from './Context';
 import { PanoSphere, panoDirection } from './PanoSphere';
-import { PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
+import { groupPois, PoiLayer, PoiProjector, SpaceLabelLayer, type ScenePoi } from './Pois';
 import { useRealContext } from './RealContext';
 import { TourGuide, type GuideStep } from './TourGuide';
 import { useNivel } from '@/components/hotel/Nivel';
@@ -377,6 +377,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
   const [planHovered, setPlanHovered] = useState<string | null>(null);
   const floorAnchors = useRef(new Map<string, HTMLElement>());
+  const poiGroups = useMemo(() => groupPois(data.pois), [data.pois]);
   // los pisos pegados al costado del edificio (FloorTags): en la vista exterior y dentro de un piso
   const tagAnchors = useRef(new Map<string, HTMLElement>());
   const floorTags = useMemo<FloorTag[]>(
@@ -715,7 +716,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         />
         <UnitLights light={light} units={data.units} />
         <ExportHook />
-        <PoiProjector pois={data.pois} anchors={anchors} />
+        <PoiProjector pois={poiGroups} anchors={anchors} />
 
         {/* maqueta de la unidad actual (bloque 3); solo se monta la que se ve */}
         {unitId && data.unitPlans[unitId] && unitAnchor(data, frame, unitId) ? (
@@ -769,7 +770,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         />
       </Canvas>
       <FloorTagLayer tags={floorTags} anchors={tagAnchors} visible={active && !inUnit && vpData === null} currentId={selectedId} />
-      <PoiLayer pois={data.pois} anchors={anchors} visible={showPois} />
+      <PoiLayer pois={poiGroups} anchors={anchors} visible={showPois} />
       {stage.kind === 'explorar' && active ? <ViewpointOverlay pois={data.pois} /> : null}
       <SpaceLabelLayer
         labels={floorLabels}
