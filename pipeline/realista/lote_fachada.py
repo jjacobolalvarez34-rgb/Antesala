@@ -12,6 +12,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from optimizar import hay_ktx, optimizar  # noqa: E402
+
 # en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
 BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
 LOG = '.tmp/realista/lote.log'
@@ -43,12 +46,15 @@ log('=== fachada', hotel)
 log('  exportando del visor')
 if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar-edificio.spec.ts', env={**ENV, 'HOTEL': hotel}):
     sys.exit(1)
+# sin restos de una corrida anterior: si Blender falla, que se note (pasó con Cénit el 2026-11-16)
+if os.path.exists(out + '.glb'):
+    os.remove(out + '.glb')
 log(f'  Blender: horneado de la fachada en atlas ({samples} muestras, más o menos una hora)')
 if not run(f'"{BLENDER}" -b -P pipeline/realista/hornear_edificio.py -- {src} {out} {samples}') or not os.path.exists(out + '.glb'):
     sys.exit(1)
 log('  optimizando')
 os.makedirs(os.path.dirname(final), exist_ok=True)
-if not run(f'npx -y @gltf-transform/cli optimize {out}.glb {final} --compress draco --texture-compress webp --texture-size 2048'):
+if not optimizar(f'{out}.glb', final, run, 4096 if hay_ktx() else 2048):
     sys.exit(1)
 p = f'content/hotels/{hotel}/hotel.json'
 h = json.load(open(p, encoding='utf-8'))

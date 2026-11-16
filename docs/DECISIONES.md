@@ -521,7 +521,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 
 **D-088 · 2026-11-16 · Render en el PC prestado con GPU y modo hiperrealista**
 - Decisión:
-  - Los scripts de Blender aceptan `GPU=1` (`pipeline/realista/gpu.py`: OptiX, CUDA, HIP, oneAPI o Metal) y `HIPER=1` (más rebotes, menos ruido, 360° maestro de 8K con copia web de 4K, fotos de 3200 px).
+  - Los scripts de Blender aceptan `GPU=1` (`pipeline/realista/render_gpu.py`: OptiX, CUDA, HIP, oneAPI o Metal) y `HIPER=1` (más rebotes, menos ruido, 360° maestro de 8K con copia web de 4K, fotos de 3200 px).
   - Las rutas de este PC (Blender, Playwright, Poly Haven) son variables de entorno.
   - El plan de la sesión está en `docs/RENDER.md`: en el T440p se prepara y se prueba en baja, y en el PC prestado solo se corren los lotes finales.
 - Por qué: un amigo le presta a Jacobo su PC un día para los renders, y Jacobo quiere hiperrealista. Sin el historial de esta conversación, todo tiene que estar escrito. Sigue sin alquilar GPU (presupuesto).

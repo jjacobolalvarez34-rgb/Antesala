@@ -2,6 +2,11 @@
 
 Guía paso a paso para la sesión de render en el PC con tarjeta gráfica que le prestan a Jacobo. Está escrita para que **cualquiera (Jacobo o Claude en otra sesión, sin el historial de esta conversación)** la siga de principio a fin. Va con `docs/CARGA.md`: todo lo que se renderiza tiene que caber en sus presupuestos.
 
+## Fecha
+
+- **Miércoles 2026-11-18**, si se puede.
+- Si no, **el fin de semana del 21–22 de noviembre**. Ese día Jacobo no va a estar: la sesión la lleva su amigo o Claude Code abierto en ese PC, y por eso esta guía tiene que bastar sola (ver §7).
+
 ## 0. La idea en una línea
 
 En el T440p de Jacobo (4 núcleos, sin GPU) todo se **prepara y se prueba en baja**. En el PC prestado solo se corren los lotes finales en alta, con `GPU=1 HIPER=1`, y se trae el resultado. Una sesión en ese PC no es para descubrir errores.
@@ -122,7 +127,33 @@ Cada mejora se hace en su propio commit, con una foto de antes y otra de despué
    Revisar con calma y anotar en `docs/CARGA.md` §1. Mirar las capturas antes de dar nada por bueno.
 4. Commit, bitácora y `docs/ESTADO.md`.
 
-## 6. Si sobra tiempo en el PC prestado
+## 6. Texturas KTX2 (instalado el 2026-11-16)
+
+KTX-Software 4.4.2 está instalado en este PC (`D:\Herramientas\KTX-Software`), con permiso de Jacobo. En el PC prestado **no hace falta**: allá se renderiza y la compresión se hace aquí después.
+
+Ver `docs/CARGA.md` §5 para cuándo conviene KTX2 y cuándo WebP.
+
+## 7. Si Jacobo no está ese día
+
+Para su amigo o para Claude Code en ese PC:
+
+1. Abrir una terminal en la carpeta del repo y leer `CLAUDE.md`, este archivo y `docs/CARGA.md`.
+2. Seguir §2 (preparar) y §3 (lotes en orden).
+   - No cambiar código ni contenido: solo correr los lotes.
+   - Si un lote falla dos veces, se salta y se anota.
+3. Anotar en `.tmp/realista/SESION.md`:
+   - qué corrió;
+   - cuánto tardó cada lote;
+   - qué falló, con el error.
+4. Al final, copiar a la USB:
+   - `content/hotels/*/media/`;
+   - `content/hotels/*/hotel.json`;
+   - `.tmp/realista/lote.log`;
+   - `.tmp/realista/SESION.md`;
+   - los maestros `*-master.jpg`.
+5. No subir nada a GitHub desde ese PC sin Jacobo. No dejar sesiones abiertas.
+
+## 8. Si sobra tiempo en el PC prestado
 
 - Un video de vuelo por hotel (cámara de la escena → fachada → piso → habitación) para redes y para la página de Antesala.
 - Los 360° de Akuare solo si ya hay permiso del edificio real; si no, nada de Akuare.

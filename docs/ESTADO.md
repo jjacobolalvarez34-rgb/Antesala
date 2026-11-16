@@ -209,8 +209,8 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
       - ¿Captura con cámara 360 hecha por nosotros o por el agente?
     - **Legal:** con un edificio real hace falta el permiso del dueño o de la constructora. Por eso la demo de constructora nueva es ficticia, y Akuare (real, "no oficial") queda solo como prueba interna.
 
-- **14. Instalar KTX-Software (`toktx`) en el PC.** Las texturas comprimidas para la GPU (KTX2) gastan de 4 a 8 veces menos memoria de video en el celular. Es un programa gratuito de Khronos; hace falta el permiso de Jacobo para instalarlo.
-- **15. Cuándo es el día de render en el PC prestado.** Antes conviene hacer las mejoras de `docs/RENDER.md` §4 (muebles con forma, materiales con relieve, luz de arquitecto), para que esa sesión no se gaste descubriendo errores.
+- **14. ~~Instalar KTX-Software~~:** aprobado e instalado el 2026-11-16 (4.4.2, en `D:\Herramientas\KTX-Software`).
+- **15. Día de render en el PC prestado:** miércoles 2026-11-18 si se puede; si no, el fin de semana del 21–22 (sin Jacobo: la guía `docs/RENDER.md` §7 lo cubre). Antes conviene hacer las mejoras de `docs/RENDER.md` §4 (muebles con forma, materiales con relieve, luz de arquitecto), para que esa sesión no se gaste descubriendo errores.
 
 ---
 

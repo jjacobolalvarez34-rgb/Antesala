@@ -15,7 +15,7 @@ import time
 
 import bpy
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from gpu import hiper, usar_gpu  # noqa: E402
+from render_gpu import hiper, usar_gpu  # noqa: E402
 from mathutils import Vector
 
 argv = sys.argv[sys.argv.index('--') + 1:]

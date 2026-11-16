@@ -52,7 +52,9 @@ for t in sys.argv[1:]:
     glb = f'.tmp/realista/{hotel}-{unidad}.glb'
     salida = f'.tmp/realista/fotos-{hotel}-{nombre}'
     log('---', hotel, unidad, plan)
-    if not os.path.exists(glb):
+    # si la unidad y el plano se llaman igual (los refugios de Frailejón), la salida horneada de
+    # lote.py pisa la exportación del visor: se vuelve a exportar siempre
+    if not os.path.exists(glb) or unidad == nombre:
         log('  exportando del visor')
         if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar.spec.ts', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
             continue

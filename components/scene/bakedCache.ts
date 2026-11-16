@@ -2,6 +2,8 @@ import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import { markLoading } from '@/lib/capabilities';
 
+import { parseGltf } from './gltf';
+
 /**
  * Maquetas horneadas (D-074): los GLB se bajan una vez y se guardan en memoria, para
  * precargar las unidades del piso abierto. Al entrar a una habitación la horneada ya
@@ -44,18 +46,7 @@ export function loadBaked(url: string): Promise<GLTF | null> {
 
 async function parse(url: string): Promise<GLTF | null> {
   markLoading();
-  const [buf, { GLTFLoader }, { DRACOLoader }] = await Promise.all([
-    fetchBuffer(url),
-    import('three/examples/jsm/loaders/GLTFLoader.js'),
-    import('three/examples/jsm/loaders/DRACOLoader.js'),
-  ]);
+  const buf = await fetchBuffer(url);
   if (!buf) return null;
-  const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
-  try {
-    return await new GLTFLoader().setDRACOLoader(draco).parseAsync(buf.slice(0), '');
-  } catch {
-    return null;
-  } finally {
-    draco.dispose();
-  }
+  return parseGltf(buf.slice(0));
 }

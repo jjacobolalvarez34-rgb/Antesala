@@ -10,6 +10,7 @@ import { planToMesh } from '@/components/plan/planToMesh';
 import { useTour } from '@/lib/store';
 import type { PlanGeometry } from '@/lib/types';
 
+import { loadGltf } from './gltf';
 import type { LightUniforms } from './windows';
 
 const noHit = () => null;
@@ -142,13 +143,7 @@ export function FloorPlanModel({
     let alive = true;
     let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null = null;
     void (async () => {
-      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
-        import('three/examples/jsm/loaders/GLTFLoader.js'),
-        import('three/examples/jsm/loaders/DRACOLoader.js'),
-      ]);
-      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
-      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
-      draco.dispose();
+      const gltf = await loadGltf(realista);
       if (!alive || !gltf) return;
       let mat: THREE.MeshBasicMaterial | null = null;
       const all: THREE.MeshBasicMaterial[] = [];

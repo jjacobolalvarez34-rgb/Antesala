@@ -21,6 +21,7 @@ import {
 } from '@/lib/building';
 import type { Building, PlanGeometry } from '@/lib/types';
 
+import { loadGltf } from './gltf';
 import type { CladdingMaps } from './assets';
 import { FloorPlanModel, type FloorPlanSpace } from './FloorPlanModel';
 import { mergeBoxes, onEdge, type Box } from './geometry';
@@ -1064,13 +1065,7 @@ export function BuildingModel({
     let alive = true;
     markLoading(10000);
     void (async () => {
-      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
-        import('three/examples/jsm/loaders/GLTFLoader.js'),
-        import('three/examples/jsm/loaders/DRACOLoader.js'),
-      ]);
-      const draco = new DRACOLoader().setDecoderPath('/visor/draco/');
-      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(realista).catch(() => null);
-      draco.dispose();
+      const gltf = await loadGltf(realista);
       if (!alive || !gltf) return;
       const floorsOut: Record<string, BakedFloor> = {};
       let roof: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial } | undefined;

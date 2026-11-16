@@ -12,6 +12,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from optimizar import optimizar  # noqa: E402
+
 # en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
 BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
 TODAS = ['niebla-alta:402', 'niebla-alta:201', 'niebla-alta:601', 'akuare:101', 'akuare:102']
@@ -53,6 +56,8 @@ for t in trabajos:
     if not run(f'npx playwright test -c pipeline/renders.config.ts realista/exportar.spec.ts', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
         continue
     log('  Blender: muebles, render y horneado (unos 20 min)')
+    if os.path.exists(salida + '.glb') and os.path.abspath(salida + '.glb') != os.path.abspath(glb):
+        os.remove(salida + '.glb')  # sin restos: si Blender falla, que se note
     if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} {os.environ.get("MUESTRAS", "48")} {os.environ.get("RES", "2048")}'):
         continue
     if not os.path.exists(salida + '.glb'):
@@ -60,7 +65,7 @@ for t in trabajos:
         continue
     log('  optimizando')
     os.makedirs(os.path.dirname(final), exist_ok=True)
-    if not run(f'npx -y @gltf-transform/cli optimize {salida}.glb {final} --compress draco --texture-compress webp --texture-size 2048'):
+    if not optimizar(f'{salida}.glb', final, run, 2048):
         continue
     h = json.load(open(hjson, encoding='utf-8'))
     n = 0

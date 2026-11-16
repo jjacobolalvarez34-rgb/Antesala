@@ -13,6 +13,7 @@ import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Quality } from '@/lib/capabilities';
 
+import { setGltfRenderer } from '../gltf';
 import { CameraRig } from '../CameraRig';
 import { ExportHook } from '../ExportHook';
 import { PoiProjector, SpaceLabelLayer } from '../Pois';
@@ -117,6 +118,7 @@ export default function TerrainScene({ data, stage, active, quality, reduced, in
         onPointerMissed={() => setHovered(null)}
       >
         <ReadySignal />
+        <RegisterGl />
         {!descend ? <WaitCurtain onLifted={() => setDescend(true)} /> : null}
         <ExportHook />
         <SkyAndFog light={light} intro={intro && !reduced} descend={descend} />
@@ -346,6 +348,13 @@ function Rig({
       )}
     </>
   );
+}
+
+/** KTX2 de los refugios realistas: el cargador necesita el renderer (D-087). */
+function RegisterGl() {
+  const gl = useThree((s) => s.gl);
+  useEffect(() => setGltfRenderer(gl), [gl]);
+  return null;
 }
 
 function HoldCamera({ pose }: { pose: CameraPose }) {

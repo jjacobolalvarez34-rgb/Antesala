@@ -28,6 +28,7 @@ import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, Offer, PlanGeometry } from '@/lib/types';
 
+import { setGltfRenderer } from './gltf';
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
 import { Backdrop, VIEW_ONLY_LAYER, type BackdropApi } from './Backdrop';
 import { BuildingModel, type BuildingColors, type FacadeUnit, type SceneFloor } from './Building';
@@ -184,6 +185,8 @@ function ShadowFreeze({ frozen }: { frozen: boolean }) {
 
 function ReadySignal() {
   const frames = useRef(0);
+  const gl = useThree((st) => st.gl);
+  useEffect(() => setGltfRenderer(gl), [gl]);
   const setSceneReady = useTour((s) => s.setSceneReady);
   useFrame(() => {
     frames.current += 1;
