@@ -114,7 +114,7 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
             </button>
           </div>
           <ol className="mt-3 flex flex-col gap-2.5 text-sm text-bone/85">
-            {[`${tap} un piso del edificio.`, 'Elige tu habitación en la planta.', 'Recórrela por dentro y reserva.'].map((t, i) => (
+            {[`${tap} el número de un piso, junto al edificio.`, 'Elige tu habitación en la planta.', 'Recórrela por dentro y reserva.'].map((t, i) => (
               <li key={t} className="flex items-center gap-3">
                 <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent-on-dark text-xs font-semibold text-ink">
                   {i + 1}

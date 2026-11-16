@@ -114,10 +114,13 @@ const FAQ = [
   },
 ];
 
+const DEMO_ORDER = ['niebla', 'cenit', 'frailejon', 'akuare'];
+
 export default async function Home() {
   const niebla = await getHotelBundle(ANTESALA.demoSlug);
   const akuare = await getHotelBundle('akuare');
   const frailejon = await getHotelBundle('frailejon');
+  const cenit = await getHotelBundle('cenit');
 
   // la unidad del recorrido: la suite con balcón del piso 5 de Niebla Alta
   let recorrido: RecorridoData | null = null;
@@ -245,7 +248,35 @@ export default async function Home() {
           href: routes.hotel('frailejon'),
         }
       : null,
-  ].filter((d) => d !== null);
+    cenit
+      ? {
+          key: 'cenit',
+          img: null,
+          imgAlt: '',
+          art: (
+            <ElevationArt
+              id="art-cenit"
+              tower
+              name={cenit.hotel.name}
+              heightM={(cenit.hotel.site.building?.floors ?? 15) * (cenit.hotel.site.building?.floorHeightM ?? 3.2)}
+              taken="Ocupada"
+              source="TORRE DE 15 PISOS"
+              levels={sortedLevels(cenit.hotel).map((l) => ({
+                id: l.id,
+                units: cenit.hotel.units.filter((u) => u.levelId === l.id).map((u) => ({ id: u.id, sold: !!u.occupied })),
+              }))}
+            />
+          ),
+          badge: 'Hotel de lujo · Bogotá',
+          name: cenit.hotel.name,
+          text: `Una torre de ${cenit.hotel.levels.length} pisos y ${cenit.hotel.units.length} habitaciones: se elige el piso en el mismo edificio, la habitación por su vista y se entra a verla por dentro.`,
+          href: routes.hotel('cenit'),
+        }
+      : null,
+  ]
+    .filter((d) => d !== null)
+    // los ficticios primero (del más chico al más grande) y Akuare, que es de prueba, al final
+    .sort((a, b) => DEMO_ORDER.indexOf(a.key) - DEMO_ORDER.indexOf(b.key));
 
   return (
     <div className={`${s.root} marca-antesala`}>
@@ -301,7 +332,7 @@ export default async function Home() {
                 </div>
               </article>
             </div>
-            <p className={s.fict}>Niebla Alta y Frailejón son ficticios; Akuare es una demostración no oficial con datos públicos. Imágenes ilustrativas.</p>
+            <p className={s.fict}>Niebla Alta, Frailejón y Cénit son ficticios; Akuare es una demostración no oficial con datos públicos. Imágenes ilustrativas.</p>
           </div>
         </section>
 

@@ -82,6 +82,66 @@ for k, objs in groups.items():
     joined[k] = ob
 log('piezas', sorted(joined))
 
+
+# --- caras pegadas: en cada esquina, la punta de un muro cae exactamente sobre la cara del
+# muro vecino (mismo plano, misma normal). Cycles ve dos superficies en el mismo lugar y la
+# luz horneada sale negra en una franja del grueso del muro. La cara contenida se hunde.
+import bmesh
+
+
+def quitar_pegadas(ob):
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    bm.faces.ensure_lookup_table()
+    buckets = {}
+    for f in bm.faces:
+        n = f.normal
+        if n.length < 0.5:
+            continue
+        d = n.dot(f.verts[0].co)
+        key = (round(n.x, 2), round(n.y, 2), round(n.z, 2), round(d, 2))
+        buckets.setdefault(key, []).append(f)
+    fuera = set()
+    for faces in buckets.values():
+        if len(faces) < 2:
+            continue
+        for f in faces:
+            if f in fuera:
+                continue
+            n = f.normal
+            # ejes del plano
+            u = n.orthogonal().normalized()
+            v = n.cross(u)
+            pf = [(x.co.dot(u), x.co.dot(v)) for x in f.verts]
+            fa = f.calc_area()
+            for g in faces:
+                if g is f or g in fuera or g.calc_area() < fa - 1e-6:
+                    continue
+                pg = [(x.co.dot(u), x.co.dot(v)) for x in g.verts]
+                gu0, gu1 = min(p[0] for p in pg), max(p[0] for p in pg)
+                gv0, gv1 = min(p[1] for p in pg), max(p[1] for p in pg)
+                if all(gu0 - 1e-3 <= p[0] <= gu1 + 1e-3 and gv0 - 1e-3 <= p[1] <= gv1 + 1e-3 for p in pf):
+                    fuera.add(f)
+                    break
+    if fuera:
+        # no se borra (quedaría un hueco donde la cara vecina no alcanza): se hunde 3 mm detrás
+        movidos = set()
+        for f in fuera:
+            n = f.normal.copy()
+            for x in f.verts:
+                if x not in movidos:
+                    x.co -= n * 0.003
+                    movidos.add(x)
+        bm.to_mesh(ob.data)
+    bm.free()
+    return len(fuera)
+
+
+for k, ob in joined.items():
+    n = quitar_pegadas(ob)
+    if n:
+        log('caras pegadas hundidas', k, n)
+
 # --- luz
 mins, maxs = Vector((1e9,) * 3), Vector((-1e9,) * 3)
 for ob in joined.values():
@@ -121,6 +181,11 @@ cam.data.lens = 35
 sc.collection.objects.link(cam)
 sc.camera = cam
 cam.location = center + Vector((size * 0.9, -size * 1.4, size * 0.45))
+if os.environ.get('CAM_ESQUINA'):
+    # prueba: de cerca a la esquina (x máx, y mín) a media altura
+    esq = Vector(map(float, os.environ['CAM_ESQUINA'].split(',')))
+    cam.location = esq + Vector((3.0, -4.0, 1.0))
+    center = esq
 cam.rotation_euler = (center - cam.location).to_track_quat('-Z', 'Y').to_euler()
 sc.render.resolution_x, sc.render.resolution_y = 1600, 900
 sc.cycles.samples = SAMPLES
@@ -128,6 +193,8 @@ sc.render.image_settings.file_format = 'JPEG'
 sc.render.filepath = os.path.abspath(OUT + '-muestra.jpg')
 bpy.ops.render.render(write_still=True)
 log('muestra')
+if os.environ.get('SOLO_MUESTRA'):
+    sys.exit(0)
 
 # --- horneado por pieza
 sc.cycles.samples = SAMPLES

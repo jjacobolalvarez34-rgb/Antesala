@@ -403,12 +403,12 @@
             {
               "id": "pano-201-descanso",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/descanso-360.svg",
+              "src": "media/fotos/estudio-201/descanso-360.jpg",
               "alt": "Zona de descanso en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.5554,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 2.3289,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -453,31 +453,22 @@
               "height": 1000
             },
             {
-              "id": "units-201-descanso-1",
+              "id": "foto-201-descanso-amplia",
               "kind": "photo",
-              "src": "media/units/201/descanso-amplia.svg",
+              "src": "media/fotos/estudio-201/descanso-amplia.jpg",
               "alt": "Zona de descanso: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-201-descanso-2",
+              "id": "foto-201-descanso-detalle",
               "kind": "photo",
-              "src": "media/units/201/descanso-detalle.svg",
+              "src": "media/fotos/estudio-201/descanso-detalle.jpg",
               "alt": "Zona de descanso: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-201-descanso-3",
-              "kind": "photo",
-              "src": "media/units/201/descanso-luz.svg",
-              "alt": "Zona de descanso: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -497,12 +488,12 @@
             {
               "id": "pano-201-sala",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/sala-360.svg",
+              "src": "media/fotos/estudio-201/sala-360.jpg",
               "alt": "Sala en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.5862,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -2.3836,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -547,31 +538,22 @@
               "height": 1000
             },
             {
-              "id": "units-201-sala-1",
+              "id": "foto-201-sala-amplia",
               "kind": "photo",
-              "src": "media/units/201/sala-amplia.svg",
+              "src": "media/fotos/estudio-201/sala-amplia.jpg",
               "alt": "Sala: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-201-sala-2",
+              "id": "foto-201-sala-detalle",
               "kind": "photo",
-              "src": "media/units/201/sala-detalle.svg",
+              "src": "media/fotos/estudio-201/sala-detalle.jpg",
               "alt": "Sala: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-201-sala-3",
-              "kind": "photo",
-              "src": "media/units/201/sala-luz.svg",
-              "alt": "Sala: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -592,12 +574,12 @@
             {
               "id": "pano-201-cocina",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/cocina-360.svg",
+              "src": "media/fotos/estudio-201/cocina-360.jpg",
               "alt": "Cocineta y comedor en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -3.0712,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -642,31 +624,22 @@
               "height": 1000
             },
             {
-              "id": "units-201-cocina-1",
+              "id": "foto-201-cocina-amplia",
               "kind": "photo",
-              "src": "media/units/201/cocina-amplia.svg",
+              "src": "media/fotos/estudio-201/cocina-amplia.jpg",
               "alt": "Cocineta y comedor: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-201-cocina-2",
+              "id": "foto-201-cocina-detalle",
               "kind": "photo",
-              "src": "media/units/201/cocina-detalle.svg",
+              "src": "media/fotos/estudio-201/cocina-detalle.jpg",
               "alt": "Cocineta y comedor: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-201-cocina-3",
-              "kind": "photo",
-              "src": "media/units/201/cocina-luz.svg",
-              "alt": "Cocineta y comedor: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -685,12 +658,12 @@
             {
               "id": "pano-201-bano",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/bano-360.svg",
+              "src": "media/fotos/estudio-201/bano-360.jpg",
               "alt": "Baño en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -2.8402,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -735,22 +708,22 @@
               "height": 1000
             },
             {
-              "id": "units-201-bano-1",
+              "id": "foto-201-bano-amplia",
               "kind": "photo",
-              "src": "media/units/201/bano-amplia.svg",
+              "src": "media/fotos/estudio-201/bano-amplia.jpg",
               "alt": "Baño: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-201-bano-2",
+              "id": "foto-201-bano-detalle",
               "kind": "photo",
-              "src": "media/units/201/bano-detalle.svg",
+              "src": "media/fotos/estudio-201/bano-detalle.jpg",
               "alt": "Baño: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         }
@@ -801,12 +774,12 @@
             {
               "id": "pano-301-descanso",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/descanso-360.svg",
+              "src": "media/fotos/estudio-201/descanso-360.jpg",
               "alt": "Zona de descanso en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.5554,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 2.3289,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -835,7 +808,7 @@
               "id": "premium-301-descanso",
               "kind": "photo",
               "src": "media/premium/201-descanso.webp",
-              "alt": "Zona de descanso de Estudio 301 (imagen ilustrativa)",
+              "alt": "Zona de descanso de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -844,38 +817,29 @@
             {
               "id": "render-301-descanso",
               "kind": "photo",
-              "src": "media/renders/301-descanso.jpg",
-              "alt": "Zona de descanso de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/201-descanso.jpg",
+              "alt": "Zona de descanso de Estudio 201, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-301-descanso-1",
+              "id": "foto-301-descanso-amplia",
               "kind": "photo",
-              "src": "media/units/201/descanso-amplia.svg",
+              "src": "media/fotos/estudio-201/descanso-amplia.jpg",
               "alt": "Zona de descanso: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-301-descanso-2",
+              "id": "foto-301-descanso-detalle",
               "kind": "photo",
-              "src": "media/units/201/descanso-detalle.svg",
+              "src": "media/fotos/estudio-201/descanso-detalle.jpg",
               "alt": "Zona de descanso: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-301-descanso-3",
-              "kind": "photo",
-              "src": "media/units/201/descanso-luz.svg",
-              "alt": "Zona de descanso: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -895,12 +859,12 @@
             {
               "id": "pano-301-sala",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/sala-360.svg",
+              "src": "media/fotos/estudio-201/sala-360.jpg",
               "alt": "Sala en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.5862,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -2.3836,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -929,7 +893,7 @@
               "id": "premium-301-sala",
               "kind": "photo",
               "src": "media/premium/201-sala.webp",
-              "alt": "Sala de Estudio 301 (imagen ilustrativa)",
+              "alt": "Sala de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -938,38 +902,29 @@
             {
               "id": "render-301-sala",
               "kind": "photo",
-              "src": "media/renders/301-sala.jpg",
-              "alt": "Sala de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/201-sala.jpg",
+              "alt": "Sala de Estudio 201, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-301-sala-1",
+              "id": "foto-301-sala-amplia",
               "kind": "photo",
-              "src": "media/units/201/sala-amplia.svg",
+              "src": "media/fotos/estudio-201/sala-amplia.jpg",
               "alt": "Sala: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-301-sala-2",
+              "id": "foto-301-sala-detalle",
               "kind": "photo",
-              "src": "media/units/201/sala-detalle.svg",
+              "src": "media/fotos/estudio-201/sala-detalle.jpg",
               "alt": "Sala: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-301-sala-3",
-              "kind": "photo",
-              "src": "media/units/201/sala-luz.svg",
-              "alt": "Sala: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -990,12 +945,12 @@
             {
               "id": "pano-301-cocina",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/cocina-360.svg",
+              "src": "media/fotos/estudio-201/cocina-360.jpg",
               "alt": "Cocineta y comedor en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -3.0712,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -1024,7 +979,7 @@
               "id": "premium-301-cocina",
               "kind": "photo",
               "src": "media/premium/201-cocina.webp",
-              "alt": "Cocina de Estudio 301 (imagen ilustrativa)",
+              "alt": "Cocina de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -1033,38 +988,29 @@
             {
               "id": "render-301-cocina",
               "kind": "photo",
-              "src": "media/renders/301-cocina.jpg",
-              "alt": "Cocineta y comedor de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/201-cocina.jpg",
+              "alt": "Cocineta y comedor de Estudio 201, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-301-cocina-1",
+              "id": "foto-301-cocina-amplia",
               "kind": "photo",
-              "src": "media/units/201/cocina-amplia.svg",
+              "src": "media/fotos/estudio-201/cocina-amplia.jpg",
               "alt": "Cocineta y comedor: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-301-cocina-2",
+              "id": "foto-301-cocina-detalle",
               "kind": "photo",
-              "src": "media/units/201/cocina-detalle.svg",
+              "src": "media/fotos/estudio-201/cocina-detalle.jpg",
               "alt": "Cocineta y comedor: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-301-cocina-3",
-              "kind": "photo",
-              "src": "media/units/201/cocina-luz.svg",
-              "alt": "Cocineta y comedor: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1083,12 +1029,12 @@
             {
               "id": "pano-301-bano",
               "kind": "pano360",
-              "src": "media/panos/estudio-201/bano-360.svg",
+              "src": "media/fotos/estudio-201/bano-360.jpg",
               "alt": "Baño en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -2.8402,
               "hotspots": [
                 {
                   "id": "a-descanso",
@@ -1117,7 +1063,7 @@
               "id": "premium-301-bano",
               "kind": "photo",
               "src": "media/premium/201-bano.webp",
-              "alt": "Baño de Estudio 301 (imagen ilustrativa)",
+              "alt": "Baño de Estudio 201 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -1126,29 +1072,29 @@
             {
               "id": "render-301-bano",
               "kind": "photo",
-              "src": "media/renders/301-bano.jpg",
-              "alt": "Baño de Estudio 301, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/201-bano.jpg",
+              "alt": "Baño de Estudio 201, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-301-bano-1",
+              "id": "foto-301-bano-amplia",
               "kind": "photo",
-              "src": "media/units/201/bano-amplia.svg",
+              "src": "media/fotos/estudio-201/bano-amplia.jpg",
               "alt": "Baño: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-301-bano-2",
+              "id": "foto-301-bano-detalle",
               "kind": "photo",
-              "src": "media/units/201/bano-detalle.svg",
+              "src": "media/fotos/estudio-201/bano-detalle.jpg",
               "alt": "Baño: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         }
@@ -1201,12 +1147,12 @@
             {
               "id": "pano-402-sala",
               "kind": "pano360",
-              "src": "media/panos/suite-402/sala-360.svg",
+              "src": "media/fotos/suite-402/sala-360.jpg",
               "alt": "Sala y comedor en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.9848,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.0679,
               "hotspots": [
                 {
                   "id": "a-balcon",
@@ -1258,31 +1204,22 @@
               "height": 1000
             },
             {
-              "id": "units-402-sala-1",
+              "id": "foto-402-sala-amplia",
               "kind": "photo",
-              "src": "media/units/402/sala-amplia.svg",
+              "src": "media/fotos/suite-402/sala-amplia.jpg",
               "alt": "Sala y comedor: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-402-sala-2",
+              "id": "foto-402-sala-detalle",
               "kind": "photo",
-              "src": "media/units/402/sala-detalle.svg",
+              "src": "media/fotos/suite-402/sala-detalle.jpg",
               "alt": "Sala y comedor: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-402-sala-3",
-              "kind": "photo",
-              "src": "media/units/402/sala-luz.svg",
-              "alt": "Sala y comedor: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1300,12 +1237,12 @@
             {
               "id": "pano-402-balcon",
               "kind": "pano360",
-              "src": "media/panos/suite-402/balcon-360.svg",
+              "src": "media/fotos/suite-402/balcon-360.jpg",
               "alt": "Balcón en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 1.6352,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.2012,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1357,31 +1294,22 @@
               "height": 1000
             },
             {
-              "id": "units-402-balcon-1",
+              "id": "foto-402-balcon-amplia",
               "kind": "photo",
-              "src": "media/units/402/balcon-amplia.svg",
+              "src": "media/fotos/suite-402/balcon-amplia.jpg",
               "alt": "Balcón: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-402-balcon-2",
+              "id": "foto-402-balcon-detalle",
               "kind": "photo",
-              "src": "media/units/402/balcon-detalle.svg",
+              "src": "media/fotos/suite-402/balcon-detalle.jpg",
               "alt": "Balcón: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-402-balcon-3",
-              "kind": "photo",
-              "src": "media/units/402/balcon-luz.svg",
-              "alt": "Balcón: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1401,12 +1329,12 @@
             {
               "id": "pano-402-cocina",
               "kind": "pano360",
-              "src": "media/panos/suite-402/cocina-360.svg",
+              "src": "media/fotos/suite-402/cocina-360.jpg",
               "alt": "Cocina en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0.0599,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.1885,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1458,31 +1386,22 @@
               "height": 1000
             },
             {
-              "id": "units-402-cocina-1",
+              "id": "foto-402-cocina-amplia",
               "kind": "photo",
-              "src": "media/units/402/cocina-amplia.svg",
+              "src": "media/fotos/suite-402/cocina-amplia.jpg",
               "alt": "Cocina: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-402-cocina-2",
+              "id": "foto-402-cocina-detalle",
               "kind": "photo",
-              "src": "media/units/402/cocina-detalle.svg",
+              "src": "media/fotos/suite-402/cocina-detalle.jpg",
               "alt": "Cocina: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-402-cocina-3",
-              "kind": "photo",
-              "src": "media/units/402/cocina-luz.svg",
-              "alt": "Cocina: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1502,12 +1421,12 @@
             {
               "id": "pano-402-dormitorio",
               "kind": "pano360",
-              "src": "media/panos/suite-402/dormitorio-360.svg",
+              "src": "media/fotos/suite-402/dormitorio-360.jpg",
               "alt": "Dormitorio en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.1071,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.9736,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1559,31 +1478,22 @@
               "height": 1000
             },
             {
-              "id": "units-402-dormitorio-1",
+              "id": "foto-402-dormitorio-amplia",
               "kind": "photo",
-              "src": "media/units/402/dormitorio-amplia.svg",
+              "src": "media/fotos/suite-402/dormitorio-amplia.jpg",
               "alt": "Dormitorio: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-402-dormitorio-2",
+              "id": "foto-402-dormitorio-detalle",
               "kind": "photo",
-              "src": "media/units/402/dormitorio-detalle.svg",
+              "src": "media/fotos/suite-402/dormitorio-detalle.jpg",
               "alt": "Dormitorio: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-402-dormitorio-3",
-              "kind": "photo",
-              "src": "media/units/402/dormitorio-luz.svg",
-              "alt": "Dormitorio: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1602,12 +1512,12 @@
             {
               "id": "pano-402-bano",
               "kind": "pano360",
-              "src": "media/panos/suite-402/bano-360.svg",
+              "src": "media/fotos/suite-402/bano-360.jpg",
               "alt": "Baño en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 2.9156,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1659,22 +1569,22 @@
               "height": 1000
             },
             {
-              "id": "units-402-bano-1",
+              "id": "foto-402-bano-amplia",
               "kind": "photo",
-              "src": "media/units/402/bano-amplia.svg",
+              "src": "media/fotos/suite-402/bano-amplia.jpg",
               "alt": "Baño: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-402-bano-2",
+              "id": "foto-402-bano-detalle",
               "kind": "photo",
-              "src": "media/units/402/bano-detalle.svg",
+              "src": "media/fotos/suite-402/bano-detalle.jpg",
               "alt": "Baño: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         }
@@ -1727,12 +1637,12 @@
             {
               "id": "pano-502-sala",
               "kind": "pano360",
-              "src": "media/panos/suite-402/sala-360.svg",
+              "src": "media/fotos/suite-402/sala-360.jpg",
               "alt": "Sala y comedor en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.9848,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.0679,
               "hotspots": [
                 {
                   "id": "a-balcon",
@@ -1768,7 +1678,7 @@
               "id": "premium-502-sala",
               "kind": "photo",
               "src": "media/premium/402-sala.webp",
-              "alt": "Sala de Suite 502 (imagen ilustrativa)",
+              "alt": "Sala de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -1777,38 +1687,29 @@
             {
               "id": "render-502-sala",
               "kind": "photo",
-              "src": "media/renders/502-sala.jpg",
-              "alt": "Sala y comedor de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/402-sala.jpg",
+              "alt": "Sala y comedor de Suite 402, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-502-sala-1",
+              "id": "foto-502-sala-amplia",
               "kind": "photo",
-              "src": "media/units/402/sala-amplia.svg",
+              "src": "media/fotos/suite-402/sala-amplia.jpg",
               "alt": "Sala y comedor: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-502-sala-2",
+              "id": "foto-502-sala-detalle",
               "kind": "photo",
-              "src": "media/units/402/sala-detalle.svg",
+              "src": "media/fotos/suite-402/sala-detalle.jpg",
               "alt": "Sala y comedor: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-502-sala-3",
-              "kind": "photo",
-              "src": "media/units/402/sala-luz.svg",
-              "alt": "Sala y comedor: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1826,12 +1727,12 @@
             {
               "id": "pano-502-balcon",
               "kind": "pano360",
-              "src": "media/panos/suite-402/balcon-360.svg",
+              "src": "media/fotos/suite-402/balcon-360.jpg",
               "alt": "Balcón en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 1.6352,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.2012,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1867,7 +1768,7 @@
               "id": "premium-502-balcon",
               "kind": "photo",
               "src": "media/premium/402-balcon.webp",
-              "alt": "Balcón de Suite 502 (imagen ilustrativa)",
+              "alt": "Balcón de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -1876,38 +1777,29 @@
             {
               "id": "render-502-balcon",
               "kind": "photo",
-              "src": "media/renders/502-balcon.jpg",
-              "alt": "Balcón de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/402-balcon.jpg",
+              "alt": "Balcón de Suite 402, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-502-balcon-1",
+              "id": "foto-502-balcon-amplia",
               "kind": "photo",
-              "src": "media/units/402/balcon-amplia.svg",
+              "src": "media/fotos/suite-402/balcon-amplia.jpg",
               "alt": "Balcón: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-502-balcon-2",
+              "id": "foto-502-balcon-detalle",
               "kind": "photo",
-              "src": "media/units/402/balcon-detalle.svg",
+              "src": "media/fotos/suite-402/balcon-detalle.jpg",
               "alt": "Balcón: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-502-balcon-3",
-              "kind": "photo",
-              "src": "media/units/402/balcon-luz.svg",
-              "alt": "Balcón: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -1927,12 +1819,12 @@
             {
               "id": "pano-502-cocina",
               "kind": "pano360",
-              "src": "media/panos/suite-402/cocina-360.svg",
+              "src": "media/fotos/suite-402/cocina-360.jpg",
               "alt": "Cocina en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0.0599,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.1885,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -1968,7 +1860,7 @@
               "id": "premium-502-cocina",
               "kind": "photo",
               "src": "media/premium/402-cocina.webp",
-              "alt": "Cocina de Suite 502 (imagen ilustrativa)",
+              "alt": "Cocina de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -1977,38 +1869,29 @@
             {
               "id": "render-502-cocina",
               "kind": "photo",
-              "src": "media/renders/502-cocina.jpg",
-              "alt": "Cocina de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/402-cocina.jpg",
+              "alt": "Cocina de Suite 402, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-502-cocina-1",
+              "id": "foto-502-cocina-amplia",
               "kind": "photo",
-              "src": "media/units/402/cocina-amplia.svg",
+              "src": "media/fotos/suite-402/cocina-amplia.jpg",
               "alt": "Cocina: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-502-cocina-2",
+              "id": "foto-502-cocina-detalle",
               "kind": "photo",
-              "src": "media/units/402/cocina-detalle.svg",
+              "src": "media/fotos/suite-402/cocina-detalle.jpg",
               "alt": "Cocina: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-502-cocina-3",
-              "kind": "photo",
-              "src": "media/units/402/cocina-luz.svg",
-              "alt": "Cocina: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2028,12 +1911,12 @@
             {
               "id": "pano-502-dormitorio",
               "kind": "pano360",
-              "src": "media/panos/suite-402/dormitorio-360.svg",
+              "src": "media/fotos/suite-402/dormitorio-360.jpg",
               "alt": "Dormitorio en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.1071,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.9736,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -2069,7 +1952,7 @@
               "id": "premium-502-dormitorio",
               "kind": "photo",
               "src": "media/premium/402-dormitorio.webp",
-              "alt": "Dormitorio de Suite 502 (imagen ilustrativa)",
+              "alt": "Dormitorio de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -2078,38 +1961,29 @@
             {
               "id": "render-502-dormitorio",
               "kind": "photo",
-              "src": "media/renders/502-dormitorio.jpg",
-              "alt": "Dormitorio de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/402-dormitorio.jpg",
+              "alt": "Dormitorio de Suite 402, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-502-dormitorio-1",
+              "id": "foto-502-dormitorio-amplia",
               "kind": "photo",
-              "src": "media/units/402/dormitorio-amplia.svg",
+              "src": "media/fotos/suite-402/dormitorio-amplia.jpg",
               "alt": "Dormitorio: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-502-dormitorio-2",
+              "id": "foto-502-dormitorio-detalle",
               "kind": "photo",
-              "src": "media/units/402/dormitorio-detalle.svg",
+              "src": "media/fotos/suite-402/dormitorio-detalle.jpg",
               "alt": "Dormitorio: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-502-dormitorio-3",
-              "kind": "photo",
-              "src": "media/units/402/dormitorio-luz.svg",
-              "alt": "Dormitorio: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2128,12 +2002,12 @@
             {
               "id": "pano-502-bano",
               "kind": "pano360",
-              "src": "media/panos/suite-402/bano-360.svg",
+              "src": "media/fotos/suite-402/bano-360.jpg",
               "alt": "Baño en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 2.9156,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -2169,7 +2043,7 @@
               "id": "premium-502-bano",
               "kind": "photo",
               "src": "media/premium/402-bano.webp",
-              "alt": "Baño de Suite 502 (imagen ilustrativa)",
+              "alt": "Baño de Suite 402 (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 893,
@@ -2178,29 +2052,29 @@
             {
               "id": "render-502-bano",
               "kind": "photo",
-              "src": "media/renders/502-bano.jpg",
-              "alt": "Baño de Suite 502, vista desde adentro (imagen ilustrativa)",
+              "src": "media/renders/402-bano.jpg",
+              "alt": "Baño de Suite 402, vista desde adentro (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
               "height": 1000
             },
             {
-              "id": "units-502-bano-1",
+              "id": "foto-502-bano-amplia",
               "kind": "photo",
-              "src": "media/units/402/bano-amplia.svg",
+              "src": "media/fotos/suite-402/bano-amplia.jpg",
               "alt": "Baño: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-502-bano-2",
+              "id": "foto-502-bano-detalle",
               "kind": "photo",
-              "src": "media/units/402/bano-detalle.svg",
+              "src": "media/fotos/suite-402/bano-detalle.jpg",
               "alt": "Baño: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         }

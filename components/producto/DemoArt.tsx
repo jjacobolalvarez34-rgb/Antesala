@@ -19,33 +19,45 @@ export function ElevationArt({
   name,
   heightM,
   levels,
+  taken = 'Vendido',
+  source = 'CATASTRO DE BOGOTÁ',
+  id = 'art',
+  tower = false,
 }: {
   name: string;
   heightM: number;
+  /** cómo se llaman las ocupadas: "Vendido" en finca raíz, "Ocupada" en un hotel */
+  taken?: string;
+  /** de dónde sale el alzado, al pie */
+  source?: string;
+  /** prefijo de los patrones SVG, por si hay dos alzados en la página */
+  id?: string;
+  /** torre: angosta y alta, para que se lea su proporción */
+  tower?: boolean;
   /** de abajo hacia arriba; cada unidad con su estado */
   levels: { id: string; units: { id: string; sold: boolean }[] }[];
 }) {
   const W = 480;
   const H = 300;
-  const x0 = 70;
-  const x1 = 410;
+  const x0 = tower ? 175 : 70;
+  const x1 = tower ? 305 : 410;
   const ground = 262;
-  const rowH = Math.min(40, 200 / Math.max(1, levels.length));
+  const rowH = Math.min(40, (tower ? 214 : 200) / Math.max(1, levels.length));
   const top = ground - rowH * levels.length;
   const total = levels.reduce((n, l) => n + l.units.length, 0);
   const sold = levels.reduce((n, l) => n + l.units.filter((u) => u.sold).length, 0);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Alzado de ${name}: ${total} unidades, ${sold} vendidas`} preserveAspectRatio="xMidYMid slice">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Alzado de ${name}: ${total} unidades, ${sold} ${taken.toLowerCase()}s`} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <pattern id="art-rayado" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <pattern id={`${id}-rayado`} width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
           <line x1="0" y1="0" x2="0" y2="5" stroke={C.bisel} strokeWidth="1.6" />
         </pattern>
-        <pattern id="art-cuadricula" width="20" height="20" patternUnits="userSpaceOnUse">
+        <pattern id={`${id}-cuadricula`} width="20" height="20" patternUnits="userSpaceOnUse">
           <path d="M20 0H0V20" fill="none" stroke={C.noche} strokeOpacity="0.06" strokeWidth="1" />
         </pattern>
       </defs>
       <rect width={W} height={H} fill={C.papel} />
-      <rect width={W} height={H} fill="url(#art-cuadricula)" />
+      <rect width={W} height={H} fill={`url(#${id}-cuadricula)`} />
       {/* terreno */}
       <line x1="24" y1={ground} x2={W - 24} y2={ground} stroke={C.noche} strokeWidth="1.4" />
       {Array.from({ length: 24 }, (_, i) => (
@@ -66,7 +78,7 @@ export function ElevationArt({
               return (
                 <g key={u.id}>
                   {k > 0 ? <line x1={cx} y1={y} x2={cx} y2={y + rowH} stroke={C.noche} strokeOpacity="0.4" /> : null}
-                  {u.sold ? <rect x={cx + 2.5} y={y + 2.5} width={cw - 5} height={rowH - 5} fill="url(#art-rayado)" /> : null}
+                  {u.sold ? <rect x={cx + 2.5} y={y + 2.5} width={cw - 5} height={rowH - 5} fill={`url(#${id}-rayado)`} /> : null}
                   {/* ventana */}
                   <rect
                     x={cx + cw * 0.3}
@@ -109,13 +121,13 @@ export function ElevationArt({
         <text x={x0 + 15} y={top - 25.5}>
           Disponible · {total - sold}
         </text>
-        <rect x={x0 + 108} y={top - 34} width="10" height="10" fill="url(#art-rayado)" stroke={C.noche} strokeOpacity="0.4" />
+        <rect x={x0 + 108} y={top - 34} width="10" height="10" fill={`url(#${id}-rayado)`} stroke={C.noche} strokeOpacity="0.4" />
         <text x={x0 + 123} y={top - 25.5}>
-          Vendido · {sold}
+          {taken} · {sold}
         </text>
       </g>
       <text x={W - 24} y={H - 12} textAnchor="end" fontSize="8.5" letterSpacing="2" fill={C.noche} fillOpacity="0.55" fontFamily="var(--f-body)">
-        {name.toUpperCase()} · ALZADO · CATASTRO DE BOGOTÁ
+        {name.toUpperCase()} · ALZADO · {source}
       </text>
     </svg>
   );

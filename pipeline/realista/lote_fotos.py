@@ -42,6 +42,10 @@ for t in sys.argv[1:]:
     hjson = f'content/hotels/{hotel}/hotel.json'
     h = json.load(open(hjson, encoding='utf-8'))
     u = next(x for x in h['units'] if x['id'] == unidad)
+    if 'sameAs' in u:
+        # las copias heredan los espacios (y sus fotos) de la unidad tipo
+        log('---', hotel, unidad, f"copia de {u['sameAs']}: usa sus fotos")
+        continue
     plan = u['plan']
     nombre = os.path.basename(plan).replace('.svg', '')
     glb = f'.tmp/realista/{hotel}-{unidad}.glb'

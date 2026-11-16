@@ -37,9 +37,38 @@
         "roof": "terraza",
         "windows": "muro-cortina"
       },
-      "topSetback": false
+      "topSetback": false,
+      "realista": "media/realista/fachada.glb"
     },
-    "exterior": [],
+    "exterior": [
+      {
+        "id": "render-exterior-1",
+        "kind": "photo",
+        "src": "media/renders/fachada-dia.jpg",
+        "alt": "Fachada de Hotel Cénit en la tarde (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-2",
+        "kind": "photo",
+        "src": "media/renders/fachada-noche.jpg",
+        "alt": "Fachada de Hotel Cénit de noche (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      },
+      {
+        "id": "render-exterior-3",
+        "kind": "photo",
+        "src": "media/renders/piso-15.jpg",
+        "alt": "Piso 15 abierto, con la planta amoblada (imagen ilustrativa)",
+        "fidelity": "ilustrativa",
+        "width": 1600,
+        "height": 1000
+      }
+    ],
     "pois": [
       {
         "id": "lobby",
@@ -109,105 +138,120 @@
       "name": "Lobby",
       "kind": "piso",
       "order": 1,
-      "plan": "plans/piso-1.svg"
+      "plan": "plans/piso-1.svg",
+      "realista": "media/realista/planta-1.glb"
     },
     {
       "id": "2",
       "name": "Spa",
       "kind": "piso",
       "order": 2,
-      "plan": "plans/piso-2.svg"
+      "plan": "plans/piso-2.svg",
+      "realista": "media/realista/planta-2.glb"
     },
     {
       "id": "3",
       "name": "Piso 3",
       "kind": "piso",
       "order": 3,
-      "plan": "plans/piso-3.svg"
+      "plan": "plans/piso-3.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "4",
       "name": "Piso 4",
       "kind": "piso",
       "order": 4,
-      "plan": "plans/piso-4.svg"
+      "plan": "plans/piso-4.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "5",
       "name": "Piso 5",
       "kind": "piso",
       "order": 5,
-      "plan": "plans/piso-5.svg"
+      "plan": "plans/piso-5.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "6",
       "name": "Piso 6",
       "kind": "piso",
       "order": 6,
-      "plan": "plans/piso-6.svg"
+      "plan": "plans/piso-6.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "7",
       "name": "Piso 7",
       "kind": "piso",
       "order": 7,
-      "plan": "plans/piso-7.svg"
+      "plan": "plans/piso-7.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "8",
       "name": "Piso 8",
       "kind": "piso",
       "order": 8,
-      "plan": "plans/piso-8.svg"
+      "plan": "plans/piso-8.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "9",
       "name": "Piso 9",
       "kind": "piso",
       "order": 9,
-      "plan": "plans/piso-9.svg"
+      "plan": "plans/piso-9.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "10",
       "name": "Piso 10",
       "kind": "piso",
       "order": 10,
-      "plan": "plans/piso-10.svg"
+      "plan": "plans/piso-10.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "11",
       "name": "Piso 11",
       "kind": "piso",
       "order": 11,
-      "plan": "plans/piso-11.svg"
+      "plan": "plans/piso-11.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "12",
       "name": "Piso 12",
       "kind": "piso",
       "order": 12,
-      "plan": "plans/piso-12.svg"
+      "plan": "plans/piso-12.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "13",
       "name": "Piso 13",
       "kind": "piso",
       "order": 13,
-      "plan": "plans/piso-13.svg"
+      "plan": "plans/piso-13.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "14",
       "name": "Piso 14",
       "kind": "piso",
       "order": 14,
-      "plan": "plans/piso-14.svg"
+      "plan": "plans/piso-14.svg",
+      "realista": "media/realista/planta-3.glb"
     },
     {
       "id": "15",
       "name": "Piso 15",
       "kind": "piso",
       "order": 15,
-      "plan": "plans/piso-15.svg"
+      "plan": "plans/piso-15.svg",
+      "realista": "media/realista/planta-3.glb"
     }
   ],
   "categories": [
@@ -274,7 +318,36 @@
             "Sala de lectura",
             "Escritorio"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-301-habitacion",
+              "kind": "pano360",
+              "alt": "Habitación en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-izq/habitacion-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.692
+            },
+            {
+              "id": "foto-301-habitacion-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/habitacion-amplia.jpg",
+              "alt": "Habitación: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-301-habitacion-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/habitacion-detalle.jpg",
+              "alt": "Habitación: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         },
         {
           "id": "vestier",
@@ -286,7 +359,36 @@
             "Clóset abierto",
             "Banca"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-301-vestier",
+              "kind": "pano360",
+              "alt": "Vestier en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-izq/vestier-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.6075
+            },
+            {
+              "id": "foto-301-vestier-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/vestier-amplia.jpg",
+              "alt": "Vestier: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-301-vestier-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/vestier-detalle.jpg",
+              "alt": "Vestier: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         },
         {
           "id": "bano",
@@ -299,10 +401,40 @@
             "Mármol",
             "Amenidades de la casa"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-301-bano",
+              "kind": "pano360",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/deluxe-izq/bano-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 1.5181
+            },
+            {
+              "id": "foto-301-bano-amplia",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/bano-amplia.jpg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-301-bano-detalle",
+              "kind": "photo",
+              "src": "media/fotos/deluxe-izq/bano-detalle.jpg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         }
       ],
-      "featured": true
+      "featured": true,
+      "realista": "media/realista/deluxe-izq.glb"
     },
     {
       "id": "302",
@@ -372,7 +504,8 @@
           ],
           "media": []
         }
-      ]
+      ],
+      "realista": "media/realista/deluxe-der.glb"
     },
     {
       "id": "303",
@@ -429,7 +562,8 @@
           "media": []
         }
       ],
-      "occupied": true
+      "occupied": true,
+      "realista": "media/realista/superior-der.glb"
     },
     {
       "id": "304",
@@ -485,7 +619,8 @@
           ],
           "media": []
         }
-      ]
+      ],
+      "realista": "media/realista/superior-izq.glb"
     },
     {
       "sameAs": "301",

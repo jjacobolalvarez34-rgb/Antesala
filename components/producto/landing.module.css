@@ -827,8 +827,12 @@
 /* demos */
 .demoCards {
   display: grid;
-  grid-template-columns: 1.1fr 1.1fr 1.1fr 0.8fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+}
+/* cuatro demos en tres columnas: "Su hotel aquí" ocupa las dos que sobran de la segunda fila */
+.demoCards > .yours:nth-child(5) {
+  grid-column: span 2;
 }
 .dcard {
   border: 1px solid var(--line);
@@ -886,10 +890,16 @@
   .demoCards {
     grid-template-columns: 1fr 1fr;
   }
+  .demoCards > .yours:nth-child(5) {
+    grid-column: span 2;
+  }
 }
 @media (max-width: 640px) {
   .demoCards {
     grid-template-columns: 1fr;
+  }
+  .demoCards > .yours:nth-child(5) {
+    grid-column: auto;
   }
 }
 

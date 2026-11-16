@@ -662,6 +662,16 @@ sc.view_settings.look = 'AgX - Base Contrast'
 sc.view_settings.exposure = -0.2
 sc.render.image_settings.file_format = 'JPEG'
 sc.render.image_settings.quality = 90
+# rápido en CPU: pocos rebotes y muestreo adaptativo (el filtro de ruido limpia el resto)
+sc.cycles.max_bounces = 6
+sc.cycles.diffuse_bounces = 3
+sc.cycles.glossy_bounces = 2
+sc.cycles.transmission_bounces = 4
+sc.cycles.transparent_max_bounces = 6
+sc.cycles.caustics_reflective = False
+sc.cycles.caustics_refractive = False
+sc.cycles.use_adaptive_sampling = True
+sc.cycles.adaptive_threshold = 0.04
 
 
 def shot(path, loc, look_at, res=(1600, 900), samples=SAMPLES):
@@ -675,7 +685,8 @@ def shot(path, loc, look_at, res=(1600, 900), samples=SAMPLES):
 
 
 d = size * 1.15
-shot(OUT + '-muestra.jpg', center + Vector((d * 0.7, -d * 0.75, d * 0.95)), center)
+if not os.environ.get('SIN_HORNEAR'):
+    shot(OUT + '-muestra.jpg', center + Vector((d * 0.7, -d * 0.75, d * 0.95)), center)
 # segunda toma: más cerca, sobre la sala (el sofá), en diagonal desde arriba
 sofa_f = next((f for f in FURN if f['item'] == 'sofa'), None)
 tgt = Vector((sofa_f['cx'], sofa_f['cy'], 0.4)) if sofa_f else center
