@@ -541,3 +541,13 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Sale de los espacios del plano que coinciden con las zonas comunes (`site.pois`): un hotel nuevo solo nombra el espacio en su SVG.
   - En las demos los nombres son genéricos o ficticios. Con un hotel real puede ir la marca del local que arrienda (un café, una tienda), con su permiso.
 - Por qué: idea de Jacobo, "que aparezca qué cosas hay adentro, un café o un bar, con su posición". Sirve al hotel para vender sus servicios y a los locales que tiene adentro.
+
+**D-091 · 2026-11-16 · Un barrio que parezca un lugar**
+- Decisión: alrededor de los hoteles sin contexto real (Niebla Alta, Cénit), el entorno inventado (`components/scene/Barrio.tsx`) tiene:
+  - una cuadrícula de calles con andenes;
+  - manzanas con edificios pegados a lo largo del borde, con alturas y colores variados (ladrillos y estucos en varios tonos) y torres sueltas lejos del hotel;
+  - dos parques con árboles;
+  - cerros orientales en tres capas, más claras y azuladas hacia el fondo.
+
+  Todo va en pocas mallas; solo lo cercano hace sombra. Akuare sigue con su contexto real (catastro y OpenStreetMap).
+- Por qué: Jacobo: "el fondo no parece un lugar real, se ve como un decorado". Antes había dos calles y edificios sueltos sobre tierra.

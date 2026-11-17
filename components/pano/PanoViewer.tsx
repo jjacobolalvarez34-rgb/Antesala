@@ -128,8 +128,8 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
       if (!drag) {
         lon += vLon;
         lat = THREE.MathUtils.clamp(lat + vLat, -1.35, 1.35);
-        vLon *= 0.92;
-        vLat *= 0.92;
+        vLon *= 0.86;
+        vLat *= 0.86;
       }
       camera.fov += (fov - camera.fov) * 0.2;
       camera.updateProjectionMatrix();

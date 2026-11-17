@@ -293,7 +293,7 @@ function Rig({
         makeDefault
         enablePan={false}
         enableDamping
-        dampingFactor={0.08}
+        dampingFactor={0.15} // frena más rápido al soltar (Jacobo, 2026-11-16: "el freno es muy largo")
         enableZoom={!in360}
         minDistance={in360 ? 0.04 : pose.radius * 0.65}
         maxDistance={in360 ? 0.06 : pose.radius * 1.3}

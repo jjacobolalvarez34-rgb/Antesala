@@ -7,9 +7,9 @@ import * as THREE from 'three';
 import type { BuildingFrame, Facade } from '@/lib/building';
 
 import { VIEW_ONLY_LAYER } from './Backdrop';
-import { mergeBoxes, type Box } from './geometry';
+import { BarrioMeshes, Cerros, useBarrio } from './Barrio';
 import { RealNeighbors, streetSpots, type LampSpot, type RealContextData } from './RealContext';
-import { muteNeighbor, neighborFacadeTexture, neighborLitTexture, paved } from './textures';
+import { paved } from './textures';
 import type { LightUniforms } from './windows';
 
 /**
@@ -49,198 +49,10 @@ function inViewCorridor(x: number, z: number, frame: BuildingFrame, facades: Fac
 const STREET = 9;
 const SIDEWALK = 3.2;
 
-interface Block {
-  x: number;
-  z: number;
-  w: number;
-  d: number;
-  h: number;
-  kind: 'ladrillo' | 'estuco';
-  /** en el corredor de vista: solo lo ve la cámara de la ventana (capa VIEW_ONLY) */
-  viewOnly: boolean;
-}
-
-function useNeighbors(frame: BuildingFrame, facades: Facade[]): Block[] {
-  return useMemo(() => {
-    const rand = mulberry32(42);
-    const [cx, cz] = frame.center;
-    const out: Block[] = [];
-    const cell = 30;
-    const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
-    const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
-    for (let i = -4; i <= 4; i++) {
-      for (let j = -4; j <= 3; j++) {
-        const n = 1 + Math.floor(rand() * 3);
-        for (let k = 0; k < n; k++) {
-          const w = 8 + rand() * 10;
-          const d = 9 + rand() * 9;
-          const bx = cx + i * cell + (rand() - 0.5) * 12;
-          const bz = cz + j * cell + (rand() - 0.5) * 12;
-          const ring = Math.max(Math.abs(i), Math.abs(j));
-          const floors = ring <= 1 ? 2 + Math.floor(rand() * 3) : 2 + Math.floor(rand() * 6);
-          const overlaps = (x0: number, x1: number, z0: number, z1: number) =>
-            bx + w / 2 > x0 && bx - w / 2 < x1 && bz + d / 2 > z0 && bz - d / 2 < z1;
-          const margin = STREET / 2 + SIDEWALK + 0.5;
-          if (
-            overlaps(-Infinity, Infinity, frontStreet - margin, frontStreet + margin) ||
-            overlaps(sideStreet - margin, sideStreet + margin, -Infinity, Infinity) ||
-            overlaps(cx - frame.width / 2 - 4, cx + frame.width / 2 + 4, cz - frame.depth / 2 - 4, cz + frame.depth / 2 + 4)
-          ) {
-            continue;
-          }
-          // en el corredor de vista de una fachada: no tapa la cámara, pero sí aparece en la vista desde la ventana
-          const viewOnly = inViewCorridor(bx, bz, frame, facades, Math.max(w, d) / 2);
-          out.push({ x: bx, z: bz, w, d, h: floors * 2.9, kind: rand() < 0.62 ? 'ladrillo' : 'estuco', viewOnly });
-        }
-      }
-    }
-    return out;
-  }, [frame, facades]);
-}
-
-function NeighborBlocks({
-  frame,
-  facades,
-  shadows,
-  light,
-}: {
-  frame: BuildingFrame;
-  facades: Facade[];
-  shadows: boolean;
-  light: LightUniforms;
-}) {
-  const blocks = useNeighbors(frame, facades);
-  const mats = useMemo(() => {
-    const roof = muteNeighbor(new THREE.MeshStandardMaterial({ color: '#8f8a82', roughness: 0.95 }));
-    const make = (kind: 'ladrillo' | 'estuco', seed: number) =>
-      muteNeighbor(
-        new THREE.MeshStandardMaterial({
-          map: neighborFacadeTexture(kind, kind === 'ladrillo' ? 3 : 9),
-          emissiveMap: neighborLitTexture(seed),
-          emissive: new THREE.Color('#ffffff'),
-          emissiveIntensity: 0,
-          roughness: 0.92,
-        }),
-      );
-    return { roof, ladrillo: make('ladrillo', 21), estuco: make('estuco', 37) };
-  }, []);
-  useFrame(() => {
-    const n = light.uNight.value;
-    mats.ladrillo.emissiveIntensity = n * 1.4;
-    mats.estuco.emissiveIntensity = n * 1.4;
-  });
-
-  const geos = useMemo(() => build(blocks.filter((b) => !b.viewOnly)), [blocks]);
-  const viewGeos = useMemo(() => build(blocks.filter((b) => b.viewOnly)), [blocks]);
-
-  return (
-    <group>
-      <BlockMeshes geos={geos} mats={mats} shadows={shadows} />
-      <BlockMeshes geos={viewGeos} mats={mats} shadows={false} layer={VIEW_ONLY_LAYER} />
-    </group>
-  );
-}
-
-function build(blocks: Block[]) {
-  const byKind: Record<'ladrillo' | 'estuco', Box[]> = { ladrillo: [], estuco: [] };
-  const roofs: Box[] = [];
-  for (const b of blocks) {
-    byKind[b.kind].push({ x: b.x, y: b.h / 2, z: b.z, w: b.w, h: b.h, d: b.d, rotY: 0 });
-    roofs.push({ x: b.x, y: b.h + 0.05, z: b.z, w: b.w + 0.1, h: 0.1, d: b.d + 0.1, rotY: 0 });
-  }
-  return {
-    ladrillo: mergeBoxes(byKind.ladrillo, 6, 0, 2.9),
-    estuco: mergeBoxes(byKind.estuco, 6, 0, 2.9),
-    roofs: mergeBoxes(roofs, 4),
-  };
-}
-
 /** Pone un objeto (y sus hijos) en una capa de render. */
 const onLayer = (layer?: number) => (o: THREE.Object3D | null) => {
   if (o && layer !== undefined) o.traverse((c) => c.layers.set(layer));
 };
-
-function BlockMeshes({
-  geos,
-  mats,
-  shadows,
-  layer,
-}: {
-  geos: ReturnType<typeof build>;
-  mats: { roof: THREE.Material; ladrillo: THREE.Material; estuco: THREE.Material };
-  shadows: boolean;
-  layer?: number;
-}) {
-  return (
-    <group ref={onLayer(layer)}>
-      {geos.ladrillo ? (
-        <mesh geometry={geos.ladrillo} material={mats.ladrillo} castShadow={shadows} receiveShadow={shadows} />
-      ) : null}
-      {geos.estuco ? (
-        <mesh geometry={geos.estuco} material={mats.estuco} castShadow={shadows} receiveShadow={shadows} />
-      ) : null}
-      {geos.roofs ? <mesh geometry={geos.roofs} material={mats.roof} receiveShadow={shadows} /> : null}
-    </group>
-  );
-}
-
-function Streets({ frame, shadows }: { frame: BuildingFrame; shadows: boolean }) {
-  const [cx, cz] = frame.center;
-  const frontStreet = cz + frame.depth / 2 + SIDEWALK + STREET / 2;
-  const sideStreet = cx + frame.width / 2 + SIDEWALK + STREET / 2;
-  const { walks, curbs, marks } = useMemo(() => {
-    const L = 500;
-    const walks: Box[] = [
-      // andenes a ambos lados de cada calle
-      { x: cx, y: 0.08, z: frontStreet - STREET / 2 - SIDEWALK / 2, w: L, h: 0.16, d: SIDEWALK, rotY: 0 },
-      { x: cx, y: 0.08, z: frontStreet + STREET / 2 + SIDEWALK / 2, w: L, h: 0.16, d: SIDEWALK, rotY: 0 },
-      { x: sideStreet - STREET / 2 - SIDEWALK / 2, y: 0.08, z: cz, w: SIDEWALK, h: 0.16, d: L, rotY: 0 },
-      { x: sideStreet + STREET / 2 + SIDEWALK / 2, y: 0.08, z: cz, w: SIDEWALK, h: 0.16, d: L, rotY: 0 },
-    ];
-    const curbs: Box[] = walks.map((w) =>
-      w.w > w.d
-        ? { ...w, y: 0.09, d: 0.18, z: w.z + (w.z < frontStreet ? SIDEWALK / 2 : -SIDEWALK / 2) }
-        : { ...w, y: 0.09, w: 0.18, x: w.x + (w.x < sideStreet ? SIDEWALK / 2 : -SIDEWALK / 2) },
-    );
-    const marks: Box[] = [];
-    for (let t = -L / 2; t < L / 2; t += 6) {
-      marks.push({ x: cx + t, y: 0.012, z: frontStreet, w: 3, h: 0.01, d: 0.14, rotY: 0 });
-      marks.push({ x: sideStreet, y: 0.012, z: cz + t, w: 0.14, h: 0.01, d: 3, rotY: 0 });
-    }
-    return { walks, curbs, marks };
-  }, [cx, cz, frontStreet, sideStreet]);
-  const walkGeo = useMemo(() => mergeBoxes(walks, 2), [walks]);
-  // andén de concreto gris en baldosas (antes, casi blanco)
-  const walkMat = useMemo(() => paved(new THREE.MeshStandardMaterial({ color: '#868076', roughness: 0.92 }), 0.6), []);
-  const curbGeo = useMemo(() => mergeBoxes(curbs, 2), [curbs]);
-  const markGeo = useMemo(() => mergeBoxes(marks), [marks]);
-
-  return (
-    <group>
-      <mesh rotation-x={-Math.PI / 2} position={[cx, 0.005, frontStreet]} receiveShadow={shadows}>
-        <planeGeometry args={[500, STREET]} />
-        <meshStandardMaterial color="#47484a" roughness={0.95} />
-      </mesh>
-      <mesh rotation-x={-Math.PI / 2} position={[sideStreet, 0.004, cz]} receiveShadow={shadows}>
-        <planeGeometry args={[STREET, 500]} />
-        <meshStandardMaterial color="#47484a" roughness={0.95} />
-      </mesh>
-      {walkGeo ? (
-        <mesh geometry={walkGeo} receiveShadow={shadows} material={walkMat} />
-      ) : null}
-      {curbGeo ? (
-        <mesh geometry={curbGeo} receiveShadow={shadows}>
-          <meshStandardMaterial color="#a9a399" roughness={0.85} />
-        </mesh>
-      ) : null}
-      {markGeo ? (
-        <mesh geometry={markGeo}>
-          <meshStandardMaterial color="#e9e6df" roughness={0.6} />
-        </mesh>
-      ) : null}
-    </group>
-  );
-}
 
 interface TreeSpot {
   x: number;
@@ -339,29 +151,6 @@ function TreeSet({ spots, shadows, layer }: { spots: TreeSpot[]; shadows: boolea
         <meshStandardMaterial roughness={1} />
       </instancedMesh>
     </group>
-  );
-}
-
-function Ridge({ frame }: { frame: BuildingFrame }) {
-  const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(900, 160, 90, 16);
-    const pos = g.attributes.position!;
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const y = pos.getY(i);
-      const t = (y + 80) / 160;
-      const crest = 70 + Math.sin(x / 61) * 22 + Math.sin(x / 23 + 1.7) * 8 + Math.sin(x / 7.3) * 2;
-      pos.setY(i, t * crest);
-      pos.setZ(i, -t * 40);
-    }
-    g.computeVertexNormals();
-    return g;
-  }, []);
-  // cerros orientales al fondo (−z)
-  return (
-    <mesh geometry={geo} position={[frame.center[0], -1, frame.center[1] - 260]}>
-      <meshStandardMaterial color="#56694d" roughness={1} />
-    </mesh>
   );
 }
 
@@ -509,6 +298,10 @@ export function DayNightLights({
     if (sun.current) {
       sun.current.intensity = THREE.MathUtils.lerp(3.1, 0.45, n);
       sun.current.color.copy(daySun).lerp(moon, n);
+      // de noche la luna no hace sombras: rasantes y con poca resolución, dejaban un serrucho sobre
+      // el ladrillo alrededor de las ventanas (reporte de Jacobo, 2026-11-16). Se desvanecen con la
+      // intensidad (sin recompilar nada, a diferencia de apagar castShadow)
+      sun.current.shadow.intensity = THREE.MathUtils.clamp(1 - n * 1.6, 0, 1);
     }
     if (hemi.current) {
       hemi.current.intensity = THREE.MathUtils.lerp(0.75, 0.34, n);
@@ -562,6 +355,7 @@ export function Context({
   // el suelo de fondo: tierra y pavimento gastado, no blanco
   const groundMat = useMemo(() => paved(new THREE.MeshStandardMaterial({ color: '#4d4a44', roughness: 1 }), 0), []);
   const inCorridor = useCallback((x: number, z: number, pad: number) => inViewCorridor(x, z, frame, facades, pad), [frame, facades]);
+  const barrio = useBarrio(frame, inCorridor);
   const [cx, cz] = frame.center;
   const sky = useMemo(
     () =>
@@ -605,13 +399,14 @@ export function Context({
         </>
       ) : (
         <>
-          <Streets frame={frame} shadows={shadows} />
+          {/* barrio con cuadrícula de calles, manzanas y parques (D-091); antes, dos calles y vecinos sueltos */}
+          <BarrioMeshes barrio={barrio} shadows={shadows} light={light} />
           <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} />
           <Trees frame={frame} facades={facades} shadows={shadows} />
-          <NeighborBlocks frame={frame} facades={facades} shadows={shadows} light={light} />
+          <TreeSet spots={barrio.parkTrees} shadows={false} />
         </>
       )}
-      <Ridge frame={frame} />
+      <Cerros frame={frame} />
     </group>
   );
 }

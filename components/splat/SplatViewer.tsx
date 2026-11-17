@@ -50,7 +50,7 @@ export default function SplatViewer({ url, title, onClose }: { url: string; titl
       scene.add(splat);
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
-      controls.dampingFactor = 0.08;
+      controls.dampingFactor = 0.15;
       controls.target.set(0, 0, 0);
       controls.minDistance = 0.05;
       controls.maxDistance = 8;
