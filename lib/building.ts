@@ -233,7 +233,9 @@ export function facadePose(
   const polar = (tower ? 76 : 70) * DEG;
   // de más arriba la altura aparente se acorta y la cubierta suma: se encuadra la proyección
   const tall = f.height * Math.sin(polar) + diag * Math.cos(polar) * 0.6;
-  const radius = fitRect(diag + 4, tall + 4, fov, aspect, portrait ? 1.1 : 1.5);
+  // un poco más lejos que el encuadre justo (Jacobo, 2026-11-16: "un poquito menos de zoom"):
+  // el edificio respira y los números de piso caben al lado
+  const radius = fitRect(diag + 4, tall + 4, fov, aspect, portrait ? 1.1 : 1.5) * (portrait ? 1.18 : 1.1);
   return {
     target: [f.center[0], f.height * (tower ? 0.48 : 0.42), f.center[1]],
     radius: radius + toFacade * 0.5,
