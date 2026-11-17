@@ -26,13 +26,18 @@ def optimizar(src, dst, run, size=2048):
     if not hay_ktx() or os.environ.get('SIN_KTX'):
         return run(f'{G} optimize {src} {dst} --compress draco --texture-compress webp --texture-size {size}')
     env = {**os.environ, 'PATH': KTX_BIN + os.pathsep + os.environ.get('PATH', '')}
-    a, b = dst + '.a.glb', dst + '.b.glb'
+    a, a2, b = dst + '.a.glb', dst + '.a2.glb', dst + '.b.glb'
+    # la decoración de Poly Haven (texturas "_1k": plantas, jarrones) mide pocos píxeles en
+    # pantalla y el visor solo usa su color: 256 px. Sin esto, KTX2 duplicaba el peso de bajada.
     ok = (
         run(f'{G} resize {src} {a} --width {size} --height {size}', env=env)
-        and run(f'{G} etc1s {a} {b}', env=env)
-        and run(f'{G} draco {b} {dst}', env=env)
+        and run(f'{G} resize {a} {a2} --width 256 --height 256 --pattern "*_1k*"', env=env)
+        and run(f'{G} etc1s {a2} {b}', env=env)
+        # al final, el resto de `optimize` (copias como instancias, simplificar, soldar) con Draco,
+        # sin tocar las texturas que ya son KTX2
+        and run(f'{G} optimize {b} {dst} --compress draco --texture-compress false', env=env)
     )
-    for t in (a, b):
+    for t in (a, a2, b):
         if os.path.exists(t):
             os.remove(t)
     return ok

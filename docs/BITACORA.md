@@ -25,6 +25,36 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-16 (noche) · Cénit Premium de 2 a 34 fps
+
+**Hecho**
+- **Fachada de Cénit en atlas:**
+  - salió a las 7:47 p. m. (4 h 26 min, con el PC compartido);
+  - de 30 texturas a 2: un atlas de 4096 px para fachadas y cubierta, y uno de 2048 px para losas;
+  - de 2,1 a 1,2 MB, y de ~420 a ~14 MB de memoria de video.
+- **Todo lo horneado en KTX2** (Niebla Alta, Cénit, Frailejón) con la receta corregida de `optimizar.py`:
+  - la decoración de Poly Haven pasa a 256 px;
+  - al final va `optimize` con Draco, porque sin instancias ni simplificación las plantas decorativas duplicaban el peso.
+  
+  Casi todo pesa menos que en WebP.
+- Se subieron:
+  - volver junto a Reservar;
+  - números de piso dentro de la pantalla;
+  - letreros por apartamento con dos toques;
+  - el panel del espacio nuevo;
+  - la transición que prepara la habitación escondida (D-089);
+  - la vista inicial un poco más lejos.
+
+**Mediciones** (celular simulado, con el PC ocupado)
+- Cénit Premium: 2 → **34 fps**; 7,3 → **3,1 MB**; escena visible en 9,9 s.
+
+**Siguiente**
+- Que Jacobo pruebe en su celular la transición de piso a habitación (primer toque, leer, segundo toque).
+- Sombras de las ventanas en Premium de noche.
+- Rediseño de la página de Antesala.
+
+---
+
 ## 2026-11-16 (tarde) · Notas del papá de Jacobo: sencillo, intuitivo y que jamás se trabe
 
 **Contexto**

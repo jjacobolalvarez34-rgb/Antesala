@@ -11,6 +11,9 @@ Jacobo abrió Cénit en su celular y "va muy lento". Medido con `pnpm perf` (§6
 | Cénit Premium | 11,1 s | 7,3 MB | **2 fps** | 34 (16,9 s) |
 | Cénit Inmersivo | 9,8 s | 3,8 MB | 51 fps | 33 (11,7 s) |
 | Niebla Alta Inmersivo | 9,3 s | 4,0 MB | 56 fps | 26 (11,2 s) |
+| **Cénit Premium, 2026-11-16 noche** (atlas + KTX2 + tandas) | 9,9 s | 3,1 MB | **34 fps** | 37 (12,5 s) |
+
+La medición de la noche se hizo con el PC ocupado (otra pestaña pesada de Jacobo): los tiempos de las tareas largas están inflados. La fluidez es la que importa: de 2 a 34 fps.
 
 Las causas no eran los MB bajados, sino la **memoria de video**:
 
@@ -84,7 +87,13 @@ Además de los de `ARQUITECTURA.md` §8. Son criterios de aceptación: se miden 
 1. **Atlas, no una textura por pieza.** Las piezas que se ven juntas comparten imagen. Ejemplo: la fachada, que `hornear_edificio.py` hornea en un atlas desde la D-087.
 2. **Lo repetido se hornea una vez.** Los pisos tipo comparten planta; las copias (`sameAs`) heredan fotos y 3D.
 3. **Tamaños máximos en la web:** 2048 px por textura y 4096 × 2048 para el 360° de escritorio. Los maestros de mayor resolución (8K) se guardan aparte para fotos y video, no para el visor.
-4. **Formato de textura:** hoy WebP dentro del GLB. **Pendiente (pide permiso):** pasar a KTX2/Basis (`--texture-compress ktx2` de gltf-transform). Necesita instalar KTX-Software (`toktx`) en el PC.
+4. **Formato de textura: KTX2/ETC1S** (desde el 2026-11-16, con KTX-Software instalado). Lo hace `pipeline/realista/optimizar.py` en este orden:
+   1. texturas a su tamaño máximo;
+   2. la decoración de Poly Haven (`*_1k*`) a 256 px, porque el visor solo usa su color y se ve pequeña;
+   3. ETC1S;
+   4. `optimize` con Draco (instancias, simplificar, soldar).
+
+   Resultado: pesa igual o menos que WebP al bajar, y la textura de luz de 2048 px ocupa ~2,8 MB de video en vez de ~22 MB. Sin `toktx` (el PC prestado) sale WebP como antes. Para pasar lo ya horneado: `python pipeline/realista/reoptimizar.py`.
 5. **Geometría:** Draco y sin caras ocultas (muros pegados, caras contenidas).
 
 ## 6. Cómo medir

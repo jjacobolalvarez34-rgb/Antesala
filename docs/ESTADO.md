@@ -131,6 +131,18 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 ## 6. Qué está en curso
 
+- **Hecho el 2026-11-16 en la noche: Cénit Premium pasó de 2 a 34 cuadros por segundo** en el celular simulado (de 7,3 a 3,1 MB). Hubo tres arreglos:
+  - la fachada en un solo atlas (de 30 texturas a 2);
+  - las texturas en KTX2, que ocupan unas 8 veces menos memoria de video y pesan igual o menos;
+  - la carga por tandas.
+
+  Además, con las notas del papá de Jacobo:
+  - **Volver:** la flecha junto a "Reservar" funciona (antes no respondía).
+  - **Letreros por apartamento:** al abrir un piso, cada apartamento tiene su número con un punto verde o terracota. El primer toque muestra el precio; el segundo entra.
+  - **Habitación sin congelarse:** se prepara escondida desde el primer toque, para que el vuelo no se congele.
+  - **Panel del espacio:** más simple, con los espacios en una fila y "Fotos y detalles".
+  - **Página de Antesala en celular:** el menú cabe y el recorrido va ordenado.
+  - **Pendiente:** el rediseño de la página de Antesala con estética propia, que no se vea "hecha con IA".
 - **Hecho el 2026-11-16: rendimiento en celular (D-087) y plan de render (D-088).**
   - **El problema:** en el celular de Jacobo, Cénit Premium iba "muy lento" (2 cuadros por segundo medidos). La fachada realista ocupaba ~420 MB de memoria de video y las plantas de los 13 pisos iguales se cargaban al llegar.
   - **El arreglo:** una fachada en un solo atlas; cada planta se carga al abrir su piso; cielo liviano en celular; la resolución ya no se queda baja para siempre (el "se ve pixelado"); sin botón "Entrar" en el telón. El orden de carga está en `docs/CARGA.md`.
