@@ -334,11 +334,16 @@ export function UnitModel({
   const scene = useThree((s) => s.scene);
   const readySent = useRef(false);
   const visibleRef = useRef(visible);
+  // el aviso llega como función nueva en cada render: se guarda en una ref para no relanzar la
+  // compilación en cada cuadro (pasaba: se compilaba una y otra vez antes de terminar)
+  const onReadyRef = useRef(onReady);
   useEffect(() => {
     visibleRef.current = visible;
+    onReadyRef.current = onReady;
   });
+  const gated = !!onReady;
   useEffect(() => {
-    if (!(visible || warm) || waiting || readySent.current || !onReady) return;
+    if (!(visible || warm) || waiting || readySent.current || !gated) return;
     const g = group.current;
     if (!g) return;
     let done = false;
@@ -348,14 +353,14 @@ export function UnitModel({
       readySent.current = true;
       // recién ahora se deja dibujar: si se mostraba antes, el primer cuadro compilaba de golpe
       if (visibleRef.current && group.current) group.current.visible = true;
-      onReady();
+      onReadyRef.current?.();
     };
     // compileAsync recoge los materiales con traverse (no mira si se ven): el grupo sigue
     // escondido mientras compila y el piso se dibuja fluido
     const t = window.setTimeout(finish, 5000);
     gl.compileAsync(g, camera, scene).then(finish, finish);
     return () => window.clearTimeout(t);
-  }, [visible, warm, waiting, onReady, gl, camera, scene]);
+  }, [visible, warm, waiting, gated, gl, camera, scene]);
 
   // aparece y desaparece con fundido. El retardo de entrada cuenta desde que se pidió
   // mostrar la unidad: si la horneada llega a mitad de camino, entra a tiempo (no empieza de cero)
@@ -363,7 +368,7 @@ export function UnitModel({
   useLayoutEffect(() => {
     const g = group.current;
     // con aviso de "lista" (onReady), se muestra cuando terminó de compilar (ver arriba)
-    if (visible && g && (readySent.current || !onReady)) g.visible = true;
+    if (visible && g && (readySent.current || !gated)) g.visible = true;
     const now = performance.now() / 1000;
     if (!visible) shownAt.current = 0;
     else if (!shownAt.current) shownAt.current = now;
@@ -396,7 +401,7 @@ export function UnitModel({
         onComplete: i === 0 && !visible ? () => g && (g.visible = false) : undefined,
       }),
     );
-  }, [visible, mats, reduced, real, waiting]);
+  }, [visible, mats, reduced, real, waiting, gated]);
 
   // resaltado del espacio (hover o seleccionado)
   useEffect(() => {
