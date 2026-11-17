@@ -525,3 +525,19 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Las rutas de este PC (Blender, Playwright, Poly Haven) son variables de entorno.
   - El plan de la sesión está en `docs/RENDER.md`: en el T440p se prepara y se prueba en baja, y en el PC prestado solo se corren los lotes finales.
 - Por qué: un amigo le presta a Jacobo su PC un día para los renders, y Jacobo quiere hiperrealista. Sin el historial de esta conversación, todo tiene que estar escrito. Sigue sin alquilar GPU (presupuesto).
+
+**D-089 · 2026-11-16 · Que jamás se trabe: preparar antes de mostrar**
+- Decisión:
+  - Las transiciones no compilan nada en el momento.
+  - La habitación se carga y compila sus shaders escondida (`compileAsync`, que recorre todo aunque no se vea) desde el primer toque de su letrero (o al pasar el mouse). La cámara espera en el piso hasta que está lista (máximo 5 s) y solo entonces vuela.
+  - En producción se apaga `checkShaderErrors`.
+  - Los letreros aparecen cuando la cámara se detiene, nunca durante el vuelo.
+  - Se mide con `pnpm transicion`.
+- Por qué: el papá de Jacobo vio el paso de piso a apartamento trabado, y Jacobo pidió "que JAMÁS se trabe", sobre todo al presentar y con el hiperrealista. Perfilado en celular simulado: la congelada de 3 s era la compilación de shaders en el primer cuadro de la habitación.
+
+**D-090 · 2026-11-16 · Lo que hay dentro del hotel, en su lugar**
+- Decisión:
+  - En los pisos comunes, cada lugar del plano (bar, restaurante, café, spa, gimnasio) lleva un letrero en su sitio, con un punto bronce. Al tocarlo muestra su descripción.
+  - Sale de los espacios del plano que coinciden con las zonas comunes (`site.pois`): un hotel nuevo solo nombra el espacio en su SVG.
+  - En las demos los nombres son genéricos o ficticios. Con un hotel real puede ir la marca del local que arrienda (un café, una tienda), con su permiso.
+- Por qué: idea de Jacobo, "que aparezca qué cosas hay adentro, un café o un bar, con su posición". Sirve al hotel para vender sus servicios y a los locales que tiene adentro.

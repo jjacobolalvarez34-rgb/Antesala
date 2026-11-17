@@ -28,7 +28,7 @@ import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, Offer, PlanGeometry } from '@/lib/types';
 
-import { UnitTagLayer } from './UnitTags';
+import { UnitTagLayer, type UnitTag } from './UnitTags';
 import { setGltfRenderer } from './gltf';
 import { ASSETS, loadBrick, loadEnvironment, loadLinen, prefetch, type CladdingMaps } from './assets';
 import { Backdrop, VIEW_ONLY_LAYER, type BackdropApi } from './Backdrop';
@@ -429,7 +429,30 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     if (!entry || order === undefined) return [];
     const fc = facadesOf(data.building);
     const [px, pz] = facadeDir(fc[facadeIndex % fc.length]!);
-    return entry.spaces.flatMap((sp) => {
+    const levelName = data.floors.find((f) => f.id === stage.levelId)?.name;
+    return entry.spaces.flatMap((sp): UnitTag[] => {
+      // lo que hay en un piso común (bar, restaurante, café, spa): en su lugar, con su descripción (D-090)
+      if (sp.kind === 'poi') {
+        const poly = entry.plan.spaces.find((p) => p.id === sp.id);
+        if (!poly) return [];
+        const info = data.pois.find((p) => p.name === sp.name && (!p.levelName || p.levelName === levelName));
+        const [lx, ly] = polygonLabelPoint(poly.points);
+        return [
+          {
+            id: `poi-${sp.id}`,
+            kind: 'poi' as const,
+            short: sp.name,
+            name: sp.name,
+            detail: info?.description ?? sp.name,
+            occupied: false,
+            position: [
+              frame.center[0] + lx / 100 - entry.plan.width / 200 + px * FLOOR_PULL,
+              (order - 1) * frame.floorHeight + 1.9,
+              frame.center[1] + ly / 100 - entry.plan.height / 200 + pz * FLOOR_PULL,
+            ] as [number, number, number],
+          },
+        ];
+      }
       if (sp.kind !== 'unit' || !sp.unitId) return [];
       const poly = entry.plan.spaces.find((p) => p.id === sp.id);
       const unit = data.units.find((u) => u.id === sp.unitId);
@@ -441,6 +464,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       return [
         {
           id: sp.unitId,
+          kind: 'unit' as const,
           short: unit.name.match(/\d+[A-Za-z]?$/)?.[0] ?? unit.name,
           name: unit.name,
           detail: unit.occupied
