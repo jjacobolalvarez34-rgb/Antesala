@@ -303,15 +303,24 @@ ROT = {'n': 0.0, 's': math.pi, 'e': -math.pi / 2, 'w': math.pi / 2}
 
 # ---------------------------------------------------------------- primitivas (marco local: atrás = +Y)
 PARTS = []
+SOFT = {'lino_claro', 'lino_sofa', 'terciopelo', 'lana'}
 
 
 def _finish(o, mat, bevel):
     o.data.materials.append(mat)
+    dims = sorted(o.dimensions)
+    blando = mat.name in SOFT and dims[0] >= 0.03 and dims[1] >= 0.08
     if bevel > 0:
         mod = o.modifiers.new('bisel', 'BEVEL')
         mod.width = bevel
-        mod.segments = 3
+        mod.segments = 2 if blando else 3
         mod.limit_method = 'ANGLE'
+    if blando:
+        # tapicería con forma: el bisel más una subdivisión redondea colchón, edredón, cojines y
+        # sofá como relleno y no como caja (al horneado va un nivel; a las fotos, dos)
+        sub = o.modifiers.new('relleno', 'SUBSURF')
+        sub.levels = 1
+        sub.render_levels = 2
     PARTS.append(o)
     return o
 
@@ -358,12 +367,14 @@ def legs(L, D, h, mat, inset=0.04, r=0.018):
 def bed(L, D):
     box(0, 0, 0.05, L, D, 0.25, M['roble'], 0.02)
     box(0, -0.02, 0.30, L - 0.05, D - 0.08, 0.22, M['lino_claro'], 0.05)
-    box(0, -D * 0.12, 0.50, L + 0.02, D * 0.72, 0.07, M['lino_claro'], 0.035)  # edredón
-    box(0, -D / 2 + 0.28, 0.565, L + 0.03, 0.42, 0.025, M['terciopelo'], 0.01)  # pie de cama
+    # edredón que cae por los costados del colchón (no una placa encima), con su doblez arriba
+    box(0, -D * 0.10, 0.36, L + 0.04, D * 0.76, 0.21, M['lino_claro'], 0.07)
+    box(0, -D * 0.10 + D * 0.38 - 0.10, 0.55, L + 0.03, 0.2, 0.05, M['lino_claro'], 0.035)  # doblez
+    box(0, -D / 2 + 0.30, 0.565, L + 0.07, 0.44, 0.03, M['terciopelo'], 0.012)  # pie de cama
     n = 2 if L > 1.3 else 1
     for i in range(n):
         x = (i - (n - 1) / 2) * (L / n)
-        box(x, D / 2 - 0.30, 0.52, L / n - 0.12, 0.34, 0.15, M['lino_claro'], 0.06)
+        box(x, D / 2 - 0.30, 0.52, L / n - 0.10, 0.38, 0.19, M['lino_claro'], 0.085)  # almohadas llenas
     box(0, D / 2 - 0.04, 0.05, L + 0.08, 0.08, 1.05, M['terciopelo'], 0.025)  # cabecero
     art(0, D / 2 + GAP['v'] - 0.03, 1.45, min(1.0, L * 0.6), 0.55)
 
@@ -577,14 +588,68 @@ def place_model(name, f, height, keep_aspect=True, tag='modelo'):
     return True
 
 
+def modelo(name, giro, L, D, alto):
+    """Modelo CC0 de Poly Haven en el marco local del mueble (frente a -Y, centrado, apoyado en el
+    piso), girado `giro` grados para que su frente quede adelante y escalado sin deformarlo para
+    caber en L × D × alto. Devuelve su alto, o None si el modelo no está."""
+    o = import_model(name)
+    if not o:
+        return None
+    from mathutils import Matrix
+    o.data.transform(Matrix.Rotation(math.radians(giro), 4, 'Z'))
+    xs = [v.co.x for v in o.data.vertices]
+    ys = [v.co.y for v in o.data.vertices]
+    zs = [v.co.z for v in o.data.vertices]
+    w, d, h = max(xs) - min(xs), max(ys) - min(ys), max(zs) - min(zs)
+    o.data.transform(Matrix.Translation((-(min(xs) + max(xs)) / 2, -(min(ys) + max(ys)) / 2, -min(zs))))
+    k = min(L / max(w, 1e-3), D / max(d, 1e-3), alto / max(h, 1e-3))
+    o.data.transform(Matrix.Scale(k, 4))
+    o.location = (0, 0, 0)
+    PARTS.append(o)
+    return h * k
+
+
+def nightstand_m(L, D):
+    h = modelo('side_table_01', 0, L, D, 0.55)
+    if h is None:
+        return nightstand(L, D)
+    cyl(0, 0.03, h, 0.06, 0.03, M['laton'])
+    cyl(0, 0.03, h + 0.03, 0.012, 0.22, M['laton'])
+    cyl(0, 0.03, h + 0.20, 0.11, 0.17, M['pantalla'], verts=32, caps=False)
+    bulb(0, 0.03, h + 0.29, 18)
+
+
+def coffee_m(L, D):
+    # mesa de centro redonda de Poly Haven si el hueco es más o menos cuadrado
+    if abs(L - D) < 0.2 and modelo('coffee_table_round_01', 0, L, D, 0.42) is not None:
+        return
+    coffee(L, D)
+
+
+def armchair_m(L, D):
+    if modelo('modern_arm_chair_01', 0, L, D, 0.85) is None:
+        chair(L, D)
+
+
+def console_m(L, D):
+    if modelo('modern_wooden_cabinet', 0, L, D, 0.75) is None:
+        generic(L, D, 0.8)
+
+
+def shelf_m(L, D):
+    if modelo('wooden_display_shelves_01', -90, L, D, 1.9) is None:
+        shelf(L, D)
+
+
 BUILD = {
-    'bed': (bed, short_sides), 'nightstand': (nightstand, long_sides), 'desk': (desk, long_sides),
-    'table': (table, long_sides), 'coffee': (coffee, long_sides), 'chair': (chair, long_sides),
+    'bed': (bed, short_sides), 'nightstand': (nightstand_m, long_sides), 'desk': (desk, long_sides),
+    'table': (table, long_sides), 'coffee': (coffee_m, long_sides), 'chair': (chair, long_sides),
+    'armchair': (armchair_m, long_sides),
     'sofa': (sofa, long_sides), 'wardrobe': (wardrobe, long_sides), 'counter': (counter, long_sides),
     'kitchen': (kitchen, long_sides), 'island': (island, long_sides), 'shower': (shower, long_sides),
     'sink': (sink, long_sides), 'toilet': (toilet, short_sides), 'bathtub': (bathtub, long_sides),
     'rug': (rug, long_sides), 'stool': (stool, long_sides), 'lamp': (lamp, long_sides),
-    'shelf': (shelf, long_sides), 'console': (lambda L, D: generic(L, D, 0.8), long_sides),
+    'shelf': (shelf_m, long_sides), 'console': (console_m, long_sides),
     'bench': (lambda L, D: generic(L, D, 0.45, 'terciopelo'), long_sides),
     'lounger': (lambda L, D: generic(L, D, 0.35, 'lino_claro'), long_sides),
     'reception': (lambda L, D: generic(L, D, 1.05), long_sides), 'bar': (lambda L, D: generic(L, D, 1.05), long_sides),
@@ -596,8 +661,6 @@ for f in FURN:
     count[it] = count.get(it, 0) + 1
     if it == 'plant':
         place_model('potted_plant_02' if f['sx'] >= 0.45 else 'potted_plant_04', f, 1.1 if f['sx'] >= 0.45 else 0.5, tag='planta')
-        continue
-    if it == 'armchair' and place_model('modern_arm_chair_01', f, 0.85):
         continue
     if it not in BUILD:
         continue

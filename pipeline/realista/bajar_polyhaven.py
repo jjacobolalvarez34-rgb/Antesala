@@ -6,7 +6,9 @@ import urllib.request
 
 DEST = os.environ.get('POLYHAVEN', 'D:/Herramientas/assets-polyhaven')
 TEXTURAS = ['laminate_floor_02', 'beige_wall_001', 'floor_tiles_06', 'marble_01', 'oak_veneer_01', 'rough_linen', 'velour_velvet', 'caban']
-MODELOS = ['potted_plant_02', 'potted_plant_04', 'ceramic_vase_01', 'decorative_book_set_01', 'modern_arm_chair_01', 'coffee_table_round_01', 'modern_ceiling_lamp_01']
+MODELOS = ['potted_plant_02', 'potted_plant_04', 'ceramic_vase_01', 'decorative_book_set_01', 'modern_arm_chair_01', 'coffee_table_round_01', 'modern_ceiling_lamp_01',
+           # muebles con forma (mejora hiperrealista): los modernos de Poly Haven por tipo de mueble
+           'modern_wooden_cabinet', 'wooden_display_shelves_01', 'side_table_01', 'throw_pillows_01', 'ceramic_vase_02', 'ceramic_vase_03']
 # cielo real que se ve por las ventanas y alumbra la escena (4K: nítido en la ventana, sin pesar)
 HDRIS = ['kloofendal_48d_partly_cloudy_puresky']
 UA = {'User-Agent': 'antesala-pipeline/1.0'}
