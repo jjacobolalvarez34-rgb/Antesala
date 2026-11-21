@@ -13,7 +13,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from optimizar import hay_ktx, optimizar  # noqa: E402
+from optimizar import optimizar  # noqa: E402
 
 # en otro PC: BLENDER=<ruta a blender.exe> (ver docs/RENDER.md)
 BLENDER = os.environ.get('BLENDER', 'D:/Herramientas/blender-5.2.4-windows-x64/blender.exe')
@@ -54,7 +54,9 @@ if not run(f'"{BLENDER}" -b -P pipeline/realista/hornear_edificio.py -- {src} {o
     sys.exit(1)
 log('  optimizando')
 os.makedirs(os.path.dirname(final), exist_ok=True)
-if not optimizar(f'{out}.glb', final, run, 4096 if hay_ktx() else 2048):
+# a la web, como dice docs/CARGA.md §4: atlas de 2048 px (el horneado es de 4096 y se reduce:
+# sale más limpio que hornear directo a 2048)
+if not optimizar(f'{out}.glb', final, run, 2048):
     sys.exit(1)
 p = f'content/hotels/{hotel}/hotel.json'
 h = json.load(open(p, encoding='utf-8'))
