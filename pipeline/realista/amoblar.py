@@ -135,7 +135,7 @@ M = {
     'blanco_mate': plain('blanco_mate', '#efece6', 0.45),
     'lienzo': plain('lienzo', '#e9e1d3', 0.9),
     'cortina': texmat('cortina', 'rough_linen', 0.35, tint='#efe9df', normal=0.8),
-    'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=2.5),
+    'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=3.5),
     'alfombra': texmat('alfombra', 'caban', 0.6, tint='#8f867b', normal=0.5),
     'concreto': plain('concreto', '#bdb6ab', 0.85),
 }
@@ -277,10 +277,25 @@ def box(x, y, z, sx, sy, sz, mat, bevel=0.008):
     return _finish(o, mat, min(bevel, sx / 3, sy / 3, sz / 3))
 
 
-def cyl(x, y, z, r, h, mat, verts=28, bevel=0.004):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=r, depth=h, location=(x, y, z + h / 2))
+def cyl(x, y, z, r, h, mat, verts=28, bevel=0.004, caps=True):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=r, depth=h, location=(x, y, z + h / 2),
+                                        end_fill_type='NGON' if caps else 'NOTHING')
     o = bpy.context.active_object
     return _finish(o, mat, min(bevel, r / 3, h / 3))
+
+
+def bulb(x, y, z, watts):
+    """Bombillo cálido (2700 K) dentro de una pantalla abierta: la lámpara alumbra de verdad."""
+    if PLANTA:
+        return
+    ld = bpy.data.lights.new('bombillo', 'POINT')
+    ld.energy = watts
+    ld.shadow_soft_size = 0.04
+    ld.color = srgb('#ffc187')
+    o = bpy.data.objects.new('bombillo', ld)
+    o.location = (x, y, z)
+    bpy.context.scene.collection.objects.link(o)
+    PARTS.append(o)
 
 
 def legs(L, D, h, mat, inset=0.04, r=0.018):
@@ -321,7 +336,8 @@ def nightstand(L, D):
     box(0, -D / 2 + 0.005, 0.30, L - 0.05, 0.01, 0.002, M['metal'], 0)
     cyl(0, 0.03, 0.5, 0.06, 0.03, M['laton'])
     cyl(0, 0.03, 0.53, 0.012, 0.22, M['laton'])
-    cyl(0, 0.03, 0.70, 0.11, 0.17, M['pantalla'], verts=32)
+    cyl(0, 0.03, 0.70, 0.11, 0.17, M['pantalla'], verts=32, caps=False)
+    bulb(0, 0.03, 0.79, 18)
 
 
 def desk(L, D):
@@ -455,7 +471,8 @@ def stool(L, D):
 def lamp(L, D):
     cyl(0, 0, 0, 0.14, 0.025, M['metal'])
     cyl(0, 0, 0.025, 0.012, 1.35, M['metal'], verts=10)
-    cyl(0, 0, 1.30, 0.20, 0.28, M['pantalla'], verts=32)
+    cyl(0, 0, 1.30, 0.20, 0.28, M['pantalla'], verts=32, caps=False)
+    bulb(0, 0, 1.44, 35)
 
 
 def shelf(L, D):
@@ -548,6 +565,9 @@ for f in FURN:
         x, y = o.location.x, o.location.y
         o.location.x = f['cx'] + x * math.cos(rot) - y * math.sin(rot)
         o.location.y = f['cy'] + x * math.sin(rot) + y * math.cos(rot)
+        if o.type == 'LIGHT':
+            o['tipo'] = 'luz'
+            continue
         o['tipo'] = 'vidrio' if o.data.materials and o.data.materials[0] == M['vidrio'] else 'mueble'
 # cortinas: dos paños a los lados de cada ventana, del lado de adentro
 SPACES = []
@@ -627,30 +647,129 @@ suelo = bpy.context.active_object
 suelo.data.materials.append(plain('suelo', '#d9d4cb', 0.9))
 suelo['tipo'] = 'suelo'
 
+# ---- luz de arquitecto: cielo real (HDRI de Poly Haven) que se ve por las ventanas, un sol de
+# borde nítido que entra por la ventana principal y lámparas cálidas encendidas (ver bulb()).
+CIELO = f'{A}/hdri/kloofendal_48d_partly_cloudy_puresky_4k.hdr'
+if not os.path.exists(CIELO):
+    log('sin el cielo de Poly Haven (bajar_polyhaven.py): se usa el del visor')
+    CIELO = HDRI
+
+
+def ventana_principal():
+    """Dirección hacia adentro (x, y) de la ventana más ancha que da a un espacio interior."""
+    best = None
+    for g in root.iter():
+        if not (g.tag.endswith('g') and g.get('id') == 'openings'):
+            continue
+        for r in g.iter():
+            if not r.tag.endswith('rect') or r.get('data-type') != 'window':
+                continue
+            x, y = float(r.get('x')) * 0.01, float(r.get('y')) * 0.01
+            w, h = float(r.get('width')) * 0.01, float(r.get('height')) * 0.01
+            cx, cy = x + w / 2 - PW / 2, -(y + h / 2 - PH / 2)
+            horiz = w >= h
+            for sgn in (1, -1):
+                if inside(*((cx, cy + sgn * 0.3) if horiz else (cx + sgn * 0.3, cy))):
+                    if best is None or max(w, h) > best[0]:
+                        best = (max(w, h), (0.0, float(sgn)) if horiz else (float(sgn), 0.0))
+                    break
+    return best[1] if best else None
+
+
 world = bpy.data.worlds.new('cielo')
 sc.world = world
 world.use_nodes = True
 wn, wl = world.node_tree.nodes, world.node_tree.links
 env = wn.new('ShaderNodeTexEnvironment')
-env.image = bpy.data.images.load(HDRI)
-lp = wn.new('ShaderNodeLightPath')
-mix = wn.new('ShaderNodeMixShader')
-bg_light = wn['Background']
-bg_light.inputs['Strength'].default_value = 1.1
-wl.new(env.outputs['Color'], bg_light.inputs['Color'])
-bg_cam = wn.new('ShaderNodeBackground')
-bg_cam.inputs['Color'].default_value = (*srgb('#ece8e1'), 1)
-wl.new(lp.outputs['Is Camera Ray'], mix.inputs['Fac'])
-wl.new(bg_light.outputs['Background'], mix.inputs[1])
-wl.new(bg_cam.outputs['Background'], mix.inputs[2])
-wl.new(mix.outputs['Shader'], wn['World Output'].inputs['Surface'])
+env.image = bpy.data.images.load(CIELO)
+mp_w = wn.new('ShaderNodeMapping')
+wl.new(wn.new('ShaderNodeTexCoord').outputs['Generated'], mp_w.inputs['Vector'])
+wl.new(mp_w.outputs['Vector'], env.inputs['Vector'])
+# el sol del HDRI se recorta (lo pone la lámpara de sol, con su sombra nítida y su dirección)
+recorte = wn.new('ShaderNodeMix')
+recorte.data_type = 'RGBA'
+recorte.blend_type = 'DARKEN'
+recorte.inputs['Factor'].default_value = 1.0
+recorte.inputs['B'].default_value = (8.0, 8.0, 8.0, 1.0)
+wl.new(env.outputs['Color'], recorte.inputs['A'])
+bg = wn['Background']
+bg.inputs['Strength'].default_value = 1.0
+wl.new(recorte.outputs['Result'], bg.inputs['Color'])
 
 sun = bpy.data.objects.new('sol', bpy.data.lights.new('sol', 'SUN'))
-sun.data.energy = 2.6
-sun.data.angle = math.radians(4)
-sun.data.color = srgb('#fff0d8')
-sun.rotation_euler = (math.radians(48), 0, math.radians(30))
+sun.data.energy = 6.0
+sun.data.angle = math.radians(0.6)  # disco del sol real: sombra de borde nítido
+sun.data.color = srgb('#fff1dc')
+adentro = None if PLANTA else ventana_principal()
+if adentro:
+    # entra por la ventana principal, 35° de lado (sombras en diagonal) y bajo (32° de altura),
+    # para que deje su mancha en el piso
+    a = math.radians(35)
+    dx = adentro[0] * math.cos(a) - adentro[1] * math.sin(a)
+    dy = adentro[0] * math.sin(a) + adentro[1] * math.cos(a)
+    phi = math.atan2(-dx, dy)
+    sun.rotation_euler = (math.radians(58), 0, phi)
+    log('sol por la ventana principal: adentro', adentro, 'rumbo', round(math.degrees(phi)))
+else:
+    sun.rotation_euler = (math.radians(48), 0, math.radians(30))
 sc.collection.objects.link(sun)
+# el cielo se gira para que su zona clara quede del lado del sol
+try:
+    import numpy as np
+    w_, h_ = env.image.size
+    px = np.empty(w_ * h_ * 4, dtype=np.float32)
+    env.image.pixels.foreach_get(px)
+    lum = px.reshape(h_, w_, 4)[:, :, :3] @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+    u = np.unravel_index(np.argmax(lum), lum.shape)[1] / w_
+    az_tex = (0.5 - u) * 2 * math.pi
+    sd = sun.rotation_euler.to_matrix() @ Vector((0, 0, 1))  # hacia el sol
+    mp_w.inputs['Rotation'].default_value[2] = az_tex - math.atan2(sd.y, sd.x)
+except Exception as e:  # sin numpy el cielo queda como viene
+    log('cielo sin girar:', e)
+
+# vidrio para el render: deja pasar el sol (el de transmisión lo bloqueaba: sin cáusticas, la luz
+# directa no cruza un vidrio que refracta) y refleja un poco. Antes de exportar vuelve el original.
+vidrio_luz = bpy.data.materials.new('vidrio-luz')
+vidrio_luz.use_nodes = True
+vn, vlk = vidrio_luz.node_tree.nodes, vidrio_luz.node_tree.links
+vn.remove(vn['Principled BSDF'])
+tr = vn.new('ShaderNodeBsdfTransparent')
+tr.inputs['Color'].default_value = (0.93, 0.96, 0.96, 1)
+gl = vn.new('ShaderNodeBsdfGlossy')
+gl.inputs['Roughness'].default_value = 0.02
+fr = vn.new('ShaderNodeFresnel')
+fr.inputs['IOR'].default_value = 1.52
+# reflejo solo en la cara de entrada: de salida, el Fresnel de 1/1,52 da reflexión total por encima
+# de ~41° y el vidrio frenaba casi toda la luz oblicua del sol y del cielo
+geo = vn.new('ShaderNodeNewGeometry')
+frente = vn.new('ShaderNodeMath')
+frente.operation = 'SUBTRACT'
+frente.inputs[0].default_value = 1.0
+vlk.new(geo.outputs['Backfacing'], frente.inputs[1])
+refl = vn.new('ShaderNodeMath')
+refl.operation = 'MULTIPLY'
+vlk.new(fr.outputs['Fac'], refl.inputs[0])
+vlk.new(frente.outputs['Value'], refl.inputs[1])
+mx = vn.new('ShaderNodeMixShader')
+vlk.new(refl.outputs['Value'], mx.inputs['Fac'])
+vlk.new(tr.outputs['BSDF'], mx.inputs[1])
+vlk.new(gl.outputs['BSDF'], mx.inputs[2])
+# la sombra lo cruza entera (solo el tinte del vidrio)
+lp_v = vn.new('ShaderNodeLightPath')
+mx2 = vn.new('ShaderNodeMixShader')
+vlk.new(lp_v.outputs['Is Shadow Ray'], mx2.inputs['Fac'])
+vlk.new(mx.outputs['Shader'], mx2.inputs[1])
+vlk.new(tr.outputs['BSDF'], mx2.inputs[2])
+vlk.new(mx2.outputs['Shader'], vn['Material Output'].inputs['Surface'])
+for o in sc.objects:
+    if o.type == 'MESH':
+        for s in o.material_slots:
+            if s.material == M['vidrio']:
+                s.material = vidrio_luz
+                if o.get('tipo') != 'vidrio':
+                    # ventanas: la cámara no ve la caja de vidrio (de lado se veía negra contra el
+                    # muro); el sol y el cielo sí la cruzan. El vidrio de la ducha sí se ve.
+                    o.visible_camera = False
 
 cam = bpy.data.objects.new('cam', bpy.data.cameras.new('cam'))
 cam.data.lens = 32
@@ -722,7 +841,8 @@ if FOTOS:
     techo = bpy.context.active_object
     techo.scale = (max(xs_w) - min(xs_w), max(ys_w) - min(ys_w), 1)
     techo.data.materials.append(plain('techo-fotos', '#f2efe9', 0.9))
-    # luz de techo suave por espacio: con techo, adentro quedaba oscuro
+    # luz de techo suave por espacio, solo de relleno: ahora el sol y el cielo entran por las
+    # ventanas (con 30 W/m² todo quedaba parejo y plano)
     luces = []
     for sid, poly in SPACES:
         if any(k in sid for k in ('balcon', 'terraza', 'deck', 'porche')):
@@ -733,7 +853,7 @@ if FOTOS:
         ld.shape = 'RECTANGLE'
         ld.size = max(0.5, (max(xs_) - min(xs_)) * 0.6)
         ld.size_y = max(0.5, (max(ys_) - min(ys_)) * 0.6)
-        ld.energy = 30 * (max(xs_) - min(xs_)) * (max(ys_) - min(ys_))
+        ld.energy = 7 * (max(xs_) - min(xs_)) * (max(ys_) - min(ys_))
         ld.color = srgb('#ffe6c4')
         lo = bpy.data.objects.new(f'techo-{sid}', ld)
         lo.location = ((max(xs_) + min(xs_)) / 2, (max(ys_) + min(ys_)) / 2, WALL_TOP - 0.05)
@@ -844,7 +964,7 @@ for o in [o for o in sc.objects if o.type == 'MESH' and o.modifiers]:
     for mod in list(o.modifiers):
         bpy.ops.object.modifier_apply(modifier=mod.name)
 opaque = [o for o in sc.objects if o.type == 'MESH' and o.get('tipo') not in ('planta', 'vidrio', 'suelo')
-          and not any(s.material == M['vidrio'] for s in o.material_slots)]
+          and not any(s.material in (M['vidrio'], vidrio_luz) for s in o.material_slots)]
 bpy.ops.object.select_all(action='DESELECT')
 for o in opaque:
     o.select_set(True)
@@ -888,6 +1008,12 @@ for layer in [layer for layer in obj.data.uv_layers if layer.name != 'luz']:
     obj.data.uv_layers.remove(layer)
 
 bpy.data.objects.remove(suelo, do_unlink=True)
+# el visor recibe el vidrio de siempre (transmisión en glTF)
+for o in sc.objects:
+    if o.type == 'MESH':
+        for s in o.material_slots:
+            if s.material == vidrio_luz:
+                s.material = M['vidrio']
 bpy.ops.object.select_all(action='DESELECT')
 for o in sc.objects:
     if o.type == 'MESH':
