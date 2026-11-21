@@ -1,0 +1,7 @@
+{
+  "_nota": "Postproducción de las fotos y 360° por hotel (amoblar.py). calidez: + cálido, - frío (pendiente del color, ±0,06 ya se nota). contraste: curva S. brillo: fuerza del glare en lo más claro. Un hotel sin entrada usa 'neutro'.",
+  "neutro": { "calidez": 0.0, "contraste": 0.03, "brillo": 0.18 },
+  "niebla-alta": { "calidez": 0.045, "contraste": 0.035, "brillo": 0.22 },
+  "cenit": { "calidez": 0.0, "contraste": 0.04, "brillo": 0.18 },
+  "frailejon": { "calidez": -0.035, "contraste": 0.03, "brillo": 0.18 }
+}

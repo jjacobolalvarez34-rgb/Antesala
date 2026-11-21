@@ -945,6 +945,46 @@ sc.cycles.caustics_reflective = False
 sc.cycles.caustics_refractive = False
 sc.cycles.use_adaptive_sampling = True
 sc.cycles.adaptive_threshold = 0.01 if hiper() else 0.04
+# ---- postproducción ligera por hotel (pipeline/realista/looks.json): brillo suave en lo más claro
+# y una curva de color (Niebla cálido, Cénit neutro, Frailejón frío). Solo fotos y 360°, no el horneado.
+def postproduccion():
+    import json
+    partes = os.path.abspath(SVG).replace('\\', '/').split('/')
+    hotel = partes[partes.index('hotels') + 1] if 'hotels' in partes[:-1] else 'neutro'
+    looks = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'looks.json'), encoding='utf-8'))
+    lk = looks.get(hotel, looks['neutro'])
+    t = bpy.data.node_groups.new('post', 'CompositorNodeTree')
+    t.interface.new_socket('Image', in_out='OUTPUT', socket_type='NodeSocketColor')
+    rl = t.nodes.new('CompositorNodeRLayers')
+    gl_ = t.nodes.new('CompositorNodeGlare')
+    gl_.inputs['Type'].default_value = 'Bloom'
+    gl_.inputs['Quality'].default_value = 'High'
+    gl_.inputs['Threshold'].default_value = 1.0
+    gl_.inputs['Strength'].default_value = lk['brillo']
+    cb = t.nodes.new('CompositorNodeColorBalance')
+    cb.inputs['Type'].default_value = 'Offset/Power/Slope (ASC-CDL)'
+    k = lk['calidez']
+    cb.inputs[14].default_value = (1 + k, 1 + k * 0.25, 1 - k, 1)  # pendiente (Slope) RGB
+    cv = t.nodes.new('CompositorNodeCurveRGB')
+    c = cv.mapping.curves[3]
+    q = lk['contraste']
+    c.points.new(0.25, 0.25 - q)
+    c.points.new(0.75, 0.75 + q)
+    cv.mapping.update()
+    out = t.nodes.new('NodeGroupOutput')
+    t.links.new(rl.outputs['Image'], gl_.inputs['Image'])
+    t.links.new(gl_.outputs['Image'], cb.inputs['Image'])
+    t.links.new(cb.outputs['Image'], cv.inputs['Image'])
+    t.links.new(cv.outputs['Image'], out.inputs[0])
+    sc.compositing_node_group = t
+    sc.render.use_compositing = True
+    log('postproducción', hotel, lk)
+
+
+try:
+    postproduccion()
+except Exception as e:  # sin postproducción la foto sale igual, solo sin el retoque
+    log('sin postproducción:', e)
 PANO_W = int(os.environ.get('PANO_RES', '8192' if hiper() else '2048'))
 PANO_WEB = int(os.environ.get('PANO_WEB', '2048'))
 FOTO = (3200, 2000) if hiper() else (1600, 1000)
