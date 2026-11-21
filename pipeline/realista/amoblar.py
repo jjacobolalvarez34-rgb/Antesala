@@ -188,6 +188,8 @@ M = {
     'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=3.5),
     'alfombra': texmat('alfombra', 'caban', 0.6, tint='#8f867b', normal=0.5, relieve=0.4),
     'concreto': plain('concreto', '#bdb6ab', 0.85),
+    'fruta': plain('fruta', '#e08a2c', 0.45),
+    'tapa': plain('tapa', '#3f4a3c', 0.7),  # tapas de libros
 }
 # PLANTA=1: planta de un piso entero en corte (muros a 1,1 m): sin cortinas ni cuadros y
 # los muebles altos recortados a la altura del corte
@@ -375,6 +377,8 @@ def bed(L, D):
     for i in range(n):
         x = (i - (n - 1) / 2) * (L / n)
         box(x, D / 2 - 0.30, 0.52, L / n - 0.10, 0.38, 0.19, M['lino_claro'], 0.085)  # almohadas llenas
+    if L > 1.3:
+        cojines(0, D / 2 - 0.55, 0.56, min(0.9, L * 0.5), M['lana'])
     box(0, D / 2 - 0.04, 0.05, L + 0.08, 0.08, 1.05, M['terciopelo'], 0.025)  # cabecero
     art(0, D / 2 + GAP['v'] - 0.03, 1.45, min(1.0, L * 0.6), 0.55)
 
@@ -404,6 +408,9 @@ def nightstand(L, D):
 def desk(L, D):
     box(0, 0, 0.72, L, D, 0.035, M['roble'], 0.006)
     legs(L, D, 0.72, M['metal'], r=0.012)
+    if L > 0.7:
+        libros(-L / 2 + 0.18, D * 0.1, 0.755, 3)
+        cyl(L / 2 - 0.12, D * 0.15, 0.755, 0.045, 0.16, M['ceramica'], verts=20)  # portalápices / florero
 
 
 def table(L, D):
@@ -447,8 +454,10 @@ def sofa(L, D):
         x = -L / 2 + arm + w / 2 + i * w
         box(x, -0.08, 0.32, w - 0.02, D - 0.32, 0.13, M['lino_sofa'], 0.05)
         box(x, D / 2 - 0.26, 0.42, w - 0.08, 0.16, 0.36, M['lino_sofa'], 0.07)
-    box(-L / 2 + arm + 0.25, D / 2 - 0.36, 0.46, 0.38, 0.12, 0.34, M['terciopelo'], 0.06)
-    box(L / 2 - arm - 0.25, D / 2 - 0.36, 0.46, 0.36, 0.12, 0.32, M['lana'], 0.06)  # otro cojín
+    # cojines con forma en una esquina y una manta sobre el brazo del otro lado
+    cojines(-L / 2 + arm + 0.32, D / 2 - 0.40, 0.44, 0.62, M['terciopelo'])
+    box(L / 2 - arm / 2, -0.04, 0.575, arm + 0.06, D * 0.5, 0.022, M['lana'], 0.008)
+    box(L / 2 + 0.02, -0.04, 0.22, 0.022, D * 0.5, 0.37, M['lana'], 0.008)
     art(0, D / 2 + GAP['v'] - 0.03, 1.35, min(1.1, L * 0.55), 0.7)
     for s in (-1, 1):
         cyl(s * (L / 2 - 0.08), D / 2 - 0.08, 0, 0.018, 0.08, M['metal'], verts=10)
@@ -480,6 +489,13 @@ def counter(L, D):
         box(-L * 0.28, 0.0, 0.895, 0.36, 0.24, 0.02, M['roble'], 0.004)
         cyl(L * 0.32, -0.02, 0.895, 0.08, 0.2, M['metal'], verts=20)
         cyl(-L * 0.05, 0.02, 0.895, 0.1, 0.07, M['ceramica'], verts=24)
+        # vajilla y fruta: platos apilados y tres naranjas en el bowl
+        for i in range(4):
+            cyl(L * 0.12, -0.06, 0.895 + i * 0.014, 0.12, 0.011, M['ceramica'], verts=32, bevel=0.003)
+        for k in range(3):
+            bpy.ops.mesh.primitive_uv_sphere_add(radius=0.035, location=(-L * 0.05 + (k - 1) * 0.045, 0.02 + (k % 2) * 0.03, 0.95))
+            bpy.ops.object.shade_smooth()
+            _finish(bpy.context.active_object, M['fruta'], 0)
 
 
 def kitchen(L, D):
@@ -495,6 +511,8 @@ def shower(L, D):
     box(0, -D / 2 + 0.01, 0.04, L * 0.9, 0.012, 1.95, M['vidrio'], 0)
     cyl(0, D / 2 - 0.08, 1.9, 0.11, 0.015, M['laton'], verts=24)
     cyl(0, D / 2 - 0.03, 1.0, 0.012, 0.9, M['laton'], verts=12)
+    # toalla colgada del borde del vidrio, del lado de afuera
+    box(L * 0.22, -D / 2 - 0.012, 1.32, min(0.45, L * 0.45), 0.022, 0.64, M['lino_claro'], 0.01)
 
 
 def sink(L, D):
@@ -588,7 +606,7 @@ def place_model(name, f, height, keep_aspect=True, tag='modelo'):
     return True
 
 
-def modelo(name, giro, L, D, alto):
+def modelo(name, giro, L, D, alto, pos=(0, 0, 0), mat=None):
     """Modelo CC0 de Poly Haven en el marco local del mueble (frente a -Y, centrado, apoyado en el
     piso), girado `giro` grados para que su frente quede adelante y escalado sin deformarlo para
     caber en L × D × alto. Devuelve su alto, o None si el modelo no está."""
@@ -604,9 +622,27 @@ def modelo(name, giro, L, D, alto):
     o.data.transform(Matrix.Translation((-(min(xs) + max(xs)) / 2, -(min(ys) + max(ys)) / 2, -min(zs))))
     k = min(L / max(w, 1e-3), D / max(d, 1e-3), alto / max(h, 1e-3))
     o.data.transform(Matrix.Scale(k, 4))
-    o.location = (0, 0, 0)
+    o.location = pos
+    if mat:
+        # se retiñe con las telas del hotel (el modelo trae un estampado que no va)
+        o.data.materials.clear()
+        o.data.materials.append(mat)
     PARTS.append(o)
     return h * k
+
+
+def cojines(x, y, z, ancho, mat):
+    """Par de cojines con forma (throw_pillows_01), recostados; si falta el modelo, dos cajas suaves."""
+    if modelo('throw_pillows_01', 0, ancho, 0.4, 0.42, pos=(x, y, z), mat=mat) is None:
+        for sx in (-1, 1):
+            box(x + sx * ancho * 0.22, y, z, ancho * 0.36, 0.12, 0.34, mat, 0.06)
+
+
+def libros(x, y, z, n=3):
+    """Pila de libros (tapas de colores apagados, sin texto)."""
+    for i in range(n):
+        box(x + (i % 2) * 0.012, y - (i % 3) * 0.008, z + i * 0.032, 0.22 - i * 0.015, 0.16 - i * 0.01, 0.028,
+            M[('tapa', 'lino_sofa', 'terciopelo')[i % 3]], 0.003)
 
 
 def nightstand_m(L, D):
