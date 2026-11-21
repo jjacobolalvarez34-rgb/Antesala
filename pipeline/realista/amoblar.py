@@ -45,8 +45,10 @@ def srgb(h):
 
 
 # ---------------------------------------------------------------- materiales
-def texmat(name, folder, size_m, tint=None, rough_mult=1.0, normal=0.6):
-    """Material PBR con texturas de Poly Haven en proyección de caja (sin depender de UVs)."""
+def texmat(name, folder, size_m, tint=None, rough_mult=1.0, normal=0.6, relieve=0.25, imperfeccion=0.15):
+    """Material PBR completo de Poly Haven (color, rugosidad, normal y relieve; a 2K si está) en
+    proyección de caja (sin depender de UVs), con algo de imperfección: la rugosidad y el tono
+    varían un poco con un ruido grande (desgaste, polvo), como en un material real."""
     m = bpy.data.materials.new(name)
     m.use_nodes = True
     nt = m.node_tree
@@ -58,8 +60,8 @@ def texmat(name, folder, size_m, tint=None, rough_mult=1.0, normal=0.6):
     nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])
 
     def img(file, color):
-        path = f'{A}/tex/{folder}/{file}.jpg'
-        if not os.path.exists(path):
+        path = next((p for p in (f'{A}/tex/{folder}/{file}_2k.jpg', f'{A}/tex/{folder}/{file}.jpg') if os.path.exists(p)), None)
+        if not path:
             return None
         t = n.new('ShaderNodeTexImage')
         t.image = bpy.data.images.load(path, check_existing=True)
@@ -69,8 +71,28 @@ def texmat(name, folder, size_m, tint=None, rough_mult=1.0, normal=0.6):
         nt.links.new(mp.outputs['Vector'], t.inputs['Vector'])
         return t
 
+    # imperfección: un ruido de ~1,5 tamaños de textura, sin repetirse
+    ruido = None
+    if imperfeccion:
+        ruido = n.new('ShaderNodeTexNoise')
+        ruido.inputs['Scale'].default_value = 0.7
+        ruido.inputs['Detail'].default_value = 6.0
+        ruido.inputs['Roughness'].default_value = 0.6
+        nt.links.new(mp.outputs['Vector'], ruido.inputs['Vector'])
+
+    def variacion(lo, hi):
+        mr = n.new('ShaderNodeMapRange')
+        mr.inputs['From Min'].default_value = 0.3
+        mr.inputs['From Max'].default_value = 0.7
+        mr.inputs['To Min'].default_value = lo
+        mr.inputs['To Max'].default_value = hi
+        nt.links.new(ruido.outputs['Fac'], mr.inputs['Value'])
+        return mr.outputs['Result']
+
+    color = None
     d = img('diff', True)
     if d:
+        color = d.outputs['Color']
         if tint:
             # la textura trae su propio color (lino azulado, terciopelo rojo): primero a gris, luego el tono
             hs = n.new('ShaderNodeHueSaturation')
@@ -82,22 +104,50 @@ def texmat(name, folder, size_m, tint=None, rough_mult=1.0, normal=0.6):
             mix.inputs['Factor'].default_value = 1.0
             nt.links.new(hs.outputs['Color'], mix.inputs['A'])
             mix.inputs['B'].default_value = (*srgb(tint), 1)
-            nt.links.new(mix.outputs['Result'], b.inputs['Base Color'])
-        else:
-            nt.links.new(d.outputs['Color'], b.inputs['Base Color'])
+            color = mix.outputs['Result']
+        if ruido:
+            tono = n.new('ShaderNodeMix')
+            tono.data_type = 'RGBA'
+            tono.blend_type = 'MULTIPLY'
+            tono.inputs['Factor'].default_value = 1.0
+            nt.links.new(color, tono.inputs['A'])
+            nt.links.new(variacion(1 - imperfeccion * 0.35, 1 + imperfeccion * 0.15), tono.inputs['B'])
+            color = tono.outputs['Result']
+        nt.links.new(color, b.inputs['Base Color'])
     r = img('rough', False)
     if r:
         mm = n.new('ShaderNodeMath')
         mm.operation = 'MULTIPLY'
         mm.inputs[1].default_value = rough_mult
         nt.links.new(r.outputs['Color'], mm.inputs[0])
-        nt.links.new(mm.outputs['Value'], b.inputs['Roughness'])
+        rough = mm.outputs['Value']
+        if ruido:
+            mv = n.new('ShaderNodeMath')
+            mv.operation = 'MULTIPLY'
+            mv.use_clamp = True
+            nt.links.new(rough, mv.inputs[0])
+            nt.links.new(variacion(1 - imperfeccion, 1 + imperfeccion), mv.inputs[1])
+            rough = mv.outputs['Value']
+        nt.links.new(rough, b.inputs['Roughness'])
+    normal_out = None
     nm = img('nor', False)
     if nm:
         nmap = n.new('ShaderNodeNormalMap')
         nmap.inputs['Strength'].default_value = normal
         nt.links.new(nm.outputs['Color'], nmap.inputs['Color'])
-        nt.links.new(nmap.outputs['Normal'], b.inputs['Normal'])
+        normal_out = nmap.outputs['Normal']
+    # relieve: el mapa de desplazamiento como bump encima de la normal (juntas, poros, trama)
+    dm = img('disp', False) if relieve else None
+    if dm:
+        bump = n.new('ShaderNodeBump')
+        bump.inputs['Strength'].default_value = relieve
+        bump.inputs['Distance'].default_value = 0.003 * size_m
+        nt.links.new(dm.outputs['Color'], bump.inputs['Height'])
+        if normal_out:
+            nt.links.new(normal_out, bump.inputs['Normal'])
+        normal_out = bump.outputs['Normal']
+    if normal_out:
+        nt.links.new(normal_out, b.inputs['Normal'])
     return m
 
 
@@ -117,15 +167,15 @@ def plain(name, color, rough=0.5, metal=0.0, trans=0.0, emit=None, emit_strength
 
 
 M = {
-    'muro': texmat('muro', 'beige_wall_001', 2.0, tint='#fbf8f2', rough_mult=1.0, normal=0.25),
-    'madera_piso': texmat('madera_piso', 'laminate_floor_02', 2.4, normal=0.4),
-    'baldosa': texmat('baldosa', 'marble_01', 0.9, tint='#f4f1ec', rough_mult=0.7, normal=0.15),
+    'muro': texmat('muro', 'beige_wall_001', 2.0, tint='#fbf8f2', rough_mult=1.0, normal=0.25, relieve=0.12, imperfeccion=0.1),
+    'madera_piso': texmat('madera_piso', 'laminate_floor_02', 2.4, normal=0.4, relieve=0.3, imperfeccion=0.2),
+    'baldosa': texmat('baldosa', 'marble_01', 0.9, tint='#f4f1ec', rough_mult=0.7, normal=0.15, relieve=0.08),
     'roble': texmat('roble', 'oak_veneer_01', 1.2, rough_mult=0.9, normal=0.3),
-    'marmol': texmat('marmol', 'marble_01', 1.4, rough_mult=0.6, normal=0.2),
+    'marmol': texmat('marmol', 'marble_01', 1.4, rough_mult=0.6, normal=0.2, relieve=0.05, imperfeccion=0.1),
     'lino_claro': texmat('lino_claro', 'rough_linen', 0.5, tint='#f6f3ee', normal=0.5),
     'lino_sofa': texmat('lino_sofa', 'rough_linen', 0.5, tint='#c9bca9', normal=0.6),
     'terciopelo': texmat('terciopelo', 'velour_velvet', 0.4, tint='#7d8c78', normal=0.5),
-    'lana': texmat('lana', 'caban', 0.8, tint='#e2d8c8', normal=0.7),
+    'lana': texmat('lana', 'caban', 0.8, tint='#e2d8c8', normal=0.7, relieve=0.4),
     'ceramica': plain('ceramica', '#f6f5f2', 0.12),
     'metal': plain('metal', '#2b2926', 0.35, metal=1.0),
     'aluminio': plain('aluminio', '#9a9a95', 0.3, metal=1.0),
@@ -136,7 +186,7 @@ M = {
     'lienzo': plain('lienzo', '#e9e1d3', 0.9),
     'cortina': texmat('cortina', 'rough_linen', 0.35, tint='#efe9df', normal=0.8),
     'pantalla': plain('pantalla', '#f4e7cf', 0.8, emit='#ffd9a0', emit_strength=3.5),
-    'alfombra': texmat('alfombra', 'caban', 0.6, tint='#8f867b', normal=0.5),
+    'alfombra': texmat('alfombra', 'caban', 0.6, tint='#8f867b', normal=0.5, relieve=0.4),
     'concreto': plain('concreto', '#bdb6ab', 0.85),
 }
 # PLANTA=1: planta de un piso entero en corte (muros a 1,1 m): sin cortinas ni cuadros y

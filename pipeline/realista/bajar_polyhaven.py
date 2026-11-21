@@ -29,6 +29,11 @@ for t in TEXTURAS:
     for mapa, clave in [('Diffuse', 'diff'), ('nor_gl', 'nor'), ('Rough', 'rough')]:
         if mapa in files:
             save(files[mapa]['1k']['jpg']['url'], f'{DEST}/tex/{t}/{clave}.jpg')
+    # material completo a 2K (color, rugosidad, normal y relieve) para las fotos hiperrealistas;
+    # amoblar.py usa el de 2K si está y si no el de 1K
+    for mapa, clave in [('Diffuse', 'diff'), ('nor_gl', 'nor'), ('Rough', 'rough'), ('Displacement', 'disp')]:
+        if mapa in files and '2k' in files[mapa]:
+            save(files[mapa]['2k']['jpg']['url'], f'{DEST}/tex/{t}/{clave}_2k.jpg')
     print('textura', t)
 
 for hd in HDRIS:
