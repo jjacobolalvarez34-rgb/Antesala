@@ -1218,6 +1218,8 @@ for s in obj.material_slots:
     node.image = img
     nt.nodes.active = node
 sc.cycles.samples = max(32, SAMPLES)
+# los datos persistentes (para las fotos) dejaban la textura de luz negra: el horneado no los usa
+sc.render.use_persistent_data = False
 sc.render.bake.margin = 4
 log('horneando', RES)
 bpy.ops.object.bake(type='COMBINED', pass_filter={'DIRECT', 'INDIRECT', 'DIFFUSE', 'GLOSSY', 'TRANSMISSION', 'EMIT'})
