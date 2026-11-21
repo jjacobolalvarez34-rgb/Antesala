@@ -1033,10 +1033,29 @@ if FOTOS:
             d = min(d, math.hypot(dx, dy) + 0.15)
         return d
 
-    def look(loc, target, lens, path, res):
+    def look(loc, target, lens, path, res, desenfoque=None):
+        """Foto de arquitecto: cámara nivelada (verticales rectas); lo que sube o baja el encuadre lo
+        hace el desplazamiento del lente, no inclinar la cámara. Con `desenfoque` (f), foco en el
+        objetivo y poca profundidad de campo."""
         cam.data.type = 'PERSP'
         cam.data.lens = lens
-        shot(path, loc, target, res=res, samples=max(24, SAMPLES // 2))
+        cam.data.sensor_fit = 'HORIZONTAL'
+        dx, dy, dz = target[0] - loc[0], target[1] - loc[1], target[2] - loc[2]
+        dist = max(math.hypot(dx, dy), 0.3)
+        cam.data.shift_y = max(-0.3, min(0.3, dz / dist * lens / cam.data.sensor_width))
+        cam.data.dof.use_dof = bool(desenfoque)
+        if desenfoque:
+            cam.data.dof.focus_distance = math.hypot(dist, dz)
+            cam.data.dof.aperture_fstop = desenfoque
+        shot(path, loc, (target[0], target[1], loc[2]), res=res, samples=max(24, SAMPLES // 2))
+        cam.data.shift_y = 0
+        cam.data.dof.use_dof = False
+
+    # pieza principal de cada espacio para la foto de detalle (en este orden)
+    PIEZAS = ['bed', 'sofa', 'sink', 'counter', 'kitchen', 'island', 'table', 'desk', 'coffee', 'armchair',
+              'bathtub', 'shower', 'nightstand', 'lounger', 'bench', 'plant']
+    ALTO_PIEZA = {'bed': 0.55, 'sofa': 0.5, 'sink': 0.9, 'counter': 0.9, 'kitchen': 0.9, 'island': 0.9,
+                  'table': 0.75, 'desk': 0.75, 'coffee': 0.4, 'armchair': 0.5, 'bathtub': 0.55, 'shower': 1.0}
 
     sc.cycles.use_denoising = True
     info = {}
@@ -1070,7 +1089,7 @@ if FOTOS:
         target = (win[0], win[1], 1.3) if win else (cxs, cys, 1.0)
         # dirección hacia la ventana, en la convención del visor (escena: x = x, z = -y de Blender)
         yaw = math.atan2(-(target[1] - eye[1]), target[0] - eye[0])
-        h = 1.15 if outdoor else 1.45
+        h = 1.15 if outdoor else 1.45  # el 360° (las fotos van a 1,4 m)
         cam.data.type = 'PANO'
         try:
             cam.data.panorama_type = 'EQUIRECTANGULAR'
@@ -1095,11 +1114,34 @@ if FOTOS:
             bpy.data.images.remove(im)
         log('360', sid)
         # amplia: desde el punto despejado más lejano a la ventana, mirándola
-        far = max(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) + c[2] * 0.5)
-        look(Vector((far[0], far[1], h)), target, 16, f'{OUT}-{sid}-amplia.jpg', FOTO)
+        def tapado(c, t):
+            """Cuántos de tres rayos (centro y ±28°, el ancho del lente de 24 mm) chocan con un muro
+            en el primer metro y medio: una cámara metida en un pasillo ve medio cuadro de muro."""
+            base = math.atan2(t[1] - c[1], t[0] - c[0])
+            n = 0
+            for da in (-0.49, 0.0, 0.49):
+                a = base + da
+                for k in range(3, 16):
+                    px, py = c[0] + math.cos(a) * k * 0.1, c[1] + math.sin(a) * k * 0.1
+                    if any(abs(px - w['cx']) < w['sx'] / 2 + 0.02 and abs(py - w['cy']) < w['sy'] / 2 + 0.02 for w in WALLS):
+                        n += 1
+                        break
+            return n
+
+        far = max(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) + c[2] * 0.5 - 2.5 * tapado(c, target))
+        h_foto = 1.15 if outdoor else 1.4
+        look(Vector((far[0], far[1], h_foto)), (target[0], target[1], 1.05), 24, f'{OUT}-{sid}-amplia.jpg', FOTO)
         # detalle: desde cerca de la ventana, mirando hacia adentro, un poco más bajo
-        near = min(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) - c[2] * 0.3)
-        look(Vector((near[0], near[1], h - 0.25)), (cxs + (cxs - near[0]) * 0.3, cys + (cys - near[1]) * 0.3, 0.8), 24, f'{OUT}-{sid}-detalle.jpg', FOTO)
+        # detalle: la pieza principal del espacio, desde unos 2 m, a 28 mm y con poco foco
+        piezas = [f for f in FURN if f['item'] in PIEZAS and in_poly(f['cx'], f['cy'], poly)]
+        if piezas:
+            pz = min(piezas, key=lambda f: PIEZAS.index(f['item']))
+            obj = (pz['cx'], pz['cy'], ALTO_PIEZA.get(pz['item'], 0.6))
+            near = min(ok, key=lambda c: abs(math.hypot(c[0] - obj[0], c[1] - obj[1]) - 2.0) - c[2] * 0.2)
+        else:
+            obj = (cxs, cys, 0.7)
+            near = min(ok, key=lambda c: math.hypot(c[0] - target[0], c[1] - target[1]) - c[2] * 0.3)
+        look(Vector((near[0], near[1], 1.2 if not outdoor else 1.1)), obj, 28, f'{OUT}-{sid}-detalle.jpg', FOTO, desenfoque=2.2)
         info[sid] = {'yaw': round(yaw, 4), 'eye': [round(eye[0], 3), round(-eye[1], 3)]}
     json.dump(info, open(f'{OUT}-fotos.json', 'w'))
     bpy.data.objects.remove(techo, do_unlink=True)
