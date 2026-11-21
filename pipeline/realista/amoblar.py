@@ -797,6 +797,7 @@ sc.cycles.caustics_refractive = False
 sc.cycles.use_adaptive_sampling = True
 sc.cycles.adaptive_threshold = 0.01 if hiper() else 0.04
 PANO_W = int(os.environ.get('PANO_RES', '8192' if hiper() else '2048'))
+PANO_WEB = int(os.environ.get('PANO_WEB', '2048'))
 FOTO = (3200, 2000) if hiper() else (1600, 1000)
 
 
@@ -932,12 +933,13 @@ if FOTOS:
         sc.render.resolution_x, sc.render.resolution_y = PANO_W, PANO_W // 2
         sc.cycles.samples = max(24, SAMPLES // 2)
         pano_path = os.path.abspath(f'{OUT}-{sid}-360.jpg')
-        sc.render.filepath = pano_path.replace('-360.jpg', '-360-master.jpg') if PANO_W > 4096 else pano_path
+        sc.render.filepath = pano_path.replace('-360.jpg', '-360-master.jpg') if PANO_W > PANO_WEB else pano_path
         bpy.ops.render.render(write_still=True)
-        if PANO_W > 4096:
-            # la web usa 4096 × 2048 (muchos celulares no aceptan texturas más grandes); el maestro se guarda
+        if PANO_W > PANO_WEB:
+            # la web usa 2048 × 1024: el visor carga una sola imagen para todos los equipos y en el
+            # celular el 360° no puede pasar de ahí (docs/CARGA.md §4). El maestro (8K) se guarda aparte.
             im = bpy.data.images.load(sc.render.filepath)
-            im.scale(4096, 2048)
+            im.scale(PANO_WEB, PANO_WEB // 2)
             im.filepath_raw = pano_path
             im.file_format = 'JPEG'
             im.save()

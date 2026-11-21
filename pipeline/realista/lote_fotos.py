@@ -89,7 +89,8 @@ for t in sys.argv[1:]:
             if pano is None:
                 pano = {'id': f'pano-{unidad}-{sid}', 'kind': 'pano360', 'alt': f"{s['name']} en 360° (imagen ilustrativa)", 'fidelity': 'ilustrativa'}
                 media.insert(0, pano)
-            pw = 4096 if (os.environ.get('HIPER') or int(os.environ.get('PANO_RES', '2048')) > 2048) else 2048
+            # la copia web es de 2048 × 1024 aunque el maestro sea de 8K (docs/CARGA.md §4)
+            pw = int(os.environ.get('PANO_WEB', '2048'))
             pano.update({'src': files['360'], 'width': pw, 'height': pw // 2, 'yaw': info[sid]['yaw']})
         # las fotos grises de marcador (media/units/*.svg) se van; entran la amplia y la de detalle
         media[:] = [m for m in media if not (m['kind'] == 'photo' and m['src'].startswith('media/units/') and m['src'].endswith('.svg'))]
