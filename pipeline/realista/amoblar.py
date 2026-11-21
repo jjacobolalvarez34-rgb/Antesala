@@ -658,6 +658,8 @@ sc.collection.objects.link(cam)
 sc.camera = cam
 sc.render.engine = 'CYCLES'
 usar_gpu(sc)
+# entre una foto y la siguiente solo cambia la cámara: no se rearma la escena en la tarjeta
+sc.render.use_persistent_data = True
 sc.cycles.use_denoising = True
 sc.view_settings.view_transform = 'AgX'
 sc.view_settings.look = 'AgX - Base Contrast'
@@ -768,7 +770,11 @@ if FOTOS:
 
     sc.cycles.use_denoising = True
     info = {}
+    # SOLO_ESPACIOS=sala,dormitorio: solo esos espacios (para probar mejoras rápido)
+    solo = [s for s in os.environ.get('SOLO_ESPACIOS', '').split(',') if s]
     for sid, poly in SPACES:
+        if solo and sid not in solo:
+            continue
         outdoor = any(k in sid for k in ('balcon', 'terraza', 'deck', 'porche'))
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
