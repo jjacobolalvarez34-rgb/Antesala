@@ -89,7 +89,7 @@ Notas:
 - **`HIPER=1` cambia esto en Blender:**
   - rebotes de luz de 6 a 12;
   - umbral de ruido de 0,04 a 0,01;
-  - 360° de 8192 × 4096 (maestro) más una copia de 4096 × 2048 para la web;
+  - 360° de 8192 × 4096 (maestro) más una copia de 2048 × 1024 para la web (D-093: el visor usa la misma imagen en el celular);
   - fotos de 3200 × 2000.
   
   Los maestros (`*-360-master.jpg`) se guardan en `.tmp/realista/`: sirven para impresos y video, **no se suben a la web**.
@@ -114,6 +114,30 @@ Las muestras altas quitan el ruido, pero no vuelven real una caja. El salto vien
 
 Cada mejora se hace en su propio commit, con una foto de antes y otra de después en la bitácora.
 
+**Hecho el 2026-11-21** en el PC del amigo de Jacobo (rama `render-hiper`, D-092). Lo que quedó en `amoblar.py`:
+
+1. **Luz:**
+   - cielo `kloofendal_48d_partly_cloudy_puresky` (4K, CC0) visible por las ventanas, con su sol recortado;
+   - lámpara de sol de 0,6° que entra por la ventana más ancha del plano;
+   - bombillos cálidos dentro de pantallas abiertas;
+   - relleno del techo de 7 W/m².
+   
+   **Lo que más pesaba:** el vidrio de las ventanas bloqueaba el sol (transmisión sin cáusticas y reflexión total al salir de la caja). Para el render se cambia por uno transparente; antes de exportar vuelve el de siempre.
+2. **Materiales:** mapas de 2K con relieve (desplazamiento como bump) e imperfección por ruido. `floor_tiles_06` se descartó: sale como un tablero de ajedrez.
+3. **Muebles:**
+   - con modelo de Poly Haven: mesa de noche, mesa de centro redonda, poltrona, consola y estantería;
+   - sofá, cama y sillas siguen armados (Poly Haven no tiene modernos), con tapicería acolchada (bisel + subdivisión) y una cama nueva con edredón que cae.
+4. **Objetos:** cojines con forma, manta, libros, toalla, vajilla y fruta.
+5. **Cámara:**
+   - amplia de 24 mm a 1,4 m y detalle de 28 mm a la pieza principal, con f/2,2;
+   - nivelada, con desplazamiento de lente;
+   - descarta los puntos con un muro en el cuadro.
+6. **Postproducción:** bloom suave y curva de color por hotel en `pipeline/realista/looks.json`.
+
+La fachada se probó con el mismo cielo y no mejoró: quedó como estaba.
+
+Para probar rápido: `SOLO_ESPACIOS=sala,dormitorio` limita las fotos a esos espacios.
+
 ## 5. Volver con el resultado
 
 1. En el PC prestado: `git status` debe mostrar cambios solo en `content/hotels/*/media/` y en `content/hotels/*/hotel.json`.
@@ -129,7 +153,7 @@ Cada mejora se hace en su propio commit, con una foto de antes y otra de despué
 
 ## 6. Texturas KTX2 (instalado el 2026-11-16)
 
-KTX-Software 4.4.2 está instalado en este PC (`D:\Herramientas\KTX-Software`), con permiso de Jacobo. En el PC prestado **no hace falta**: allá se renderiza y la compresión se hace aquí después.
+KTX-Software 4.4.2 está instalado en este PC (`D:\Herramientas\KTX-Software`), con permiso de Jacobo. En el PC prestado del 2026-11-21 también se usó (extraído del instalador, sin instalar), para que todo saliera en KTX2 de una vez.
 
 Ver `docs/CARGA.md` §5 para cuándo conviene KTX2 y cuándo WebP.
 
@@ -153,7 +177,31 @@ Para su amigo o para Claude Code en ese PC:
    - los maestros `*-master.jpg`.
 5. No subir nada a GitHub desde ese PC sin Jacobo. No dejar sesiones abiertas.
 
-## 8. Si sobra tiempo en el PC prestado
+## 8. Lo que se aprendió en el PC del amigo (2026-11-21)
+
+- **Tarjeta:** NVIDIA RTX 3050 Laptop (4 GB). Con OptiX va unas 3 veces más rápido que el T440p en lo liviano, pero está lejos de los estimados de §3, que suponían una GPU de escritorio:
+  - un 360° de 8K a 256 muestras pasó de 23 minutos sin terminar;
+  - con §3 tal cual, los lotes habrían durado más de un día.
+- **Calidad ajustada que se usó** (con `HIPER=1`):
+
+  | Lote | Ajuste |
+  |---|---|
+  | Fachadas | 64 muestras; se hornean a 4096 y se sirven a 2048, unas 256 por píxel |
+  | Habitaciones | 512 muestras |
+  | Plantas | 256 muestras |
+  | Fotos | 256 muestras |
+  | 360° | maestro de 4K (`PANO_RES=4096`) |
+
+  Los tiempos reales están en la bitácora y en `.tmp/realista/SESION.md`.
+- **Tamaños web** (D-093), lo que manda `docs/CARGA.md` §4:
+  - el 360° para la web queda en **2048 × 1024 también con `HIPER=1`**, porque el visor carga una sola imagen para celular y escritorio (`PANO_WEB` lo cambia);
+  - la fachada se sirve en un atlas de **2048**.
+- **Rutas:** todas por variable de entorno, sin tocar el código:
+  - `BLENDER`, `POLYHAVEN`, `KTX_BIN` y `PLAYWRIGHT_BROWSERS_PATH` (en Windows, `%USERPROFILE%\AppData\Local\ms-playwright`);
+  - KTX-Software también se puede usar sin instalarlo: se extrae el instalador con 7-Zip.
+- **Fotos más rápidas:** con `use_persistent_data`, las fotos pasaron de ~38 a ~13 s cada una. El horneado lo apaga: con los datos persistentes la textura de luz salía negra.
+
+## 9. Si sobra tiempo en el PC prestado
 
 - Un video de vuelo por hotel (cámara de la escena → fachada → piso → habitación) para redes y para la página de Antesala.
 - Los 360° de Akuare solo si ya hay permiso del edificio real; si no, nada de Akuare.

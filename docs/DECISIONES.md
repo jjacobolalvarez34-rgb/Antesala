@@ -551,3 +551,35 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 
   Todo va en pocas mallas; solo lo cercano hace sombra. Akuare sigue con su contexto real (catastro y OpenStreetMap).
 - Por qué: Jacobo: "el fondo no parece un lugar real, se ve como un decorado". Antes había dos calles y edificios sueltos sobre tierra.
+
+**D-092 · 2026-11-21 · Render hiperrealista: luz, materiales, muebles, objetos, cámara y retoque**
+- Decisión: las seis mejoras de `docs/RENDER.md` §4 quedan en `pipeline/realista/amoblar.py`. Cada una tiene su commit en la rama `render-hiper`.
+  - **Luz de arquitecto:**
+    - cielo HDRI real visible por las ventanas;
+    - sol de borde nítido por la ventana principal;
+    - lámparas cálidas encendidas;
+    - un vidrio de render que deja pasar el sol.
+  - **Materiales:** Poly Haven completos a 2K, con relieve e imperfección.
+  - **Muebles:** modelos CC0 por tipo donde los hay modernos, y tapicería acolchada donde no.
+  - **Objetos:** densidad moderada.
+  - **Cámara:** de arquitecto (24–28 mm a 1,4 m, verticales rectas, foco en el detalle).
+  - **Retoque:** glare y curva de color por hotel. El estilo de cada hotel vive en `pipeline/realista/looks.json`, no en el código (regla 1).
+- Por qué: con muestras altas el ruido desaparece, pero las cajas y la luz plana siguen ahí. Lo que más pesaba era un error: el vidrio de las ventanas no dejaba pasar el sol.
+  - La fachada se probó con el mismo cielo y no mejoró, así que quedó como estaba.
+  - Las fotos de antes y después de la Suite 402 están en la bitácora.
+
+**D-093 · 2026-11-21 · Tamaños web fijos aunque el render sea hiperrealista**
+- Decisión:
+  - **360° para la web:** 2048 × 1024 también con `HIPER=1`. El maestro (4K en esta sesión, 8K si la tarjeta da) se queda en `.tmp/realista/`.
+  - **Fachada:** se sirve en un atlas de 2048 px. Se hornea a 4096 y se reduce, así sale más limpia.
+  - **Calidad de los lotes:** en el PC del amigo de Jacobo (RTX 3050 de portátil) se usó la ajustada:
+
+    | Lote | Muestras |
+    |---|---|
+    | Fachadas | 64 |
+    | Habitaciones | 512 |
+    | Plantas | 256 |
+    | Fotos | 256 |
+
+    Con la de `docs/RENDER.md` §3 habría tardado más de un día.
+- Por qué: el visor carga una sola imagen de 360° para todos los equipos, y `docs/CARGA.md` §4 pone el tope en 2048 en el celular. La fachada estaba en 4096, contra el mismo presupuesto. El realismo tiene que venir de la luz horneada, no de más píxeles. La calidad ajustada la eligió el amigo de Jacobo al ver los tiempos.
