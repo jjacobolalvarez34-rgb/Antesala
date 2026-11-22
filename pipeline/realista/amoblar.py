@@ -315,13 +315,14 @@ def _finish(o, mat, bevel):
     if bevel > 0:
         mod = o.modifiers.new('bisel', 'BEVEL')
         mod.width = bevel
-        mod.segments = 2 if blando else 3
+        mod.segments = 2  # con 2 basta para la luz en bordes de 1 cm; 3 llevaba el GLB a índices de 32 bits
         mod.limit_method = 'ANGLE'
     if blando:
         # tapicería con forma: el bisel más una subdivisión redondea colchón, edredón, cojines y
-        # sofá como relleno y no como caja (al horneado va un nivel; a las fotos, dos)
+        # sofá como relleno y no como caja. Solo en las fotos: al horneado (que aplica el nivel de
+        # vista) no va, porque duplicaba los vértices del GLB del visor (memoria de video en celular)
         sub = o.modifiers.new('relleno', 'SUBSURF')
-        sub.levels = 1
+        sub.levels = 0
         sub.render_levels = 2
     PARTS.append(o)
     return o
@@ -491,9 +492,9 @@ def counter(L, D):
         cyl(-L * 0.05, 0.02, 0.895, 0.1, 0.07, M['ceramica'], verts=24)
         # vajilla y fruta: platos apilados y tres naranjas en el bowl
         for i in range(4):
-            cyl(L * 0.12, -0.06, 0.895 + i * 0.014, 0.12, 0.011, M['ceramica'], verts=32, bevel=0.003)
+            cyl(L * 0.12, -0.06, 0.895 + i * 0.014, 0.12, 0.011, M['ceramica'], verts=20, bevel=0)
         for k in range(3):
-            bpy.ops.mesh.primitive_uv_sphere_add(radius=0.035, location=(-L * 0.05 + (k - 1) * 0.045, 0.02 + (k % 2) * 0.03, 0.95))
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.035, location=(-L * 0.05 + (k - 1) * 0.045, 0.02 + (k % 2) * 0.03, 0.95))
             bpy.ops.object.shade_smooth()
             _finish(bpy.context.active_object, M['fruta'], 0)
 
@@ -623,6 +624,13 @@ def modelo(name, giro, L, D, alto, pos=(0, 0, 0), mat=None):
     k = min(L / max(w, 1e-3), D / max(d, 1e-3), alto / max(h, 1e-3))
     o.data.transform(Matrix.Scale(k, 4))
     o.location = pos
+    # al horneado (nivel de vista) el modelo va simplificado a ~800 caras: en el visor se ve
+    # pequeño y su detalle ya queda en la luz horneada; a las fotos va completo
+    caras = len(o.data.polygons)
+    if caras > 800:
+        dec = o.modifiers.new('liviano', 'DECIMATE')
+        dec.ratio = 800 / caras
+        dec.show_render = False
     if mat:
         # se retiñe con las telas del hotel (el modelo trae un estampado que no va)
         o.data.materials.clear()
@@ -1195,8 +1203,11 @@ if FOTOS:
 for o in [o for o in sc.objects if o.type == 'MESH' and o.modifiers]:
     bpy.context.view_layer.objects.active = o
     for mod in list(o.modifiers):
+        if mod.type == 'SUBSURF' and mod.levels == 0:
+            o.modifiers.remove(mod)  # relleno solo para las fotos: al horneado no va
+            continue
         bpy.ops.object.modifier_apply(modifier=mod.name)
-opaque = [o for o in sc.objects if o.type == 'MESH' and o.get('tipo') not in ('planta', 'vidrio', 'suelo')
+opaque =[o for o in sc.objects if o.type == 'MESH' and o.get('tipo') not in ('planta', 'vidrio', 'suelo')
           and not any(s.material in (M['vidrio'], vidrio_luz) for s in o.material_slots)]
 bpy.ops.object.select_all(action='DESELECT')
 for o in opaque:
