@@ -750,7 +750,36 @@
             "Escritorio",
             "Sillón de lectura"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-304-habitacion",
+              "kind": "pano360",
+              "alt": "Habitación en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/superior-izq/habitacion-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.7579
+            },
+            {
+              "id": "foto-304-habitacion-amplia",
+              "kind": "photo",
+              "src": "media/fotos/superior-izq/habitacion-amplia.jpg",
+              "alt": "Habitación: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-304-habitacion-detalle",
+              "kind": "photo",
+              "src": "media/fotos/superior-izq/habitacion-detalle.jpg",
+              "alt": "Habitación: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         },
         {
           "id": "bano",
@@ -762,7 +791,36 @@
             "Ducha de lluvia",
             "Amenidades de la casa"
           ],
-          "media": []
+          "media": [
+            {
+              "id": "pano-304-bano",
+              "kind": "pano360",
+              "alt": "Baño en 360° (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "src": "media/fotos/superior-izq/bano-360.jpg",
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.7438
+            },
+            {
+              "id": "foto-304-bano-amplia",
+              "kind": "photo",
+              "src": "media/fotos/superior-izq/bano-amplia.jpg",
+              "alt": "Baño: vista general (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            },
+            {
+              "id": "foto-304-bano-detalle",
+              "kind": "photo",
+              "src": "media/fotos/superior-izq/bano-detalle.jpg",
+              "alt": "Baño: detalle (imagen ilustrativa)",
+              "fidelity": "ilustrativa",
+              "width": 1600,
+              "height": 1000
+            }
+          ]
         }
       ],
       "realista": "media/realista/superior-izq.glb"
