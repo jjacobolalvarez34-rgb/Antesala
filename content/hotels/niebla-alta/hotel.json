@@ -2135,12 +2135,12 @@
             {
               "id": "pano-601-terraza",
               "kind": "pano360",
-              "src": "media/panos/penthouse-601/terraza-360.svg",
+              "src": "media/fotos/penthouse-601/terraza-360.jpg",
               "alt": "Terraza en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0.4727,
+              "width": 2048,
+              "height": 1024,
+              "yaw": 0.2465,
               "hotspots": [
                 {
                   "id": "a-sala",
@@ -2192,31 +2192,22 @@
               "height": 1000
             },
             {
-              "id": "units-601-terraza-1",
+              "id": "foto-601-terraza-amplia",
               "kind": "photo",
-              "src": "media/units/601/terraza-amplia.svg",
+              "src": "media/fotos/penthouse-601/terraza-amplia.jpg",
               "alt": "Terraza: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-601-terraza-2",
+              "id": "foto-601-terraza-detalle",
               "kind": "photo",
-              "src": "media/units/601/terraza-detalle.svg",
+              "src": "media/fotos/penthouse-601/terraza-detalle.jpg",
               "alt": "Terraza: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-601-terraza-3",
-              "kind": "photo",
-              "src": "media/units/601/terraza-luz.svg",
-              "alt": "Terraza: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2237,12 +2228,12 @@
             {
               "id": "pano-601-sala",
               "kind": "pano360",
-              "src": "media/panos/penthouse-601/sala-360.svg",
+              "src": "media/fotos/penthouse-601/sala-360.jpg",
               "alt": "Sala y comedor en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -2.0521,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -1.7125,
               "hotspots": [
                 {
                   "id": "a-terraza",
@@ -2294,31 +2285,22 @@
               "height": 1000
             },
             {
-              "id": "units-601-sala-1",
+              "id": "foto-601-sala-amplia",
               "kind": "photo",
-              "src": "media/units/601/sala-amplia.svg",
+              "src": "media/fotos/penthouse-601/sala-amplia.jpg",
               "alt": "Sala y comedor: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-601-sala-2",
+              "id": "foto-601-sala-detalle",
               "kind": "photo",
-              "src": "media/units/601/sala-detalle.svg",
+              "src": "media/fotos/penthouse-601/sala-detalle.jpg",
               "alt": "Sala y comedor: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-601-sala-3",
-              "kind": "photo",
-              "src": "media/units/601/sala-luz.svg",
-              "alt": "Sala y comedor: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2339,12 +2321,12 @@
             {
               "id": "pano-601-cocina",
               "kind": "pano360",
-              "src": "media/panos/penthouse-601/cocina-360.svg",
+              "src": "media/fotos/penthouse-601/cocina-360.jpg",
               "alt": "Cocina en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": 0.0167,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -0.1614,
               "hotspots": [
                 {
                   "id": "a-terraza",
@@ -2396,31 +2378,22 @@
               "height": 1000
             },
             {
-              "id": "units-601-cocina-1",
+              "id": "foto-601-cocina-amplia",
               "kind": "photo",
-              "src": "media/units/601/cocina-amplia.svg",
+              "src": "media/fotos/penthouse-601/cocina-amplia.jpg",
               "alt": "Cocina: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-601-cocina-2",
+              "id": "foto-601-cocina-detalle",
               "kind": "photo",
-              "src": "media/units/601/cocina-detalle.svg",
+              "src": "media/fotos/penthouse-601/cocina-detalle.jpg",
               "alt": "Cocina: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-601-cocina-3",
-              "kind": "photo",
-              "src": "media/units/601/cocina-luz.svg",
-              "alt": "Cocina: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2440,12 +2413,12 @@
             {
               "id": "pano-601-dormitorio",
               "kind": "pano360",
-              "src": "media/panos/penthouse-601/dormitorio-360.svg",
+              "src": "media/fotos/penthouse-601/dormitorio-360.jpg",
               "alt": "Dormitorio principal en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -1.2793,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -0.9282,
               "hotspots": [
                 {
                   "id": "a-terraza",
@@ -2497,31 +2470,22 @@
               "height": 1000
             },
             {
-              "id": "units-601-dormitorio-1",
+              "id": "foto-601-dormitorio-amplia",
               "kind": "photo",
-              "src": "media/units/601/dormitorio-amplia.svg",
+              "src": "media/fotos/penthouse-601/dormitorio-amplia.jpg",
               "alt": "Dormitorio principal: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-601-dormitorio-2",
+              "id": "foto-601-dormitorio-detalle",
               "kind": "photo",
-              "src": "media/units/601/dormitorio-detalle.svg",
+              "src": "media/fotos/penthouse-601/dormitorio-detalle.jpg",
               "alt": "Dormitorio principal: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-601-dormitorio-3",
-              "kind": "photo",
-              "src": "media/units/601/dormitorio-luz.svg",
-              "alt": "Dormitorio principal: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         },
@@ -2541,12 +2505,12 @@
             {
               "id": "pano-601-bano",
               "kind": "pano360",
-              "src": "media/panos/penthouse-601/bano-360.svg",
+              "src": "media/fotos/penthouse-601/bano-360.jpg",
               "alt": "Baño en 360° (imagen ilustrativa)",
               "fidelity": "ilustrativa",
-              "width": 4096,
-              "height": 2048,
-              "yaw": -3.009,
+              "width": 2048,
+              "height": 1024,
+              "yaw": -2.946,
               "hotspots": [
                 {
                   "id": "a-terraza",
@@ -2598,31 +2562,22 @@
               "height": 1000
             },
             {
-              "id": "units-601-bano-1",
+              "id": "foto-601-bano-amplia",
               "kind": "photo",
-              "src": "media/units/601/bano-amplia.svg",
+              "src": "media/fotos/penthouse-601/bano-amplia.jpg",
               "alt": "Baño: vista general (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
+              "height": 1000
             },
             {
-              "id": "units-601-bano-2",
+              "id": "foto-601-bano-detalle",
               "kind": "photo",
-              "src": "media/units/601/bano-detalle.svg",
+              "src": "media/fotos/penthouse-601/bano-detalle.jpg",
               "alt": "Baño: detalle (imagen ilustrativa)",
               "fidelity": "ilustrativa",
               "width": 1600,
-              "height": 1067
-            },
-            {
-              "id": "units-601-bano-3",
-              "kind": "photo",
-              "src": "media/units/601/bano-luz.svg",
-              "alt": "Baño: luz de la tarde (imagen ilustrativa)",
-              "fidelity": "ilustrativa",
-              "width": 1600,
-              "height": 1067
+              "height": 1000
             }
           ]
         }
