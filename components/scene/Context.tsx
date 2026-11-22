@@ -7,7 +7,7 @@ import * as THREE from 'three';
 import type { BuildingFrame, Facade } from '@/lib/building';
 
 import { VIEW_ONLY_LAYER } from './Backdrop';
-import { BarrioMeshes, Cerros, useBarrio } from './Barrio';
+import { BarrioMeshes, Cerros, SIDEWALK, STREET, useBarrio } from './Barrio';
 import { RealNeighbors, streetSpots, type LampSpot, type RealContextData } from './RealContext';
 import { paved } from './textures';
 import type { LightUniforms } from './windows';
@@ -46,8 +46,6 @@ function inViewCorridor(x: number, z: number, frame: BuildingFrame, facades: Fac
   });
 }
 
-const STREET = 9;
-const SIDEWALK = 3.2;
 
 /** Pone un objeto (y sus hijos) en una capa de render. */
 const onLayer = (layer?: number) => (o: THREE.Object3D | null) => {
@@ -356,6 +354,13 @@ export function Context({
   const groundMat = useMemo(() => paved(new THREE.MeshStandardMaterial({ color: '#4d4a44', roughness: 1 }), 0), []);
   const inCorridor = useCallback((x: number, z: number, pad: number) => inViewCorridor(x, z, frame, facades, pad), [frame, facades]);
   const barrio = useBarrio(frame, inCorridor);
+  const streetTrees = useMemo(
+    () => ({
+      main: barrio.streetTrees.filter((p) => !inCorridor(p.x, p.z, -2)),
+      view: barrio.streetTrees.filter((p) => inCorridor(p.x, p.z, -2)),
+    }),
+    [barrio, inCorridor],
+  );
   const [cx, cz] = frame.center;
   const sky = useMemo(
     () =>
@@ -383,7 +388,9 @@ export function Context({
     fog.color.copy(dayFog).lerp(nightFog, light.uNight.value);
   });
   return (
-    <group>
+    // "contexto": el pipeline del 3D realista lo exporta para que por las ventanas de las fotos y
+    // los 360° se vea esta misma calle (D-094)
+    <group name="contexto">
       <DayNightLights frame={frame} light={light} shadows={shadows} high={high} />
       <mesh scale={900} material={sky}>
         <sphereGeometry args={[1, 32, 16]} />
@@ -404,6 +411,9 @@ export function Context({
           <StreetLamps frame={frame} facades={facades} light={light} shadows={shadows} />
           <Trees frame={frame} facades={facades} shadows={shadows} />
           <TreeSet spots={barrio.parkTrees} shadows={false} />
+          {/* árboles de las calles de las manzanas vecinas (D-094); los del corredor, solo en la ventana */}
+          <TreeSet spots={streetTrees.main} shadows={false} />
+          <TreeSet spots={streetTrees.view} shadows={false} layer={VIEW_ONLY_LAYER} />
         </>
       )}
       <Cerros frame={frame} />
