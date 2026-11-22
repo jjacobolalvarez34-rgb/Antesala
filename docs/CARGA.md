@@ -12,6 +12,26 @@ Jacobo abrió Cénit en su celular y "va muy lento". Medido con `pnpm perf` (§6
 | Cénit Inmersivo | 9,8 s | 3,8 MB | 51 fps | 33 (11,7 s) |
 | Niebla Alta Inmersivo | 9,3 s | 4,0 MB | 56 fps | 26 (11,2 s) |
 | **Cénit Premium, 2026-11-16 noche** (atlas + KTX2 + tandas) | 9,9 s | 3,1 MB | **34 fps** | 37 (12,5 s) |
+| **Cénit Premium, 2026-11-21** (render hiperrealista, fachada en atlas de 2048) | 5,6 s | 2,7 MB | **60 fps** | 12 (4,7 s) |
+| **Niebla Alta Premium, 2026-11-21** (ídem) | 5,3 s | 2,7 MB | **60 fps** | 13 (4,7 s) |
+| Niebla Alta 402 Premium (habitación), 2026-11-21 | 5,8 s | 4,7 MB | 60 fps | 18 (5,8 s) |
+| Cénit 301 Premium (habitación), 2026-11-21 | 5,9 s | 3,9 MB | 60 fps | 16 (5,8 s) |
+
+Las del 2026-11-21 se tomaron en otro PC (el del amigo de Jacobo), así que no se comparan uno a uno con las del 16.
+
+**Memoria de video estimada el 2026-11-21.** Es una cota por arriba: envuelve las llamadas de WebGL, con el script de la sesión `.tmp/realista/vram.mjs`, que no está en el repo.
+
+| Página | Memoria de video estimada |
+|---|---|
+| Cénit Premium | ~124 MB |
+| Niebla Premium | ~130 MB |
+| Cénit 301 (habitación) | ~148 MB |
+| Niebla 402 (habitación) | ~156 MB |
+
+En las páginas de habitación:
+- unos 48 MB son buffers del posproceso del visor;
+- la geometría nueva de los muebles suma ~2 MB frente a antes;
+- queda pendiente bajarla: subdivisión solo en las fotos y modelos simplificados en el horneado.
 
 La medición de la noche se hizo con el PC ocupado (otra pestaña pesada de Jacobo): los tiempos de las tareas largas están inflados. La fluidez es la que importa: de 2 a 34 fps.
 
