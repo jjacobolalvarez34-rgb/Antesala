@@ -232,6 +232,11 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] **Rediseño de la página de Antesala:** estética propia (bordes, botones, fuentes), que no se vea genérica ni hecha con IA
 - [ ] Menos botones en general: revisar cada pantalla de la demo y quitar lo que no hace falta
 - [ ] La sombra de la sala a veces falla (preguntar a Jacobo en qué modo y desde dónde)
+- [ ] **La vista por la ventana no es real** (Jacobo, 2026-11-23, con captura de la cocina de la Suite 402 en Premium): afuera se ve el barrio del 3D (cajas con ventanas pintadas) y, de cerca, la maqueta horneada se ve borrosa. Propuesta:
+  1. en Premium, el 360° muestra la **foto 360° renderizada** (ya existe, hiperrealista) en vez de la maqueta en vivo; la maqueta en vivo queda para Inmersivo;
+  2. volver a renderizar los 360° y las fotos con una **ciudad creíble por la ventana**: cielo y ciudad lejana fotográficos de Poly Haven (CC0, desenfocados) y, cerca, el barrio del 3D con más detalle, para que cuadre con lo de afuera (regla 9).
+
+  Son horas de render: una noche aquí o el PC del amigo. Anotado, sin hacer
 - [ ] **Números de piso al costado del edificio (FloorTags):** no se mueven parejo. Cada piso busca por su cuenta la esquina más a la derecha, así que con perspectiva quedan corridos unos de otros y las líneas finas se ven sueltas. Deberían ir en una sola columna alineada. Además, **mientras la persona gira la cámara deberían desvanecerse y volver al detenerse**, como los letreros de las unidades (Jacobo, 2026-11-23, con captura de Niebla Alta de noche). Anotado, sin hacer
 - [ ] **Noche en Premium:** cuando la demo carga de noche (la hora se toma sola), las sombras de las ventanas se ven mal. Revisar las sombras y la luz de las ventanas con la fachada horneada de noche (Jacobo, 2026-11-16)
 
