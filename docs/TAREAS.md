@@ -232,6 +232,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] **Rediseño de la página de Antesala:** estética propia (bordes, botones, fuentes), que no se vea genérica ni hecha con IA
 - [ ] Menos botones en general: revisar cada pantalla de la demo y quitar lo que no hace falta
 - [ ] La sombra de la sala a veces falla (preguntar a Jacobo en qué modo y desde dónde)
+- [ ] **Números de piso al costado del edificio (FloorTags):** no se mueven parejo. Cada piso busca por su cuenta la esquina más a la derecha, así que con perspectiva quedan corridos unos de otros y las líneas finas se ven sueltas. Deberían ir en una sola columna alineada. Además, **mientras la persona gira la cámara deberían desvanecerse y volver al detenerse**, como los letreros de las unidades (Jacobo, 2026-11-23, con captura de Niebla Alta de noche). Anotado, sin hacer
 - [ ] **Noche en Premium:** cuando la demo carga de noche (la hora se toma sola), las sombras de las ventanas se ven mal. Revisar las sombras y la luz de las ventanas con la fachada horneada de noche (Jacobo, 2026-11-16)
 
 ### Celular (pedido de Jacobo, 2026-11-16)

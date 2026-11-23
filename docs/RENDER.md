@@ -32,6 +32,8 @@ Todos registran su resultado en `content/hotels/<hotel>/hotel.json` y dejan su b
 
 El §4 dice qué falta para el salto.
 
+> **Antes de cualquier commit en otro PC:** configurar Git con el nombre y el correo de Jacobo (`git config user.name` y `git config user.email`). El 2026-11-21 los commits quedaron firmados por el usuario de ese PC y Vercel (plan gratuito) no los desplegó. Se destrabó con un commit vacío de Jacobo (`1c205f9`).
+
 ## 2. Preparar el PC prestado (una vez, ~1 h)
 
 Nada de esto guarda contraseñas ni llaves en el repo.
