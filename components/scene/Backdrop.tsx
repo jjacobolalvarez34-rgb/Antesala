@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, type ReactNode } from 'react';
 import gsap from 'gsap';
 import * as THREE from 'three';
 
+import { exportScenes } from './ExportHook';
 import { envIntensity, type LightUniforms } from './windows';
 
 /**
@@ -126,6 +127,13 @@ export function Backdrop({
   reduced?: boolean;
 }) {
   const bgScene = useMemo(() => new THREE.Scene(), []);
+  // el pipeline del 3D realista exporta el barrio que vive en esta escena de fondo (D-094)
+  useEffect(() => {
+    exportScenes.add(bgScene);
+    return () => {
+      exportScenes.delete(bgScene);
+    };
+  }, [bgScene]);
   const gl = useThree((s) => s.gl);
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const size = useThree((s) => s.size);

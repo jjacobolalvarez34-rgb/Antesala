@@ -1039,6 +1039,88 @@ if FOTOS:
     techo = bpy.context.active_object
     techo.scale = (max(xs_w) - min(xs_w), max(ys_w) - min(ys_w), 1)
     techo.data.materials.append(plain('techo-fotos', '#f2efe9', 0.9))
+    # ---- la calle alrededor (D-094): el barrio del visor, exportado con la unidad, a la altura real
+    # del piso, para que por las ventanas se vea la misma calle que en el 3D. Solo en las fotos.
+    contexto = []
+    CONTEXTO, ANCLA = os.environ.get('CONTEXTO'), os.environ.get('ANCLA')
+    if CONTEXTO and ANCLA and os.path.exists(CONTEXTO) and os.path.exists(ANCLA):
+        ax, ay, az = json.load(open(ANCLA, encoding='utf-8'))
+        antes = set(sc.objects)
+        bpy.ops.import_scene.gltf(filepath=os.path.abspath(CONTEXTO))
+        nuevos = [o for o in sc.objects if o not in antes]
+        contexto = [o for o in nuevos if o.type == 'MESH']
+        for o in contexto:
+            mw = o.matrix_world.copy()
+            o.parent = None
+            o.matrix_world = mw
+        for o in [o for o in nuevos if o.type != 'MESH']:
+            bpy.data.objects.remove(o, do_unlink=True)  # luces, cámara y grupos del visor
+        for o in list(contexto):
+            if max(o.dimensions) > 1500:  # la esfera del cielo
+                bpy.data.objects.remove(o, do_unlink=True)
+                contexto.remove(o)
+                continue
+            # el visor está en Y arriba: la unidad (en el origen) va en el ancla del mundo
+            o.location += Vector((-ax, az, -ay))
+            o['tipo'] = 'contexto'
+        # el visor tiñe con color por vértice (cerros, edificios, carros): Blender no lo aplica solo.
+        # Se multiplica en los materiales cuyas mallas lo traen todas (si no, saldrían negras).
+        usuarios = {}
+        for o in contexto:
+            for sl in o.material_slots:
+                if sl.material:
+                    usuarios.setdefault(sl.material, []).append(o)
+        for m, obs in usuarios.items():
+            b = m.node_tree.nodes.get('Principled BSDF') if m.use_nodes else None
+            if not b:
+                continue
+            nt_ = m.node_tree
+            if b.inputs['Base Color'].is_linked:
+                src = b.inputs['Base Color'].links[0].from_socket
+            else:
+                rgb = nt_.nodes.new('ShaderNodeRGB')
+                rgb.outputs[0].default_value = b.inputs['Base Color'].default_value
+                src = rgb.outputs[0]
+            capas = [o.data.color_attributes[0].name if o.data.color_attributes else None for o in obs]
+            if capas and all(capas) and len(set(capas)) == 1:
+                vc = nt_.nodes.new('ShaderNodeVertexColor')
+                vc.layer_name = capas[0]
+                mul = nt_.nodes.new('ShaderNodeMix')
+                mul.data_type = 'RGBA'
+                mul.blend_type = 'MULTIPLY'
+                mul.inputs['Factor'].default_value = 1.0
+                nt_.links.new(src, mul.inputs['A'])
+                nt_.links.new(vc.outputs['Color'], mul.inputs['B'])
+                src = mul.outputs['Result']
+            # vecinos apagados, como en el visor: el protagonista es el hotel
+            hs = nt_.nodes.new('ShaderNodeHueSaturation')
+            hs.inputs['Saturation'].default_value = 0.45
+            hs.inputs['Value'].default_value = 0.95
+            nt_.links.new(src, hs.inputs['Color'])
+            nt_.links.new(hs.outputs['Color'], b.inputs['Base Color'])
+        # el piso claro de la maqueta taparía la calle desde la ventana
+        suelo.hide_render = True
+        cam.data.clip_end = 3000
+        # bruma por distancia (como la niebla del visor): lo lejano se desvanece, el interior no
+        sc.view_layers[0].use_pass_mist = True
+        world.mist_settings.start = 40
+        world.mist_settings.depth = 380
+        t = sc.compositing_node_group
+        if t:
+            rl = next(n for n in t.nodes if n.bl_idname == 'CompositorNodeRLayers')
+            out = next(n for n in t.nodes if n.bl_idname == 'NodeGroupOutput')
+            prev = out.inputs[0].links[0].from_socket
+            mx_ = t.nodes.new('ShaderNodeMix')
+            mx_.data_type = 'RGBA'
+            mul = t.nodes.new('ShaderNodeMath')
+            mul.operation = 'MULTIPLY'
+            mul.inputs[1].default_value = 0.92
+            t.links.new(rl.outputs['Mist'], mul.inputs[0])
+            t.links.new(mul.outputs['Value'], mx_.inputs['Factor'])
+            t.links.new(prev, mx_.inputs['A'])
+            mx_.inputs['B'].default_value = (*(c * 2.2 for c in srgb('#dfe2e1')), 1)  # antes de la curva de tono: claro
+            t.links.new(mx_.outputs['Result'], out.inputs[0])
+        log('contexto: barrio del visor por las ventanas', len(contexto), 'mallas, ancla', [round(v, 2) for v in (ax, ay, az)])
     # luz de techo suave por espacio, solo de relleno: ahora el sol y el cielo entran por las
     # ventanas (con 30 W/m² todo quedaba parejo y plano)
     luces = []
@@ -1193,6 +1275,9 @@ if FOTOS:
         info[sid] = {'yaw': round(yaw, 4), 'eye': [round(eye[0], 3), round(-eye[1], 3)]}
     json.dump(info, open(f'{OUT}-fotos.json', 'w'))
     bpy.data.objects.remove(techo, do_unlink=True)
+    for o in contexto:
+        bpy.data.objects.remove(o, do_unlink=True)
+    suelo.hide_render = False
     for lo in luces:
         bpy.data.objects.remove(lo, do_unlink=True)
     if os.environ.get('SIN_HORNEAR'):

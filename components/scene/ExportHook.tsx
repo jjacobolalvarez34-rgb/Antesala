@@ -8,7 +8,19 @@ declare global {
   interface Window {
     /** solo con ?export=1: exporta un grupo de la escena a GLB (base64) para Blender (D-074) */
     __antesalaExport?: (name: string) => Promise<string>;
+    /** solo con ?export=1: posición de un objeto en el mundo (dónde va la unidad dentro del edificio) */
+    __antesalaAnchor?: (name: string) => [number, number, number];
   }
+}
+
+/** Escenas aparte (el fondo de Backdrop, donde vive el barrio) donde también se busca qué exportar. */
+export const exportScenes = new Set<THREE.Scene>();
+
+/** Busca un objeto por nombre en la escena principal y en las de fondo. */
+function findObject(scene: THREE.Scene, name: string) {
+  let obj = scene.getObjectByName(name);
+  for (const s of exportScenes) obj ??= s.getObjectByName(name);
+  return obj;
 }
 
 /**
@@ -21,7 +33,7 @@ export function ExportHook() {
   useEffect(() => {
     if (!new URLSearchParams(window.location.search).has('export')) return;
     window.__antesalaExport = async (name: string) => {
-      const obj = scene.getObjectByName(name) as THREE.Object3D | undefined;
+      const obj = findObject(scene, name);
       if (!obj) throw new Error(`no existe ${name}`);
       // con opacidad completa y visible, sin la animación de entrada
       obj.traverse((o) => {
@@ -48,8 +60,16 @@ export function ExportHook() {
       for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
       return btoa(bin);
     };
+    window.__antesalaAnchor = (name: string) => {
+      const obj = findObject(scene, name);
+      if (!obj) throw new Error(`no existe ${name}`);
+      obj.updateMatrixWorld(true);
+      const p = obj.getWorldPosition(obj.position.clone());
+      return [p.x, p.y, p.z];
+    };
     return () => {
       delete window.__antesalaExport;
+      delete window.__antesalaAnchor;
     };
   }, [scene]);
   return null;

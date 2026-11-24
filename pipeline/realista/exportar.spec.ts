@@ -20,4 +20,14 @@ test(`exportar ${HOTEL} ${UNIDAD}`, async ({ page }) => {
   const out = `.tmp/realista/${HOTEL}-${UNIDAD}.glb`;
   writeFileSync(out, Buffer.from(b64, 'base64'));
   console.log('GLB', out, Math.round(b64.length * 0.75 / 1024), 'KB');
+  // la calle alrededor (D-094) y dónde va la unidad en el mundo: para que por las ventanas de las
+  // fotos y los 360° se vea el barrio a la altura real del piso. Los hoteles con contexto real o
+  // en terreno pueden no tenerlo: entonces las fotos siguen con el cielo solo.
+  const ancla = await page.evaluate(() => window.__antesalaAnchor!('unidad-maqueta'));
+  writeFileSync(`.tmp/realista/${HOTEL}-${UNIDAD}-ancla.json`, JSON.stringify(ancla));
+  const ctx = await page.evaluate(() => window.__antesalaExport!('contexto').catch(() => ''));
+  if (ctx) {
+    writeFileSync(`.tmp/realista/${HOTEL}-contexto.glb`, Buffer.from(ctx, 'base64'));
+    console.log('contexto', Math.round(ctx.length * 0.75 / 1024), 'KB, ancla', ancla.map((v) => v.toFixed(2)).join(' '));
+  }
 });

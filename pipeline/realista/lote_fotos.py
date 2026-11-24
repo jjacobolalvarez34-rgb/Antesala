@@ -54,13 +54,16 @@ for t in sys.argv[1:]:
     log('---', hotel, unidad, plan)
     # si la unidad y el plano se llaman igual (los refugios de Frailejón), la salida horneada de
     # lote.py pisa la exportación del visor: se vuelve a exportar siempre
-    if not os.path.exists(glb) or unidad == nombre:
+    ancla = f'.tmp/realista/{hotel}-{unidad}-ancla.json'
+    contexto = f'.tmp/realista/{hotel}-contexto.glb'
+    # sin el ancla (posición de la unidad en el mundo) tampoco hay barrio por la ventana: se exporta
+    if not os.path.exists(glb) or unidad == nombre or not os.path.exists(ancla):
         log('  exportando del visor')
         if not run('npx playwright test -c pipeline/renders.config.ts realista/exportar.spec.ts', env={**ENV, 'HOTEL': hotel, 'UNIDAD': unidad}):
             continue
     log(f'  Blender: fotos y 360° ({SAMPLES} muestras)')
     if not run(f'"{BLENDER}" -b -P pipeline/realista/amoblar.py -- {glb} content/hotels/{hotel}/{plan} {salida} {SAMPLES} 1024',
-               env={**ENV, 'FOTOS': '1', 'SIN_HORNEAR': '1'}):
+               env={**ENV, 'FOTOS': '1', 'SIN_HORNEAR': '1', 'CONTEXTO': contexto, 'ANCLA': ancla}):
         continue
     info_path = f'{salida}-fotos.json'
     if not os.path.exists(info_path):

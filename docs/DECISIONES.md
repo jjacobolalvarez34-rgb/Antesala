@@ -583,3 +583,22 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 
     Con la de `docs/RENDER.md` §3 habría tardado más de un día.
 - Por qué: el visor carga una sola imagen de 360° para todos los equipos, y `docs/CARGA.md` §4 pone el tope en 2048 en el celular. La fachada estaba en 4096, contra el mismo presupuesto. El realismo tiene que venir de la luz horneada, no de más píxeles. La calidad ajustada la eligió el amigo de Jacobo al ver los tiempos.
+
+**D-094 · 2026-11-21 · Calle con medidas de Bogotá, el hotel de protagonista y la misma calle por las ventanas**
+- Decisión: el barrio inventado de Niebla Alta y Cénit (`components/scene/Barrio.tsx`) toma la sección de una vía local de Bogotá.
+  - **Calle:**
+    - calzada de 10 m (dos carriles de 3,5 m y uno de parqueo) con línea central amarilla discontinua y cebras en los cruces cercanos;
+    - andén de 4,5 m con sardinel claro, franja verde de 1,2 m (árboles y postes) y zona peatonal en loseta.
+  - **Vecinos:**
+    - en las manzanas cercanas, locales en el primer piso: vitrina oscura que se enciende de noche, dintel y algunos toldos;
+    - antepecho de 45 cm arriba;
+    - ninguno pasa del 80 % de la altura del hotel (las torres lejanas, hasta 30 m si el hotel es bajo);
+    - todo apagado como antes (`muteNeighbor`).
+  - **Frente a la fachada** (corredor de vista, D-055): la cámara ve locales de 1 o 2 pisos, y los edificios altos siguen solo en la vista desde la ventana. Antes quedaba un lote vacío.
+  - **Calle con vida:** carros estacionados en las calles cercanas, en tonos apagados, y árboles en las calles de las manzanas vecinas del hotel.
+  - **En las fotos y los 360° de Blender:**
+    - el visor exporta este barrio (grupo `contexto`) y la posición de la unidad (`__antesalaAnchor`, solo con `?export=1`);
+    - `amoblar.py` lo pone por las ventanas a la altura real del piso, desaturado y con bruma por distancia.
+    
+    El horneado para el visor no lo lleva, porque el visor ya dibuja el barrio en vivo. La fachada tampoco se re-hornea con él, porque congelaría sombras que el visor ya calcula.
+- Por qué: el amigo de Jacobo pidió el fondo de ambas demos mejorado: "la calle se debe ver realista en cuanto a dimensiones y características, pero el foco principal debe ser el edificio". Además, en las fotos se veía por la ventana un cielo sin suelo. Ahora afuera y adentro muestran la misma calle (regla 9, coherencia).
