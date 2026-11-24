@@ -5,12 +5,14 @@ import { ChevronLeft, ChevronRight, Hand, X } from 'lucide-react';
 import { useTour } from '@/lib/store';
 
 import type { ScenePoi } from './Pois';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Controles del mirador (D-042): nombre del punto, flechas para saltar entre
  * miradores y salir. Arrastrar mira alrededor en vivo (día o noche).
  */
 export function ViewpointOverlay({ pois }: { pois: ScenePoi[] }) {
+  const tr = useT();
   const viewpoint = useTour((s) => s.viewpoint);
   const setViewpoint = useTour((s) => s.setViewpoint);
   const poi = viewpoint ? pois.find((p) => p.id === viewpoint.poiId) : undefined;
@@ -28,7 +30,7 @@ export function ViewpointOverlay({ pois }: { pois: ScenePoi[] }) {
         <button
           type="button"
           onClick={() => go(-1)}
-          aria-label="Mirador anterior"
+          aria-label={tr('Mirador anterior')}
           className="grid size-11 shrink-0 place-items-center rounded-xl transition-colors hover:bg-bone/12"
         >
           <ChevronLeft aria-hidden className="size-5" />
@@ -40,7 +42,7 @@ export function ViewpointOverlay({ pois }: { pois: ScenePoi[] }) {
         <button
           type="button"
           onClick={() => go(1)}
-          aria-label="Mirador siguiente"
+          aria-label={tr('Mirador siguiente')}
           className="grid size-11 shrink-0 place-items-center rounded-xl transition-colors hover:bg-bone/12"
         >
           <ChevronRight aria-hidden className="size-5" />
@@ -48,7 +50,7 @@ export function ViewpointOverlay({ pois }: { pois: ScenePoi[] }) {
         <button
           type="button"
           onClick={() => setViewpoint(null)}
-          aria-label="Salir del mirador"
+          aria-label={tr('Salir del mirador')}
           className="ml-1 grid size-11 shrink-0 place-items-center rounded-xl border-l border-bone/15 transition-colors hover:bg-bone/12"
         >
           <X aria-hidden className="size-5" />

@@ -1,8 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 
-import { routes } from '@/lib/routes';
 import type { Space } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useRoutes, useT } from '@/components/i18n/Lang';
 
 /** Acceso rápido a los espacios de la unidad. */
 export function SpaceChips({
@@ -18,8 +20,10 @@ export function SpaceChips({
   currentId?: string;
   className?: string;
 }) {
+  const tr = useT();
+  const routes = useRoutes();
   return (
-    <nav aria-label="Espacios de la unidad" className={className}>
+    <nav aria-label={tr('Espacios de la unidad')} className={className}>
       <ul className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 md:mx-0 md:flex-wrap md:px-0">
         {spaces.map((s) => {
           const active = s.id === currentId;

@@ -4,6 +4,7 @@ import { cache } from 'react';
 import { z } from 'zod';
 
 import { facadesOf, windowsOn } from './building';
+import { translateDeep, type Lang } from './i18n';
 import { parsePlan, polygonAreaM2 } from './plan';
 import type { Hotel, HotelTokens, PlanGeometry } from './types';
 
@@ -448,9 +449,23 @@ export const listHotelSlugs = cache(async (): Promise<string[]> => {
   return entries.filter((e) => e.isDirectory()).map((e) => e.name);
 });
 
-/** Carga y valida un hotel. Devuelve null si la carpeta no existe. */
-export const getHotelBundle = cache(async (slug: string): Promise<HotelBundle | null> => {
+/** Tabla de traducción del hotel (`content/hotels/<slug>/i18n/<lang>.json`), o vacía. */
+const getTranslations = cache(async (slug: string, lang: Lang): Promise<Record<string, string>> => {
+  try {
+    return JSON.parse(await readFile(path.join(CONTENT_DIR, slug, 'i18n', `${lang}.json`), 'utf8')) as Record<string, string>;
+  } catch {
+    return {};
+  }
+});
+
+/**
+ * Carga y valida un hotel. Devuelve null si la carpeta no existe. En otro idioma, sus textos se
+ * traducen al cargar (D-094): con la tabla del hotel y las reglas comunes; lo que no está, en español.
+ */
+export const getHotelBundle = cache(async (slug: string, lang: Lang = 'es'): Promise<HotelBundle | null> => {
   const slugs = await listHotelSlugs();
   if (!slugs.includes(slug)) return null;
-  return loadBundle(slug);
+  const bundle = await loadBundle(slug);
+  if (lang === 'es') return bundle;
+  return translateDeep(bundle, await getTranslations(slug, lang));
 });

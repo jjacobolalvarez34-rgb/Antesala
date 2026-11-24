@@ -5,6 +5,7 @@ import { useState, type ReactNode } from 'react';
 
 import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Marco del panel del espacio en modo escena (rediseñado el 2026-11-16 con las notas del papá
@@ -35,6 +36,7 @@ export function SpaceSheetFrame({
   const panoSpots = useTour((s) => s.panoSpots);
   const setPanoSpot = useTour((s) => s.setPanoSpot);
   const [open, setOpen] = useState(false);
+  const tr = useT();
   const on360 = hasPano && view360;
 
   return (
@@ -44,7 +46,7 @@ export function SpaceSheetFrame({
       {nav ? <div className="px-3 pt-2 md:pt-3">{nav}</div> : null}
       <div className="flex flex-wrap items-center gap-2 px-3 py-2.5">
         {hasPano ? (
-          <div role="group" aria-label="Vista del espacio" className="flex rounded-full bg-secondary p-1">
+          <div role="group" aria-label={tr('Vista del espacio')} className="flex rounded-full bg-secondary p-1">
             <button
               type="button"
               aria-pressed={on360}
@@ -65,7 +67,7 @@ export function SpaceSheetFrame({
                 !on360 ? 'bg-ink text-bone' : 'hover:bg-card',
               )}
             >
-              <Box aria-hidden className="size-4" /> Maqueta
+              <Box aria-hidden className="size-4" /> {tr('Maqueta')}
             </button>
           </div>
         ) : null}
@@ -73,22 +75,22 @@ export function SpaceSheetFrame({
           <button
             type="button"
             onClick={() => setPanoSpot((panoSpot + 1) % panoSpots)}
-            aria-label={`Mirar desde el punto ${((panoSpot + 1) % panoSpots) + 1} de ${panoSpots}`}
+            aria-label={tr('Mirar desde el punto {i} de {n}', { i: ((panoSpot + 1) % panoSpots) + 1, n: panoSpots })}
             className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-medium transition-colors hover:bg-card"
           >
             <MapPin aria-hidden className="size-4" />
-            Punto {panoSpot + 1}/{panoSpots}
+            {tr('Punto')} {panoSpot + 1}/{panoSpots}
           </button>
         ) : null}
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
-          aria-label={open ? `Ocultar fotos y detalles de ${title}` : `Ver fotos y detalles de ${title}`}
+          aria-label={tr(open ? 'Ocultar fotos y detalles de {x}' : 'Ver fotos y detalles de {x}', { x: title })}
           className="ml-auto inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-3 text-sm font-medium transition-colors hover:border-ink/40"
         >
           <Images aria-hidden className="size-4" />
-          {open ? 'Ocultar' : 'Fotos y detalles'}
+          {tr(open ? 'Ocultar' : 'Fotos y detalles')}
           <ChevronDown aria-hidden className={cn('size-4 transition-transform duration-300', open && 'rotate-180')} />
         </button>
       </div>

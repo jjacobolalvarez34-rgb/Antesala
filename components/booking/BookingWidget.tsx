@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { buildWhatsAppUrl, type WhatsAppContext } from '@/lib/whatsapp';
 
 import { addDays, BTN, BTN_INK, iso, longDate, parse } from './ReserveSheet';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Consulta de disponibilidad de la portada (D-078): llegada, salida y huéspedes en
@@ -27,6 +28,7 @@ export function BookingWidget({
   suffix?: string;
   className?: string;
 }) {
+  const tr = useT();
   const today = useMemo(() => new Date(), []);
   const [checkIn, setCheckIn] = useState(() => iso(addDays(new Date(), 7)));
   const [checkOut, setCheckOut] = useState(() => iso(addDays(new Date(), 10)));
@@ -48,12 +50,12 @@ export function BookingWidget({
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
-      aria-label="Consultar disponibilidad"
+      aria-label={tr('Consultar disponibilidad')}
       className={cn('grid overflow-hidden rounded-[var(--hotel-r-card,3px)] border border-border bg-background shadow-[0_24px_48px_-32px_rgb(28_27_25/0.5)] md:grid-cols-[1fr_1fr_0.8fr_auto]', className)}
     >
       <div className="grid grid-cols-2 divide-x divide-border md:contents">
         <label htmlFor={ids.in} className={cn(cell, 'md:border-r md:border-border')}>
-          <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">Llegada</span>
+          <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">{tr('Llegada')}</span>
           <input
             id={ids.in}
             type="date"
@@ -67,7 +69,7 @@ export function BookingWidget({
           />
         </label>
         <label htmlFor={ids.out} className={cn(cell, 'md:border-r md:border-border')}>
-          <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">Salida</span>
+          <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">{tr('Salida')}</span>
           <input
             id={ids.out}
             type="date"
@@ -79,11 +81,11 @@ export function BookingWidget({
         </label>
       </div>
       <label htmlFor={ids.guests} className={cn(cell, 'border-t border-border md:border-t-0 md:border-r')}>
-        <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">Huéspedes</span>
+        <span className="text-[0.625rem] tracking-[0.2em] text-muted-foreground uppercase">{tr('Huéspedes')}</span>
         <select id={ids.guests} value={guests} onChange={(e) => setGuests(Number(e.target.value))} className={field}>
           {Array.from({ length: Math.max(1, maxGuests) }, (_, i) => i + 1).map((n) => (
             <option key={n} value={n}>
-              {n} {n === 1 ? 'huésped' : 'huéspedes'}
+              {n} {tr(n === 1 ? 'huésped' : 'huéspedes')}
             </option>
           ))}
         </select>
@@ -96,11 +98,11 @@ export function BookingWidget({
           rel="noopener noreferrer"
           className={cn(BTN, BTN_INK, 'min-h-12 w-full px-7', !valid && 'pointer-events-none opacity-50')}
         >
-          Consultar disponibilidad
+          {tr('Consultar disponibilidad')}
         </a>
         <p className="text-center text-[0.6875rem] text-muted-foreground md:hidden">
-          {valid ? `${nights} ${nights === 1 ? 'noche' : 'noches'}` : 'La salida debe ser después de la llegada'}
-          {valid && from !== undefined ? ` · desde ${formatCOP(from)}${suffix ?? ''}` : ''}
+          {valid ? `${nights} ${tr(nights === 1 ? 'noche' : 'noches')}` : tr('La salida debe ser después de la llegada')}
+          {valid && from !== undefined ? ` · ${tr('desde')} ${formatCOP(from)}${tr(suffix ?? '')}` : ''}
         </p>
       </div>
     </form>

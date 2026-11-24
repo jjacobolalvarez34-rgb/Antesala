@@ -8,6 +8,7 @@ import { useRef, useState, type RefObject } from 'react';
 import * as THREE from 'three';
 
 import { useTour } from '@/lib/store';
+import { useT } from '@/components/i18n/Lang';
 
 export interface ScenePoi {
   id: string;
@@ -99,11 +100,12 @@ export function SpaceLabelLayer({
   onHover: (id: string | null) => void;
   ariaLabel?: string;
 }) {
+  const tr = useT();
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
     >
-      <ul aria-label={ariaLabel}>
+      <ul aria-label={tr(ariaLabel)}>
         {labels.map((l) => {
           const active = l.id === current || l.id === hovered;
           return (
@@ -147,6 +149,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
   // la tarjeta se abre hacia donde haya espacio: hacia abajo si el punto está en la mitad superior
   const [below, setBelow] = useState(false);
   const setViewpoint = useTour((s) => s.setViewpoint);
+  const tr = useT();
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500 ${visible ? 'opacity-100' : 'opacity-0'}`}
@@ -154,7 +157,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
       {pois.map((g) => {
         const p = g.members[0]!;
         const many = g.members.length > 1;
-        const label = many ? `${g.members.length} zonas comunes` : p.name;
+        const label = many ? tr('{n} zonas comunes', { n: g.members.length }) : p.name;
         return (
         <div
           key={g.id}
@@ -183,7 +186,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                 <span className="size-3 rounded-full bg-accent-on-dark shadow-[0_0_10px_2px_rgb(184_154_106/0.7)]" />
               </span>
               {many ? <span className="text-xs tabular-nums">{g.members.length}</span> : null}
-              <span className="hidden group-hover:inline group-focus-visible:inline">{many ? 'Zonas comunes' : p.name}</span>
+              <span className="hidden group-hover:inline group-focus-visible:inline">{many ? tr('Zonas comunes') : p.name}</span>
             </button>
             {open === g.id && many ? (
               <div
@@ -192,11 +195,11 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                 }`}
               >
                 <div className="flex items-center justify-between gap-2 px-2 pt-1">
-                  <p className="text-[0.6875rem] font-medium tracking-[0.2em] text-bone/60 uppercase">Zonas comunes</p>
+                  <p className="text-[0.6875rem] font-medium tracking-[0.2em] text-bone/60 uppercase">{tr('Zonas comunes')}</p>
                   <button
                     type="button"
                     onClick={() => setOpen(null)}
-                    aria-label="Cerrar"
+                    aria-label={tr('Cerrar')}
                     className="grid size-8 place-items-center rounded-full hover:bg-bone/10"
                   >
                     <X aria-hidden className="size-4" />
@@ -221,7 +224,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                             className="inline-flex min-h-9 items-center gap-1.5 text-[0.8125rem] font-medium text-accent-on-dark underline-offset-4 hover:underline"
                           >
                             <Orbit aria-hidden className="size-4" />
-                            Mirar en 360°
+                            {tr('Mirar en 360°')}
                           </button>
                         ) : null}
                         {m.href ? (
@@ -229,7 +232,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                             href={m.href}
                             className="inline-flex min-h-9 items-center text-[0.8125rem] font-medium text-accent-on-dark underline-offset-4 hover:underline"
                           >
-                            Ver {m.levelName?.toLowerCase() ?? 'el piso'}
+                            {tr('Ver {x}', { x: m.levelName?.toLowerCase() ?? tr('el piso') })}
                           </Link>
                         ) : null}
                       </div>
@@ -250,7 +253,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                   <button
                     type="button"
                     onClick={() => setOpen(null)}
-                    aria-label="Cerrar"
+                    aria-label={tr('Cerrar')}
                     className="-mt-1 -mr-1 grid size-8 place-items-center rounded-full hover:bg-bone/10"
                   >
                     <X aria-hidden className="size-4" />
@@ -267,7 +270,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                     className="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-accent-on-dark px-3 text-[0.8125rem] font-medium text-ink transition-colors hover:bg-bone"
                   >
                     <Orbit aria-hidden className="size-4" />
-                    Mirar desde aquí (360°)
+                    {tr('Mirar desde aquí (360°)')}
                   </button>
                 ) : null}
                 {p.href ? (
@@ -275,7 +278,7 @@ export function PoiLayer({ pois, anchors, visible }: { pois: PoiGroup[]; anchors
                     href={p.href}
                     className="mt-3 inline-flex min-h-9 items-center text-[0.8125rem] font-medium text-accent-on-dark underline-offset-4 hover:underline"
                   >
-                    Ver {p.levelName?.toLowerCase() ?? 'el piso'}
+                    {tr('Ver {x}', { x: p.levelName?.toLowerCase() ?? tr('el piso') })}
                   </Link>
                 ) : null}
               </div>

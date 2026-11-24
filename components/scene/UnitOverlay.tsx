@@ -9,6 +9,7 @@ import { formatPrice, OFFER } from '@/lib/hotel';
 import { useTour } from '@/lib/store';
 
 import type { SceneData, SceneUnit } from './Scene';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Capa HTML de las unidades: etiqueta junto al puntero al pasar por sus
@@ -16,6 +17,7 @@ import type { SceneData, SceneUnit } from './Scene';
  * cierra con un diafragma de cámara (D-038).
  */
 export function UnitOverlay({ data, visible }: { data: SceneData; visible: boolean }) {
+  const tr = useT();
   const hovered = useTour((s) => s.hoveredUnit);
   const view = useTour((s) => s.view);
   const setView = useTour((s) => s.setView);
@@ -65,7 +67,7 @@ export function UnitOverlay({ data, visible }: { data: SceneData; visible: boole
           close();
         }}
         onClick={(e) => e.target === e.currentTarget && close()}
-        aria-label="Vista desde la unidad"
+        aria-label={tr('Vista desde la unidad')}
         className="m-auto w-[min(92vw,960px)] max-w-none overflow-hidden rounded-3xl bg-transparent p-0 text-bone backdrop:bg-ink/80 backdrop:backdrop-blur-sm"
       >
         {view ? (
@@ -73,16 +75,16 @@ export function UnitOverlay({ data, visible }: { data: SceneData; visible: boole
             <div className="relative bg-ink">
               <img
                 src={view.src}
-                alt={`Vista aproximada desde la ventana de ${viewUnit?.name ?? 'la unidad'}`}
+                alt={tr('Vista aproximada desde la ventana de {x}', { x: viewUnit?.name ?? tr('la unidad') })}
                 className="block aspect-[16/10] w-full object-cover"
               />
               <span className="glass absolute top-3 left-3 rounded-full px-2.5 py-1 text-xs font-medium text-ink">
-                Vista ilustrativa
+                {tr('Vista ilustrativa')}
               </span>
               <button
                 type="button"
                 onClick={close}
-                aria-label="Cerrar"
+                aria-label={tr('Cerrar')}
                 autoFocus
                 className="glass-dark absolute top-3 right-3 grid size-11 place-items-center rounded-full"
               >

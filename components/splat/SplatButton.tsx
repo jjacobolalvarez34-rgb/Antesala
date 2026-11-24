@@ -5,11 +5,13 @@ import { Box } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 const SplatViewer = dynamic(() => import('./SplatViewer'), { ssr: false });
 
 /** Abre el splat del espacio a pantalla completa; el visor se baja solo al tocar. */
 export function SplatButton({ url, title, exact, className }: { url: string; title: string; exact: boolean; className?: string }) {
+  const tr = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -22,7 +24,7 @@ export function SplatButton({ url, title, exact, className }: { url: string; tit
         )}
       >
         <Box aria-hidden className="size-4" strokeWidth={1.5} />
-        {exact ? 'Recorrer en 3D real' : 'Recorrer en 3D'}
+        {tr(exact ? 'Recorrer en 3D real' : 'Recorrer en 3D')}
       </button>
       {open ? <SplatViewer url={url} title={title} onClose={() => setOpen(false)} /> : null}
     </>

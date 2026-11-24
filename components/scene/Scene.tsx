@@ -22,9 +22,10 @@ import {
   type Facade,
 } from '@/lib/building';
 import { isLoading, lowerQuality, markLoading, raiseQuality, type Quality } from '@/lib/capabilities';
-import { formatCOP, OFFER } from '@/lib/hotel';
+import { useLang, useRoutes } from '@/components/i18n/Lang';
+import { formatCOP, offerTexts } from '@/lib/hotel';
+import { t } from '@/lib/i18n';
 import { parsePlan, polygonLabelPoint } from '@/lib/plan';
-import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import type { Building, Offer, PlanGeometry } from '@/lib/types';
 
@@ -344,6 +345,9 @@ function BuildingEnvironment({ map, light, interior }: { map: THREE.Texture | nu
 
 export default function Scene({ data, stage, active, quality, qualityLocked, reduced, intro }: Props) {
   const router = useRouter();
+  const lang = useLang();
+  const routes = useRoutes();
+  const offer = offerTexts(data.offer, lang);
   const frame = useMemo(() => buildingFrame(data.building), [data.building]);
   const facades = useMemo(() => facadesOf(data.building), [data.building]);
   const hoveredLevelId = useTour((s) => s.hoveredLevelId);
@@ -409,17 +413,17 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
       data.floors.map((f) => {
         const units = data.units.filter((u) => u.levelId === f.id);
         const free = units.filter((u) => !u.occupied).length;
-        const word = data.offer && data.offer !== 'noche' ? (free === 1 ? 'disponible' : 'disponibles') : free === 1 ? 'libre' : 'libres';
+        const word = t(lang, data.offer && data.offer !== 'noche' ? (free === 1 ? 'disponible' : 'disponibles') : free === 1 ? 'libre' : 'libres');
         const pois = data.pois.filter((p) => p.levelName === f.name).map((p) => p.name);
         return {
           id: f.id,
           order: f.order,
           name: f.name,
           href: routes.piso(data.slug, f.id),
-          note: units.length ? (free ? `${free} ${word}` : data.offer === 'venta' ? 'vendido' : 'sin cupo') : pois.join(' · ') || f.name,
+          note: units.length ? (free ? `${free} ${word}` : t(lang, data.offer === 'venta' ? 'vendido' : 'sin cupo')) : pois.join(' · ') || f.name,
         };
       }),
-    [data.floors, data.units, data.pois, data.offer, data.slug],
+    [data.floors, data.units, data.pois, data.offer, data.slug, lang, routes],
   );
   const levelPlans = useLevelPlans(data.levelPlanSources, stage.kind === 'piso' ? stage.levelId : null);
   const floorLabels = useMemo(() => {
@@ -468,17 +472,17 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           short: unit.name.match(/\d+[A-Za-z]?$/)?.[0] ?? unit.name,
           name: unit.name,
           detail: unit.occupied
-            ? OFFER[data.offer ?? 'noche'].takenShort
+            ? offer.takenShort
             : unit.price !== undefined
-              ? `${formatCOP(unit.price)}${OFFER[data.offer ?? 'noche'].suffix ?? ''}`
-              : 'Libre',
+              ? `${formatCOP(unit.price)}${offer.suffix ?? ''}`
+              : t(lang, 'Libre'),
           occupied: !!unit.occupied,
           position: [x, y, z] as [number, number, number],
           href: unit.href,
         },
       ];
     });
-  }, [stage, data, frame, facadeIndex, levelPlans]);
+  }, [stage, data, frame, facadeIndex, levelPlans, lang, offer.suffix, offer.takenShort]);
   const view360 = useTour((s) => s.view360);
   const currentPano =
     unitId && spaceId ? (data.unitPlans[unitId]?.spaces.find((s) => s.id === spaceId)?.pano ?? null) : null;
@@ -539,7 +543,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         },
       ];
     });
-  }, [currentPano, eye, unitId, data.slug]);
+  }, [currentPano, eye, unitId, data.slug, routes]);
   const [cx, cz] = frame.center;
   const anchors = useRef(new Map<string, HTMLElement>());
   const spaceAnchors = useRef(new Map<string, HTMLElement>());
@@ -555,7 +559,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         ? [{ id: s.id, name: s.name, position: [anchor[0] + c[0], anchor[1] + 1.3, anchor[2] + c[1]] as [number, number, number], href: routes.espacio(data.slug, unitId, s.id) }]
         : [];
     });
-  }, [unitId, data, frame]);
+  }, [unitId, data, frame, routes]);
   const guideStep: GuideStep =
     in360 ? 'mirar' : stage.kind === 'piso' ? 'piso' : stage.kind === 'unidad' ? (spaceId ? 'espacio' : 'unidad') : 'explorar';
   /**

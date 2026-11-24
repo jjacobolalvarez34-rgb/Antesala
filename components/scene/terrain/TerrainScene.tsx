@@ -9,7 +9,7 @@ import * as THREE from 'three';
 
 import { useNivel } from '@/components/hotel/Nivel';
 import type { CameraPose } from '@/lib/building';
-import { routes } from '@/lib/routes';
+import { useRoutes } from '@/components/i18n/Lang';
 import { useTour } from '@/lib/store';
 import type { Quality } from '@/lib/capabilities';
 
@@ -48,6 +48,7 @@ interface Props {
 
 export default function TerrainScene({ data, stage, active, quality, reduced, intro }: Props) {
   const router = useRouter();
+  const routes = useRoutes();
   const nivel = useNivel();
   const night = useTour((s) => s.night);
   const hoveredUnit = useTour((s) => s.hoveredUnit?.id ?? null);
@@ -99,7 +100,7 @@ export default function TerrainScene({ data, stage, active, quality, reduced, in
         ? [{ id: s.id, name: s.name, position: [current.pos[0] + c[0], current.pos[1] + 1.3, current.pos[2] + c[1]] as [number, number, number], href: routes.espacio(data.slug, current.cabin.id, s.id) }]
         : [];
     });
-  }, [current, data.slug]);
+  }, [current, data.slug, routes]);
 
   const inUnit = stage.kind === 'unidad';
   const aerial = stage.kind === 'piso';

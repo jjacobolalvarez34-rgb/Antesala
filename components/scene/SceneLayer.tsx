@@ -7,7 +7,9 @@ import { useEffect, useMemo } from 'react';
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
 import { detectCapability, qualityOverride } from '@/lib/capabilities';
 import { prefetch } from './prefetch';
-import { routes } from '@/lib/routes';
+import { useLang } from '@/components/i18n/Lang';
+import { routesFor } from '@/lib/i18n';
+import type { routes } from '@/lib/routes';
 import { can3d, useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
@@ -39,6 +41,7 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWi
   }, [wire]);
   const terrain = 'kind' in data && data.kind === 'terreno';
   const router = useRouter();
+  const lang = useLang();
   const [stageName, param, spaceParam] = useSelectedLayoutSegments();
   const reduced = useReducedMotion();
   const { quality, qualityLocked, askConsent, consent, sceneReady, sceneMounted, intro, init, mountScene } = useTour();
@@ -98,9 +101,9 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWi
   // Sin WebGL2, o si la persona eligió la lista: la vista exterior pasa a la lista
   useEffect(() => {
     if (stageName === 'explorar' && (quality === 'lista' || consent === 'declined')) {
-      router.replace(`${routes.lista(data.slug)}?aviso=sin-3d` as ReturnType<typeof routes.lista>);
+      router.replace(`${routesFor(lang).lista(data.slug)}?aviso=sin-3d` as ReturnType<typeof routes.lista>);
     }
-  }, [stageName, quality, consent, router, data.slug]);
+  }, [stageName, quality, consent, router, data.slug, lang]);
 
   const active = wants3d && sceneReady;
   useEffect(() => {

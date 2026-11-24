@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
@@ -5,9 +7,9 @@ import { Gallery, type GalleryItem } from '@/components/gallery/Gallery';
 import { SpaceSheetFrame } from '@/components/scene/SpaceViewControls';
 import { SplatButton } from '@/components/splat/SplatButton';
 import { formatArea } from '@/lib/hotel';
-import { routes } from '@/lib/routes';
 import type { Space, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useRoutes, useT } from '@/components/i18n/Lang';
 
 /**
  * Ficha del espacio sobre la maqueta. Arriba, siempre a la vista, la fila de espacios de la
@@ -29,8 +31,10 @@ export function SpaceSheet({
   /** recorrido 3D fotográfico del espacio (D-082) */
   splat?: { url: string; exact: boolean };
 }) {
+  const tr = useT();
+  const routes = useRoutes();
   const nav = (
-    <nav aria-label={`Espacios de ${unit.name}`}>
+    <nav aria-label={tr('Espacios de {x}', { x: unit.name })}>
       <p className="flex items-baseline justify-between gap-2 px-1 text-[0.6875rem] tracking-[0.14em] text-muted-foreground uppercase">
         <Link href={routes.unidad(slug, unit.id)} className="truncate underline-offset-4 hover:underline">
           {unit.name}

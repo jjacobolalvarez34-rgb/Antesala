@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+import { useT } from '@/components/i18n/Lang';
 import { can3d, useTour } from '@/lib/store';
 
 /**
@@ -44,6 +45,7 @@ export function BrandIntro({
   const rest = pathname.startsWith(base) ? pathname.slice(base.length) : '';
   const stage3d = /^\/(explorar|piso\/[^/]+|unidad\/[^/]+)(\/[^/]+)?\/?$/.test(rest);
   const tour = useTour();
+  const tr = useT();
   const blocked = tour.quality !== null && !can3d(tour);
   const [phase, setPhase] = useState<'cover' | 'leaving' | 'done'>('cover');
   const show = stage3d && phase !== 'done' && !blocked;
@@ -88,7 +90,7 @@ export function BrandIntro({
       />
       <div
         role="status"
-        aria-label={`${name}: preparando el edificio`}
+        aria-label={tr('{x}: preparando el edificio', { x: name })}
         className={`brand-intro pointer-events-auto fixed inset-0 z-50 overflow-hidden bg-ink text-bone ${phase === 'leaving' ? 'brand-intro-leave' : ''}`}
       >
         {/* la foto de portada con un acercamiento lento y viñeta (solo transform: fluido aunque el 3D se esté armando) */}
@@ -115,7 +117,7 @@ export function BrandIntro({
           </div>
           <div aria-hidden className="flex flex-col items-center gap-4">
             <span className="brand-intro-progress block h-px w-40 overflow-hidden bg-bone/15" />
-            <span className="text-[0.625rem] tracking-[0.32em] text-bone/55 uppercase">Preparando el recorrido</span>
+            <span className="text-[0.625rem] tracking-[0.32em] text-bone/55 uppercase">{tr('Preparando el recorrido')}</span>
           </div>
         </div>
       </div>

@@ -1,5 +1,8 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import type { Fidelity } from '@/lib/types';
+import { useT } from '@/components/i18n/Lang';
 
 const LABELS: Record<Fidelity, string> = {
   ilustrativa: 'Imagen ilustrativa',
@@ -7,6 +10,7 @@ const LABELS: Record<Fidelity, string> = {
 };
 
 export function FidelityBadge({ fidelity, className }: { fidelity: Fidelity; className?: string }) {
+  const tr = useT();
   return (
     <span
       className={cn(
@@ -15,7 +19,7 @@ export function FidelityBadge({ fidelity, className }: { fidelity: Fidelity; cla
       )}
     >
       <span aria-hidden className={cn('size-1.5 rounded-full', fidelity === 'exacta' ? 'bg-ink' : 'bg-accent')} />
-      {LABELS[fidelity]}
+      {tr(LABELS[fidelity])}
     </span>
   );
 }

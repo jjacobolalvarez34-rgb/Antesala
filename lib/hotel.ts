@@ -1,3 +1,4 @@
+import { t, type Lang } from './i18n';
 import type { Hotel, Level, Offer, Unit } from './types';
 
 /** Selectores puros sobre el modelo. Sirven en servidor y cliente. */
@@ -117,8 +118,15 @@ export const OFFER: Record<
   },
 };
 
-export const offerOf = (hotel: Pick<Hotel, 'offer'>) => OFFER[hotel.offer ?? 'noche'];
+/** Textos de la oferta en un idioma (D-094): los mismos campos, traducidos. */
+export function offerTexts(offer: Offer | undefined, lang: Lang = 'es') {
+  const base = OFFER[offer ?? 'noche'];
+  if (lang === 'es') return base;
+  return Object.fromEntries(Object.entries(base).map(([k, v]) => [k, t(lang, v)])) as typeof base;
+}
+
+export const offerOf = (hotel: Pick<Hotel, 'offer'>, lang: Lang = 'es') => offerTexts(hotel.offer, lang);
 
 /** "$ 270.000 / noche", "$ 1.800.000 / mes" o "$ 255.000.000". */
-export const formatPrice = (value: number, offer: Offer = 'noche') => `${formatCOP(value)}${OFFER[offer].suffix}`;
+export const formatPrice = (value: number, offer: Offer = 'noche', lang: Lang = 'es') => `${formatCOP(value)}${offerTexts(offer, lang).suffix}`;
 

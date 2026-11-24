@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- ver Gallery.tsx */
 import { Move } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Foto para "mirar alrededor" (pedido de Jacobo, 2026-11-12): sin ser un 360°,
@@ -27,6 +28,7 @@ export function LookImage({
   height?: number;
   priority?: boolean;
 }) {
+  const tr = useT();
   const frame = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
   const [hint, setHint] = useState(true);
@@ -169,7 +171,7 @@ export function LookImage({
         className={`glass pointer-events-none absolute bottom-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium text-ink transition-opacity duration-700 ${hint ? 'opacity-100' : 'opacity-0'}`}
       >
         <Move className="size-3.5" />
-        Arrastra para mirar
+        {tr('Arrastra para mirar')}
       </p>
     </div>
   );

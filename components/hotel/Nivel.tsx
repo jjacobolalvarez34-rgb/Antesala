@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 
+import { useT } from '@/components/i18n/Lang';
 import { cn } from '@/lib/utils';
 
 /**
@@ -80,9 +81,10 @@ const LABELS: Record<Nivel, string> = { esencial: 'Esencial', inmersivo: 'Inmers
 /** "Ver como: Esencial · Inmersivo · Premium" en la banda de demo. */
 export function NivelSelector({ base, className }: { base: string; className?: string }) {
   const nivel = useNivel();
+  const tr = useT();
   return (
-    <div role="group" aria-label="Ver la demo como" className={cn('flex items-center gap-1.5 text-xs', className)}>
-      <span className="hidden text-bone/60 lg:inline">Ver como</span>
+    <div role="group" aria-label={tr('Ver la demo como')} className={cn('flex items-center gap-1.5 text-xs', className)}>
+      <span className="hidden text-bone/60 lg:inline">{tr('Ver como')}</span>
       <div className="flex rounded-full bg-bone/10 p-0.5">
         {NIVELES.map((n) => (
           <button
@@ -95,7 +97,7 @@ export function NivelSelector({ base, className }: { base: string; className?: s
               nivel === n ? 'bg-bone text-ink' : 'text-bone/80 hover:text-bone',
             )}
           >
-            {LABELS[n]}
+            {tr(LABELS[n])}
           </button>
         ))}
       </div>

@@ -8,6 +8,7 @@ import * as THREE from 'three';
 
 import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 export interface FloorTag {
   id: string;
@@ -91,10 +92,11 @@ export function FloorTagLayer({
   currentId: string | null;
 }) {
   const hovered = useTour((s) => s.hoveredLevelId);
+  const tr = useT();
   const setHovered = useTour((s) => s.setHoveredLevel);
   return (
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500', visible ? 'opacity-100' : 'opacity-0')}>
-      <ol aria-label="Pisos del edificio">
+      <ol aria-label={tr('Pisos del edificio')}>
         {[...tags]
           .sort((a, b) => b.order - a.order)
           .map((t) => {

@@ -7,6 +7,7 @@ import { useRef, type RefObject } from 'react';
 import * as THREE from 'three';
 
 import { formatCOP } from '@/lib/hotel';
+import { useT } from '@/components/i18n/Lang';
 import { cn } from '@/lib/utils';
 
 import type { TerrainCabin } from './types';
@@ -61,10 +62,11 @@ export function CabinLabels({
   offer?: string;
 }) {
   const router = useRouter();
+  const tr = useT();
   const touch = useRef(false);
   return (
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700', visible ? 'opacity-100' : 'opacity-0')}>
-      <ul aria-label="Refugios">
+      <ul aria-label={tr('Refugios')}>
         {cabins.map((c) => {
           const active = hovered === c.id;
           return (
@@ -98,7 +100,7 @@ export function CabinLabels({
                 onFocus={() => onHover(c.id)}
                 onBlur={() => onHover(null)}
                 className="group flex flex-col items-center outline-none"
-                aria-label={`${c.name}${c.price ? `, desde ${formatCOP(c.price)} por ${offer}` : ''}${c.occupied ? ', ocupado en estas fechas' : ''}`}
+                aria-label={`${c.name}${c.price ? tr(', desde {p} por {o}', { p: formatCOP(c.price), o: tr(offer) }) : ''}${c.occupied ? tr(', ocupado en estas fechas') : ''}`}
               >
                 <span
                   className={cn(
@@ -115,11 +117,11 @@ export function CabinLabels({
                   >
                     <span className="overflow-hidden">
                       <span className="block pt-1">
-                        {c.price ? `${formatCOP(c.price)} / ${offer}` : c.category}
-                        {` · ${c.capacity} pers.`}
+                        {c.price ? `${formatCOP(c.price)} / ${tr(offer)}` : c.category}
+                        {` · ${c.capacity} ${tr('pers.')}`}
                       </span>
                       <span className="block pt-0.5 normal-case tracking-normal text-[0.6875rem] opacity-75">
-                        {c.occupied ? 'Ocupado en estas fechas' : 'Toca para entrar'}
+                        {tr(c.occupied ? 'Ocupado en estas fechas' : 'Toca para entrar')}
                       </span>
                     </span>
                   </span>
@@ -149,9 +151,10 @@ export function PoiLabels({
   anchors: LabelAnchors;
   visible: boolean;
 }) {
+  const tr = useT();
   return (
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-700', visible ? 'opacity-100' : 'opacity-0')}>
-      <ul aria-label="Zonas comunes">
+      <ul aria-label={tr('Zonas comunes')}>
         {pois.map((p) => (
           <li
             key={p.id}

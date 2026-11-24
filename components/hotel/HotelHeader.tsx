@@ -6,7 +6,7 @@ import { Move3d } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { ReserveButton } from '@/components/booking/ReserveSheet';
-import { routes } from '@/lib/routes';
+import { useRoutes, useT } from '@/components/i18n/Lang';
 import type { Offer } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import type { WhatsAppContext } from '@/lib/whatsapp';
@@ -45,6 +45,8 @@ export function HotelHeader({
   offer?: Offer;
 }) {
   const segments = useSelectedLayoutSegments();
+  const tr = useT();
+  const routes = useRoutes();
   const home = segments.length === 0;
   const inScene = segments[0] === 'explorar' || segments[0] === 'piso' || segments[0] === 'unidad';
   const [scrolled, setScrolled] = useState(false);
@@ -71,7 +73,7 @@ export function HotelHeader({
           href={routes.lista(slug)}
           className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap scene:max-md:hidden border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
         >
-          {listLabel}
+          {tr(listLabel)}
         </Link>
       </header>
     );
@@ -91,14 +93,14 @@ export function HotelHeader({
           <span className={upper ? 'font-display text-[1.125rem] leading-none tracking-[0.2em] uppercase' : 'font-display text-[1.5rem] leading-none tracking-tight'}>{name}</span>
           <span className={cn('mt-1 text-[0.625rem] tracking-[0.22em] uppercase', over ? 'text-bone/75' : 'text-muted-foreground')}>{place}</span>
         </Link>
-        <nav aria-label="Secciones" className="ml-auto hidden items-center gap-7 text-[0.8125rem] lg:flex">
+        <nav aria-label={tr('Secciones')} className="ml-auto hidden items-center gap-7 text-[0.8125rem] lg:flex">
           {SECTIONS.map(([id, label]) => (
             <a
               key={id}
               href={`${routes.hotel(slug)}#${id}`}
               className={cn('py-2 underline-offset-[6px] transition-colors hover:underline', over ? 'text-bone/90' : 'text-ink/80 hover:text-ink')}
             >
-              {label}
+              {tr(label)}
             </a>
           ))}
         </nav>
@@ -106,12 +108,13 @@ export function HotelHeader({
           <Link
             href={routes.explorar(slug)}
             className={cn(
-              'inline-flex min-h-11 items-center gap-2 px-2 text-[0.8125rem] transition-colors',
-              over ? 'text-bone hover:text-white' : 'text-ink hover:text-accent',
+              // píldora con borde: se lee como botón, no como un enlace más del menú
+              'inline-flex min-h-10 items-center gap-2 rounded-[var(--hotel-r-btn,999px)] border px-3.5 text-[0.8125rem] font-medium transition-colors',
+              over ? 'border-bone/60 text-bone hover:bg-bone/10' : 'border-ink/30 text-ink hover:border-accent hover:text-accent',
             )}
           >
             <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
-            <span className="hidden sm:inline">Recorrido 3D</span>
+            <span className="hidden sm:inline">{tr('Recorrido 3D')}</span>
             <span className="sm:hidden">3D</span>
           </Link>
           <ReserveButton context={booking} offer={offer} tone={over ? 'bone' : 'ink'} className="max-md:hidden" />

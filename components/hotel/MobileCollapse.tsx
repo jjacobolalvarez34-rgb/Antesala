@@ -2,12 +2,14 @@
 
 import { ChevronDown } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * En móvil, los detalles de un panel sobre la escena empiezan recogidos (la
  * maqueta es la protagonista); en escritorio siempre se ven.
  */
 export function MobileCollapse({ children, label = 'Ver detalles' }: { children: ReactNode; label?: string }) {
+  const tr = useT();
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
@@ -19,7 +21,7 @@ export function MobileCollapse({ children, label = 'Ver detalles' }: { children:
         onClick={() => setOpen((o) => !o)}
         className="mt-3 inline-flex min-h-10 items-center gap-1.5 rounded-full bg-bone/10 px-3.5 text-sm text-bone/85 transition-colors hover:bg-bone/20 md:hidden"
       >
-        {open ? 'Ocultar detalles' : label}
+        {tr(open ? 'Ocultar detalles' : label)}
         <ChevronDown aria-hidden className={`size-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
       </button>
       <div id={id} className={open ? 'animate-in duration-300 fade-in' : 'hidden md:block'}>

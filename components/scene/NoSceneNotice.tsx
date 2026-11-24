@@ -5,9 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
+import { useT } from '@/components/i18n/Lang';
 
 /** Aviso cuando la vista exterior lleva a la lista; permite volver al 3D (D-025). */
 export function NoSceneNotice({ slug }: { slug: string }) {
+  const tr = useT();
   const params = useSearchParams();
   const router = useRouter();
   const quality = useTour((s) => s.quality);
@@ -19,8 +21,8 @@ export function NoSceneNotice({ slug }: { slug: string }) {
       <p className="flex flex-1 items-start gap-2 text-pretty">
         <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
         {noWebgl
-          ? 'Este navegador no puede mostrar la vista 3D. Aquí tienes el recorrido completo.'
-          : 'Aquí tienes el recorrido completo en lista.'}
+          ? tr('Este navegador no puede mostrar la vista 3D. Aquí tienes el recorrido completo.')
+          : tr('Aquí tienes el recorrido completo en lista.')}
       </p>
       {noWebgl ? null : (
         <button

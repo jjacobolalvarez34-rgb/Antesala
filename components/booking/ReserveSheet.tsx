@@ -4,9 +4,10 @@ import { CalendarDays, MessageCircle, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { buildWhatsAppUrl, type WhatsAppContext } from '@/lib/whatsapp';
-import { formatCOP, OFFER } from '@/lib/hotel';
+import { formatCOP, offerTexts } from '@/lib/hotel';
 import type { Offer } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useLang, useT } from '@/components/i18n/Lang';
 
 /**
  * Reserva (bloque 6): fechas y huéspedes antes de abrir WhatsApp con el
@@ -45,6 +46,8 @@ export function ReserveButton({
   /** venta o arriendo: en vez de fechas, WhatsApp para agendar una visita (D-057) */
   offer?: Offer;
 }) {
+  const tr = useT();
+  const lang = useLang();
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
   const today = useMemo(() => new Date(), []);
@@ -79,7 +82,7 @@ export function ReserveButton({
         rel="noopener noreferrer"
         className={cn(BTN, tone === 'bone' ? BTN_BONE : BTN_INK, className)}
       >
-        {OFFER[offer].cta}
+        {offerTexts(offer, lang).cta}
       </a>
     );
   }
@@ -91,7 +94,7 @@ export function ReserveButton({
         onClick={() => setOpen(true)}
         className={cn(BTN, tone === 'bone' ? BTN_BONE : BTN_INK, className)}
       >
-        Reservar
+        {tr('Reservar')}
       </button>
 
       <dialog
@@ -106,13 +109,13 @@ export function ReserveButton({
             <div>
               <p className="eyebrow">{context.hotelName}</p>
               <h2 id={`${ids.in}-t`} className="mt-1 font-display text-title leading-none">
-                {context.unitName ?? 'Reservar'}
+                {context.unitName ?? tr('Reservar')}
               </h2>
             </div>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Cerrar"
+              aria-label={tr('Cerrar')}
               className="-mt-1 -mr-1 grid size-11 place-items-center rounded-full hover:bg-secondary"
             >
               <X aria-hidden className="size-5" />
@@ -121,7 +124,7 @@ export function ReserveButton({
 
           <div className="mt-5 grid grid-cols-2 gap-3">
             <label htmlFor={ids.in} className="block">
-              <span className="eyebrow">Llegada</span>
+              <span className="eyebrow">{tr('Llegada')}</span>
               <input
                 id={ids.in}
                 type="date"
@@ -135,7 +138,7 @@ export function ReserveButton({
               />
             </label>
             <label htmlFor={ids.out} className="block">
-              <span className="eyebrow">Salida</span>
+              <span className="eyebrow">{tr('Salida')}</span>
               <input
                 id={ids.out}
                 type="date"
@@ -147,7 +150,7 @@ export function ReserveButton({
             </label>
           </div>
           <label htmlFor={ids.guests} className="mt-3 block">
-            <span className="eyebrow">Huéspedes</span>
+            <span className="eyebrow">{tr('Huéspedes')}</span>
             <select
               id={ids.guests}
               value={guests}
@@ -156,7 +159,7 @@ export function ReserveButton({
             >
               {Array.from({ length: maxGuests }, (_, i) => i + 1).map((n) => (
                 <option key={n} value={n}>
-                  {n} {n === 1 ? 'huésped' : 'huéspedes'}
+                  {n} {tr(n === 1 ? 'huésped' : 'huéspedes')}
                 </option>
               ))}
             </select>
@@ -166,17 +169,17 @@ export function ReserveButton({
             <CalendarDays aria-hidden className="size-4 shrink-0 text-accent" />
             {valid ? (
               <p className="flex-1">
-                {nights} {nights === 1 ? 'noche' : 'noches'}
+                {nights} {tr(nights === 1 ? 'noche' : 'noches')}
                 {price !== undefined ? (
                   <>
                     {' · '}
                     <span className="font-semibold">{formatCOP(price * nights)}</span>
-                    <span className="text-muted-foreground"> estimado (tarifa simulada)</span>
+                    <span className="text-muted-foreground"> {tr('estimado (tarifa simulada)')}</span>
                   </>
                 ) : null}
               </p>
             ) : (
-              <p className="flex-1 text-muted-foreground">La salida debe ser después de la llegada.</p>
+              <p className="flex-1 text-muted-foreground">{tr('La salida debe ser después de la llegada.')}</p>
             )}
           </div>
 
@@ -192,10 +195,10 @@ export function ReserveButton({
             )}
           >
             <MessageCircle aria-hidden className="size-4" />
-            Enviar por WhatsApp
+            {tr('Enviar por WhatsApp')}
           </a>
           <p className="mt-2 text-center text-xs text-muted-foreground">
-            Se abre WhatsApp con el mensaje listo; el hotel confirma disponibilidad.
+            {tr('Se abre WhatsApp con el mensaje listo; el hotel confirma disponibilidad.')}
           </p>
         </form>
       </dialog>

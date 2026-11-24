@@ -1,9 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
-import { formatCOP, OFFER, pluralize, unitPrice } from '@/lib/hotel';
-import { routes } from '@/lib/routes';
+import { formatCOP, offerTexts, pluralize, unitPrice } from '@/lib/hotel';
 import type { Level, Offer, Poi, Unit } from '@/lib/types';
+import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 
 /**
  * Panel del piso sobre la escena 3D (DISENO.md §3): bottom sheet en móvil,
@@ -32,13 +34,16 @@ export function FloorSheet({
   above?: Level;
   below?: Level;
 }) {
+  const tr = useT();
+  const routes = useRoutes();
+  const lang = useLang();
   const free = units.filter((u) => !u.occupied);
   if (hidden) return null;
   const prices = free.map(unitPrice).filter((p): p is number => p !== undefined);
   const from = prices.length ? Math.min(...prices) : undefined;
   return (
     <section
-      aria-label={`Unidades del ${level.name}`}
+      aria-label={tr('Unidades del {x}', { x: level.name })}
       className="glass-dark pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[36dvh] animate-in flex-col overflow-hidden rounded-3xl shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-32 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-11rem)] md:w-[400px] md:slide-in-from-right-4"
     >
       <header className="flex items-center justify-between gap-3 px-5 pt-4 pb-3">
@@ -52,7 +57,7 @@ export function FloorSheet({
           {above ? (
             <Link
               href={routes.piso(slug, above.id)}
-              aria-label={`Subir a ${above.name}`}
+              aria-label={tr('Subir a {x}', { x: above.name })}
               className="grid size-11 place-items-center rounded-full bg-bone/10 transition-colors hover:bg-bone/20"
             >
               <ArrowUp aria-hidden className="size-4" />
@@ -61,7 +66,7 @@ export function FloorSheet({
           {below ? (
             <Link
               href={routes.piso(slug, below.id)}
-              aria-label={`Bajar a ${below.name}`}
+              aria-label={tr('Bajar a {x}', { x: below.name })}
               className="grid size-11 place-items-center rounded-full bg-bone/10 transition-colors hover:bg-bone/20"
             >
               <ArrowDown aria-hidden className="size-4" />
@@ -73,13 +78,13 @@ export function FloorSheet({
       <div className="scrollbar-none overflow-y-auto px-5 pb-4">
         {units.length ? (
           <p className="text-sm text-bone/80">
-            {pluralize(units.length, 'habitación', 'habitaciones')}
-            {free.length < units.length ? ` · ${pluralize(free.length, OFFER[offer].free, OFFER[offer].freePlural)}` : null}
+            {pluralize(units.length, tr('habitación'), tr('habitaciones'))}
+            {free.length < units.length ? ` · ${pluralize(free.length, offerTexts(offer, lang).free, offerTexts(offer, lang).freePlural)}` : null}
             {from !== undefined ? (
               <>
                 {' · desde '}
                 <span className="font-semibold text-bone">{formatCOP(from)}</span>
-                <span className="text-bone/65">{OFFER[offer].suffix}</span>
+                <span className="text-bone/65">{offerTexts(offer, lang).suffix}</span>
               </>
             ) : null}
           </p>

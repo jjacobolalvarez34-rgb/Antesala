@@ -1,13 +1,15 @@
+'use client';
+
 /* eslint-disable @next/next/no-img-element -- ver components/gallery/Gallery.tsx */
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
-import { formatArea, formatCOP, OFFER, pluralize, unitPrice } from '@/lib/hotel';
+import { formatArea, formatCOP, offerTexts, pluralize, unitPrice } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
-import { routes } from '@/lib/routes';
 import type { Category, Offer, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 
 export function unitCover(unit: Unit) {
   return unit.spaces.flatMap((s) => s.media).find((m) => m.kind === 'photo');
@@ -31,6 +33,9 @@ export function UnitCard({
   variant?: 'row' | 'feature';
   className?: string;
 }) {
+  const tr = useT();
+  const routes = useRoutes();
+  const lang = useLang();
   const cover = unitCover(unit);
   const price = unitPrice(unit);
   const feature = variant === 'feature';
@@ -61,17 +66,17 @@ export function UnitCard({
         <h3 className={cn('font-display leading-tight', feature ? 'text-title' : 'text-subtitle')}>{unit.name}</h3>
         {feature && category ? <p className="text-pretty text-muted-foreground">{category.tagline}</p> : null}
         <p className="text-sm text-muted-foreground">
-          {formatArea(unit.areaM2)} · {pluralize(unit.capacity, 'persona', 'personas')}
+          {formatArea(unit.areaM2)} · {pluralize(unit.capacity, tr('persona'), tr('personas'))}
         </p>
         <div className={cn('mt-auto flex items-end justify-between gap-3', feature ? 'pt-2' : 'pt-1')}>
           {unit.occupied ? (
             <p className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
-              {OFFER[offer].taken}
+              {offerTexts(offer, lang).taken}
             </p>
           ) : price !== undefined ? (
             <p className="text-sm">
               <span className="font-semibold text-foreground">{formatCOP(price)}</span>
-              <span className="text-muted-foreground">{OFFER[offer].suffix}</span>
+              <span className="text-muted-foreground">{offerTexts(offer, lang).suffix}</span>
               {unit.viewPremiumCOP ? (
                 <span className="mt-0.5 block text-xs font-medium text-accent">
                   Incluye {formatCOP(unit.viewPremiumCOP)} por vista

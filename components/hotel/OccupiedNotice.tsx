@@ -1,10 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, CalendarX2 } from 'lucide-react';
 
 import { findLevel, formatPrice, freeAlternative, offerOf, unitPrice } from '@/lib/hotel';
-import { routes } from '@/lib/routes';
 import type { Hotel, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useLang, useRoutes } from '@/components/i18n/Lang';
 
 /**
  * Aviso de unidad ocupada (D-054): se puede recorrer, pero no reservar en estas
@@ -24,11 +26,13 @@ export function OccupiedNotice({
   compact?: boolean;
   className?: string;
 }) {
+  const routes = useRoutes();
+  const lang = useLang();
   if (!unit.occupied) return null;
   const alt = freeAlternative(hotel, unit);
   const altPrice = alt ? unitPrice(alt) : undefined;
   const dark = tone === 'dark';
-  const t = offerOf(hotel);
+  const t = offerOf(hotel, lang);
   if (compact) {
     return (
       <p
@@ -76,7 +80,7 @@ export function OccupiedNotice({
           <span>
             <span className="block font-medium">{alt.name}</span>
             <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>
-              {[findLevel(hotel, alt.levelId)?.name, altPrice !== undefined ? formatPrice(altPrice, hotel.offer) : null]
+              {[findLevel(hotel, alt.levelId)?.name, altPrice !== undefined ? formatPrice(altPrice, hotel.offer, lang) : null]
                 .filter(Boolean)
                 .join(' · ')}
             </span>

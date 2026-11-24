@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import * as THREE from 'three';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Visor 360° (D-084): un panorama equirectangular desde un punto fijo del espacio, a
@@ -15,6 +16,7 @@ import * as THREE from 'three';
  * textura): el centro de la imagen es el norte del plano y hacia la derecha va el oriente.
  */
 export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: string; title: string; yaw?: number; onClose: () => void }) {
+  const tr = useT();
   const host = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
 
@@ -171,7 +173,7 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
         <button
           type="button"
           onClick={onClose}
-          aria-label="Cerrar el 360°"
+          aria-label={tr('Cerrar el 360°')}
           className="pointer-events-auto grid size-11 place-items-center rounded-full glass-dark transition-colors hover:bg-ink"
         >
           <X aria-hidden className="size-5" />
@@ -179,7 +181,7 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
       </div>
       {state !== 'ready' ? (
         <div className="pointer-events-none absolute inset-0 grid place-items-center text-[0.625rem] tracking-[0.3em] text-bone/60 uppercase">
-          {state === 'loading' ? 'Cargando el 360°' : 'No se pudo cargar el 360°'}
+          {tr(state === 'loading' ? 'Cargando el 360°' : 'No se pudo cargar el 360°')}
         </div>
       ) : null}
     </div>,

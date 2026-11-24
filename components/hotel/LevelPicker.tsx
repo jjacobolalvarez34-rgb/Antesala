@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import { routes } from '@/lib/routes';
 import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { useRoutes, useT } from '@/components/i18n/Lang';
 
 export interface PickerLevel {
   id: string;
@@ -33,6 +33,8 @@ export function LevelPicker({
   variant: 'scene' | 'list';
   className?: string;
 }) {
+  const tr = useT();
+  const routes = useRoutes();
   const hovered = useTour((s) => s.hoveredLevelId);
   const setHovered = useTour((s) => s.setHoveredLevel);
   const sorted = [...levels].sort((a, b) => b.order - a.order);
@@ -62,7 +64,7 @@ export function LevelPicker({
   }
 
   return (
-    <nav aria-label="Pisos del edificio" className={className}>
+    <nav aria-label={tr('Pisos del edificio')} className={className}>
       <ol className="glass-dark flex flex-col gap-0.5 rounded-3xl p-1 shadow-2xl md:gap-1 md:p-1.5">
         {sorted.map((l) => {
           const active = l.id === currentId;

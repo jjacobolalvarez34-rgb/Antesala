@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useSyncExternalStore, type RefObject } from 'react';
 
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 export interface UnitTag {
   id: string;
@@ -58,6 +59,7 @@ export function UnitTagLayer({
   onHover: (id: string | null) => void;
 }) {
   const router = useRouter();
+  const tr = useT();
   const idle = useSyncExternalStore(subscribeCamera, cameraIdle, () => true);
   // al cambiar de piso, la cámara empieza a moverse un instante después: los letreros nuevos
   // esperan un momento para no asomarse antes del vuelo (reporte de Jacobo, 2026-11-16)
@@ -74,7 +76,7 @@ export function UnitTagLayer({
 
   return (
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden', !shown && 'invisible')}>
-      <ul aria-label="Unidades y lugares del piso">
+      <ul aria-label={tr('Unidades y lugares del piso')}>
         {tags.map((t, i) => {
           const open = armed === t.id || hovered === t.id;
           const poi = t.kind === 'poi';
@@ -133,7 +135,7 @@ export function UnitTagLayer({
                 {open ? (
                   <span className="mt-1 max-w-56 rounded-lg bg-ink/85 px-2.5 py-1.5 text-center text-[0.6875rem] leading-snug text-pretty text-bone shadow-lg">
                     <span className={cn('block', t.occupied && 'text-[#e7a48f]')}>{t.detail}</span>
-                    {armed === t.id && !poi ? <span className="mt-0.5 block text-bone/70">Toca otra vez para entrar</span> : null}
+                    {armed === t.id && !poi ? <span className="mt-0.5 block text-bone/70">{tr('Toca otra vez para entrar')}</span> : null}
                   </span>
                 ) : null}
                 {/* la línea fina hasta el lugar */}

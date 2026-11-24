@@ -7,6 +7,7 @@ import type { Route } from 'next';
 import { formatCOP } from '@/lib/hotel';
 import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 export interface TerrainPanelCabin {
   id: string;
@@ -36,6 +37,7 @@ export function TerrainPanel({
   aerial: boolean;
   offer?: string;
 }) {
+  const tr = useT();
   const hovered = useTour((s) => s.hoveredUnit?.id ?? null);
   const setHovered = useTour((s) => s.setHoveredUnit);
   const night = useTour((s) => s.night);
@@ -45,16 +47,16 @@ export function TerrainPanel({
     <div className="flex w-full flex-col gap-2 md:w-[21rem]">
       <div className="flex items-center gap-1.5 rounded-md p-1.5 glass-dark">
         <Link href={valleHref} aria-current={!aerial ? 'page' : undefined} className={cn(tab, !aerial ? 'bg-bone text-ink' : 'text-bone/80 hover:text-bone')}>
-          El valle
+          {tr('El valle')}
         </Link>
         <Link href={aereaHref} aria-current={aerial ? 'page' : undefined} className={cn(tab, aerial ? 'bg-bone text-ink' : 'text-bone/80 hover:text-bone')}>
-          Vista aérea
+          {tr('Vista aérea')}
         </Link>
         <button
           type="button"
           onClick={() => setNight(!night)}
           aria-pressed={night}
-          aria-label={night ? 'Ver de día' : 'Ver de noche'}
+          aria-label={tr(night ? 'Ver de día' : 'Ver de noche')}
           className="ml-auto grid size-9 place-items-center rounded-[var(--hotel-r-btn,3px)] text-bone/85 transition-colors hover:bg-bone/12"
         >
           {night ? <Sun aria-hidden className="size-4" /> : <Moon aria-hidden className="size-4" />}

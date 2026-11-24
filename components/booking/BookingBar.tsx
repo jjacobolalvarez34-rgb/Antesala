@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { formatCOP, OFFER } from '@/lib/hotel';
-import { routes } from '@/lib/routes';
+import { useLang } from '@/components/i18n/Lang';
+import { formatCOP, offerTexts } from '@/lib/hotel';
+import { routesFor, t as tr, type Lang } from '@/lib/i18n';
+import type { routes } from '@/lib/routes';
 import type { Offer } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import type { WhatsAppContext } from '@/lib/whatsapp';
@@ -47,10 +49,11 @@ interface Stage {
   occupied?: { href?: ReturnType<typeof routes.unidad>; name?: string };
 }
 
-function resolveStage(data: BookingSummary, segments: string[]): Stage {
+function resolveStage(data: BookingSummary, segments: string[], lang: Lang): Stage {
+  const routes = routesFor(lang);
   const base: WhatsAppContext = { phone: data.whatsapp, hotelName: data.name };
-  const t = OFFER[data.offer ?? 'noche'];
-  const from = data.priceFrom !== undefined ? `Desde ${formatCOP(data.priceFrom)}${t.suffix}` : undefined;
+  const t = offerTexts(data.offer, lang);
+  const from = data.priceFrom !== undefined ? tr(lang, 'Desde {p}', { p: `${formatCOP(data.priceFrom)}${t.suffix}` }) : undefined;
   const [stage, a, b] = segments;
 
   if (stage === 'unidad' && a) {
@@ -64,7 +67,7 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
         label: space ? `${unit.name} · ${space.name}` : unit.name,
         detail: unit.occupied ? t.taken : unit.price !== undefined ? `${formatCOP(unit.price)}${t.suffix}` : undefined,
         back: space ? routes.unidad(data.slug, unit.id) : routes.piso(data.slug, unit.levelId),
-        backLabel: space ? `Volver a ${unit.name}` : `Volver a ${level?.name ?? 'el piso'}`,
+        backLabel: tr(lang, 'Volver a {x}', { x: space ? unit.name : (level?.name ?? tr(lang, 'el piso')) }),
         context: { ...base, unitName: unit.name, spaceName: space?.name },
         price: unit.price,
         capacity: unit.capacity,
@@ -75,37 +78,37 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
     const level = data.levels.find((l) => l.id === a);
     const prices = data.units.filter((u) => u.levelId === a && u.price !== undefined).map((u) => u.price!);
     return {
-      label: level?.name ?? 'Piso',
-      detail: prices.length ? `Desde ${formatCOP(Math.min(...prices))}${t.suffix}` : from,
+      label: level?.name ?? tr(lang, 'Piso'),
+      detail: prices.length ? tr(lang, 'Desde {p}', { p: `${formatCOP(Math.min(...prices))}${t.suffix}` }) : from,
       back: routes.explorar(data.slug),
-      backLabel: data.siteKind === 'terreno' ? 'Volver al valle' : 'Volver al edificio',
+      backLabel: tr(lang, data.siteKind === 'terreno' ? 'Volver al valle' : 'Volver al edificio'),
       context: base,
     };
   }
   if (stage === 'explorar') {
     return {
-      label: data.siteKind === 'terreno' ? 'Explorar el terreno' : 'Explorar el edificio',
+      label: tr(lang, data.siteKind === 'terreno' ? 'Explorar el terreno' : 'Explorar el edificio'),
       detail: from,
       back: routes.hotel(data.slug),
-      backLabel: 'Volver a la entrada',
+      backLabel: tr(lang, 'Volver a la entrada'),
       context: base,
     };
   }
   if (stage === 'comparar') {
     return {
-      label: 'Comparar categorías',
+      label: tr(lang, 'Comparar categorías'),
       detail: from,
       back: routes.lista(data.slug),
-      backLabel: 'Volver a pisos y unidades',
+      backLabel: tr(lang, 'Volver a pisos y unidades'),
       context: base,
     };
   }
   if (stage === 'lista') {
     return {
-      label: data.siteKind === 'terreno' ? 'Los refugios' : 'Pisos y unidades',
+      label: tr(lang, data.siteKind === 'terreno' ? 'Los refugios' : 'Pisos y unidades'),
       detail: from,
       back: routes.hotel(data.slug),
-      backLabel: 'Volver a la entrada',
+      backLabel: tr(lang, 'Volver a la entrada'),
       context: base,
     };
   }
@@ -121,7 +124,10 @@ function resolveStage(data: BookingSummary, segments: string[]): Stage {
  */
 export function BookingBar({ data }: { data: BookingSummary }) {
   const segments = useSelectedLayoutSegments();
-  const stage = resolveStage(data, segments);
+  const lang = useLang();
+  const stage = resolveStage(data, segments, lang);
+  const o = offerTexts(data.offer, lang);
+  const venta = data.offer && data.offer !== 'noche';
   // el panel es para el gerente del hotel: sin barra de reserva
   if (segments[0] === 'panel') return null;
 
@@ -138,7 +144,7 @@ export function BookingBar({ data }: { data: BookingSummary }) {
         !inScene && 'md:hidden',
       )}
     >
-      <nav aria-label="Reserva" className="mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center gap-3 px-3 md:px-3">
+      <nav aria-label={tr(lang, 'Reserva')} className="mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center gap-3 px-3 md:px-3">
         {stage.back ? (
           <Link
             href={stage.back}
@@ -163,10 +169,9 @@ export function BookingBar({ data }: { data: BookingSummary }) {
               className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-[var(--hotel-r-btn,3px)] bg-ink px-4 text-[0.75rem] font-medium tracking-[0.12em] text-bone uppercase transition-colors hover:bg-accent"
             >
               <span className="hidden sm:inline">
-                Ver {data.offer && data.offer !== 'noche' ? '' : 'la '}
-                {stage.occupied.name}, {OFFER[data.offer ?? 'noche'].free}
+                {tr(lang, venta ? 'Ver {x}, {libre}' : 'Ver la {x}, {libre}', { x: stage.occupied.name ?? '', libre: o.free })}
               </span>
-              <span className="sm:hidden">Ver {data.offer && data.offer !== 'noche' ? 'uno disponible' : 'una libre'}</span>
+              <span className="sm:hidden">{tr(lang, venta ? 'Ver uno disponible' : 'Ver una libre')}</span>
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           ) : null

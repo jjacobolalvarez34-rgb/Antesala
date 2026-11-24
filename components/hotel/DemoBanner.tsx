@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { ArrowLeft, Info } from 'lucide-react';
 
 import { AntesalaSymbol } from '@/components/brand/AntesalaLogo';
+import { LangSwitch } from '@/components/i18n/LangSwitch';
+import { t, type Lang } from '@/lib/i18n';
 
 import { NivelSelector } from './Nivel';
 
@@ -14,7 +16,9 @@ export function DemoBanner({
   note = 'Hotel ficticio · imágenes ilustrativas',
   base,
   niveles = false,
+  lang = 'es',
 }: {
+  lang?: Lang;
   note?: string;
   /** /h/<hotel> */
   base?: string;
@@ -31,18 +35,16 @@ export function DemoBanner({
           <ArrowLeft aria-hidden className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
           <AntesalaSymbol tone="oscuro" small className="h-4 w-auto" />
           <span className="font-[family-name:var(--font-cinzel)] tracking-[0.3em]">ANTESALA</span>
-          <span className="sr-only">: volver a la página de Antesala</span>
+          <span className="sr-only">{t(lang, ': volver a la página de Antesala')}</span>
         </Link>
         <p className="flex min-w-0 items-center justify-center gap-2 text-center text-xs tracking-wide">
           <Info aria-hidden className="hidden size-3.5 shrink-0 opacity-80 sm:block" />
-          <span className="min-w-0">{note}</span>
+          <span className="min-w-0">{t(lang, note)}</span>
         </p>
-        {niveles && base ? (
-          <NivelSelector base={base} className="col-span-3 justify-center pb-1 sm:col-span-1 sm:pb-0" />
-        ) : (
-          /* contrapeso del enlace para que la nota quede centrada */
-          <span aria-hidden className="hidden w-[7.5rem] sm:block" />
-        )}
+        <div className="col-span-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pb-1 sm:col-span-1 sm:justify-end sm:pb-0">
+          {niveles && base ? <NivelSelector base={base} /> : null}
+          <LangSwitch />
+        </div>
       </div>
     </div>
   );

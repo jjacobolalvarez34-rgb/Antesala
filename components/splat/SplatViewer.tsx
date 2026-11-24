@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import * as THREE from 'three';
+import { useT } from '@/components/i18n/Lang';
 
 /**
  * Visor de Gaussian Splatting (D-082): un espacio capturado (o un splat sintético
@@ -15,6 +16,7 @@ import * as THREE from 'three';
  * arranca en el centro del espacio y se arrastra para mirar alrededor.
  */
 export default function SplatViewer({ url, title, onClose }: { url: string; title: string; onClose: () => void }) {
+  const tr = useT();
   const host = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -104,7 +106,7 @@ export default function SplatViewer({ url, title, onClose }: { url: string; titl
         <button
           type="button"
           onClick={onClose}
-          aria-label="Cerrar el recorrido 3D"
+          aria-label={tr('Cerrar el recorrido 3D')}
           className="pointer-events-auto grid size-11 place-items-center rounded-full glass-dark transition-colors hover:bg-ink"
         >
           <X aria-hidden className="size-5" />

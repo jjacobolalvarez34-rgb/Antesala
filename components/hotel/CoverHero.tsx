@@ -8,6 +8,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { lessMotion } from '@/lib/motion';
 
 import { useNivel } from './Nivel';
+import { useT } from '@/components/i18n/Lang';
 
 export interface CoverHeroPoint {
   id: string;
@@ -197,6 +198,7 @@ export function CoverHero({
 
 /** Video de transición a pantalla completa; al terminar (o al saltar) entra al destino. */
 function ClipOverlay({ point, wide, onDone }: { point: CoverHeroPoint; wide: boolean; onDone: () => void }) {
+  const tr = useT();
   const [on, setOn] = useState(false);
   const done = useRef(false);
   const finish = useCallback(() => {
@@ -221,7 +223,7 @@ function ClipOverlay({ point, wide, onDone }: { point: CoverHeroPoint; wide: boo
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Entrando: ${point.label}`}
+      aria-label={tr('Entrando: {x}', { x: point.label })}
       className={`fixed inset-0 z-[60] bg-black transition-opacity duration-500 ${on ? 'opacity-100' : 'opacity-0'}`}
     >
       <video
@@ -245,7 +247,7 @@ function ClipOverlay({ point, wide, onDone }: { point: CoverHeroPoint; wide: boo
         autoFocus
         className="absolute right-5 bottom-[calc(1.5rem+var(--safe-bottom))] inline-flex min-h-11 items-center rounded-full border border-bone/30 px-5 text-sm text-bone transition-colors hover:bg-bone/10"
       >
-        Saltar
+        {tr('Saltar')}
       </button>
     </div>
   );

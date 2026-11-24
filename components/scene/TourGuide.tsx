@@ -3,6 +3,8 @@
 import { Hand, MousePointerClick, Move3d, X } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useLang } from '@/components/i18n/Lang';
+import { t } from '@/lib/i18n';
 
 /**
  * Guía del recorrido (D-048): la primera vez en el edificio, una tarjeta con
@@ -44,6 +46,7 @@ function whenIdle(cb: () => void) {
 }
 
 export function TourGuide({ step, active }: { step: GuideStep | null; active: boolean }) {
+  const lang = useLang();
   const touch = useTouch();
   const [shown, setShown] = useState<GuideStep | null>(null);
 
@@ -90,7 +93,8 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
   if (!shown) return null;
   // la capa 3D es su propio contexto de apilamiento (debajo del contenido): la guía va al body
   const portal = (node: ReactNode) => createPortal(node, document.body);
-  const tap = touch ? 'Toca' : 'Haz clic en';
+  const tr = (es: string) => t(lang, es);
+  const tap = tr(touch ? 'Toca' : 'Haz clic en');
   const Icon = touch ? Hand : MousePointerClick;
 
   if (shown === 'explorar') {
@@ -107,14 +111,14 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
             <button
               type="button"
               onClick={() => setShown(null)}
-              aria-label="Cerrar la guía"
+              aria-label={tr('Cerrar la guía')}
               className="-mt-1 -mr-1 grid size-9 shrink-0 place-items-center rounded-full hover:bg-bone/10"
             >
               <X aria-hidden className="size-4" />
             </button>
           </div>
           <ol className="mt-3 flex flex-col gap-2.5 text-sm text-bone/85">
-            {[`${tap} el número de un piso, junto al edificio.`, 'Elige tu habitación en la planta.', 'Recórrela por dentro y reserva.'].map((t, i) => (
+            {[`${tap} ${tr('el número de un piso, junto al edificio.')}`, tr('Elige tu habitación en la planta.'), tr('Recórrela por dentro y reserva.')].map((t, i) => (
               <li key={t} className="flex items-center gap-3">
                 <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent-on-dark text-xs font-semibold text-ink">
                   {i + 1}
@@ -137,12 +141,12 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
 
   const text =
     shown === 'piso'
-      ? `${tap} una habitación para entrar`
+      ? `${tap} ${tr('una habitación para entrar')}`
       : shown === 'unidad'
-        ? `${tap} un espacio para verlo de cerca`
+        ? `${tap} ${tr('un espacio para verlo de cerca')}`
         : shown === 'espacio'
-          ? 'Arrastra para girar la maqueta'
-          : 'Arrastra para mirar alrededor';
+          ? tr('Arrastra para girar la maqueta')
+          : tr('Arrastra para mirar alrededor');
   const HintIcon = shown === 'espacio' || shown === 'mirar' ? Move3d : Icon;
 
   return portal(

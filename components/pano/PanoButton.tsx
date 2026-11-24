@@ -5,11 +5,13 @@ import { Orbit } from 'lucide-react';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 const PanoViewer = dynamic(() => import('./PanoViewer'), { ssr: false });
 
 /** Abre el 360° del espacio a pantalla completa; el visor se baja solo al tocar (D-084). */
 export function PanoButton({ url, title, yaw, className }: { url: string; title: string; yaw?: number; className?: string }) {
+  const tr = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -22,7 +24,7 @@ export function PanoButton({ url, title, yaw, className }: { url: string; title:
         )}
       >
         <Orbit aria-hidden className="size-4" strokeWidth={1.5} />
-        Mirar en 360°
+        {tr('Mirar en 360°')}
       </button>
       {open ? <PanoViewer url={url} title={title} yaw={yaw} onClose={() => setOpen(false)} /> : null}
     </>

@@ -1,9 +1,12 @@
+'use client';
+
 import { ExactUnitPicker } from '@/components/hotel/ExactUnitPicker';
 import { MobileCollapse } from '@/components/hotel/MobileCollapse';
 import { OccupiedNotice } from '@/components/hotel/OccupiedNotice';
 import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
 import { formatArea, formatCOP, offerOf, pluralize, unitPrice } from '@/lib/hotel';
 import type { Category, Hotel, Level, Unit } from '@/lib/types';
+import { useLang, useT } from '@/components/i18n/Lang';
 
 /**
  * Panel de la unidad sobre su maqueta 3D (bloque 3): bottom sheet en móvil,
@@ -21,6 +24,8 @@ export function UnitSheet({
   category?: Category;
   level?: Level;
 }) {
+  const tr = useT();
+  const lang = useLang();
   const price = unitPrice(unit);
   return (
     <section
@@ -35,7 +40,7 @@ export function UnitSheet({
         {price !== undefined ? (
           <p className="mt-2 text-sm md:mt-3">
             <span className="text-lg font-semibold">{formatCOP(price)}</span>
-            <span className="text-bone/65">{offerOf(hotel).suffix}</span>
+            <span className="text-bone/65">{offerOf(hotel, lang).suffix}</span>
             {unit.viewPremiumCOP ? (
               <span className="block text-xs font-medium text-accent-on-dark">
                 Incluye {formatCOP(unit.viewPremiumCOP)} por vista
@@ -46,7 +51,7 @@ export function UnitSheet({
         <OccupiedNotice hotel={hotel} unit={unit} tone="dark" compact className="mt-3" />
         <MobileCollapse>
           <p className="mt-3 text-sm text-bone/80">
-            {formatArea(unit.areaM2)} · {pluralize(unit.capacity, 'persona', 'personas')} · {unit.beds}
+            {formatArea(unit.areaM2)} · {pluralize(unit.capacity, tr('persona'), tr('personas'))} · {unit.beds}
           </p>
           {unit.view ? <p className="mt-2 text-sm text-pretty text-bone/75">{unit.view}</p> : null}
           {unit.exterior?.length ? <ViewFromWindowButton unitId={unit.id} /> : null}

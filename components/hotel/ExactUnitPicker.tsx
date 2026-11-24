@@ -1,10 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { findLevel, formatCOP, offerOf, sortedLevels, unitPrice } from '@/lib/hotel';
-import { routes } from '@/lib/routes';
 import type { Hotel, Unit } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 
 /**
  * "Elige tu unidad exacta" (bloque 6): la misma unidad en los otros pisos (la
@@ -26,6 +28,9 @@ export function ExactUnitPicker({
   tone?: 'light' | 'dark';
   className?: string;
 }) {
+  const tr = useT();
+  const routes = useRoutes();
+  const lang = useLang();
   const sameType = hotel.units.filter((u) => u.categoryId === unit.categoryId);
   const siblings = sameType
     .filter((u) => columnKey(u) === columnKey(unit))
@@ -39,7 +44,7 @@ export function ExactUnitPicker({
   return (
     <section aria-labelledby={`exacta-${unit.id}`} className={className}>
       <h2 id={`exacta-${unit.id}`} className={dark ? 'text-xs tracking-[0.12em] text-bone/60 uppercase' : 'eyebrow'}>
-        Elige tu unidad exacta
+        {tr('Elige tu unidad exacta')}
       </h2>
       <div className="mt-3 flex gap-4">
         {/* alzado esquemático: un rectángulo por piso; se marcan las unidades de la categoría */}
@@ -47,7 +52,7 @@ export function ExactUnitPicker({
           viewBox={`0 0 40 ${levels.length * 12 + 4}`}
           className="w-10 shrink-0"
           role="img"
-          aria-label={`Ubicación en el edificio de las unidades ${siblings.map((s) => s.name).join(', ')}`}
+          aria-label={tr('Ubicación en el edificio de las unidades {x}', { x: siblings.map((s) => s.name).join(', ') })}
         >
           {levels.map((l, i) => {
             const here = siblings.find((s) => s.levelId === l.id);
@@ -105,9 +110,9 @@ export function ExactUnitPicker({
                   <span className="shrink-0 text-right text-sm">
                     {price !== undefined ? <span className="block font-semibold">{formatCOP(price)}</span> : null}
                     {current ? (
-                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>la que ves</span>
+                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>{tr('la que ves')}</span>
                     ) : s.occupied ? (
-                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>{offerOf(hotel).takenShort.toLowerCase()}</span>
+                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>{offerOf(hotel, lang).takenShort.toLowerCase()}</span>
                     ) : diff !== 0 ? (
                       <span className={cn('text-xs font-medium', dark ? 'text-accent-on-dark' : 'text-accent')}>
                         {diff > 0 ? '+' : '−'}
@@ -115,7 +120,7 @@ export function ExactUnitPicker({
                         {s.viewPremiumCOP ? ' por vista' : ''}
                       </span>
                     ) : (
-                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>mismo precio</span>
+                      <span className={cn('text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>{tr('mismo precio')}</span>
                     )}
                   </span>
                   {current ? null : (
@@ -131,7 +136,7 @@ export function ExactUnitPicker({
         <p className={cn('mt-3 text-xs', dark ? 'text-bone/60' : 'text-muted-foreground')}>
           Y {others} más de este tipo hacia otras fachadas.{' '}
           <Link href={routes.lista(hotel.slug)} className={cn('font-medium underline-offset-4 hover:underline', dark ? 'text-accent-on-dark' : 'text-accent')}>
-            Ver todas
+            {tr('Ver todas')}
           </Link>
         </p>
       ) : null}

@@ -232,6 +232,16 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] **Rediseño de la página de Antesala:** estética propia (bordes, botones, fuentes), que no se vea genérica ni hecha con IA
 - [ ] Menos botones en general: revisar cada pantalla de la demo y quitar lo que no hace falta
 - [ ] La sombra de la sala a veces falla (preguntar a Jacobo en qué modo y desde dónde)
+### Notas de Jacobo recorriendo Niebla Alta (2026-11-24), en orden: primero el edificio, la página del hotel al final
+
+- [ ] **La guía "Así se recorre el hotel" es gigante** y tapa la escena al entrar. Hacerla pequeña y discreta (o un toque de ayuda), sin cubrir el edificio ni competir con "Reservar"
+- [ ] **Quitar el aviso "Hotel ficticio" de la franja de arriba dentro del 3D:** ya se sabe que es una demo; sobra
+- [ ] **Puntos naranja de las zonas comunes sobre el edificio** (terraza, lobby…) molestan a la vista. Mejor: que esa información aparezca al abrir el piso donde está (el lobby en el piso 1) y que **la terraza sea el último piso** en la lista de pisos
+- [ ] **Abrir un piso carga lento.** Idea de Jacobo: al entrar a un piso, dejar en pantalla solo ese piso (sin el resto del edificio), con un botón para volver y cambiar de piso desde ahí. Debería ir mucho más rápido
+- [ ] **En el piso 1, los letreros de Lobby y Cowork con esos colores se ven feos.** Rediseñar el estilo de los letreros de lugares comunes
+- [ ] Esencial / Inmersivo / Premium: las fotos y los 360° todavía no tienen el tiempo de trabajo que merecen (revisar con calma)
+- [ ] **La página de Niebla Alta (portada del hotel) se ve muy mal: rediseñarla.** Va al final, después de lo del edificio
+
 - [ ] **Traducción (ES / EN y más)** (Jacobo, 2026-11-24: un amigo de Nueva Zelanda quiere mostrarlo a amigos de otros idiomas). Hoy ya sirve el traductor del navegador (casi todo es texto HTML). Bien hecho:
   - diccionario por idioma para la interfaz (unos 60 componentes);
   - textos de cada hotel por idioma dentro de su carpeta (regla 1);

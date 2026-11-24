@@ -12,6 +12,7 @@ import { useNivel } from '@/components/hotel/Nivel';
 import { LookImage } from './LookImage';
 import type { Fidelity } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useT } from '@/components/i18n/Lang';
 
 export interface GalleryItem {
   id: string;
@@ -29,6 +30,7 @@ export interface GalleryItem {
  * Solo se renderiza lo que haya (regla 2); sin medios muestra un estado vacío digno.
  */
 export function Gallery({ items: all, title, className }: { items: GalleryItem[]; title: string; className?: string }) {
+  const tr = useT();
   // fuera de Premium no se muestran las fotos premium (si queda alguna otra)
   const nivel = useNivel();
   const base = all.filter((i) => i.tier !== 'premium');
@@ -56,7 +58,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
           className,
         )}
       >
-        Aún no hay imágenes de este espacio.
+        {tr('Aún no hay imágenes de este espacio.')}
       </div>
     );
   }
@@ -64,7 +66,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
   const ratio = current.width && current.height ? `${current.width} / ${current.height}` : '3 / 2';
 
   return (
-    <section aria-label={`Imágenes de ${title}`} className={className}>
+    <section aria-label={tr('Imágenes de {x}', { x: title })} className={className}>
       <div className="relative overflow-hidden bg-muted sm:rounded-2xl md:rounded-3xl" style={{ aspectRatio: ratio }}>
         {/* la foto se puede mirar: arrastrar o inclinar el celular mueve la cámara */}
         <LookImage
@@ -82,7 +84,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
           className="glass absolute right-3 bottom-3 inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-medium text-ink transition-transform active:scale-95"
         >
           <Expand aria-hidden className="size-4" />
-          Ampliar
+          {tr('Ampliar')}
         </button>
         {count > 1 ? (
           <>
@@ -102,7 +104,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
               <button
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Ver imagen ${i + 1}: ${item.alt}`}
+                aria-label={tr('Ver imagen {i}: {x}', { i: i + 1, x: item.alt })}
                 aria-current={i === index ? 'true' : undefined}
                 className={cn(
                   'block h-16 w-24 overflow-hidden rounded-lg ring-offset-2 ring-offset-background transition-[opacity,box-shadow] duration-200 md:h-20 md:w-30',
@@ -118,7 +120,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
 
       <dialog
         ref={dialogRef}
-        aria-label={`${title}: imagen ${index + 1} de ${count}`}
+        aria-label={tr('{x}: imagen {i} de {n}', { x: title, i: index + 1, n: count })}
         onClose={() => setOpen(false)}
         onKeyDown={(e) => {
           if (e.key === 'ArrowRight') go(1);
@@ -137,7 +139,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Cerrar"
+              aria-label={tr('Cerrar')}
               className="grid size-11 place-items-center rounded-full bg-bone/12 transition-colors hover:bg-bone/20"
               autoFocus
             >
@@ -153,7 +155,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
               <button
                 type="button"
                 onClick={() => go(-1)}
-                aria-label="Imagen anterior"
+                aria-label={tr('Imagen anterior')}
                 className="grid size-12 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20"
               >
                 <ChevronLeft aria-hidden className="size-5" />
@@ -161,7 +163,7 @@ export function Gallery({ items: all, title, className }: { items: GalleryItem[]
               <button
                 type="button"
                 onClick={() => go(1)}
-                aria-label="Imagen siguiente"
+                aria-label={tr('Imagen siguiente')}
                 className="grid size-12 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20"
               >
                 <ChevronRight aria-hidden className="size-5" />
@@ -197,6 +199,7 @@ function NavButton({ side, onClick, label }: { side: 'left' | 'right'; onClick: 
  * ampliada y los botones +/− sirven con teclado.
  */
 function ZoomImage({ src, alt }: { src: string; alt: string }) {
+  const tr = useT();
   const [view, setView] = useState({ scale: 1, x: 0, y: 0 });
   const drag = useRef<{ px: number; py: number; x: number; y: number } | null>(null);
   const clamp = (s: number) => Math.min(4, Math.max(1, s));
@@ -252,7 +255,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
           type="button"
           onClick={() => zoomAt(view.scale / 1.5)}
           disabled={view.scale <= 1}
-          aria-label="Alejar"
+          aria-label={tr('Alejar')}
           className="grid size-11 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20 disabled:opacity-40"
         >
           <Minus aria-hidden className="size-5" />
@@ -261,7 +264,7 @@ function ZoomImage({ src, alt }: { src: string; alt: string }) {
           type="button"
           onClick={() => zoomAt(view.scale * 1.5)}
           disabled={view.scale >= 4}
-          aria-label="Acercar"
+          aria-label={tr('Acercar')}
           className="grid size-11 place-items-center rounded-full bg-bone/12 text-bone transition-colors hover:bg-bone/20 disabled:opacity-40"
         >
           <Plus aria-hidden className="size-5" />

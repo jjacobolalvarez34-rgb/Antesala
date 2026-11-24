@@ -6,7 +6,10 @@ import { DailyChart } from '@/components/panel/DailyChart';
 import { getHotelBundle } from '@/lib/content';
 import { formatCOP, unitPrice } from '@/lib/hotel';
 
-export const metadata: Metadata = { title: 'Panel del hotel', robots: { index: false } };
+export const metadata: Metadata = {
+  title: 'Panel del hotel',
+  robots: { index: false },
+};
 
 /**
  * Panel de métricas SIMULADAS (bloque 6): lo que vería el gerente con
@@ -38,7 +41,10 @@ export default async function PanelPage({ params }: PageProps<'/h/[hotel]/panel'
     const d = new Date(end.getTime() - (29 - i) * 86_400_000);
     const weekend = [5, 6].includes(d.getUTCDay()) ? 1.35 : 1;
     const trend = 1 + i * 0.012;
-    return { date: d.toISOString().slice(0, 10), value: Math.round((52 + rand() * 30) * weekend * trend) };
+    return {
+      date: d.toISOString().slice(0, 10),
+      value: Math.round((52 + rand() * 30) * weekend * trend),
+    };
   });
   const visits = days.reduce((s, d) => s + d.value, 0);
   const tours = Math.round(visits * 0.71);
@@ -50,15 +56,30 @@ export default async function PanelPage({ params }: PageProps<'/h/[hotel]/panel'
   const saved = direct * adr * nights * OTA_COMMISSION;
 
   const units = hotel.units
-    .map((u) => ({ name: u.name, views: Math.round(visits * (0.12 + rand() * 0.22) * (u.featured ? 1.4 : 1)) }))
+    .map((u) => ({
+      name: u.name,
+      views: Math.round(visits * (0.12 + rand() * 0.22) * (u.featured ? 1.4 : 1)),
+    }))
     .sort((a, b) => b.views - a.views);
   const maxViews = units[0]?.views ?? 1;
 
   const kpis = [
     { label: 'Visitas (30 días)', value: visits.toLocaleString('es-CO') },
-    { label: 'Recorridos 3D', value: tours.toLocaleString('es-CO'), note: `${Math.round((tours / visits) * 100)} % de las visitas` },
-    { label: 'Clics a reservar', value: clicks.toLocaleString('es-CO'), note: `${((clicks / visits) * 100).toLocaleString('es-CO', { maximumFractionDigits: 1 })} % de conversión` },
-    { label: 'Reservas directas', value: direct.toLocaleString('es-CO'), note: 'por WhatsApp' },
+    {
+      label: 'Recorridos 3D',
+      value: tours.toLocaleString('es-CO'),
+      note: `${Math.round((tours / visits) * 100)} % de las visitas`,
+    },
+    {
+      label: 'Clics a reservar',
+      value: clicks.toLocaleString('es-CO'),
+      note: `${((clicks / visits) * 100).toLocaleString('es-CO', { maximumFractionDigits: 1 })} % de conversión`,
+    },
+    {
+      label: 'Reservas directas',
+      value: direct.toLocaleString('es-CO'),
+      note: 'por WhatsApp',
+    },
   ];
 
   return (
