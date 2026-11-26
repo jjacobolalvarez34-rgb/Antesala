@@ -104,8 +104,11 @@ const SKIP = new Set([
   'logo',
   'font',
   'icon',
-  'cover',
   'facade',
+  // opciones internas, no textos: techo y estilo de la cabaña o del edificio, tono de marca
+  'style',
+  'roof',
+  'voice',
 ]);
 
 /** Traduce un texto del contenido con la tabla del hotel y las reglas comunes; si no, lo deja igual. */
@@ -113,8 +116,26 @@ export function translateText(text: string, table: Record<string, string>): stri
   const hit = table[text] ?? EN[text];
   if (hit) return hit;
   for (const [re, to] of RULES) if (re.test(text)) return text.replace(re, to);
+  // textos compuestos (los textos alternativos de fotos y 360°): se traduce cada parte
+  for (const [re, build] of COMPOSED) {
+    const m = text.match(re);
+    if (m) return build(m.slice(1).map((x) => translateText(x, table)));
+  }
   return text;
 }
+
+/** Unidades del contenido ("Suite 402", "Deluxe King 802", "Refugio Laguna"…), para "X de <unidad>". */
+const UNIT = '(?:Estudio|Suite|Penthouse|Deluxe King|Superior|Habitación|Apartamento|Refugio|Cabaña|Casa|Domo) [\\wÁÉÍÓÚáéíóúñ ]+';
+
+/** Patrones de texto armado: se traducen las partes y se arma igual en inglés. */
+const COMPOSED: [RegExp, (p: string[]) => string][] = [
+  [/^(.+) \(imagen ilustrativa\)$/, ([a]) => `${a} (illustrative image)`],
+  [/^(.+): vista general$/, ([a]) => `${a}: overview`],
+  [/^(.+): detalle$/, ([a]) => `${a}: detail`],
+  [/^(.+) en 360°$/, ([a]) => `${a} in 360°`],
+  [new RegExp(`^(.+) de (${UNIT}), vista desde adentro$`), ([a, b]) => `${a} of ${b}, view from inside`],
+  [new RegExp(`^(.+) de (${UNIT})$`), ([a, b]) => `${a} of ${b}`],
+];
 
 /** Copia del objeto con sus textos traducidos (solo valores de texto, nunca identificadores). */
 export function translateDeep<T>(value: T, table: Record<string, string>, key = ''): T {

@@ -137,7 +137,7 @@ export async function PisoPage({ params }: DemoProps<{ hotel: string; nivel: str
                 href: routes.unidad(hotel.slug, u.id),
                 // disponibilidad sobre la planta (bloque 9): verde libre, terracota ocupada o vendida
                 status: u.occupied ? ('ocupada' as const) : ('libre' as const),
-                statusLabel: u.occupied ? offerOf(hotel).takenShort : capitalize(offerOf(hotel).free),
+                statusLabel: u.occupied ? offerOf(hotel, lang).takenShort : capitalize(offerOf(hotel, lang).free),
               }))}
               title={tr('Planta del {x}', { x: level.name })}
               className="mx-auto mt-4 max-w-2xl"
@@ -149,11 +149,11 @@ export async function PisoPage({ params }: DemoProps<{ hotel: string; nivel: str
               >
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="size-3 rounded-sm border border-ink/20 bg-[#dfe8d6]" />
-                  {capitalize(offerOf(hotel).freePlural)} · {units.filter((u) => !u.occupied).length}
+                  {capitalize(offerOf(hotel, lang).freePlural)} · {units.filter((u) => !u.occupied).length}
                 </li>
                 <li className="flex items-center gap-2">
                   <span aria-hidden className="size-3 rounded-sm border border-ink/20 bg-[#efd9cf]" />
-                  {offerOf(hotel).takenShort} · {units.filter((u) => u.occupied).length}
+                  {offerOf(hotel, lang).takenShort} · {units.filter((u) => u.occupied).length}
                 </li>
               </ul>
             ) : null}
@@ -206,7 +206,7 @@ export async function PisoPage({ params }: DemoProps<{ hotel: string; nivel: str
                       {price !== undefined ? (
                         <p>
                           <span className="text-lg font-semibold">{formatCOP(price)}</span>
-                          <span className="text-sm text-muted-foreground">{offerOf(hotel).suffix}</span>
+                          <span className="text-sm text-muted-foreground">{offerOf(hotel, lang).suffix}</span>
                           {u.viewPremiumCOP ? (
                             <span className="block text-xs font-medium text-accent">Incluye {formatCOP(u.viewPremiumCOP)} por vista</span>
                           ) : null}

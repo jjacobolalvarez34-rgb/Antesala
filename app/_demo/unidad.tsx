@@ -110,7 +110,7 @@ export async function UnidadPage({ params }: DemoProps<{ hotel: string; unidad: 
 
             {price !== undefined ? (
               <div className="rounded-2xl border border-border bg-card p-5">
-                <p className="eyebrow">{offerOf(hotel).priceLabel}</p>
+                <p className="eyebrow">{offerOf(hotel, lang).priceLabel}</p>
                 <p className="mt-2">
                   <span className="font-display text-title">{formatCOP(price)}</span>
                   <span className="text-sm text-muted-foreground">
@@ -146,7 +146,7 @@ export async function UnidadPage({ params }: DemoProps<{ hotel: string; unidad: 
                       unitName: unit.name,
                       visit: (hotel.offer ?? 'noche') !== 'noche',
                     }}
-                    label={(hotel.offer ?? 'noche') === 'noche' ? tr('Reservar esta unidad') : offerOf(hotel).cta}
+                    label={(hotel.offer ?? 'noche') === 'noche' ? tr('Reservar esta unidad') : offerOf(hotel, lang).cta}
                     className="mt-5 w-full"
                   />
                 )}

@@ -242,13 +242,13 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] Esencial / Inmersivo / Premium: las fotos y los 360° todavía no tienen el tiempo de trabajo que merecen (revisar con calma)
 - [ ] **La página de Niebla Alta (portada del hotel) se ve muy mal: rediseñarla.** Va al final, después de lo del edificio
 
-- [ ] **Traducción (ES / EN y más)** (Jacobo, 2026-11-24: un amigo de Nueva Zelanda quiere mostrarlo a amigos de otros idiomas). Hoy ya sirve el traductor del navegador (casi todo es texto HTML). Bien hecho:
+- [x] **Traducción (ES / EN y más)** — hecho el 2026-11-25 en inglés (D-094); otros idiomas cuando haga falta. Antes: (Jacobo, 2026-11-24: un amigo de Nueva Zelanda quiere mostrarlo a amigos de otros idiomas). Hoy ya sirve el traductor del navegador (casi todo es texto HTML). Bien hecho:
   - diccionario por idioma para la interfaz (unos 60 componentes);
   - textos de cada hotel por idioma dentro de su carpeta (regla 1);
   - selector de idioma y rutas `/en/...`, con el del navegador por defecto.
 
   Empezar por inglés; preguntar qué otros idiomas. Anotado, sin hacer
-- [ ] **El botón del recorrido 3D está muy escondido**: es la función estrella y debe verse de primeras (Jacobo, 2026-11-24). Confirmar con Jacobo si es el de la portada del hotel o el de la página de Antesala. Anotado, sin hacer
+- [x] **El botón del recorrido 3D está muy escondido** — hecho: botón grande en la portada del hotel y píldora en el menú. Antes:: es la función estrella y debe verse de primeras (Jacobo, 2026-11-24). Confirmar con Jacobo si es el de la portada del hotel o el de la página de Antesala. Anotado, sin hacer
 - [ ] **La vista por la ventana no es real** (Jacobo, 2026-11-23, con captura de la cocina de la Suite 402 en Premium): afuera se ve el barrio del 3D (cajas con ventanas pintadas) y, de cerca, la maqueta horneada se ve borrosa. Propuesta:
   1. en Premium, el 360° muestra la **foto 360° renderizada** (ya existe, hiperrealista) en vez de la maqueta en vivo; la maqueta en vivo queda para Inmersivo;
   2. volver a renderizar los 360° y las fotos con una **ciudad creíble por la ventana**: cielo y ciudad lejana fotográficos de Poly Haven (CC0, desenfocados) y, cerca, el barrio del 3D con más detalle, para que cuadre con lo de afuera (regla 9).

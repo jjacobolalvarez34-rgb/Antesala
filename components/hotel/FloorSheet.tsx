@@ -49,7 +49,7 @@ export function FloorSheet({
       <header className="flex items-center justify-between gap-3 px-5 pt-4 pb-3">
         <div>
           <p className="text-xs tracking-[0.14em] text-bone/65 uppercase">
-            {level.name} de {total}
+            {tr('{x} de {n}', { x: level.name, n: total })}
           </p>
           <h1 className="font-display text-title leading-none">{level.name}</h1>
         </div>

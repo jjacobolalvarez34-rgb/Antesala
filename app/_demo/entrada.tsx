@@ -39,20 +39,21 @@ import type { Media, Unit } from '@/lib/types';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 
 /** Ícono de un servicio por palabras clave (cualquier hotel); si no hay, un visto. */
+// en español y en inglés: el contenido llega traducido en /en (D-094)
 const AMENITY_ICONS: [RegExp, LucideIcon][] = [
   [/wifi|internet/i, Wifi],
-  [/cocina|cocineta/i, CookingPot],
-  [/recepci/i, ConciergeBell],
-  [/c[oó]digo|llave|acceso|24 horas/i, KeyRound],
-  [/cowork|trabaj|escritorio/i, Laptop],
-  [/terraza|azotea|balc/i, Sunset],
-  [/lavander/i, WashingMachine],
-  [/aseo|limpieza/i, Sparkles],
-  [/parque|garaje/i, Car],
-  [/mascota/i, PawPrint],
-  [/caf[eé]|desayuno/i, Coffee],
-  [/gimnas/i, Dumbbell],
-  [/ba[ñn]era|spa|jacuzzi/i, Bath],
+  [/cocina|cocineta|kitchen/i, CookingPot],
+  [/recepci|front desk|reception/i, ConciergeBell],
+  [/c[oó]digo|llave|acceso|24 horas|code|key|24-hour/i, KeyRound],
+  [/cowork|trabaj|escritorio|desk|work/i, Laptop],
+  [/terraza|azotea|balc|terrace|rooftop/i, Sunset],
+  [/lavander|laundry/i, WashingMachine],
+  [/aseo|limpieza|cleaning/i, Sparkles],
+  [/parque|garaje|parking/i, Car],
+  [/mascota|pet/i, PawPrint],
+  [/caf[eé]|desayuno|coffee|breakfast/i, Coffee],
+  [/gimnas|gym/i, Dumbbell],
+  [/ba[ñn]era|spa|jacuzzi|bathtub|sauna/i, Bath],
   [/tv|televis/i, Tv],
 ];
 const amenityIcon = (a: string) => AMENITY_ICONS.find(([re]) => re.test(a))?.[1] ?? Check;
@@ -75,7 +76,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
   const { hotel, tokens } = bundle;
   const info = hotel.info ?? {};
   const from = priceFrom(hotel);
-  const offer = offerOf(hotel);
+  const offer = offerOf(hotel, lang);
   // glamping (D-083): refugios sueltos en un terreno, no pisos de un edificio
   const terrain = hotel.site.kind === 'terreno';
   const unitsLabel = terrain ? tr('Refugios') : offer.units;

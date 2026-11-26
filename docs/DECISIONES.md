@@ -583,3 +583,13 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 
     Con la de `docs/RENDER.md` §3 habría tardado más de un día.
 - Por qué: el visor carga una sola imagen de 360° para todos los equipos, y `docs/CARGA.md` §4 pone el tope en 2048 en el celular. La fachada estaba en 4096, contra el mismo presupuesto. El realismo tiene que venir de la luz horneada, no de más píxeles. La calidad ajustada la eligió el amigo de Jacobo al ver los tiempos.
+
+**D-094 · 2026-11-25 · Las demos en inglés**
+- Decisión:
+  - Las demos se sirven en español en `/h/...` y en inglés en `/en/h/...`, con un selector **ES / EN** en la franja de arriba.
+  - Las páginas son las mismas: viven en `app/_demo/` y reciben el idioma.
+  - Los textos de la interfaz se escriben en español dentro de `t(lang, '...')` / `useT()`. El diccionario está en `lib/i18n-en.ts` (`python pipeline/i18n_claves.py` muestra lo que falta).
+  - El contenido de cada hotel se traduce al cargarlo con su tabla `content/hotels/<slug>/i18n/en.json`, más reglas comunes ("Piso 5" → "Floor 5") y patrones de texto armado ("Baño de Suite 402, vista desde adentro (imagen ilustrativa)"). `python pipeline/i18n_contenido.py <hotel>` muestra lo que falta.
+  - Lo que no tiene traducción queda en español: nunca rompe la página.
+  - Los nombres propios no se traducen. El mensaje de WhatsApp al hotel sigue en español.
+- Por qué: un amigo de Jacobo en Nueva Zelanda quería mostrar las demos a amigos de otros idiomas. Con inglés alcanza por ahora, y es un argumento de venta: los huéspedes extranjeros son buena parte de los hoteles boutique de Bogotá.

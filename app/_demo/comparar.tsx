@@ -56,7 +56,7 @@ export async function CompararPage({ params }: DemoProps<{ hotel: string }>, lan
   }[] = [
     {
       label: tr('Desde'),
-      value: (c) => (c.from !== undefined ? formatPrice(c.from, hotel.offer) : '—'),
+      value: (c) => (c.from !== undefined ? formatPrice(c.from, hotel.offer, lang) : '—'),
     },
     {
       label: tr('Área'),
