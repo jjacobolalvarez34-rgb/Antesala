@@ -134,7 +134,7 @@ HOTEL=<slug> CUADROS=84 npx playwright test -c pipeline/renders.config.ts guiada
 - `MOMENTO=dia` o `MOMENTO=noche` filtra. `-g "llegada y pisos"` solo hace las llegadas; `-g "· piso [0-9]"`, solo las plantas.
 - Salen `content/hotels/<slug>/media/guiada/` (imágenes y `manifest.json`) y `public/demo/guiada/<slug>/` (los videos: Safari en iPhone los pide por rangos).
 - Después, medir el color del cielo en la parte de arriba de `pisos-v.jpg` y guardarlo como `sky` en el manifest.
-- Las plantas salen con la planta de código (la de Inmersivo), todas iguales. La horneada llega a la captura solo a veces (pendiente en `TAREAS.md`).
+- Las plantas salen con la planta horneada (Premium). Si una no llega en un minuto, la toma recarga una vez y, si tampoco, falla: nunca deja un piso distinto a los demás.
 - Con el manifest, el lugar ya muestra el botón "Recorrido 3D → Modo guiado" (D-097).
 
 Revisar las tomas antes de subirlas:

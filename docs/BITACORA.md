@@ -38,6 +38,13 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
   - la cubierta entra en la toma (en Niebla Alta quedaba cortada);
   - en el celular la torre se agranda si ocupa poco y deja sitio a los números;
   - el contenedor ya no se puede desplazar (`overflow: clip`).
+- **Planta horneada siempre:** había dos fallas que hacían que a veces se viera la planta de código en Premium, también para los visitantes:
+  - el lector KTX2 se creaba antes de que la escena registrara su renderer;
+  - la planta del piso abierto no se volvía a pedir si su carga se reiniciaba.
+  
+  Probado en producción: 12 de 12 pisos (antes, 1 de 8). Las vistas guiadas se recapturaron con la horneada.
+- **Maqueta del espacio como casa de muñecas:** se quitan los muros del lado de la cámara y los demás quedan completos (antes todo a 1,15 m, y en Cénit parecía que se quitaba la fachada).
+- **Vista guiada de noche:** sin la franja clara arriba.
 - **Agente productor:** `docs/PRODUCCION.md` y `.claude/agents/productor.md`, el proceso para producir un lugar nuevo (hotel, gimnasio, coworking…) con o sin información.
 
 **Decisiones**

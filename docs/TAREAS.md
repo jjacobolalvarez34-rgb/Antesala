@@ -276,12 +276,14 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] Botón también dentro del 3D (para pasar de uno a otro) si Jacobo lo quiere
 - [x] Pantalla completa (sin franja ni encabezado), marca abajo a la izquierda, controles arriba (idioma, día/noche, cerrar), torre ancha (2800 px), brillo por estado en vez de recuadro, planta arrastrable que vuelve sola, reserva solo con habitación abierta (D-096)
 - [x] Día y noche: torre y plantas de noche capturadas (2026-11-25)
-- [ ] **Plantas de la vista guiada con la planta horneada (Premium).** Hoy todas, de día y de noche, salen con la de código (la de Inmersivo), porque la horneada llegaba a la captura unas veces sí y otras no, y quedaban pisos distintos entre sí (regla 9). Lo que se vio (2026-11-25): la planta del piso abierto se monta tarde; con la horneada, `planReady` (material con `userData.base` en opacidad completa) a veces nunca se cumple, ni recargando. Revisar en `FloorPlanModel` cuándo se pide la horneada en el piso abierto y su fundido; después repetir con `nivel=premium` en `pipeline/guiada.spec.ts`
+- [x] **Plantas de la vista guiada con la planta horneada (Premium)** — hecho el 2026-11-26. Había dos fallas: (1) la planta del piso abierto no se volvía a pedir si su carga se reiniciaba (`useLevelPlans`); (2) el GLB se pedía antes de que la escena registrara su renderer y, sin KTX2, no se leía (`gltf.ts`). Las dos afectaban también a los visitantes: a veces veían la planta de código en Premium
 - [ ] **Tarjeta de Frailejón en la página de Antesala:** sigue con el mapa. Hacerle una foto del valle y un refugio con Higgsfield desde su propio 3D (como Niebla Alta, D-070), para que dé ganas de entrar. Pedir el visto bueno de Jacobo antes de generar
 
 ### Cénit en el 3D (Jacobo, 2026-11-25, en Vercel)
 
-- [ ] **Al abrir una habitación de Cénit (p. ej. Deluxe King 1302, maqueta), se quitan las paredes exteriores (las del vidrio) en vez de la pared que da a la cámara.** Quedan los muros interiores completos y la fachada cortada abajo. Revisar en `UnitModel` qué muros se bajan en el corte tipo casa de muñecas: deberían bajarse los que quedan entre la cámara y el cuarto, no siempre los de fachada. Anotado, sin hacer
+- [ ] **En el modo libre no deja tocar el piso 15 de Cénit** (Jacobo, 2026-11-26): sin importar cómo se ponga la cámara, el clic sobre el piso 15 no responde, como si algo lo tapara. Revisar qué intercepta el rayo arriba de la torre (la cubierta, la pérgola, la terraza o el número del piso). Anotado, sin hacer
+
+- [x] **Paredes de la habitación de Cénit en la maqueta** — hecho el 2026-11-26: no se quitaban las de fachada, todo se cortaba a 1,15 m y la fachada de vidrio parecía desaparecer. Ahora es una casa de muñecas: se quitan los muros del lado de la cámara y los demás quedan completos
 
 ### Celular (pedido de Jacobo, 2026-11-16)
 
