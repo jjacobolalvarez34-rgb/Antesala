@@ -146,8 +146,10 @@ function GuidedBar({ data }: { data: BookingSummary }) {
   const q = useSearchParams();
   const lang = useLang();
   const u = q.get('u');
-  if (!u || !data.units.some((x) => x.id === u && x.levelId === q.get('piso'))) return null;
-  return <Bar key="guiada" data={data} stage={guidedStage(data, q.get('piso'), u, lang)} inScene enter />;
+  const unit = u ? data.units.find((x) => x.id === u) : undefined;
+  const piso = q.get('piso') ?? unit?.levelId ?? null;
+  if (!unit || unit.levelId !== piso) return null;
+  return <Bar key="guiada" data={data} stage={guidedStage(data, piso, unit.id, lang)} inScene enter />;
 }
 
 /** En la vista guiada, la barra sigue a lo que se ve; volver sube un paso dentro de la misma vista. */

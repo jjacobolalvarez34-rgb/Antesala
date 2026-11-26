@@ -355,4 +355,14 @@ export const EN: Record<string, string> = {
   'Libre en estas fechas': 'Available on these dates',
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
+  // modos del recorrido (D-097)
+  Entrar: 'Enter',
+  'Modo guiado': 'Guided mode',
+  'Modo libre': 'Free mode',
+  'Guiado': 'Guided',
+  'Modo del recorrido': 'Tour mode',
+  '¿Cómo quieres recorrerlo?': 'How would you like to explore it?',
+  'Como un video: llegas al edificio, eliges el piso y la habitación. Más liviano, ideal en el celular.': 'Like a video: you arrive at the building, pick the floor and the room. Lighter, ideal on a phone.',
+  'El edificio en 3D a tu ritmo: lo giras, abres los pisos y entras a las habitaciones.': 'The building in 3D at your own pace: turn it, open the floors and step into the rooms.',
+  'Ver en modo libre': 'See in free mode',
 };

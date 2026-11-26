@@ -14,6 +14,7 @@ import type { TerrainDataWire } from '@/components/scene/terrain/types';
 import { LangProvider } from '@/components/i18n/Lang';
 import { SceneLayer } from '@/components/scene/SceneLayer';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
+import { loadGuided } from '@/lib/guided';
 import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice, freeAlternative } from '@/lib/hotel';
 import { mediaUrl } from '@/lib/media';
 import { tokensToStyle } from '@/lib/tokens';
@@ -246,6 +247,7 @@ export async function HotelLayout({ children, params }: DemoLayoutProps, lang: L
           listLabel={hotel.site.kind === 'terreno' ? t(lang, 'Los refugios') : undefined}
           upper={tokens.look?.title === 'mayusculas'}
           offer={hotel.offer}
+          guided={!!(await loadGuided(hotel.slug))}
         />
         <div className="relative z-10 flex-1">{children}</div>
         <BookingBar data={summary} />

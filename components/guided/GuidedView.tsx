@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Gallery } from '@/components/gallery/Gallery';
 import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 import { LangSwitch } from '@/components/i18n/LangSwitch';
+import { ModeSwitch } from '@/components/hotel/TourChooser';
 import { PanoButton } from '@/components/pano/PanoButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import type { GuidedData, GuidedLevel, GuidedOrient, GuidedUnit, P2 } from '@/lib/guided-types';
@@ -183,8 +184,9 @@ export function GuidedView({ data, offer }: { data: GuidedData; offer?: Offer })
   const params = useSearchParams();
   const chrome = useChrome(params.get('u'));
 
-  const levelId = params.get('piso');
+  // ?u= solo también sirve (desde el modo libre): el piso sale de la unidad
   const unitId = params.get('u');
+  const levelId = params.get('piso') ?? (unitId ? (data.units[unitId]?.levelId ?? null) : null);
   const level = data.levels.find((l) => l.id === levelId) ?? null;
   const unit = unitId && level && data.units[unitId]?.levelId === level.id ? data.units[unitId] : null;
 
@@ -297,7 +299,8 @@ export function GuidedView({ data, offer }: { data: GuidedData; offer?: Offer })
 
   const controls = (
     <div className="pointer-events-auto flex items-center gap-1.5 rounded-full bg-ink/85 p-1 text-bone shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)] backdrop-blur-sm">
-      <LangSwitch className="pl-2" />
+      <ModeSwitch slug={data.slug} current="guiado" place={{ level: levelId, unit: unit?.id }} />
+      <LangSwitch className="hidden pl-1 md:flex" />
       {hasNight ? (
         <button
           type="button"
@@ -1277,7 +1280,7 @@ function UnitPanel({ data, unit, offer, onClose }: { data: GuidedData; unit: Gui
         className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[var(--hotel-r-btn,3px)] border border-border text-sm transition-colors hover:border-ink/40 hover:bg-card"
       >
         <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
-        {tr('Ver en 3D')}
+        {tr('Ver en modo libre')}
       </Link>
     </div>
   );

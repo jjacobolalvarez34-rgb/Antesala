@@ -6,6 +6,7 @@ import { Move3d } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { ReserveButton } from '@/components/booking/ReserveSheet';
+import { ModeSwitch, TourButton } from '@/components/hotel/TourChooser';
 import { useRoutes, useT } from '@/components/i18n/Lang';
 import type { Offer } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -34,7 +35,10 @@ export function HotelHeader({
   offer,
   listLabel = 'Pisos y unidades',
   upper = false,
+  guided = false,
 }: {
+  /** el hotel tiene vista guiada (D-095): "Recorrido 3D" pregunta el modo y el 3D lleva el selector */
+  guided?: boolean;
   /** el nombre en mayúsculas espaciadas (identidad del hotel, D-086) */
   upper?: boolean;
   /** "Pisos y unidades" o, en un glamping, "Los refugios" */
@@ -70,12 +74,23 @@ export function HotelHeader({
           <span className="font-display text-[1.375rem] leading-none tracking-tight">{name}</span>
           <span className="mt-1 hidden text-xs tracking-[0.14em] text-muted-foreground uppercase scene:text-bone/70 sm:block">{place}</span>
         </Link>
-        <Link
-          href={routes.lista(slug)}
-          className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap scene:max-md:hidden border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
-        >
-          {tr(listLabel)}
-        </Link>
+        <div className="flex items-center gap-2">
+          {/* modo libre ⇄ guiado, en el mismo lugar (D-097) */}
+          {guided ? (
+            <ModeSwitch
+              slug={slug}
+              current="libre"
+              place={{ level: segments[0] === 'piso' ? segments[1] : null, unit: segments[0] === 'unidad' ? segments[1] : null }}
+              className="hidden bg-ink/85 p-1 shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)] scene:flex"
+            />
+          ) : null}
+          <Link
+            href={routes.lista(slug)}
+            className="inline-flex min-h-11 shrink-0 items-center rounded-full border whitespace-nowrap scene:max-md:hidden border-border px-4 text-sm transition-colors hover:border-ink/40 hover:bg-card scene:glass-dark scene:border-bone/20 scene:hover:bg-ink"
+          >
+            {tr(listLabel)}
+          </Link>
+        </div>
       </header>
     );
   }
@@ -107,8 +122,9 @@ export function HotelHeader({
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-2 lg:ml-2">
-          <Link
-            href={routes.explorar(slug)}
+          <TourButton
+            slug={slug}
+            guided={guided}
             className={cn(
               // píldora con borde: se lee como botón, no como un enlace más del menú
               'inline-flex min-h-10 items-center gap-2 rounded-[var(--hotel-r-btn,999px)] border px-3.5 text-[0.8125rem] font-medium transition-colors',
@@ -118,7 +134,7 @@ export function HotelHeader({
             <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
             <span className="hidden sm:inline">{tr('Recorrido 3D')}</span>
             <span className="sm:hidden">3D</span>
-          </Link>
+          </TourButton>
           <ReserveButton context={booking} offer={offer} tone="bone" className="max-md:hidden" />
         </div>
       </div>

@@ -25,7 +25,6 @@ import {
   Tv,
   WashingMachine,
   Wifi,
-  Clapperboard,
 } from 'lucide-react';
 
 import { BookingWidget } from '@/components/booking/BookingWidget';
@@ -35,6 +34,7 @@ import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { NivelImg, type NivelImgSrc } from '@/components/hotel/NivelImg';
 import { getHotelBundle } from '@/lib/content';
 import { loadGuided } from '@/lib/guided';
+import { TourButton } from '@/components/hotel/TourChooser';
 import { findLevel, formatArea, formatCOP, offerOf, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
 import { assetUrl, mediaUrl } from '@/lib/media';
 import type { Media, Unit } from '@/lib/types';
@@ -235,24 +235,15 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
           ) : null}
           {/* el recorrido 3D, de primeras: es lo que distingue la demo (Jacobo, 2026-11-24: "está muy escondido") */}
           <div className={`mt-8 flex flex-wrap gap-3 md:mt-10 ${centered ? 'justify-center' : ''}`}>
-            <Link
-              href={routes.explorar(hotel.slug)}
+            <TourButton
+              slug={hotel.slug}
+              guided={!!guided}
               className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] bg-bone px-6 text-[0.9375rem] font-medium text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] transition-colors hover:bg-white md:min-h-14 md:px-7 md:text-base`}
             >
               <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-            {/* vista guiada (D-095): como un video, sin 3D en vivo; solo si el hotel la tiene */}
-            {guided ? (
-              <Link
-                href={routes.guiada(hotel.slug)}
-                className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] border border-bone/45 px-6 text-[0.9375rem] font-medium text-bone backdrop-blur-[2px] transition-colors hover:border-bone hover:bg-bone/10 md:min-h-14 md:px-7 md:text-base`}
-              >
-                <Clapperboard aria-hidden className="size-5" strokeWidth={1.5} />
-                {tr('Vista guiada')}
-              </Link>
-            ) : null}
+            </TourButton>
           </div>
         </div>
         {hero ? (
@@ -287,14 +278,15 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             {hotel.intro ? (
               <p className="mt-5 font-display text-[1.875rem] leading-[1.18] text-pretty md:text-[2.75rem]">{hotel.intro}</p>
             ) : null}
-            <Link
-              href={routes.explorar(hotel.slug)}
+            <TourButton
+              slug={hotel.slug}
+              guided={!!guided}
               className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-ink pb-1 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
             >
               <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            </TourButton>
           </div>
           <dl className="self-end border-t border-border md:col-span-5">
             {facts.map((f) => (
@@ -456,13 +448,14 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                 </li>
               ))}
             </ol>
-            <Link
-              href={routes.explorar(hotel.slug)}
+            <TourButton
+              slug={hotel.slug}
+              guided={!!guided}
               className="mt-10 inline-flex min-h-12 items-center gap-2 rounded-[var(--hotel-r-btn,3px)] bg-bone px-7 text-[0.75rem] font-medium tracking-[0.16em] text-ink uppercase transition-colors hover:bg-white"
             >
               <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
               {tr('Empezar el recorrido')}
-            </Link>
+            </TourButton>
           </div>
         </div>
       </section>
@@ -669,9 +662,9 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                 </a>
               </li>
               <li>
-                <Link href={routes.explorar(hotel.slug)} className="hover:text-bone">
-                  Recorrido 3D
-                </Link>
+                <TourButton slug={hotel.slug} guided={!!guided} className="hover:text-bone">
+                  {tr('Recorrido 3D')}
+                </TourButton>
               </li>
               <li>
                 <Link href={routes.lista(hotel.slug)} className="hover:text-bone">
