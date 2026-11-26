@@ -940,6 +940,10 @@ function Roof({
   shadows,
   baked,
   light,
+  topFloor,
+  interactive = false,
+  onHover,
+  onSelect,
 }: {
   building: Building;
   frame: BuildingFrame;
@@ -949,6 +953,12 @@ function Roof({
   shadows: boolean;
   baked?: { mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial };
   light: LightUniforms;
+  /** el último piso: tocar la cubierta lo abre (Jacobo, 2026-11-26: "no me deja tocar el piso 15";
+   *  desde arriba, lo que más se ve del último piso es su cubierta, que no hacía nada) */
+  topFloor?: string;
+  interactive?: boolean;
+  onHover?: (id: string | null) => void;
+  onSelect?: (id: string) => void;
 }) {
   const footprint = building.footprint as Pt[];
   const roof = useMemo(() => slabGeometry(scaled(footprint, 0.3), 0.4), [footprint]);
@@ -1016,8 +1026,36 @@ function Roof({
   const beamGeo = useMemo(() => mergeBoxes(beams), [beams]);
   const railGeo = useMemo(() => mergeBoxes(rails), [rails]);
 
+  const live = interactive && !dimmed && !gone && !!topFloor;
   return (
-    <group position={[0, frame.height, 0]}>
+    <group
+      position={[0, frame.height, 0]}
+      onPointerOver={
+        live
+          ? (e: ThreeEvent<PointerEvent>) => {
+              e.stopPropagation();
+              onHover?.(topFloor!);
+              document.body.style.cursor = 'pointer';
+            }
+          : undefined
+      }
+      onPointerOut={
+        live
+          ? () => {
+              onHover?.(null);
+              document.body.style.cursor = '';
+            }
+          : undefined
+      }
+      onClick={
+        live
+          ? (e: ThreeEvent<MouseEvent>) => {
+              e.stopPropagation();
+              onSelect?.(topFloor!);
+            }
+          : undefined
+      }
+    >
       <mesh name="h-cubierta" geometry={roof} material={mats.roof} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
       {parapetGeo ? (
         <mesh name="h-cubierta" geometry={parapetGeo} material={mats.concrete} castShadow={shadows && !dimmed && !gone} receiveShadow={shadows} />
@@ -1190,6 +1228,10 @@ export function BuildingModel({
         shadows={shadows}
         baked={realista ? baked?.roof : undefined}
         light={light}
+        topFloor={[...floors].sort((a, b) => b.order - a.order)[0]?.id}
+        interactive={interactive && !gone}
+        onHover={onHover}
+        onSelect={onSelect}
       />
     </group>
   );
