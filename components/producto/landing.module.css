@@ -882,6 +882,24 @@
   border: 0;
   border-bottom: 1px solid var(--line-2);
 }
+/* la foto de la demo: acercamiento lento y, al pasar, fundido a una foto de adentro */
+.dcard .ph > img {
+  transition: transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.dcard:hover .ph > img {
+  transform: scale(1.06);
+}
+.ph .phHover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition:
+    opacity 0.8s ease,
+    transform 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.dcard:hover .ph .phHover {
+  opacity: 1;
+}
 .dbody {
   padding: 24px;
   display: flex;

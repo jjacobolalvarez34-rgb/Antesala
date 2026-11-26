@@ -169,8 +169,12 @@ export default async function Home() {
     niebla
       ? {
           key: 'niebla',
-          img: null,
-          imgAlt: '',
+          // su fachada de ladrillo (Higgsfield desde su propio 3D, D-070) y, al pasar, la sala de la
+          // suite 402: la planta no daba ganas de entrar (Jacobo, 2026-11-25). Fotos de Niebla Alta,
+          // no las de la página (otro edificio): la tarjeta tiene que mostrar el mismo hotel (regla 9)
+          img: photo('niebla-fachada'),
+          imgHover: photo('niebla-sala'),
+          imgAlt: 'Fachada de ladrillo de Niebla Alta en una calle de Bogotá (imagen ilustrativa)',
           // su propia planta (no la foto de la página de Antesala): piso 5 con libres y ocupadas
           art: (() => {
             const lv = sortedLevels(niebla.hotel).find((l) => l.id === '5') ?? sortedLevels(niebla.hotel).at(-1);
@@ -251,8 +255,10 @@ export default async function Home() {
     cenit
       ? {
           key: 'cenit',
-          img: null,
-          imgAlt: '',
+          // la torre de noche de la vista guiada (D-095) y, al pasar, una habitación por dentro
+          img: photo('cenit-noche'),
+          imgHover: photo('cenit-habitacion'),
+          imgAlt: 'La torre de Cénit de noche, con las ventanas encendidas, entre los edificios de Bogotá (imagen ilustrativa)',
           art: (
             <ElevationArt
               id="art-cenit"
@@ -303,6 +309,9 @@ export default async function Home() {
                 <article key={d.key} className={s.dcard}>
                   <div className={s.ph}>
                     {d.img ? <img src={d.img} alt={d.imgAlt} width={960} height={600} loading="lazy" /> : d.art}
+                    {'imgHover' in d && d.imgHover ? (
+                      <img className={s.phHover} src={d.imgHover} alt="" aria-hidden width={960} height={600} loading="lazy" />
+                    ) : null}
                     <span className={s.tag}>{d.key === 'akuare' ? 'Datos reales' : 'Demo'}</span>
                   </div>
                   <div className={s.dbody}>
