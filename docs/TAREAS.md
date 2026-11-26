@@ -282,6 +282,12 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] **En el celular, avisar que hay más abajo** (Jacobo, 2026-11-26): al abrir una habitación, la ficha (información, plano, fotos, 360°) sigue hacia abajo y nada lo indica. A la derecha, una flechita que sube y baja con "Desliza", que se va al empezar a bajar o si no hay más. En la ficha del modo guiado y en las del modo libre. Anotado, sin hacer
 - [ ] **Cambiar de espacio dentro del 360° del modo guiado** (Jacobo, 2026-11-26): con el 360° abierto, botones para pasar a los otros espacios de la habitación (habitación, baño, vestier…) sin cerrarlo. Anotado, sin hacer
 - [ ] **Entrar y salir del 360° es un corte seco** (Jacobo, 2026-11-26): hacerlo fluido, por ejemplo con un fundido y un acercamiento desde la foto o el botón hacia el panorama, y al salir, al revés. En los dos modos (`PanoButton` / `PanoViewer`). Anotado, sin hacer
+- [ ] **Darle lógica al entorno del hotel: por qué tiene cuatro fachadas** (Jacobo, 2026-11-26: "no tiene edificios cerca, podríamos agregar un parque o algo a los lados que le dé más sentido"). Una torre con ventanas por los cuatro lados es un edificio **aislado**, como exige la norma de Bogotá para torres (retiros). Hoy, al despejar la manzana, quedó tierra pelada. Propuesta, genérica en `Barrio.tsx` (sirve para cualquier hotel):
+  - al frente, una plazoleta de acceso (adoquín, materas, árboles grandes, bancas) y una bahía para dejar pasajeros frente a la marquesina;
+  - a los lados, jardines de retiro con césped, árboles y senderos;
+  - atrás, la entrada al parqueadero y los vecinos más bajos en la otra mitad de la manzana.
+  
+  Después, recapturar las vistas guiadas. Anotado, sin hacer
 - [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
 - [x] Botón también dentro del 3D para pasar de uno a otro — hecho: selector Guiado | Libre en los dos modos (D-097)
