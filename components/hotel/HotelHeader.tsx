@@ -22,7 +22,8 @@ const SECTIONS = [
 /**
  * Encabezado del sitio del hotel (D-078): como la web de un hotel real, menú de
  * secciones, recorrido 3D y Reservar fijo. En la portada va transparente sobre la
- * foto y se vuelve sólido al bajar. En las vistas con 3D queda la marca en una
+ * foto y se vuelve sólido al bajar: oscuro, como el aviso de la demo (Jacobo, 2026-11-25: "se
+ * vería mejor oscuro en vez de ese blanco"); los textos son claros en los dos casos. En las vistas con 3D queda la marca en una
  * pastilla oscura, sin tapar la escena.
  */
 export function HotelHeader({
@@ -61,7 +62,7 @@ export function HotelHeader({
   if (inScene) {
     // con el 3D encendido (data-scene) va en pastillas oscuras sobre la escena; sin 3D, normal
     return (
-      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4 scene:pointer-events-auto scene:text-bone md:px-10 md:pt-6">
+      <header data-hotel-header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4 scene:pointer-events-auto scene:text-bone md:px-10 md:pt-6">
         <Link
           href={routes.hotel(slug)}
           className="group flex min-h-11 flex-col justify-center scene:glass-dark scene:rounded-2xl scene:px-4 scene:py-1.5"
@@ -79,26 +80,27 @@ export function HotelHeader({
     );
   }
 
-  // sobre la foto de la portada: claro y transparente; si no, sólido
+  // sobre la foto de la portada: transparente; si no, sólido y oscuro
   const over = home && !scrolled;
   return (
     <header
+      data-hotel-header
       className={cn(
         'sticky top-0 z-30 transition-[background-color,border-color,color] duration-300',
-        over ? 'border-b border-transparent bg-transparent text-bone' : 'border-b border-border bg-background text-ink',
+        over ? 'border-b border-transparent bg-transparent text-bone' : 'border-b border-bone/10 bg-ink text-bone',
       )}
     >
       <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-6 px-5 md:px-10">
         <Link href={routes.hotel(slug)} className="flex min-h-11 flex-col justify-center">
           <span className={upper ? 'font-display text-[1.125rem] leading-none tracking-[0.2em] uppercase' : 'font-display text-[1.5rem] leading-none tracking-tight'}>{name}</span>
-          <span className={cn('mt-1 text-[0.625rem] tracking-[0.22em] uppercase', over ? 'text-bone/75' : 'text-muted-foreground')}>{place}</span>
+          <span className={cn('mt-1 text-[0.625rem] tracking-[0.22em] uppercase', over ? 'text-bone/75' : 'text-bone/55')}>{place}</span>
         </Link>
         <nav aria-label={tr('Secciones')} className="ml-auto hidden items-center gap-7 text-[0.8125rem] lg:flex">
           {SECTIONS.map(([id, label]) => (
             <a
               key={id}
               href={`${routes.hotel(slug)}#${id}`}
-              className={cn('py-2 underline-offset-[6px] transition-colors hover:underline', over ? 'text-bone/90' : 'text-ink/80 hover:text-ink')}
+              className="py-2 text-bone/85 underline-offset-[6px] transition-colors hover:text-bone hover:underline"
             >
               {tr(label)}
             </a>
@@ -110,14 +112,14 @@ export function HotelHeader({
             className={cn(
               // píldora con borde: se lee como botón, no como un enlace más del menú
               'inline-flex min-h-10 items-center gap-2 rounded-[var(--hotel-r-btn,999px)] border px-3.5 text-[0.8125rem] font-medium transition-colors',
-              over ? 'border-bone/60 text-bone hover:bg-bone/10' : 'border-ink/30 text-ink hover:border-accent hover:text-accent',
+              over ? 'border-bone/60 text-bone hover:bg-bone/10' : 'border-bone/30 text-bone hover:border-bone/70 hover:bg-bone/10',
             )}
           >
             <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
             <span className="hidden sm:inline">{tr('Recorrido 3D')}</span>
             <span className="sm:hidden">3D</span>
           </Link>
-          <ReserveButton context={booking} offer={offer} tone={over ? 'bone' : 'ink'} className="max-md:hidden" />
+          <ReserveButton context={booking} offer={offer} tone="bone" className="max-md:hidden" />
         </div>
       </div>
     </header>
