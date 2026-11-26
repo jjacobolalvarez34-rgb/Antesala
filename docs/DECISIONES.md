@@ -635,3 +635,18 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Al salir del hotel, el 3D se quita 1,5 s después: no antes, porque al cambiar de idioma el layout viejo se desmonta y el nuevo se registra en el mismo paso.
 - Por qué: los dos idiomas son ramas de rutas distintas. Antes, cambiar ES ⇄ EN desmontaba el 3D, que volvía a arrancar desde cero (WebGL, sombreadores, texturas y el vuelo de entrada). Jacobo: "el traductor no está al instante en los recorridos".
 
+
+**D-099 · 2026-11-26 · Tema "noche" para la web del hotel**
+- Decisión: `tokens.json` → `look.theme: "noche"`. Con eso, la portada del hotel cambia:
+  - la página va oscura, con colores que salen de la tinta y el acento del hotel;
+  - la portada usa la foto de noche, y los puntos usan su posición en esa foto (`cover[].night`);
+  - el botón principal va en el acento claro.
+
+  Se suman las fuentes Italiana y Manrope, sin precarga, y animaciones propias:
+  - la fachada se enciende;
+  - el nombre entra letra por letra;
+  - la línea dorada crece y las luces de la ciudad titilan;
+  - el botón respira, las secciones aparecen al bajar y las fotos se iluminan al pasar.
+
+  Niebla Alta lo usa. Los otros hoteles quedan con el tema claro, igual que antes.
+- Por qué: de las tres propuestas de diseño, Jacobo eligió "Noche" para Niebla Alta (2026-11-26). Es un tema y no código del hotel (regla 1): cualquier hotel con foto de noche lo puede elegir. Las otras dos propuestas quedan en el catálogo.

@@ -193,6 +193,8 @@ export interface CoverPoint {
   detail?: string;
   x: number;
   y: number;
+  /** el mismo lugar en la foto de noche (tema noche, D-099): otro encuadre, otra posición */
+  night?: { x: number; y: number };
   to: { level: string } | { unit: string } | { explorar: true };
   /**
    * Video de transición (sin sonido). Rutas relativas a la carpeta del hotel o
@@ -271,12 +273,14 @@ export interface HotelTokens {
     corners?: 'rectas' | 'suaves' | 'redondas';
     hero?: 'abajo' | 'centro';
     title?: 'normal' | 'mayusculas';
+    /** la portada clara (por defecto) u oscura, con la fachada de noche (D-099) */
+    theme?: 'claro' | 'noche';
   };
 }
 
 /** Fuentes registradas en lib/fonts.ts. Para sumar una, se registra allí y aquí. */
-export type DisplayFont = 'Instrument Serif';
-export type TextFont = 'Inter';
+export type DisplayFont = 'Instrument Serif' | 'Italiana';
+export type TextFont = 'Inter' | 'Manrope';
 
 /** Geometría de un plano SVG ya parseado (centímetros). */
 export interface PlanRect {

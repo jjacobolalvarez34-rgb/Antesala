@@ -200,7 +200,7 @@ function Bar({ data, stage, inScene, enter = false }: { data: BookingSummary; st
           <Link
             href={stage.back}
             aria-label={stage.backLabel}
-            className="grid size-11 shrink-0 place-items-center text-ink transition-colors hover:text-accent"
+            className="grid size-11 shrink-0 place-items-center text-foreground transition-colors hover:text-accent"
           >
             <ArrowLeft aria-hidden className="size-5" strokeWidth={1.5} />
           </Link>
@@ -209,7 +209,7 @@ function Bar({ data, stage, inScene, enter = false }: { data: BookingSummary; st
         )}
         <div className="relative min-w-0 flex-1" aria-live="polite">
           <div key={stage.label} className="animate-in duration-300 ease-out fade-in slide-in-from-bottom-1">
-            <p className="truncate font-display text-lg leading-tight text-ink">{stage.label}</p>
+            <p className="truncate font-display text-lg leading-tight text-foreground">{stage.label}</p>
             {stage.detail ? <p className="truncate text-xs text-muted-foreground">{stage.detail}</p> : null}
           </div>
         </div>

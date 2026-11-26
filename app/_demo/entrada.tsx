@@ -101,16 +101,19 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
 
   const exterior = hotel.site.exterior.filter((m) => m.kind === 'photo');
   const unitPhotos = (u: Unit) => u.spaces.flatMap((s) => s.media);
-  const hero = exterior[0] ?? unitPhotos(hotel.units.find((u) => u.featured) ?? hotel.units[0]!).find((m) => m.kind === 'photo');
+  const nightPremium = exterior.find((m) => /noche/i.test(m.src) && m.tier === 'premium');
+  const heroFirst = tokens.look?.theme === 'noche' && nightPremium ? nightPremium : exterior[0];
+  const hero = heroFirst ?? unitPhotos(hotel.units.find((u) => u.featured) ?? hotel.units[0]!).find((m) => m.kind === 'photo');
   // puntos tocables de la portada (bloque 9): solo sobre una foto exterior
   const coverPoints: CoverHeroPoint[] =
-    exterior[0] && hero === exterior[0]
+    heroFirst && hero === heroFirst
       ? (hotel.site.cover ?? []).map((pt) => ({
           id: pt.id,
           label: pt.label,
           detail: pt.detail,
-          x: pt.x,
-          y: pt.y,
+          // sobre la foto de noche, su posición en esa foto (si la tiene)
+          x: hero !== exterior[0] && pt.night ? pt.night.x : pt.x,
+          y: hero !== exterior[0] && pt.night ? pt.night.y : pt.y,
           href:
             'level' in pt.to
               ? routes.piso(hotel.slug, pt.to.level)
@@ -173,12 +176,15 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
   // identidad de la web de cada hotel (D-086)
   const centered = tokens.look?.hero === 'centro';
   const upper = tokens.look?.title === 'mayusculas';
+  // tema noche (D-099): la página oscura, la fachada de noche en la portada y el botón en el acento
+  const noche = tokens.look?.theme === 'noche';
   const h2 = 'font-display text-[2.5rem] leading-[1.02] tracking-tight text-balance md:text-[3.75rem]';
 
   return (
-    <main className="-mt-[4.5rem]">
+    <main className={noche ? 'tema-noche -mt-[4.5rem] bg-background text-foreground' : '-mt-[4.5rem]'}>
       {/* Portada a pantalla completa (el encabezado va encima, transparente) */}
-      <section className="relative isolate flex min-h-[640px] flex-col justify-end overflow-hidden bg-ink text-bone h-[88svh] max-h-[940px]">
+      <section className="noche-portada relative isolate flex min-h-[640px] flex-col justify-end overflow-hidden bg-ink text-bone h-[88svh] max-h-[940px]">
+        {noche ? <div aria-hidden className="noche-luces pointer-events-none absolute inset-0 -z-[5]" /> : null}
         {hero && coverPoints.length ? (
           // Premium: foto profesional con puntos; los otros niveles, la portada base (D-075)
           <HeroNivel
@@ -190,7 +196,9 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
               points: coverPoints,
             }}
             base={(() => {
-              const b = exterior.find((m) => m.tier !== 'premium');
+              const b = noche
+                ? (exterior.find((m) => /noche/i.test(m.src) && m.tier !== 'premium') ?? exterior.find((m) => m.tier !== 'premium'))
+                : exterior.find((m) => m.tier !== 'premium');
               return b
                 ? {
                     src: url(b),
@@ -222,10 +230,18 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                 ? 'mt-5 font-display text-[2.75rem] leading-[1] tracking-[0.18em] text-balance uppercase md:text-[6rem]'
                 : 'mt-4 font-display text-[4rem] leading-[0.88] tracking-tight text-balance md:text-[8.5rem]'
             }
+            aria-label={noche ? tokens.brand.name : undefined}
           >
-            {tokens.brand.name}
+            {noche
+              ? // letra por letra: cada una entra a su tiempo (tema noche, animación en globals.css)
+                [...tokens.brand.name].map((ch, k) => (
+                  <span key={k} aria-hidden className="noche-letra" style={{ ['--i' as string]: k }}>
+                    {ch === ' ' ? ' ' : ch}
+                  </span>
+                ))
+              : tokens.brand.name}
           </h1>
-          {centered ? <span aria-hidden className="mx-auto mt-6 block h-px w-24 bg-accent-on-dark" /> : null}
+          {centered ? <span aria-hidden className="noche-linea mx-auto mt-6 block h-px w-24 bg-accent-on-dark" /> : null}
           {tokens.brand.tagline ? (
             <p
               className={`mt-5 font-display text-[1.375rem] text-bone/90 italic md:text-[2rem] ${centered ? 'mx-auto max-w-2xl' : 'max-w-xl'}`}
@@ -238,7 +254,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             <TourButton
               slug={hotel.slug}
               guided={!!guided}
-              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] bg-bone px-6 text-[0.9375rem] font-medium text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] transition-colors hover:bg-white md:min-h-14 md:px-7 md:text-base`}
+              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.9375rem] font-medium transition-colors ${noche ? 'noche-lampara bg-accent-on-dark text-ink tracking-[0.16em] uppercase text-[0.8125rem] shadow-[0_0_60px_-6px_color-mix(in_oklab,var(--hotel-accent-on-dark)_55%,transparent)] hover:brightness-110' : 'bg-bone text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] hover:bg-white'} md:min-h-14 md:px-7 md:text-base`}
             >
               <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
@@ -259,7 +275,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
       {info.direct?.length ? (
         <ul
           aria-label={tr('Al reservar directo')}
-          className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-2 px-5 text-[0.8125rem] text-ink/75 md:px-10"
+          className="mx-auto mt-8 flex max-w-5xl flex-wrap justify-center gap-x-8 gap-y-2 px-5 text-[0.8125rem] text-foreground/75 md:px-10"
         >
           {info.direct.map((d) => (
             <li key={d} className="flex items-center gap-2">
@@ -272,7 +288,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
 
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         {/* El hotel en pocas palabras */}
-        <section className="grid gap-12 pt-20 md:grid-cols-12 md:gap-16 md:pt-32">
+        <section className="noche-revela grid gap-12 pt-20 md:grid-cols-12 md:gap-16 md:pt-32">
           <div className="md:col-span-7">
             <p className={`${eyebrow} text-accent`}>{hotel.neighborhood ?? hotel.city}</p>
             {hotel.intro ? (
@@ -281,7 +297,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             <TourButton
               slug={hotel.slug}
               guided={!!guided}
-              className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-ink pb-1 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+              className="group mt-8 inline-flex min-h-11 items-center gap-2 border-b border-foreground pb-1 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
             >
               <Move3d aria-hidden className="size-4" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
@@ -327,11 +343,11 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
           </div>
           <ul className="flex flex-col">
             {categories.map((c, i) => (
-              <li key={c.id} className="border-b border-border py-12 md:py-20">
+              <li key={c.id} className="noche-revela border-b border-border py-12 md:py-20">
                 <article className="grid items-center gap-8 md:grid-cols-12 md:gap-14">
                   <div className={`relative overflow-hidden rounded-[var(--hotel-r-card,3px)] md:col-span-7 ${i % 2 ? 'md:order-2' : ''}`}>
                     {c.show ? (
-                      <Link href={routes.unidad(hotel.slug, c.show.id)} aria-label={`Ver ${c.name}`} className="group block">
+                      <Link href={routes.unidad(hotel.slug, c.show.id)} aria-label={`Ver ${c.name}`} className="noche-foto group block">
                         <NivelImg
                           premium={c.photo?.premium}
                           base={c.photo?.base}
@@ -344,8 +360,8 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                   <div className="md:col-span-5">
                     <p className={`${eyebrow} text-muted-foreground`}>{String(i + 1).padStart(2, '0')}</p>
                     <h3 className="mt-3 font-display text-[2.5rem] leading-none md:text-[3.25rem]">{c.name}</h3>
-                    {c.tagline ? <p className="mt-4 max-w-md text-[1.0625rem] text-pretty text-ink/75">{c.tagline}</p> : null}
-                    <p className="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink/80">
+                    {c.tagline ? <p className="mt-4 max-w-md text-[1.0625rem] text-pretty text-foreground/75">{c.tagline}</p> : null}
+                    <p className="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-sm text-foreground/80">
                       {[
                         c.area ? formatArea(c.area) : null,
                         c.capacity ? pluralize(c.capacity, tr('persona'), tr('personas')) : null,
@@ -386,7 +402,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                         {c.show ? (
                           <Link
                             href={routes.unidad(hotel.slug, c.show.id)}
-                            className="inline-flex min-h-11 items-center border-b border-ink text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                            className="inline-flex min-h-11 items-center border-b border-foreground text-sm font-medium transition-colors hover:border-accent hover:text-accent"
                           >
                             {tr('Ver por dentro')}
                           </Link>
@@ -408,7 +424,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
       </div>
 
       {/* Lo distinto de esta web: elegir la habitación viéndola */}
-      <section aria-labelledby="recorrido" className="mt-24 bg-ink text-bone md:mt-36">
+      <section aria-labelledby="recorrido" className="noche-revela mt-24 bg-ink text-bone md:mt-36">
         <div className="mx-auto grid max-w-7xl md:grid-cols-2">
           {openFloor ? (
             <img
@@ -463,7 +479,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
       <div className="mx-auto max-w-7xl px-5 md:px-10">
         {/* El edificio: zonas comunes con foto y servicios */}
         {hotel.site.pois.length || info.amenities?.length ? (
-          <section id="edificio" aria-labelledby="titulo-edificio" className="mt-24 scroll-mt-24 md:mt-40">
+          <section id="edificio" aria-labelledby="titulo-edificio" className="noche-revela mt-24 scroll-mt-24 md:mt-40">
             <p className={`${eyebrow} text-accent`}>{tr('El edificio')}</p>
             <h2 id="titulo-edificio" className={`mt-3 max-w-3xl ${h2}`}>
               {tr('Zonas comunes y servicios')}
@@ -522,7 +538,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
               <h2 id="titulo-ubicacion" className={`mt-3 ${h2}`}>
                 {place}
               </h2>
-              {info.address ? <p className="mt-5 max-w-md text-pretty text-ink/75">{info.address}</p> : null}
+              {info.address ? <p className="mt-5 max-w-md text-pretty text-foreground/75">{info.address}</p> : null}
               {info.nearby?.length ? (
                 <ul className="mt-10 border-t border-border">
                   {info.nearby.map((n) => (
@@ -568,7 +584,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
 
         {/* Preguntas */}
         {info.faq?.length ? (
-          <section id="preguntas" aria-labelledby="titulo-preguntas" className="mt-24 grid scroll-mt-24 gap-10 md:mt-40 md:grid-cols-12">
+          <section id="preguntas" aria-labelledby="titulo-preguntas" className="noche-revela mt-24 grid scroll-mt-24 gap-10 md:mt-40 md:grid-cols-12">
             <div className="md:col-span-4">
               <p className={`${eyebrow} text-accent`}>{tr('Preguntas')}</p>
               <h2 id="titulo-preguntas" className={`mt-3 ${h2}`}>
@@ -586,7 +602,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                       strokeWidth={1.4}
                     />
                   </summary>
-                  <p className="max-w-2xl pb-6 text-pretty text-ink/70">{f.a}</p>
+                  <p className="max-w-2xl pb-6 text-pretty text-foreground/70">{f.a}</p>
                 </details>
               ))}
             </div>

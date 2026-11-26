@@ -124,6 +124,7 @@ const hotelSchema = z.object({
           detail: z.string().optional(),
           x: z.number().min(0).max(1),
           y: z.number().min(0).max(1),
+          night: z.object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) }).optional(),
           to: z.union([z.object({ level: id }), z.object({ unit: id }), z.object({ explorar: z.literal(true) })]),
           clip: z.object({ sm: z.string().min(1), lg: z.string().min(1).optional(), poster: z.string().min(1).optional() }).optional(),
         }),
@@ -177,13 +178,14 @@ const hotelSchema = z.object({
 const tokensSchema = z.object({
   brand: z.object({ name: z.string(), logo: relPath.optional(), tagline: z.string() }),
   color: z.object({ accent: hex, accentOnDark: hex.optional(), base: hex, stone: hex.optional(), ink: hex }),
-  font: z.object({ display: z.enum(['Instrument Serif']), text: z.enum(['Inter']) }),
+  font: z.object({ display: z.enum(['Instrument Serif', 'Italiana']), text: z.enum(['Inter', 'Manrope']) }),
   voice: z.string(),
   look: z
     .object({
       corners: z.enum(['rectas', 'suaves', 'redondas']).optional(),
       hero: z.enum(['abajo', 'centro']).optional(),
       title: z.enum(['normal', 'mayusculas']).optional(),
+      theme: z.enum(['claro', 'noche']).optional(),
     })
     .optional(),
 }) satisfies z.ZodType<HotelTokens>;

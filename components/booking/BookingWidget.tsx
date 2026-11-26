@@ -44,7 +44,7 @@ export function BookingWidget({
     guests,
   });
 
-  const field = 'block w-full bg-transparent pt-1 text-[0.9375rem] text-ink outline-none';
+  const field = 'block w-full bg-transparent pt-1 text-[0.9375rem] text-foreground outline-none';
   const cell = 'flex min-h-[4.25rem] flex-col justify-center px-5 py-3 focus-within:bg-secondary/60';
 
   return (

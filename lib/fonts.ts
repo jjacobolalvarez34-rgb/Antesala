@@ -1,4 +1,4 @@
-import { Cinzel, Cormorant_Garamond, Inter, Instrument_Serif, Jost } from 'next/font/google';
+import { Cinzel, Cormorant_Garamond, Inter, Instrument_Serif, Italiana, Jost, Manrope } from 'next/font/google';
 
 import type { DisplayFont, TextFont } from './types';
 
@@ -47,12 +47,34 @@ export const jost = Jost({
   display: 'swap',
 });
 
-export const fontVariables = `${instrumentSerif.variable} ${inter.variable} ${cinzel.variable} ${cormorant.variable} ${jost.variable}`;
+/**
+ * Tema "noche" de la web del hotel (Niebla Alta, 2026-11-26): letra alta y fina para los títulos y
+ * una de texto limpia. Sin precarga: solo las baja el hotel que las elige.
+ */
+export const italiana = Italiana({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-italiana',
+  display: 'swap',
+  preload: false,
+});
+
+export const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-manrope',
+  display: 'swap',
+  preload: false,
+});
+
+export const fontVariables = `${instrumentSerif.variable} ${inter.variable} ${cinzel.variable} ${cormorant.variable} ${jost.variable} ${italiana.variable} ${manrope.variable}`;
 
 export const displayFontVar: Record<DisplayFont, string> = {
   'Instrument Serif': 'var(--font-instrument-serif)',
+  Italiana: 'var(--font-italiana)',
 };
 
 export const textFontVar: Record<TextFont, string> = {
   Inter: 'var(--font-inter)',
+  Manrope: 'var(--font-manrope)',
 };
