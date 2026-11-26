@@ -222,14 +222,31 @@ for (const m of MOMENTS)
       test(`${slug} · piso ${level.id} (${o.name}, ${m.name})`, async ({ page }) => {
         test.setTimeout(420_000);
         await page.setViewportSize({ width: o.w, height: o.h });
-        await open(page, `/h/${slug}/piso/${level.id}`, m.hora, 3_000, 'inmersivo');
+        await open(page, `/h/${slug}/piso/${level.id}`, m.hora, 3_000);
         const file = `piso-${level.id}-${o.name}${m.suffix}.jpg`;
         // solo el piso, sobre un fondo liso (Jacobo: "que cuando elija un piso se vea solo el piso")
         // la planta horneada (si el piso la tiene) entra con fundido y a veces tarda: se espera a que esté
       // primero que exista la planta del piso abierto (se monta después que las demás)
       await page.waitForFunction((id) => window.__antesalaCaptura!.planInfo(id).found, level.id, { timeout: 120_000, polling: 500 });
-      // las plantas salen con la planta de código (la de Inmersivo), de día y de noche: la horneada
-      // llegaba unas veces sí y otras no, y quedaban pisos distintos entre sí (regla 9). Pendiente en TAREAS.
+      // la planta horneada (Premium), de día y de noche. Antes llegaba unas veces sí y otras no: el
+      // GLB se pedía antes de que la escena registrara su renderer y sin KTX2 no se leía (gltf.ts).
+      // Si aun así no llega en un minuto, se recarga una vez; si tampoco, la toma falla en vez de
+      // dejar un piso distinto a los demás (regla 9).
+      if (level.realista) {
+        const ready = () =>
+          page
+            .waitForFunction((id) => window.__antesalaCaptura!.planReady(id), level.id, { timeout: 60_000, polling: 500 })
+            .then(() => true)
+            .catch(() => false);
+        let ok = await ready();
+        if (!ok) {
+          await open(page, `/h/${slug}/piso/${level.id}`, m.hora, 3_000);
+          await page.waitForFunction((id) => window.__antesalaCaptura!.planInfo(id).found, level.id, { timeout: 120_000, polling: 500 });
+          ok = await ready();
+        }
+        if (!ok) throw new Error(`piso ${level.id}: la planta horneada no llegó (se reintentó)`);
+        await page.waitForTimeout(600);
+      }
       const spaces = await page.evaluate(() => window.__antesalaCaptura!.spaces());
         if (!(await page.evaluate(([id, bg]) => window.__antesalaCaptura!.isolateFloor(id, bg), [level.id, m.floorBg] as const))) return;
         const pts = spaces.flatMap((sp) => sp.points);

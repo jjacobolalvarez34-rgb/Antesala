@@ -26,6 +26,10 @@ declare global {
       isolateFloor: (levelId: string, background: string) => Promise<boolean>;
       /** la planta horneada (Premium) ya llegó y terminó su fundido: si no, la toma sale con la de código */
       planReady: (levelId: string) => boolean;
+      /** diagnóstico: mallas visibles y altas (material, si corta, alto) */
+      meshes: () => string[];
+      programs: () => string[];
+      forceCut: (v: number) => number;
       /** diagnóstico: qué materiales tiene la planta de un piso */
       planInfo: (levelId: string) => { found: boolean; visible: boolean; mats: string[]; names: string[] };
     };
@@ -50,6 +54,7 @@ export function CaptureHook({
   const controls = useThree((s) => s.controls) as unknown as { enabled: boolean; target: THREE.Vector3; update: () => void } | null;
   const invalidate = useThree((s) => s.invalidate);
   const scene = useThree((s) => s.scene);
+  const gl = useThree((s) => s.gl);
   const spacesRef = useRef(spaces);
   useEffect(() => {
     spacesRef.current = spaces;
@@ -118,6 +123,50 @@ export function CaptureHook({
         });
         return { found: !!plan, visible: plan?.visible ?? false, mats: [...new Set(mats)].slice(0, 30), names: names.slice(0, 40) };
       },
+      meshes: () => {
+        const out: string[] = [];
+        scene.traverse((o) => {
+          const m = o as THREE.Mesh;
+          if (!m.isMesh || !m.visible) return;
+          let vis = true;
+          for (let q: THREE.Object3D | null = m; q; q = q.parent) if (!q.visible) vis = false;
+          if (!vis) return;
+          const mat = m.material as THREE.Material;
+          if (!mat || mat.opacity < 0.05) return;
+          m.geometry.computeBoundingBox();
+          const bb = m.geometry.boundingBox!;
+          if (bb.max.y - bb.min.y < 1.5) return;
+          const props = gl.properties.get(mat) as { uniforms?: Record<string, { value: unknown }> };
+          const u = props.uniforms;
+          const extra = u ? ` cut=${JSON.stringify(u.uCut?.value)} sink=${JSON.stringify(u.uSink?.value)}` : ' sin-programa';
+          out.push(`${m.name || '-'} |${extra} | ${mat.type}:${mat.name} | ${mat.onBeforeCompile.toString().includes('uCut') ? 'corta' : 'no-corta'} | y ${bb.min.y.toFixed(2)}..${bb.max.y.toFixed(2)} | key ${mat.customProgramCacheKey?.() ?? ''}`);
+        });
+        return out;
+      },
+      programs: () => {
+        const ctx = gl.getContext();
+        return (gl.info.programs ?? [])
+          .filter((pr) => /unit-cut|basic|MeshBasic/i.test(String((pr as unknown as { cacheKey: string }).cacheKey) + (pr as unknown as { name: string }).name))
+          .map((pr) => {
+            const p = pr as unknown as { name: string; cacheKey: string; vertexShader: WebGLShader };
+            const src = ctx.getShaderSource(p.vertexShader) ?? '';
+            return `${p.name} | ${p.cacheKey.slice(0, 60) + ' … ' + p.cacheKey.slice(-40)} | clamp=${src.includes('min(transformed.y, uCut)')}`;
+          });
+      },
+      forceCut: (v: number) => {
+        let n = 0;
+        scene.traverse((o) => {
+          const m = o as THREE.Mesh;
+          if (!m.isMesh) return;
+          const u = (gl.properties.get(m.material as THREE.Material) as { uniforms?: Record<string, { value: number }> }).uniforms;
+          if (u?.uCut) {
+            u.uCut.value = v;
+            n++;
+          }
+        });
+        invalidate();
+        return n;
+      },
       planReady: (levelId) => {
         const plan = scene.getObjectByName(`planta-${levelId}`);
         let ready = false;
@@ -153,6 +202,6 @@ export function CaptureHook({
       camera.setViewOffset = setViewOffset;
       delete window.__antesalaCaptura;
     };
-  }, [camera, controls, invalidate, scene, footprint, floorHeight, floors]);
+  }, [camera, controls, invalidate, scene, gl, footprint, floorHeight, floors]);
   return null;
 }
