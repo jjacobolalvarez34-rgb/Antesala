@@ -273,7 +273,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [x] Documento del agente productor (`docs/PRODUCCION.md`, `.claude/agents/productor.md`)
 - [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
-- [ ] Botón también dentro del 3D (para pasar de uno a otro) si Jacobo lo quiere
+- [x] Botón también dentro del 3D para pasar de uno a otro — hecho: selector Guiado | Libre en los dos modos (D-097)
 - [x] Pantalla completa (sin franja ni encabezado), marca abajo a la izquierda, controles arriba (idioma, día/noche, cerrar), torre ancha (2800 px), brillo por estado en vez de recuadro, planta arrastrable que vuelve sola, reserva solo con habitación abierta (D-096)
 - [x] Día y noche: torre y plantas de noche capturadas (2026-11-25)
 - [x] **Plantas de la vista guiada con la planta horneada (Premium)** — hecho el 2026-11-26. Había dos fallas: (1) la planta del piso abierto no se volvía a pedir si su carga se reiniciaba (`useLevelPlans`); (2) el GLB se pedía antes de que la escena registrara su renderer y, sin KTX2, no se leía (`gltf.ts`). Las dos afectaban también a los visitantes: a veces veían la planta de código en Premium
