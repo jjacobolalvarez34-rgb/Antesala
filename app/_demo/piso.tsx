@@ -74,6 +74,7 @@ export async function PisoPage({ params }: DemoProps<{ hotel: string; nivel: str
         pois={pois}
         above={above}
         below={below}
+        levels={levels.map(({ id, name, order }) => ({ id, name, order }))}
       />
       {/* Modo lista (sin escena) */}
       <div className="mx-auto max-w-6xl px-5 scene:hidden md:px-10">

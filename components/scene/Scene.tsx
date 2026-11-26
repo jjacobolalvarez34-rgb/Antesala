@@ -762,7 +762,15 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         }}
       >
         {/* por dentro (recorrido en vivo) por las ventanas se ve la ciudad, no el estudio */}
-        <Backdrop apiRef={backdrop} environment={environment} light={light} studio={inUnit && !(in360Pano && data.liveInterior)} reduced={reduced}>
+        {/* con un piso abierto, solo el piso sobre el fondo de estudio, sin ciudad (Jacobo, 2026-11-26:
+            "que solo se vea el piso; el fondo así está desagradable"); por dentro, la ciudad */}
+        <Backdrop
+          apiRef={backdrop}
+          environment={environment}
+          light={light}
+          studio={(inUnit && !(in360Pano && data.liveInterior)) || stage.kind === 'piso'}
+          reduced={reduced}
+        >
           <Context
             frame={frame}
             facades={facades}
@@ -789,6 +797,7 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           linen={linen}
           selectedId={selectedId}
           gone={inUnit}
+          isolate={stage.kind === 'piso'}
           floorPlans={levelPlans}
           planRealista={nivel === 'premium'}
           planHovered={planHovered}
@@ -887,7 +896,8 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
           visible={active && !inUnit && vpData === null}
         />
       </Canvas>
-      <FloorTagLayer tags={floorTags} anchors={tagAnchors} visible={active && !inUnit && vpData === null} currentId={selectedId} />
+      {/* los números de piso, solo con el edificio entero: con el piso aislado se cambia desde su panel */}
+      <FloorTagLayer tags={floorTags} anchors={tagAnchors} visible={active && stage.kind === 'explorar' && vpData === null} currentId={selectedId} />
       <PoiLayer pois={poiGroups} anchors={anchors} visible={showPois} />
       {stage.kind === 'explorar' && active ? <ViewpointOverlay pois={data.pois} /> : null}
       <UnitTagLayer tags={floorLabels} anchors={floorAnchors} visible={stage.kind === 'piso' && active} hovered={planHovered} onHover={setPlanHovered} />

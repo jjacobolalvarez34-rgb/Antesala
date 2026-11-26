@@ -76,6 +76,8 @@ interface Props {
   selectedId: string | null;
   /** el edificio se desvanece (maqueta de la unidad en primer plano) */
   gone?: boolean;
+  /** con un piso abierto, solo ese piso: los demás y la cubierta se van (Jacobo, 2026-11-26) */
+  isolate?: boolean;
   hoveredId: string | null;
   pullDir: [number, number];
   colors: BuildingColors;
@@ -1078,6 +1080,7 @@ export function BuildingModel({
   linen,
   selectedId,
   gone = false,
+  isolate = false,
   hoveredId,
   pullDir,
   colors,
@@ -1180,13 +1183,14 @@ export function BuildingModel({
 
   return (
     <group ref={root} name="edificio">
-      {/* recibe la sombra del edificio sobre el fondo congelado */}
-      {shadows ? (
+      {/* recibe la sombra del edificio sobre el fondo congelado; con el piso aislado no hay suelo:
+          quedaban la sombra del piso y la placa del lote flotando sobre el estudio */}
+      {shadows && !(isolate && selectedId) ? (
         <mesh rotation-x={-Math.PI / 2} position={[cx, 0.02, cz]} material={catcher} receiveShadow raycast={noRaycast}>
           <planeGeometry args={[160, 160]} />
         </mesh>
       ) : null}
-      <mesh geometry={plinth} material={plinthMat} position={[0, -0.18, 0]} receiveShadow={shadows} />
+      {isolate && selectedId ? null : <mesh geometry={plinth} material={plinthMat} position={[0, -0.18, 0]} receiveShadow={shadows} />}
       {floors.map((f) => (
         <Floor
           key={f.id}
@@ -1198,7 +1202,9 @@ export function BuildingModel({
           cladMaps={cladding === 'ladrillo' ? cladMaps : null}
           linen={linen}
           colors={colors}
-          state={gone ? 'gone' : selectedId ? (f.id === selectedId ? 'selected' : 'dimmed') : f.id === hoveredId ? 'hovered' : 'idle'}
+          state={
+            gone ? 'gone' : selectedId ? (f.id === selectedId ? 'selected' : isolate ? 'gone' : 'dimmed') : f.id === hoveredId ? 'hovered' : 'idle'
+          }
           unitAt={unitAt}
           balconyAt={balconyAt}
           pullDir={pullDir}
@@ -1224,7 +1230,7 @@ export function BuildingModel({
         frame={frame}
         tex={tex}
         dimmed={selectedId !== null}
-        gone={gone}
+        gone={gone || (isolate && selectedId !== null)}
         shadows={shadows}
         baked={realista ? baked?.roof : undefined}
         light={light}

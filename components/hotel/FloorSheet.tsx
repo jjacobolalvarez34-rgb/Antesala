@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown, Layers } from 'lucide-react';
+import { useState } from 'react';
 
 import { formatCOP, offerTexts, pluralize, unitPrice } from '@/lib/hotel';
 import type { Level, Offer, Poi, Unit } from '@/lib/types';
@@ -22,7 +23,10 @@ export function FloorSheet({
   below,
   offer = 'noche',
   hidden = false,
+  levels = [],
 }: {
+  /** todos los pisos, para "Cambiar de piso" (con el piso aislado no se ve el edificio) */
+  levels?: Pick<Level, 'id' | 'name' | 'order'>[];
   /** el glamping usa su propio panel (TerrainOverlay) */
   hidden?: boolean;
   offer?: Offer;
@@ -38,6 +42,7 @@ export function FloorSheet({
   const routes = useRoutes();
   const lang = useLang();
   const free = units.filter((u) => !u.occupied);
+  const [picking, setPicking] = useState(false);
   if (hidden) return null;
   const prices = free.map(unitPrice).filter((p): p is number => p !== undefined);
   const from = prices.length ? Math.min(...prices) : undefined;
@@ -74,6 +79,47 @@ export function FloorSheet({
           ) : null}
         </nav>
       </header>
+
+      {/* el piso se ve solo (sin el edificio): cambiar de piso tiene que estar a la vista (Jacobo, 2026-11-26) */}
+      {levels.length > 1 ? (
+        <div className="px-5 pb-3">
+          <button
+            type="button"
+            onClick={() => setPicking((v) => !v)}
+            aria-expanded={picking}
+            className="flex min-h-11 w-full items-center justify-between gap-3 rounded-2xl border border-bone/15 bg-bone/8 px-4 text-sm font-medium transition-colors hover:bg-bone/15"
+          >
+            <span className="flex items-center gap-2">
+              <Layers aria-hidden className="size-4 text-bone/75" strokeWidth={1.5} />
+              {tr('Cambiar de piso')}
+            </span>
+            <ChevronDown aria-hidden className={`size-4 transition-transform duration-300 ${picking ? 'rotate-180' : ''}`} />
+          </button>
+          {picking ? (
+            <ol aria-label={tr('Pisos del edificio')} className="mt-2 grid animate-in grid-cols-3 gap-1.5 duration-300 fade-in slide-in-from-top-1">
+              {[...levels]
+                .sort((a, b) => b.order - a.order)
+                .map((l) => (
+                  <li key={l.id}>
+                    {l.id === level.id ? (
+                      <span aria-current="page" className="flex min-h-10 items-center justify-center rounded-xl bg-bone px-2 text-center text-xs font-medium text-ink">
+                        {l.name}
+                      </span>
+                    ) : (
+                      <Link
+                        href={routes.piso(slug, l.id)}
+                        onClick={() => setPicking(false)}
+                        className="flex min-h-10 items-center justify-center rounded-xl bg-bone/10 px-2 text-center text-xs transition-colors hover:bg-bone/20"
+                      >
+                        {l.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+            </ol>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="scrollbar-none overflow-y-auto px-5 pb-4">
         {units.length ? (
