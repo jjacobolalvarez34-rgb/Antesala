@@ -237,7 +237,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [x] **La guía "Así se recorre el hotel" es gigante** — hecho el 2026-11-25: ahora es la misma píldora pequeña de las otras ayudas ("Toca el número de un piso para abrirlo"). Antes: tapaba la escena al entrar
 - [ ] **Quitar el aviso "Hotel ficticio" de la franja de arriba dentro del 3D:** ya se sabe que es una demo; sobra
 - [ ] **Puntos naranja de las zonas comunes sobre el edificio** (terraza, lobby…) molestan a la vista. Mejor: que esa información aparezca al abrir el piso donde está (el lobby en el piso 1) y que **la terraza sea el último piso** en la lista de pisos
-- [ ] **Abrir un piso carga lento.** Idea de Jacobo: al entrar a un piso, dejar en pantalla solo ese piso (sin el resto del edificio), con un botón para volver y cambiar de piso desde ahí. Debería ir mucho más rápido
+- [x] **Abrir un piso: dejar en pantalla solo ese piso** — hecho el 2026-11-26 en el modo libre: el piso sobre el fondo de estudio (sin ciudad, sin los demás pisos ni la cubierta), con "Cambiar de piso" en su panel (lista de pisos) además de las flechas. Antes: abrir un piso cargaba lento y el fondo se veía desagradable
 - [ ] **En el piso 1, los letreros de Lobby y Cowork con esos colores se ven feos.** Rediseñar el estilo de los letreros de lugares comunes
 - [ ] Esencial / Inmersivo / Premium: las fotos y los 360° todavía no tienen el tiempo de trabajo que merecen (revisar con calma)
 - [ ] **La página de Niebla Alta (portada del hotel) se ve muy mal: rediseñarla.** Va al final, después de lo del edificio
@@ -288,6 +288,9 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
   - atrás, la entrada al parqueadero y los vecinos más bajos en la otra mitad de la manzana.
   
   Después, recapturar las vistas guiadas. Anotado, sin hacer
+- [ ] **Que entrar al 3D sea un "wow" con solo ver el edificio** (Jacobo, 2026-11-26: "tal vez sea innecesario el fondo así; lo que busco es que apenas entres, solo ver el edificio ya sea WOW"). Pensar un fondo que no compita: el edificio como pieza de exhibición (su manzana con plazoleta y jardines, y la ciudad apenas sugerida en la bruma o en volúmenes claros sin ventanas), con mejor luz de llegada. Va junto con el entorno con lógica y Niebla Alta de noche. Anotado, sin hacer
+- [ ] **Reservar en el modo libre solo con una habitación abierta**, como en el guiado (D-096). Jacobo (2026-11-26): "el botón de reservar sigue allí". Es otra excepción a la regla 4: confirmar con Jacobo si aplica a todo el modo libre (edificio y piso) y registrarla en DECISIONES. Anotado, sin hacer
+- [ ] **Al pasar el mouse o tocar un piso, que se enciendan sus ventanas** (Jacobo, 2026-11-26): en vez de (o además de) la franja de color, las ventanas de ese piso se prenden con luz cálida, de día y de noche, como un edificio real. Anotado, sin hacer
 - [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
 - [x] Botón también dentro del 3D para pasar de uno a otro — hecho: selector Guiado | Libre en los dos modos (D-097)
