@@ -161,7 +161,15 @@ function DayNight({
 }) {
   return (
     <>
-      <img src={day} alt="" draggable={false} className={cn('absolute inset-0 size-full select-none', className)} style={style} />
+      {/* la de día también se apaga de noche: en el borde que se funde con el fondo se asomaba
+          (una franja clara arriba, Jacobo 2026-11-26) */}
+      <img
+        src={day}
+        alt=""
+        draggable={false}
+        className={cn('absolute inset-0 size-full transition-opacity duration-700 ease-out select-none', night && isNight ? 'opacity-0' : 'opacity-100', className)}
+        style={style}
+      />
       {night ? (
         <img
           src={night}
