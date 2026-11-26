@@ -265,7 +265,13 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [x] Página `/h/<slug>/guiada` (y `/en`): llegada → pisos → solo el piso (entra girando) → unidad (plano, fotos, 360°), con el estado en la URL y la barra de reserva siguiendo lo que se ve
 - [x] Botón "Vista guiada" en la portada del hotel (solo si hay manifest)
 - [ ] Jacobo la prueba en su celular y dice qué ajustar (tiempos, giro de la planta, tamaño de las etiquetas)
-- [ ] Llevarla a Niebla Alta: correr `HOTEL=niebla-alta … guiada.spec` y revisar las tomas
+- [x] Llevarla a Niebla Alta (2026-11-26)
+- [x] Un solo botón "Recorrido 3D" que pregunta guiado o libre, y selector entre modos en el mismo lugar (D-097)
+- [x] Idioma al instante en los recorridos (D-098)
+- [x] Ciudad más real y en segundo plano; vecino sobre la base de Cénit
+- [x] Números de piso que se esconden al girar
+- [x] Documento del agente productor (`docs/PRODUCCION.md`, `.claude/agents/productor.md`)
+- [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
 - [ ] Botón también dentro del 3D (para pasar de uno a otro) si Jacobo lo quiere
 - [x] Pantalla completa (sin franja ni encabezado), marca abajo a la izquierda, controles arriba (idioma, día/noche, cerrar), torre ancha (2800 px), brillo por estado en vez de recuadro, planta arrastrable que vuelve sola, reserva solo con habitación abierta (D-096)

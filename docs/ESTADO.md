@@ -132,6 +132,13 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
 ## 6. Qué está en curso
 
+- **Hecho el 2026-11-26:**
+  - "Recorrido 3D" pregunta modo guiado o libre, y se cambia entre los dos sin perder el lugar (D-097);
+  - Niebla Alta ya tiene vista guiada;
+  - la ciudad del 3D va en segundo plano y más organizada;
+  - cambiar de idioma ya no recarga el 3D (D-098);
+  - hay un agente documentado para producir lugares nuevos (`docs/PRODUCCION.md`), incluidos otros tipos de espacio como gimnasios: para esos falta decidir la oferta y los muebles.
+
 - **Hecho el 2026-11-25: vista guiada para Cénit (D-095).** Es lo que Jacobo pidió, con lo que hay y sin fotos nuevas. Es el primer paso de la decisión abierta 16: el visor ya está, y cuando haya renders fotorrealistas solo se cambian las imágenes. Además:
   - la vista guiada va a pantalla completa, de día y de noche, con un brillo verde o terracota sobre cada habitación, la planta arrastrable y Reservar solo con una habitación abierta (D-096);
   - en la página de Antesala, las tarjetas de Niebla Alta y Cénit muestran foto del hotel y, al pasar, una de adentro (Frailejón sigue con su mapa; propuesta: hacerle foto con Higgsfield);

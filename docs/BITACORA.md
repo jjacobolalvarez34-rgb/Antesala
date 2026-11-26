@@ -25,6 +25,32 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-26 · Dos modos de recorrido, ciudad en segundo plano, idioma al instante y el agente productor
+
+**Hecho**
+- **Recorrido 3D con dos modos (D-097):** el botón pregunta guiado o libre, y dentro de cada uno el selector lleva al mismo piso o habitación en el otro.
+- **Vista guiada de Niebla Alta** (día y noche, horizontal y vertical) y **Cénit recapturado** con el barrio nuevo.
+- **Barrio más real y en segundo plano:** alturas parejas por manzana, torres sobre una avenida, árboles en los andenes, ventanas suaves y bruma. El frente de la manzana del hotel queda despejado: en Cénit había un vecino sobre la base de la torre.
+- **Idioma al instante (D-098):** el 3D vive en el layout raíz y no se recarga al cambiar ES ⇄ EN. Probado: el lienzo es el mismo antes y después.
+- **Números de piso:** se desvanecen mientras la cámara gira (incluida la inercia) y vuelven al detenerse.
+- **Página de Antesala:** los pasos en "Su hotel aquí", la misma nota de demos ficticias bajo las demos y en el pie, y los puntos de la portada ya no quedan sobre el menú.
+- **Vista guiada:**
+  - la cubierta entra en la toma (en Niebla Alta quedaba cortada);
+  - en el celular la torre se agranda si ocupa poco y deja sitio a los números;
+  - el contenedor ya no se puede desplazar (`overflow: clip`).
+- **Agente productor:** `docs/PRODUCCION.md` y `.claude/agents/productor.md`, el proceso para producir un lugar nuevo (hotel, gimnasio, coworking…) con o sin información.
+
+**Decisiones**
+- D-097 (dos modos) y D-098 (3D en el layout raíz).
+
+**Problemas / bloqueos**
+- En el selector, "Libre" salía "Available" en inglés: el diccionario ya lo tenía como disponibilidad. El modo usa su propio texto ("Free").
+
+**Siguiente sesión**
+- Empezar por: lo que diga Jacobo al probar los dos modos y Niebla Alta guiada en su celular. Pendientes en TAREAS: plantas horneadas en la vista guiada, paredes de la habitación de Cénit, foto para la tarjeta de Frailejón.
+
+---
+
 ## 2026-11-25 (noche) · Vista guiada de Cénit, giro más rápido y encabezado oscuro
 
 **Hecho**

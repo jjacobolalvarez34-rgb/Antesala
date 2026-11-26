@@ -622,3 +622,16 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 - Decisión: en `/h/<slug>/guiada` la barra de reserva no se muestra en el edificio ni en el piso. Entra, con un fundido, al abrir una habitación, y se va al cerrarla. En el resto de la demo sigue siempre visible (regla 4).
 - Por qué: Jacobo (2026-11-25): "el botón aparece cuando veo una habitación, no antes, porque ensucia la experiencia". La vista guiada es un recorrido a pantalla completa, como un video, y ahí la reserva tiene sentido cuando ya hay algo concreto que reservar. Es una excepción a la regla 4 pedida por el dueño, solo para esta vista.
 
+**D-097 · 2026-11-26 · Recorrido 3D con dos modos: guiado y libre**
+- Decisión:
+  - Un solo botón, "Recorrido 3D" (en la portada y en el menú), pregunta cómo recorrer: **modo guiado** (D-095, como un video, más liviano) o **modo libre** (el 3D en vivo). Si el lugar no tiene vista guiada, entra directo al libre.
+  - Dentro de cada modo, un selector **Guiado | Libre** lleva al **mismo lugar** en el otro: el edificio, el mismo piso o la misma habitación (`?piso=` o `?u=` en la vista guiada; `/piso/<n>` o `/unidad/<id>` en el 3D).
+  - En la ficha de la habitación del modo guiado, el enlace dice "Ver en modo libre".
+- Por qué: Jacobo (2026-11-26): "toca hacer recorrido 3D y que te diga si quieres el modo guiado o el libre". Antes eran dos botones sueltos, y "Ver en 3D" sacaba del guiado al libre sin avisar.
+
+**D-098 · 2026-11-26 · El 3D vive en el layout raíz**
+- Decisión: el lienzo 3D se monta en `app/layout.tsx` (`components/scene/SceneHost.tsx`). El layout del hotel solo registra sus datos (`SceneRegister`).
+  - Al cambiar de idioma (`/h/...` ⇄ `/en/h/...`), el anfitrión recibe los mismos datos traducidos y conserva los objetos que no cambiaron. El lienzo sigue vivo, en la misma posición.
+  - Al salir del hotel, el 3D se quita 1,5 s después: no antes, porque al cambiar de idioma el layout viejo se desmonta y el nuevo se registra en el mismo paso.
+- Por qué: los dos idiomas son ramas de rutas distintas. Antes, cambiar ES ⇄ EN desmontaba el 3D, que volvía a arrancar desde cero (WebGL, sombreadores, texturas y el vuelo de entrada). Jacobo: "el traductor no está al instante en los recorridos".
+
