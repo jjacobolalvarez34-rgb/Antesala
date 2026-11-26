@@ -87,6 +87,13 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
     };
     // dos parques fijos, lejos del corredor de la fachada principal
     const parkAt = new Set(['-2,1', '2,-2']);
+    // las torres van sobre una avenida (la calle x de la columna 1), no salpicadas al azar: así se
+    // organiza una ciudad de verdad (Jacobo, 2026-11-26: "agregarle realismo en la organización")
+    const AVENUE = 1;
+    // cada manzana tiene una altura base (como pasa con la norma de un sector), con un piso de
+    // variación; cerca del hotel, más bajas, para que el hotel mande
+    const baseFloors = new Map<string, number>();
+    const streetTrees: TreeSpot[] = [];
 
     for (let i = -RINGS; i < RINGS; i++) {
       for (let j = -RINGS; j < RINGS; j++) {
@@ -101,6 +108,10 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
         const D = z1 - z0;
         const ring = Math.max(Math.abs(i + 0.5), Math.abs(j + 0.5)) - 0.5;
         const hotel = i === -1 && j === -1;
+        const key = `${i},${j}`;
+        if (!baseFloors.has(key)) baseFloors.set(key, ring <= 1 ? 3 + Math.floor(rand() * 3) : 5 + Math.floor(rand() * 4));
+        const base = baseFloors.get(key)!;
+        const onAvenue = i === AVENUE || i === AVENUE - 1;
         // andén alrededor de la manzana
         sidewalks.push(
           { x: mx, y: 0.08, z: z0 + SIDEWALK / 2, w: W, h: 0.16, d: SIDEWALK, rotY: 0 },
@@ -108,6 +119,22 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
           { x: x0 + SIDEWALK / 2, y: 0.08, z: mz, w: SIDEWALK, h: 0.16, d: D - SIDEWALK * 2, rotY: 0 },
           { x: x1 - SIDEWALK / 2, y: 0.08, z: mz, w: SIDEWALK, h: 0.16, d: D - SIDEWALK * 2, rotY: 0 },
         );
+        // árboles en fila en los andenes cercanos (cada ~11 m, en el borde de la calle); no delante
+        // de la fachada que se mira (corredor de vista, D-055) ni en la manzana del hotel
+        if (ring <= 1 && !hotel) {
+          const edgeTrees = (ax0: number, ax1: number, fixed: number, alongX: boolean) => {
+            for (let t = ax0 + 6; t < ax1 - 6; t += 11) {
+              const x = alongX ? t : fixed;
+              const z = alongX ? fixed : t;
+              if (inCorridor(x, z, 3)) continue;
+              streetTrees.push({ x, z, s: 0.7 + rand() * 0.25 });
+            }
+          };
+          edgeTrees(x0, x1, z0 + 0.9, true);
+          edgeTrees(x0, x1, z1 - 0.9, true);
+          edgeTrees(z0, z1, x0 + 0.9, false);
+          edgeTrees(z0, z1, x1 - 0.9, false);
+        }
         // demarcación de las calles (las de abajo y la izquierda de cada manzana)
         for (let t = x0; t < x1; t += 6) marks.push({ x: t + 1.5, y: 0.012, z: z0 - STREET / 2, w: 3, h: 0.01, d: 0.14, rotY: 0 });
         for (let t = z0; t < z1; t += 6) marks.push({ x: x0 - STREET / 2, y: 0.012, z: t + 1.5, w: 0.14, h: 0.01, d: 3, rotY: 0 });
@@ -138,8 +165,9 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
           while (a < s.a1 - 6) {
             const w = Math.min(7 + rand() * 9, s.a1 - a);
             const deep = 10 + rand() * 5;
-            const tower = ring >= 2 && rand() < 0.07;
-            const floors = tower ? 12 + Math.floor(rand() * 9) : ring <= 1 ? 3 + Math.floor(rand() * 5) : 3 + Math.floor(rand() * 7);
+            // torres solo sobre la avenida y lejos del hotel; lo demás, la altura de su manzana ±1
+            const tower = ring >= 2 && onAvenue && s.along === 'z' && rand() < 0.35;
+            const floors = tower ? 12 + Math.floor(rand() * 7) : Math.max(2, base + Math.floor(rand() * 3) - 1);
             const h = floors * 2.9;
             const c = a + w / 2;
             const off = s.edge + (s.dir * deep) / 2;
@@ -150,6 +178,9 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
             a += w + (rand() < 0.12 ? 1.5 + rand() * 2 : 0);
             // el lote del hotel queda libre
             if (Math.abs(x - cx) < frame.width / 2 + bw / 2 + 5 && Math.abs(z - cz) < frame.depth / 2 + bd / 2 + 5) continue;
+            // y la mitad delantera de su manzana también: desde la calle (y en la vista guiada) un
+            // vecino tapaba la base de la torre (Jacobo, 2026-11-26, en Cénit)
+            if (hotel && z > cz - 2) continue;
             const kind = tower ? 'estuco' : rand() < 0.58 ? 'ladrillo' : 'estuco';
             lots.push({
               x,
@@ -171,7 +202,7 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
     // la calzada: un solo plano oscuro bajo toda la cuadrícula
     const span = pitch * RINGS * 2 + STREET;
     const center: [number, number] = [sideStreet + 0, frontStreet + 0];
-    return { lots, sidewalks, yards, parks, parkTrees, marks, span, center };
+    return { lots, sidewalks, yards, parks, parkTrees: [...parkTrees, ...streetTrees], marks, span, center };
   }, [frame, inCorridor]);
 }
 

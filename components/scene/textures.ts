@@ -291,12 +291,14 @@ export function neighborFacadeTexture(kind: 'ladrillo' | 'estuco', seed = 1) {
   c.fillStyle = kind === 'ladrillo' ? '#b9b0a3' : '#c4bdb1';
   c.fillRect(0, H - 14, W, 14);
   // dos ventanas
+  // ventanas con poco contraste: los vecinos acompañan, no compiten con el hotel (Jacobo,
+  // 2026-11-26: "la ciudad satura la visión")
   for (const x of [W * 0.12, W * 0.58]) {
-    c.fillStyle = '#2b2f31';
+    c.fillStyle = kind === 'ladrillo' ? '#5e4a42' : '#8f8c86';
     c.fillRect(x - 3, H * 0.28 - 3, W * 0.3 + 6, H * 0.46 + 6);
     const g = c.createLinearGradient(0, H * 0.28, 0, H * 0.74);
-    g.addColorStop(0, '#7f949c');
-    g.addColorStop(1, '#3e4b50');
+    g.addColorStop(0, '#9aa6aa');
+    g.addColorStop(1, '#6b7477');
     c.fillStyle = g;
     c.fillRect(x, H * 0.28, W * 0.3, H * 0.46);
     c.fillStyle = 'rgba(255,255,255,0.12)';

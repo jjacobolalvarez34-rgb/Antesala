@@ -369,7 +369,8 @@ export function Context({
       }),
     [light],
   );
-  const fog = useMemo(() => new THREE.Fog('#d9dcda', 160, 820), []);
+  // bruma más cerca: lo lejano se pierde como en Bogotá y el hotel queda al frente (2026-11-26)
+  const fog = useMemo(() => new THREE.Fog('#d9dcda', 110, 560), []);
   const dayFog = useMemo(() => new THREE.Color('#d9dcda'), []);
   const nightFog = useMemo(() => new THREE.Color('#14161d'), []);
   const scene = useThree((s) => s.scene);
