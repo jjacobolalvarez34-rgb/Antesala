@@ -30,6 +30,9 @@ const frameOf = (pts?: [number, number][]) => {
   return { w: Math.max(...xs) - Math.min(...xs) };
 };
 
+/** la misma nota bajo las demos y en el pie (antes decían cosas distintas) */
+const DEMOS_NOTE = 'Niebla Alta, Frailejón y Cénit son ficticios; Akuare es una demostración no oficial con datos públicos. Imágenes ilustrativas.';
+
 const photo = (key: string, w: 960 | 1600 = 960) => `/demo/${key}-${w}.webp`;
 
 /** Firma de Mamut Herd (una tinta). */
@@ -335,13 +338,19 @@ export default async function Home() {
                   <p className={s.it} style={{ fontSize: 20, color: 'var(--luz)' }}>
                     ¿Cómo se vería su hotel?
                   </p>
+                  {/* los pasos de "Cómo trabajamos", en corto: llenan la tarjeta sin inventar nada */}
+                  <ol className={s.yoursSteps}>
+                    <li>Nos manda fotos y planos, o los capturamos.</li>
+                    <li>Armamos su recorrido 3D.</li>
+                    <li>Lo revisa y sale publicado.</li>
+                  </ol>
                   <a className={s.btn} href="#cotizar">
                     Cotizar <span className={s.arr}>→</span>
                   </a>
                 </div>
               </article>
             </div>
-            <p className={s.fict}>Niebla Alta, Frailejón y Cénit son ficticios; Akuare es una demostración no oficial con datos públicos. Imágenes ilustrativas.</p>
+            <p className={s.fict}>{DEMOS_NOTE}</p>
           </div>
         </section>
 
@@ -608,7 +617,7 @@ export default async function Home() {
             <span>
               © 2026 {ANTESALA.company} · {ANTESALA.city}
             </span>
-            <span>Niebla Alta y Frailejón son ficticios. Imágenes ilustrativas.</span>
+            <span>{DEMOS_NOTE}</span>
           </div>
         </div>
       </footer>
