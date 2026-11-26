@@ -82,7 +82,7 @@ export function FloorSheet({
             {free.length < units.length ? ` · ${pluralize(free.length, offerTexts(offer, lang).free, offerTexts(offer, lang).freePlural)}` : null}
             {from !== undefined ? (
               <>
-                {' · desde '}
+                {` · ${tr('desde')} `}
                 <span className="font-semibold text-bone">{formatCOP(from)}</span>
                 <span className="text-bone/65">{offerTexts(offer, lang).suffix}</span>
               </>

@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Clapperboard, Move3d, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 
-import { useRoutes, useT } from '@/components/i18n/Lang';
+import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 import { cn } from '@/lib/utils';
 
 /*
@@ -140,10 +140,12 @@ function TourChooser({ slug, open, onClose }: { slug: string; open: boolean; onC
 /** "Guiado | Libre" dentro de cada modo: el mismo lugar en el otro modo. */
 export function ModeSwitch({ slug, current, place, className }: { slug: string; current: 'guiado' | 'libre'; place: Place; className?: string }) {
   const tr = useT();
+  const lang = useLang();
   const { guided, free } = useModeHrefs(slug, place);
+  // "Libre" aquí es el modo, no la disponibilidad ("Libre" → "Available" en el diccionario)
   const items = [
     { key: 'guiado', href: guided, label: tr('Guiado') },
-    { key: 'libre', href: free, label: tr('Libre') },
+    { key: 'libre', href: free, label: lang === 'es' ? 'Libre' : 'Free' },
   ] as const;
   return (
     <div role="group" aria-label={tr('Modo del recorrido')} className={cn('flex rounded-full bg-bone/10 p-0.5 text-xs', className)}>
