@@ -43,6 +43,7 @@ import { useRealContext } from './RealContext';
 import { TourGuide, type GuideStep } from './TourGuide';
 import { useNivel } from '@/components/hotel/Nivel';
 
+import { CaptureHook } from './CaptureHook';
 import { ExportHook } from './ExportHook';
 import { NEIGHBOR_MUTE } from './textures';
 import { type FloorTag, FloorTagLayer, FloorTagProjector } from './FloorTags';
@@ -426,6 +427,35 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
     [data.floors, data.units, data.pois, data.offer, data.slug, lang, routes],
   );
   const levelPlans = useLevelPlans(data.levelPlanSources, stage.kind === 'piso' ? stage.levelId : null);
+  // contornos de las unidades y los lugares del piso abierto, en el mundo (solo para la captura de la vista guiada, D-095)
+  const captureSpaces = useMemo(() => {
+    if (stage.kind !== 'piso') return [];
+    const entry = levelPlans[stage.levelId];
+    const order = data.floors.find((f) => f.id === stage.levelId)?.order;
+    if (!entry || order === undefined) return [];
+    const fc = facadesOf(data.building);
+    const [px, pz] = facadeDir(fc[facadeIndex % fc.length]!);
+    const y = (order - 1) * frame.floorHeight + 0.2;
+    return entry.spaces.flatMap((sp) => {
+      if (sp.kind !== 'unit' && sp.kind !== 'poi') return [];
+      const poly = entry.plan.spaces.find((p) => p.id === sp.id);
+      if (!poly) return [];
+      return [
+        {
+          id: sp.kind === 'unit' ? sp.unitId! : sp.id,
+          kind: sp.kind,
+          points: poly.points.map(
+            ([lx, ly]) =>
+              [
+                frame.center[0] + lx / 100 - entry.plan.width / 200 + px * FLOOR_PULL,
+                y,
+                frame.center[1] + ly / 100 - entry.plan.height / 200 + pz * FLOOR_PULL,
+              ] as [number, number, number],
+          ),
+        },
+      ];
+    });
+  }, [stage, levelPlans, data.floors, data.building, facadeIndex, frame]);
   const floorLabels = useMemo(() => {
     if (stage.kind !== 'piso') return [];
     const entry = levelPlans[stage.levelId];
@@ -787,6 +817,12 @@ export default function Scene({ data, stage, active, quality, qualityLocked, red
         />
         <UnitLights light={light} units={data.units} />
         <ExportHook />
+        <CaptureHook
+          footprint={data.building.footprint as [number, number][]}
+          floorHeight={frame.floorHeight}
+          floors={data.floors}
+          spaces={captureSpaces}
+        />
         <PoiProjector pois={poiGroups} anchors={anchors} />
 
         {/* maqueta de la unidad actual (bloque 3), o la que se prepara escondida desde el piso */}
