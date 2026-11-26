@@ -281,7 +281,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 
 ### Cénit en el 3D (Jacobo, 2026-11-25, en Vercel)
 
-- [ ] **En el modo libre no deja tocar el piso 15 de Cénit** (Jacobo, 2026-11-26): sin importar cómo se ponga la cámara, el clic sobre el piso 15 no responde, como si algo lo tapara. Revisar qué intercepta el rayo arriba de la torre (la cubierta, la pérgola, la terraza o el número del piso). Anotado, sin hacer
+- [x] **En el modo libre no dejaba tocar el piso 15 de Cénit** — hecho el 2026-11-26. Desde arriba, lo que más se ve del último piso es su cubierta (terraza, pérgola, antepecho), y la cubierta no hacía nada al tocarla. Ahora tocarla (o pasar el mouse) abre y resalta el último piso. La fachada y el número del piso ya funcionaban
 
 - [x] **Paredes de la habitación de Cénit en la maqueta** — hecho el 2026-11-26: no se quitaban las de fachada, todo se cortaba a 1,15 m y la fachada de vidrio parecía desaparecer. Ahora es una casa de muñecas: se quitan los muros del lado de la cámara y los demás quedan completos
 
