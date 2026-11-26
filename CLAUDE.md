@@ -16,6 +16,7 @@ Este archivo es el punto de entrada para Claude Code. Es corto a propósito; el 
 | Pantallas, tipografía, color, animación | `docs/DISENO.md` |
 | Planos SVG, edificio, imágenes, 360°, pipeline de assets | `docs/CONTENIDO.md` |
 | Orden de trabajo y criterios de cada bloque | `docs/PLAN.md` |
+| Producir un lugar nuevo (hotel, gym, coworking…), con o sin información | `docs/PRODUCCION.md` (agente: `.claude/agents/productor.md`) |
 | Por qué se eligió algo | `docs/DECISIONES.md` |
 | Resumen de todo para decidir (estado, páginas, comercial) | `docs/ESTADO.md` |
 
