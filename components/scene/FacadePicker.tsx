@@ -37,7 +37,10 @@ export function FacadePicker({ building, className }: { building: Building; clas
         <p className="hidden text-xs tracking-[0.12em] text-bone/60 uppercase md:block">
           {tr('Vista {i} de {n}', { i: index + 1, n: facades.length })}
         </p>
-        <p className="truncate text-sm font-medium">{current.label}</p>
+        {/* el nombre viene de lib/building.ts, en español: se traduce aquí ("Fachada 5" también) */}
+        <p className="truncate text-sm font-medium">
+          {/^Fachada (\d+)$/.test(current.label) ? tr('Fachada {n}', { n: current.label.slice(8) }) : tr(current.label)}
+        </p>
       </div>
       <button
         type="button"

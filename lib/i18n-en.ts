@@ -97,6 +97,7 @@ export const EN: Record<string, string> = {
   'Costado derecho': 'Right side',
   'Fachada posterior': 'Rear façade',
   'Costado izquierdo': 'Left side',
+  'Fachada {n}': 'Façade {n}',
   'Ver de día': 'Daytime view',
   'Ver de noche': 'Night view',
   'Pisos del edificio': 'Floors of the building',
@@ -356,6 +357,7 @@ export const EN: Record<string, string> = {
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
   // modos del recorrido (D-097)
+  'Cambiar de piso': 'Change floor',
   Entrar: 'Enter',
   'Modo guiado': 'Guided mode',
   'Modo libre': 'Free mode',
