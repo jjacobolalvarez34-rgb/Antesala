@@ -128,10 +128,13 @@ for (const m of MOMENTS)
       // final de la llegada = la vista de los pisos: casi de frente (un poco en 3/4 para dar volumen),
       // apenas desde arriba, con lente largo para que los pisos se vean rectos
       const endFov = portrait ? 30 : 22;
-      const fitV = (height * (portrait ? 1.34 : 1.22)) / 2 / Math.tan((endFov / 2) * DEG);
+      // lo que hay sobre la cubierta (terraza, pérgola, barandas) también entra: en Niebla Alta, que es
+      // baja y ancha, quedaba cortado
+      const tall = height + 5;
+      const fitV = (tall * (portrait ? 1.34 : 1.22)) / 2 / Math.tan((endFov / 2) * DEG);
       const fitH = (width * 1.5) / 2 / (Math.tan((endFov / 2) * DEG) * aspect);
       const endR = Math.max(fitV, fitH);
-      const end = { az: facade + 16 * DEG, polar: 86 * DEG, r: endR, ty: height * 0.5, fov: endFov };
+      const end = { az: facade + 16 * DEG, polar: 86 * DEG, r: endR, ty: tall * 0.5, fov: endFov };
       // comienzo: en la calle, cerca y mirando hacia arriba, con lente más abierto
       const start = { az: facade + 40 * DEG, polar: 93 * DEG, r: Math.max(48, height * 1.05), ty: height * 0.38, fov: portrait ? 66 : 54 };
       const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);

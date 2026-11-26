@@ -90,10 +90,15 @@ function fitBuilding(o: GuidedOrient, c: Chrome): Box {
   const bottom = c.barTop - (c.desktop ? 28 : 12);
   const sCover = Math.max(c.W / o.w, c.H / o.h);
   const sFit = (bottom - top) / ((b.y1 - b.y0) * o.h);
-  const s = Math.min(sCover, sFit);
+  // si los pisos ocupan poco (un edificio bajo y ancho, como Niebla Alta en vertical), la imagen se
+  // agranda hasta 1,5 veces, sin que el edificio se salga a lo ancho
+  // deja sitio a la derecha para los números de piso (~90 px en el celular)
+  const sWide = (c.W - (c.desktop ? 220 : 96) - 16) / ((b.x1 - b.x0) * o.w);
+  const s = sFit < sCover ? sFit : Math.min(sFit, sCover * 1.5, Math.max(sCover, sWide));
   const w = o.w * s;
   const h = o.h * s;
-  let left = c.W / 2 - ((b.x0 + b.x1) / 2) * w;
+  // en el celular, la torre y sus números se centran juntos (los números van a la derecha)
+  let left = (c.W - (c.desktop ? 0 : 80)) / 2 - ((b.x0 + b.x1) / 2) * w;
   if (w >= c.W) left = Math.min(0, Math.max(c.W - w, left));
   let t = (top + bottom) / 2 - ((b.y0 + b.y1) / 2) * h;
   if (h >= c.H) t = Math.min(0, Math.max(c.H - h, t));
@@ -335,7 +340,7 @@ export function GuidedView({ data, offer }: { data: GuidedData; offer?: Offer })
   return (
     <div
       data-guided-view
-      className="fixed inset-0 overflow-hidden transition-[background-color] duration-700 ease-out"
+      className="fixed inset-0 overflow-clip transition-[background-color] duration-700 ease-out"
       style={{ background: bg }}
     >
       {/* 1 · el edificio */}
