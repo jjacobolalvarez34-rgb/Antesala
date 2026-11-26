@@ -1,6 +1,6 @@
 'use client';
 
-import { useThree, type ThreeEvent } from '@react-three/fiber';
+import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import gsap from 'gsap';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -40,7 +40,6 @@ const WOOD = '#a57f5c';
 
 /** Altura de corte de muros y muebles (m): completa, o maqueta abierta al ver un espacio. */
 const FULL_CUT = 3;
-const SPACE_CUT = 1.15;
 
 /** Acabado procedural de la superficie (sin texturas que descargar). */
 type Surface = 'plaster' | 'wood' | 'tile';
@@ -83,6 +82,12 @@ interface CutUniforms {
   focus: { value: THREE.Vector4 };
   /** 0 = todo a la vista; 1 = lo que queda fuera del espacio enfocado se hundió en el piso */
   sink: { value: number };
+  /** casa de muñecas (1 = activa): se quitan los muros del lado de la cámara */
+  doll: { value: number };
+  /** la cámara en coordenadas de la maqueta (para saber de qué lado está) */
+  cam: { value: THREE.Vector3 };
+  /** caja de la unidad (minX, minZ, maxX, maxZ), en metros de la maqueta */
+  box: { value: THREE.Vector4 };
 }
 
 /**
@@ -98,6 +103,9 @@ function cuttable<T extends THREE.Material>(mat: T, u: CutUniforms, surface?: Su
     shader.uniforms.uCut = u.cut;
     shader.uniforms.uFocus = u.focus;
     shader.uniforms.uSink = u.sink;
+    shader.uniforms.uDoll = u.doll;
+    shader.uniforms.uCam = u.cam;
+    shader.uniforms.uBox = u.box;
     shader.vertexShader = `uniform float uCut;
 varying vec3 vSurfPos;
 varying vec3 vSurfNormal;
@@ -111,12 +119,23 @@ ${shader.vertexShader}`.replace(
     shader.fragmentShader = `uniform float uCut;
 uniform vec4 uFocus;
 uniform float uSink;
+uniform float uDoll;
+uniform vec3 uCam;
+uniform vec4 uBox;
 varying vec3 vSurfPos;
 varying vec3 vSurfNormal;
 ${surface ? NOISE : ''}
 ${shader.fragmentShader}`.replace(
       '#include <clipping_planes_fragment>',
       `#include <clipping_planes_fragment>
+  // casa de muñecas: fuera los muros del lado de la cámara (30 cm: el grueso del muro y algo más);
+  // el piso se queda
+  if (uDoll > 0.5 && vSurfPos.y > 0.06) {
+    if (uCam.x > uBox.z && vSurfPos.x > uBox.z - 0.3) discard;
+    if (uCam.x < uBox.x && vSurfPos.x < uBox.x + 0.3) discard;
+    if (uCam.z > uBox.w && vSurfPos.z > uBox.w - 0.3) discard;
+    if (uCam.z < uBox.y && vSurfPos.z < uBox.y + 0.3) discard;
+  }
   if (uSink > 0.0) {
     bool outside = vSurfPos.x < uFocus.x || vSurfPos.z < uFocus.y || vSurfPos.x > uFocus.z || vSurfPos.z > uFocus.w;
     if (outside && vSurfPos.y > mix(uCut + 0.01, -0.02, uSink)) discard;
@@ -203,7 +222,30 @@ export function UnitModel({
     [meshes, railing],
   );
 
-  const uni = useMemo<CutUniforms>(() => ({ cut: { value: FULL_CUT }, focus: { value: new THREE.Vector4() }, sink: { value: 0 } }), []);
+  const uni = useMemo<CutUniforms>(
+    () => ({
+      cut: { value: FULL_CUT },
+      focus: { value: new THREE.Vector4() },
+      sink: { value: 0 },
+      doll: { value: 0 },
+      cam: { value: new THREE.Vector3() },
+      box: { value: new THREE.Vector4() },
+    }),
+    [],
+  );
+  // la caja de la unidad: el plano va centrado (como focusRect)
+  useEffect(() => {
+    const w = plan.width * 0.01;
+    const h = plan.height * 0.01;
+    uni.box.value.set(-w / 2, -h / 2, w / 2, h / 2);
+  }, [plan, uni]);
+  // la cámara, en coordenadas de la maqueta, cada cuadro (solo importa con la casa de muñecas)
+  const dollCamera = useThree((s) => s.camera);
+  useFrame(() => {
+    if (uni.doll.value < 0.5 || !group.current) return;
+    uni.cam.value.copy(dollCamera.position);
+    group.current.worldToLocal(uni.cam.value);
+  });
   const cutU = uni.cut;
   // enfocar: hundir lo de afuera; al cambiar de espacio, primero vuelve todo y luego se hunde otra vez
   useEffect(() => {
@@ -223,12 +265,16 @@ export function UnitModel({
       tl.kill();
     };
   }, [focus, plan, reduced, uni]);
+  // al ver un espacio en maqueta: casa de muñecas. Antes todo se cortaba a 1,15 m y, con la fachada
+  // de vidrio de Cénit, parecía que se quitaban las paredes de afuera y quedaban las de adentro
+  // (Jacobo, 2026-11-26). Ahora los muros quedan completos, menos los del lado de la cámara.
   useEffect(() => {
-    const t = gsap.to(cutU, { value: cut ? SPACE_CUT : FULL_CUT, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0.2, ease: 'power2.inOut', overwrite: true });
+    uni.doll.value = cut ? 1 : 0;
+    const t = gsap.to(cutU, { value: FULL_CUT, duration: reduced ? 0 : 0.9, delay: reduced ? 0.45 : 0.2, ease: 'power2.inOut', overwrite: true });
     return () => {
       t.kill();
     };
-  }, [cut, reduced, cutU]);
+  }, [cut, reduced, cutU, uni]);
   const depthMat = useMemo(() => cuttable(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), uni), [uni]);
 
   const mats = useMemo(() => {
