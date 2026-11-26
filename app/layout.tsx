@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 
+import { SceneHost } from '@/components/scene/SceneHost';
 import { fontVariables } from '@/lib/fonts';
 
 import './globals.css';
@@ -19,7 +20,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="es" className={fontVariables}>
-      <body>{children}</body>
+      <body>
+        {/* el 3D de las demos, compartido por los dos idiomas (SceneHost) */}
+        <SceneHost />
+        {children}
+      </body>
     </html>
   );
 }

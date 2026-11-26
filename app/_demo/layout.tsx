@@ -12,7 +12,7 @@ import { PoweredBy } from '@/components/hotel/PoweredBy';
 import type { SceneDataWire } from '@/components/scene/Scene';
 import type { TerrainDataWire } from '@/components/scene/terrain/types';
 import { LangProvider } from '@/components/i18n/Lang';
-import { SceneLayer } from '@/components/scene/SceneLayer';
+import { SceneRegister } from '@/components/scene/SceneHost';
 import { getHotelBundle, listHotelSlugs } from '@/lib/content';
 import { loadGuided } from '@/lib/guided';
 import { findCategory, findLevel, priceFrom, sortedLevels, unitPrice, freeAlternative } from '@/lib/hotel';
@@ -227,7 +227,8 @@ export async function HotelLayout({ children, params }: DemoLayoutProps, lang: L
         style={tokensToStyle(tokens)}
         className="relative flex min-h-dvh flex-col bg-background text-foreground scene:pointer-events-none scene:bg-transparent"
       >
-        {scene ? <SceneLayer data={scene} /> : terrain ? <SceneLayer data={terrain} /> : null}
+        {/* el 3D vive en el layout raíz (SceneHost): así no se desmonta al cambiar de idioma */}
+        {scene || terrain ? <SceneRegister slug={hotel.slug} lang={lang} data={(scene ?? terrain)!} style={tokensToStyle(tokens)} /> : null}
         {hotel.isDemo ? (
           <DemoBanner
           lang={lang}

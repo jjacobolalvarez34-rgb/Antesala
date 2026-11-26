@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
@@ -42,7 +42,9 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWi
   const terrain = 'kind' in data && data.kind === 'terreno';
   const router = useRouter();
   const lang = useLang();
-  const [stageName, param, spaceParam] = useSelectedLayoutSegments();
+  // la etapa sale de la ruta (/h/<hotel>/<etapa>/... o /en/h/...): el 3D vive en el layout raíz
+  const path = usePathname();
+  const [stageName, param, spaceParam] = path.replace(/^\/en(?=\/)/, '').split('/').filter(Boolean).slice(2);
   const reduced = useReducedMotion();
   const { quality, qualityLocked, askConsent, consent, sceneReady, sceneMounted, intro, init, mountScene } = useTour();
 
