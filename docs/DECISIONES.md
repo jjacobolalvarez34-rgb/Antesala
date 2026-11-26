@@ -593,3 +593,32 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
   - Lo que no tiene traducción queda en español: nunca rompe la página.
   - Los nombres propios no se traducen. El mensaje de WhatsApp al hotel sigue en español.
 - Por qué: un amigo de Jacobo en Nueva Zelanda quería mostrar las demos a amigos de otros idiomas. Con inglés alcanza por ahora, y es un argumento de venta: los huéspedes extranjeros son buena parte de los hoteles boutique de Bogotá.
+
+**D-095 · 2026-11-25 · Vista guiada: el recorrido "como un video", prerenderizado desde nuestro 3D**
+- Decisión:
+  - Cada hotel puede tener una **vista guiada** en `/h/<slug>/guiada` (y `/en/...`), sin 3D en vivo. Por ahora solo Cénit.
+  - **Recorrido:**
+    1. la llegada en video: la cámara sube desde la calle hasta ver la torre entera;
+    2. la torre quieta, con lente largo para que los pisos se vean rectos, y el contorno de cada piso. Los pisos se iluminan de arriba hacia abajo;
+    3. al elegir un piso, el edificio se acerca a ese piso y se desvanece. La planta sola, sobre fondo liso, entra girando y se asienta, y se dibujan los contornos de las unidades;
+    4. al elegir una unidad, la planta se acerca a ella y se abre su ficha: plano, fotos, 360° y "Ver en 3D".
+    
+    Volver hace todo al revés.
+  - **Cómo se produce:** todo sale de nuestra propia escena Premium de día, con `pipeline/guiada.spec.ts`:
+    - la cámara se controla desde `components/scene/CaptureHook.tsx`, que solo existe con `?captura`;
+    - los contornos son los polígonos del mundo proyectados con la misma cámara, así que no se desalinean;
+    - hay dos tomas, horizontal (1600 × 1000) y vertical (900 × 1600), y el visor elige según la pantalla.
+  - **Dónde queda:**
+    - las imágenes y el manifest, en `content/hotels/<slug>/media/guiada/`;
+    - los videos, en `public/demo/guiada/<slug>/`, porque Safari en iPhone pide el video por rangos.
+    - Sin manifest, el hotel no muestra el botón.
+  - **Estado en la URL** (`?piso=8&u=801`): el atrás del celular y la flecha de la barra de reserva funcionan solos. La barra sigue a lo que se ve.
+  - **Movimiento:** solo transformaciones CSS (Motion). La planta siguiente se baja y se decodifica antes de la transición, y en escritorio se precargan todas en tiempo ocioso. La vista guiada no precarga el 3D.
+- Por qué:
+  - Jacobo lo propuso al ver productos de inmobiliarias: se recorre como un video y no se traba en ningún celular, porque son imágenes.
+  - Sirve de puente al modo fotorrealista Premium (decisión abierta 16 en ESTADO). Cuando haya renders de Cycles, se cambian las imágenes y el visor queda igual.
+
+**D-096 · 2026-11-25 · En la vista guiada, Reservar aparece con la habitación abierta**
+- Decisión: en `/h/<slug>/guiada` la barra de reserva no se muestra en el edificio ni en el piso. Entra, con un fundido, al abrir una habitación, y se va al cerrarla. En el resto de la demo sigue siempre visible (regla 4).
+- Por qué: Jacobo (2026-11-25): "el botón aparece cuando veo una habitación, no antes, porque ensucia la experiencia". La vista guiada es un recorrido a pantalla completa, como un video, y ahí la reserva tiene sentido cuando ya hay algo concreto que reservar. Es una excepción a la regla 4 pedida por el dueño, solo para esta vista.
+

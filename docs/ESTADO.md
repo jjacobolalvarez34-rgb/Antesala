@@ -2,7 +2,7 @@
 
 Resumen para tomar decisiones: qué está hecho, cómo funciona cada página, qué se decidió en lo comercial y qué falta decidir. Es un documento vivo: se actualiza al final de cada sesión de trabajo. El detalle técnico vive en los demás documentos de `docs/`.
 
-**Actualizado:** 2026-11-15
+**Actualizado:** 2026-11-25
 **Sitio publicado:** https://antesala-mauve.vercel.app (cada cambio que se sube a `main` se publica solo)
 
 ---
@@ -75,6 +75,7 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 | Piso | `/h/<hotel>/piso/<n>` | El piso sale del edificio como un cajón y se ve la planta amoblada. Al pasar el mouse, **una luz cálida se enciende solo sobre esa habitación**, con su nombre y precio; al tocarla brilla un momento y entra. Sin 3D, la planta en 2D con cada unidad **en verde (libre) o terracota (ocupada o vendida)**, con leyenda. |
 | Unidad | `/h/<hotel>/unidad/<id>` | La maqueta de la unidad amoblada y sin techo, su ficha (área, capacidad, precio), "Elige tu unidad exacta" (la misma unidad en otros pisos, con el extra por vista) y "Ver la vista desde la ventana". |
 | Espacio | `/h/<hotel>/unidad/<id>/<espacio>` | La **foto del espacio se puede mirar**: arrastrar o inclinar el celular mueve la cámara (no es 360°). Además, el 360° o la maqueta. En maqueta, **los demás espacios se hunden en el piso** y solo queda el elegido. |
+| Vista guiada | `/h/<hotel>/guiada` | **Nueva (D-095, D-096), por ahora solo en Cénit. A pantalla completa, de día y de noche; Reservar aparece al abrir una habitación.** El recorrido "como un video" de las inmobiliarias, sin 3D en vivo: la cámara sube desde la calle hasta la torre (video); los pisos se iluminan de arriba hacia abajo; al tocar uno, el edificio se acerca y desaparece, y **la planta de ese piso sola** entra girando con sus unidades en verde o terracota; al tocar una unidad, la planta se acerca y se abre su ficha con plano, fotos y 360°. Atrás devuelve al edificio con la animación al revés. Son imágenes de nuestro propio 3D: no se traba en ningún celular. Botón "Vista guiada" en la portada. |
 | Lista | `/h/<hotel>/lista` | Todo sin 3D: pisos, unidades, planos y fotos. Es el respaldo para celulares sin 3D. |
 | Comparar | `/h/<hotel>/comparar` | Las categorías lado a lado. |
 | Panel | `/h/<hotel>/panel` | Métricas **simuladas** para el gerente: visitas, unidades más vistas, clics a reservar y comisión ahorrada. |
@@ -130,6 +131,13 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 ---
 
 ## 6. Qué está en curso
+
+- **Hecho el 2026-11-25: vista guiada para Cénit (D-095).** Es lo que Jacobo pidió, con lo que hay y sin fotos nuevas. Es el primer paso de la decisión abierta 16: el visor ya está, y cuando haya renders fotorrealistas solo se cambian las imágenes. Además:
+  - la vista guiada va a pantalla completa, de día y de noche, con un brillo verde o terracota sobre cada habitación, la planta arrastrable y Reservar solo con una habitación abierta (D-096);
+  - en la página de Antesala, las tarjetas de Niebla Alta y Cénit muestran foto del hotel y, al pasar, una de adentro (Frailejón sigue con su mapa; propuesta: hacerle foto con Higgsfield);
+  - el giro entre fachadas del 3D es más rápido (1,2 s por cuarto de vuelta);
+  - el encabezado del hotel pasó a oscuro;
+  - la guía grande del 3D quedó como una píldora pequeña.
 
 - **Hecho el 2026-11-16 en la noche: Cénit Premium pasó de 2 a 34 cuadros por segundo** en el celular simulado (de 7,3 a 3,1 MB). Hubo tres arreglos:
   - la fachada en un solo atlas (de 30 texturas a 2);
@@ -237,8 +245,9 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 
     La IA queda para marketing: video de portada, clips y pulir renders, siempre marcados como ilustrativos.
   - **Comercial:** es el acabado que más se cobra. Encaja sobre todo en la **preventa inmobiliaria** (no hay nada que fotografiar), además de hoteles, coworkings y sitios de eventos.
+  - **Avance (2026-11-25):** ya existe la vista guiada con imágenes de nuestro 3D (D-095, `/h/cenit/guiada`). Falta decidir si se pasa a renders fotorrealistas y cómo se cobra.
   - **A decidir:**
-    - si se construye el modo guiado prerenderizado;
+    - si se construye el modo guiado prerenderizado (con renders fotorrealistas);
     - con qué motor de render (Blender, que ya está, o D5/Unreal);
     - cuánto cobrarlo frente al Premium actual.
 

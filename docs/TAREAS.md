@@ -234,7 +234,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] La sombra de la sala a veces falla (preguntar a Jacobo en qué modo y desde dónde)
 ### Notas de Jacobo recorriendo Niebla Alta (2026-11-24), en orden: primero el edificio, la página del hotel al final
 
-- [ ] **La guía "Así se recorre el hotel" es gigante** y tapa la escena al entrar. Hacerla pequeña y discreta (o un toque de ayuda), sin cubrir el edificio ni competir con "Reservar"
+- [x] **La guía "Así se recorre el hotel" es gigante** — hecho el 2026-11-25: ahora es la misma píldora pequeña de las otras ayudas ("Toca el número de un piso para abrirlo"). Antes: tapaba la escena al entrar
 - [ ] **Quitar el aviso "Hotel ficticio" de la franja de arriba dentro del 3D:** ya se sabe que es una demo; sobra
 - [ ] **Puntos naranja de las zonas comunes sobre el edificio** (terraza, lobby…) molestan a la vista. Mejor: que esa información aparezca al abrir el piso donde está (el lobby en el piso 1) y que **la terraza sea el último piso** en la lista de pisos
 - [ ] **Abrir un piso carga lento.** Idea de Jacobo: al entrar a un piso, dejar en pantalla solo ese piso (sin el resto del edificio), con un botón para volver y cambiar de piso desde ahí. Debería ir mucho más rápido
@@ -255,7 +255,27 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 
   Son horas de render: una noche aquí o el PC del amigo. Anotado, sin hacer
 - [ ] **Números de piso al costado del edificio (FloorTags):** no se mueven parejo. Cada piso busca por su cuenta la esquina más a la derecha, así que con perspectiva quedan corridos unos de otros y las líneas finas se ven sueltas. Deberían ir en una sola columna alineada. Además, **mientras la persona gira la cámara deberían desvanecerse y volver al detenerse**, como los letreros de las unidades (Jacobo, 2026-11-23, con captura de Niebla Alta de noche). Anotado, sin hacer
+- [x] **Giro entre fachadas más rápido** (Jacobo, 2026-11-25: "fluido pero rápido") — hecho: de 2,6 s fijos a 1,2 s por cuarto de vuelta (1,6 s media vuelta), curva `power2.inOut`
+- [x] **Encabezado del hotel oscuro** (Jacobo, 2026-11-25: "se vería mejor oscuro en vez de ese blanco") — hecho: el encabezado sólido de la página del hotel, la lista y la vista guiada va en tinta con textos claros; sobre la foto de la portada sigue transparente
 - [ ] **Noche en Premium:** cuando la demo carga de noche (la hora se toma sola), las sombras de las ventanas se ven mal. Revisar las sombras y la luz de las ventanas con la fachada horneada de noche (Jacobo, 2026-11-16)
+
+### Vista guiada (D-095, pedido de Jacobo, 2026-11-25: "con lo que tengamos… cuida las perspectivas")
+
+- [x] Captura desde nuestro 3D (`pipeline/guiada.spec.ts`): video de llegada, torre con contornos de pisos, una planta por piso, en horizontal y vertical
+- [x] Página `/h/<slug>/guiada` (y `/en`): llegada → pisos → solo el piso (entra girando) → unidad (plano, fotos, 360°), con el estado en la URL y la barra de reserva siguiendo lo que se ve
+- [x] Botón "Vista guiada" en la portada del hotel (solo si hay manifest)
+- [ ] Jacobo la prueba en su celular y dice qué ajustar (tiempos, giro de la planta, tamaño de las etiquetas)
+- [ ] Llevarla a Niebla Alta: correr `HOTEL=niebla-alta … guiada.spec` y revisar las tomas
+- [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
+- [ ] Botón también dentro del 3D (para pasar de uno a otro) si Jacobo lo quiere
+- [x] Pantalla completa (sin franja ni encabezado), marca abajo a la izquierda, controles arriba (idioma, día/noche, cerrar), torre ancha (2800 px), brillo por estado en vez de recuadro, planta arrastrable que vuelve sola, reserva solo con habitación abierta (D-096)
+- [x] Día y noche: torre y plantas de noche capturadas (2026-11-25)
+- [ ] **Plantas de la vista guiada con la planta horneada (Premium).** Hoy todas, de día y de noche, salen con la de código (la de Inmersivo), porque la horneada llegaba a la captura unas veces sí y otras no, y quedaban pisos distintos entre sí (regla 9). Lo que se vio (2026-11-25): la planta del piso abierto se monta tarde; con la horneada, `planReady` (material con `userData.base` en opacidad completa) a veces nunca se cumple, ni recargando. Revisar en `FloorPlanModel` cuándo se pide la horneada en el piso abierto y su fundido; después repetir con `nivel=premium` en `pipeline/guiada.spec.ts`
+- [ ] **Tarjeta de Frailejón en la página de Antesala:** sigue con el mapa. Hacerle una foto del valle y un refugio con Higgsfield desde su propio 3D (como Niebla Alta, D-070), para que dé ganas de entrar. Pedir el visto bueno de Jacobo antes de generar
+
+### Cénit en el 3D (Jacobo, 2026-11-25, en Vercel)
+
+- [ ] **Al abrir una habitación de Cénit (p. ej. Deluxe King 1302, maqueta), se quitan las paredes exteriores (las del vidrio) en vez de la pared que da a la cámara.** Quedan los muros interiores completos y la fachada cortada abajo. Revisar en `UnitModel` qué muros se bajan en el corte tipo casa de muñecas: deberían bajarse los que quedan entre la cámara y el cuarto, no siempre los de fachada. Anotado, sin hacer
 
 ### Celular (pedido de Jacobo, 2026-11-16)
 

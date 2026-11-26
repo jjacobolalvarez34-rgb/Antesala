@@ -25,6 +25,48 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
 
 ---
 
+## 2026-11-25 (noche) · Vista guiada de Cénit, giro más rápido y encabezado oscuro
+
+**Hecho**
+- **Vista guiada (D-095)**, en `/h/cenit/guiada` y `/en/h/cenit/guiada`, con un botón en la portada:
+  1. la llegada en video: la cámara sube desde la calle hasta la torre;
+  2. la torre con los pisos, que se iluminan de arriba hacia abajo, con su número y cuántas unidades quedan libres;
+  3. al tocar un piso, el edificio se acerca a ese piso y se desvanece, y la planta sola entra girando sobre fondo liso, con las unidades en verde o terracota y una lista;
+  4. al tocar una unidad, la planta se acerca y se abre su ficha: plano, fotos, 360° y "Ver en 3D".
+  
+  Atrás devuelve todo al revés. El piso y la unidad van en la URL, y la barra de reserva sigue lo que se ve.
+- **Captura** (`pipeline/guiada.spec.ts` + `components/scene/CaptureHook.tsx`): sale de nuestra escena Premium de día, en horizontal y vertical. Los contornos son los polígonos del 3D proyectados con la misma cámara.
+- **Vista guiada, segunda ronda con Jacobo:**
+  - a pantalla completa, sin franja ni encabezado: la marca del hotel abajo a la izquierda (arriba en el celular) con el aviso de hotel ficticio, y los controles arriba (idioma, día/noche, cerrar);
+  - **día y noche**, con la misma cámara y fundido entre las dos;
+  - torre en horizontal más ancha (2800 px) para que cubra ventanas anchas y bajas;
+  - en el piso, un **brillo** verde o terracota sobre la habitación (como la luz del 3D) en vez del recuadro, que se ve solo al pasar o al tocar;
+  - la planta se arrastra, se inclina y vuelve sola;
+  - Reservar aparece solo con una habitación abierta (D-096);
+  - imágenes con versión en la URL: al recapturar, el navegador mostraba la vieja de su caché (salía estirada).
+- **Tarjetas de las demos en la página de Antesala:** Niebla Alta con su fachada de ladrillo y, al pasar, la sala de la suite 402 (fotos de Niebla Alta, no las de la página, que son de otro edificio); Cénit con la torre de noche de la vista guiada y, al pasar, una habitación. Frailejón sigue con su mapa.
+- **Giro entre fachadas** más rápido (1,2 s por cuarto de vuelta, antes 2,6 s fijos).
+- **Encabezado del hotel** sólido oscuro (tinta) en vez de hueso.
+- **Guía del 3D:** la tarjeta grande "Así se recorre" pasó a la píldora pequeña.
+
+**Decisiones**
+- D-095: vista guiada prerenderizada desde nuestro 3D. Es el primer paso de la decisión abierta 16.
+
+**Problemas / bloqueos**
+- **Las plantas salían corridas y cortadas:** el visor desplaza la cámara para el panel lateral en cada cuadro (`CameraRig`). Con `?captura`, `CaptureHook` lo anula.
+- **La recaptura se colgó:** había un `next start` viejo en el puerto 3100 (las capturas lo reutilizan) sirviendo una compilación borrada. Antes de capturar, revisar que no quede ninguno.
+- **Plantas realistas a medias:** la planta horneada a veces tardaba más que la espera y la toma salía con la de código; quedaban pisos distintos entre sí (regla 9). Ni con reintento llegaba siempre, así que todas las plantas (día y noche) se capturan con la de código, la de Inmersivo: iguales entre sí. La horneada queda pendiente en TAREAS con lo que se vio.
+- **Videos en `public/demo/guiada/`** y no en `content/`: Safari en iPhone pide el video por rangos, y la ruta de medios de la demo no los sirve.
+
+**Mediciones**
+- Llegada: 1,2 MB por orientación (84 cuadros, H.264 crf 26). Torre: unos 200 KB. Cada planta: de 40 a 70 KB.
+- La vista guiada no carga three.js.
+
+**Siguiente sesión**
+- Empezar por: lo que diga Jacobo al probar la vista guiada en su celular (Vercel). Pendientes nuevos en TAREAS: plantas con la horneada, paredes de la habitación de Cénit en el 3D, foto para la tarjeta de Frailejón. Después, las notas de Niebla Alta en TAREAS (aviso "Hotel ficticio" en el 3D, puntos naranja, letreros del lobby).
+
+---
+
 ## 2026-11-16 (noche) · Cénit Premium de 2 a 34 fps
 
 **Hecho**
