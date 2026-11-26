@@ -109,7 +109,7 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate, i
     const first = prev.current === null;
     const prevKey = prev.current?.key ?? '';
     const back = !first && depth < prev.current!.depth;
-    // giro entre fachadas: largo y suave; saltos de etapa grandes (p. ej. a la unidad): vuelo más largo
+    // giro entre fachadas: rápido pero fluido (Jacobo, 2026-11-25: 2,6 s se sentía lento); saltos de etapa grandes (p. ej. a la unidad): vuelo más largo
     const facadeTurn = prevKey.startsWith('explorar-') && stageKey.startsWith('explorar-');
     const bigJump = !first && Math.abs(depth - (prev.current?.depth ?? depth)) >= 2;
     prev.current = { key: stageKey, depth };
@@ -130,7 +130,8 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate, i
           ? (introDuration ?? INTRO_DURATION)
           : 0
         : facadeTurn
-          ? 2.6
+          ? // según cuánto gira: un cuarto de vuelta 1,2 s, media vuelta 1,6 s
+            0.8 + 0.4 * (Math.abs(dAz) / (Math.PI / 2))
           : bigJump
             ? 1.9
             : DURATION * (back ? BACK_FACTOR : 1);
@@ -175,7 +176,7 @@ export function CameraRig({ pose, stageKey, depth, intro, reduced, autoRotate, i
     tween.current = gsap.to(state, {
       ...target,
       duration,
-      ease: first || bigJump ? 'power3.inOut' : facadeTurn ? 'sine.inOut' : 'power2.inOut',
+      ease: first || bigJump ? 'power3.inOut' : 'power2.inOut',
       onUpdate: update,
       onComplete: settle,
     });
