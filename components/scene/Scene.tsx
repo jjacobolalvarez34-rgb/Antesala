@@ -924,18 +924,25 @@ function useLevelPlans(sources: SceneData['levelPlanSources'], priority: string 
   const asked = useRef(new Set<string>());
   useEffect(() => {
     let alive = true;
+    const askedIds = asked.current;
     const load = (id: string) => {
       const src = sources[id];
-      if (!src || asked.current.has(id)) return;
-      asked.current.add(id);
+      if (!src || askedIds.has(id)) return;
+      askedIds.add(id);
       fetch(src.url)
         .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
         .then((svg) => {
-          if (!alive) return;
+          // si el efecto se reinició mientras bajaba (modo estricto, o los datos llegaron otra vez),
+          // se olvida que se pidió: si no, ese piso se quedaba para siempre sin planta (la vista
+          // guiada salía con plantas distintas entre sí)
+          if (!alive) {
+            askedIds.delete(id);
+            return;
+          }
           const plan = parsePlan(svg, src.url);
           setPlans((p) => ({ ...p, [id]: { plan, spaces: src.spaces, realista: src.realista } }));
         })
-        .catch(() => asked.current.delete(id));
+        .catch(() => askedIds.delete(id));
     };
     if (priority) load(priority);
     const rest = () => Object.keys(sources).forEach(load);
@@ -943,6 +950,8 @@ function useLevelPlans(sources: SceneData['levelPlanSources'], priority: string 
     const h = idle ? window.requestIdleCallback(rest, { timeout: 4000 }) : window.setTimeout(rest, 2500);
     return () => {
       alive = false;
+      // lo que quedó en vuelo se vuelve a pedir en la próxima pasada
+      if (priority) askedIds.delete(priority);
       if (idle) window.cancelIdleCallback(h);
       else window.clearTimeout(h);
     };

@@ -13,20 +13,28 @@ import type { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
  * vive en un worker y es caro de crear).
  */
 let renderer: THREE.WebGLRenderer | null = null;
-let ktx2: KTX2Loader | null = null;
+let ktx2: Promise<KTX2Loader> | null = null;
+// los efectos de los hijos corren antes que los del padre: una planta podía pedir su GLB antes de
+// que la escena registrara su renderer, y sin él no hay KTX2, el GLB no se lee y se veía la planta
+// de código (unas veces sí y otras no). Ahora se espera al renderer.
+let rendererReady: (gl: THREE.WebGLRenderer) => void = () => {};
+const whenRenderer = new Promise<THREE.WebGLRenderer>((r) => (rendererReady = r));
 
 export function setGltfRenderer(gl: THREE.WebGLRenderer) {
   renderer = gl;
+  rendererReady(gl);
   // En producción no se revisan los errores de cada shader nuevo: esa revisión obliga a esperar
   // a que la compilación termine y congelaba la página al entrar a una habitación (D-089).
   // En desarrollo se deja, para ver los errores.
   if (process.env.NODE_ENV === 'production') gl.debug.checkShaderErrors = false;
 }
 
-async function getKtx2() {
-  if (ktx2 || !renderer) return ktx2;
-  const { KTX2Loader } = await import('three/examples/jsm/loaders/KTX2Loader.js');
-  ktx2 = new KTX2Loader().setTranscoderPath('/visor/basis/').detectSupport(renderer);
+/** Un solo KTX2Loader para toda la sesión, creado cuando ya hay renderer (antes se podían crear dos). */
+function getKtx2() {
+  ktx2 ??= (async () => {
+    const [{ KTX2Loader }, gl] = await Promise.all([import('three/examples/jsm/loaders/KTX2Loader.js'), renderer ?? whenRenderer]);
+    return new KTX2Loader().setTranscoderPath('/visor/basis/').detectSupport(gl);
+  })();
   return ktx2;
 }
 

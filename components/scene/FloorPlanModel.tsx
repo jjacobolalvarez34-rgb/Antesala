@@ -139,11 +139,19 @@ export function FloorPlanModel({
   if (visible && !wanted) setWanted(true);
   const [baked, setBaked] = useState<{ obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null>(null);
   useEffect(() => {
+    // solo en modo captura (D-095): la bitácora de la planta horneada, para saber dónde se queda
+    const log = (msg: string) => {
+      const w = window as unknown as { __antesalaCaptura?: unknown; __plantaLog?: string[] };
+      if (w.__antesalaCaptura) (w.__plantaLog ??= []).push(`${Math.round(performance.now())} ${name} ${msg}`);
+    };
+    log(`efecto realista=${realista ? 'sí' : 'no'} wanted=${wanted}`);
     if (!realista || !wanted) return;
     let alive = true;
     let loaded: { obj: THREE.Object3D; mat: THREE.MeshBasicMaterial; all: THREE.MeshBasicMaterial[] } | null = null;
     void (async () => {
+      log('pide');
       const gltf = await loadGltf(realista);
+      log(`llega ${gltf ? 'bien' : 'mal'} vivo=${alive}`);
       if (!alive || !gltf) return;
       let mat: THREE.MeshBasicMaterial | null = null;
       const all: THREE.MeshBasicMaterial[] = [];
@@ -168,18 +176,20 @@ export function FloorPlanModel({
         if (src.name.startsWith('horneado')) mat = next;
       });
       mat ??= all[0] ?? null;
+      log(`materiales ${all.length}`);
       if (!mat) return;
       loaded = { obj: gltf.scene, mat, all };
       setBaked(loaded);
     })();
     return () => {
+      log('limpia');
       alive = false;
       loaded?.all.forEach((m) => {
         m.map?.dispose();
         m.dispose();
       });
     };
-  }, [realista, wanted]);
+  }, [realista, wanted, name]);
   // con la horneada, la de código no se dibuja: los pisos de las unidades siguen
   // recibiendo el mouse y las ocupadas quedan con un velo gris
   useEffect(() => {
