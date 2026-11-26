@@ -224,6 +224,24 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
 - **14. ~~Instalar KTX-Software~~:** aprobado e instalado el 2026-11-16 (4.4.2, en `D:\Herramientas\KTX-Software`).
 - **15. Día de render en el PC prestado:** miércoles 2026-11-18 si se puede; si no, el fin de semana del 21–22 (sin Jacobo: la guía `docs/RENDER.md` §7 lo cubre). Antes conviene hacer las mejoras de `docs/RENDER.md` §4 (muebles con forma, materiales con relieve, luz de arquitecto), para que esa sesión no se gaste descubriendo errores.
 
+- **16. ¿Un modo "fotorrealista guiado" para Premium, como el de las inmobiliarias?** (idea de Jacobo, 2026-11-25)
+  - **Lo que hacen ellas:** no es 3D en vivo. Son imágenes o video **prerenderizados** (V-Ray, Corona, Unreal, D5) desde cámaras fijas, con un recorrido guiado: el edificio de frente, subir al último piso, bajar piso por piso. Encima dibujan las zonas que se pueden tocar (pisos y apartamentos con su disponibilidad). Se ve perfecto en cualquier celular y no permite cámara libre.
+  - **Pisos iguales:** existe la "planta tipo" (los pisos del medio repiten la distribución) y eso es lo que permite renderizar una vez. Aun así cambian el primero, los de servicios y los últimos, y en todos cambian la vista, los muebles y la disponibilidad. Antesala ya lo aprovecha (una planta para los pisos 3 a 15 de Cénit; unidades `sameAs`).
+  - **Propuesta de Claude:** un modo híbrido para Premium.
+    - Vistas y transiciones prerenderizadas (video o secuencia de cuadros), con el 3D actual invisible por debajo para saber qué se toca y pintar la disponibilidad.
+    - Al elegir la unidad, lo mismo de hoy: fotos, 360° y plano.
+    - Inmersivo sigue siendo el 3D libre, más barato.
+  - **IA (Higgsfield, Kling, Veo) para hacer el video desde fotos:** se ve espectacular pero **inventa detalles**, así que con un lugar real choca con la regla 9 (lo que se ve tiene que ser lo que hay). El realismo **fiel** sale de:
+    - la captura en sitio (cámara 360° o video convertido en Gaussian Splatting, que el visor ya lee);
+    - el render desde planos cuando el edificio aún no existe.
+
+    La IA queda para marketing: video de portada, clips y pulir renders, siempre marcados como ilustrativos.
+  - **Comercial:** es el acabado que más se cobra. Encaja sobre todo en la **preventa inmobiliaria** (no hay nada que fotografiar), además de hoteles, coworkings y sitios de eventos.
+  - **A decidir:**
+    - si se construye el modo guiado prerenderizado;
+    - con qué motor de render (Blender, que ya está, o D5/Unreal);
+    - cuánto cobrarlo frente al Premium actual.
+
 ---
 
 ## 8. Dónde está cada cosa
