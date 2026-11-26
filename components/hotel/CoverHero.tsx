@@ -35,6 +35,12 @@ interface Layout {
  * Al tocar uno con video, pasa el clip a pantalla completa y luego entra;
  * con ahorro de datos o en modo ligero entra directo.
  */
+/**
+ * Ningún punto más arriba que esto: el encabezado transparente mide 72 px y su texto va en el
+ * medio; con el punto a 76 px, su letrero (centrado en el punto) queda debajo del menú.
+ */
+const TOP_CLEAR = 76;
+
 export function CoverHero({
   src,
   alt,
@@ -62,7 +68,9 @@ export function CoverHero({
     const scale = Math.max(W / width, H / height);
     const dw = width * scale;
     const dh = height * scale;
-    const margin = 56;
+    // arriba va el encabezado transparente (4,5 rem): los puntos y su letrero quedan debajo de esa
+    // franja, no encima del menú (la terraza de Niebla Alta tapaba "El edificio" a 1366 px)
+    const margin = TOP_CLEAR;
     // abajo queda la barra de reserva fija: más aire
     const marginBottom = 120;
     // encuadre vertical: el rango de offsets que deja todos los puntos adentro
@@ -86,7 +94,7 @@ export function CoverHero({
       pins: points.map((p) => {
         const left = offX + p.x * dw;
         const top = offY + p.y * dh;
-        return { id: p.id, left, top, inside: left > 16 && left < W - 16 && top > 16 && top < H - 96 };
+        return { id: p.id, left, top, inside: left > 16 && left < W - 16 && top >= TOP_CLEAR - 1 && top < H - 96 };
       }),
     });
     setWide(window.innerWidth >= 768);
@@ -157,7 +165,7 @@ export function CoverHero({
 
       {/* escritorio: los que no caben en el encuadre quedan como botones arriba */}
       {layout && wide && layout.pins.some((p) => !p.inside) ? (
-        <div className="absolute top-16 left-6 z-10 flex flex-wrap gap-2" role="group" aria-label="Más lugares del edificio">
+        <div className="absolute top-[5.5rem] left-6 z-10 flex flex-wrap gap-2" role="group" aria-label="Más lugares del edificio">
           {points
             .filter((p) => !layout.pins.find((x) => x.id === p.id)?.inside)
             .map((p) => (
@@ -176,7 +184,7 @@ export function CoverHero({
 
       {/* celular: fila de botones arriba (el texto de la portada tapa la parte de abajo) */}
       {layout && !wide ? (
-        <div className="absolute inset-x-4 top-14 z-10 flex flex-wrap gap-2" role="group" aria-label="Lugares del edificio">
+        <div className="absolute inset-x-4 top-[5.25rem] z-10 flex flex-wrap gap-2" role="group" aria-label="Lugares del edificio">
           {points.map((p) => (
             <button
               key={p.id}
