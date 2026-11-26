@@ -6,6 +6,8 @@
 @custom-variant scene (&:where([data-scene='on'] *));
 /* Mirador activo: solo la vista (se ocultan los controles de la vista exterior) */
 @custom-variant viewpoint (&:where([data-viewpoint='on'] *));
+/* la cámara 3D se está moviendo (al girar o en un vuelo): FloorTagProjector marca <html data-orbit> */
+@custom-variant orbiting (&:where([data-orbit='moving'] *));
 
 /*
  * Tema del visor. Los valores del hotel llegan como --hotel-* desde

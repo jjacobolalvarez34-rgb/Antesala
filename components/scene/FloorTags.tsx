@@ -3,7 +3,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import Link from 'next/link';
 import type { Route } from 'next';
-import { useRef, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import * as THREE from 'three';
 
 import { useTour } from '@/lib/store';
@@ -45,8 +45,34 @@ export function FloorTagProjector({
   const camera = useThree((s) => s.camera);
   const size = useThree((s) => s.size);
   const v = useRef(new THREE.Vector3());
+  // mientras la cámara se mueve (al girar, con su inercia, o en un vuelo) los números se
+  // desvanecen y vuelven cuando se queda quieta: girando se veían desfasados (Jacobo, 2026-11-26).
+  // Se compara la cámara de un cuadro con la del anterior; con el render bajo demanda no hay
+  // cuadros cuando está quieta, así que un temporizador avisa que paró.
+  const lastPos = useRef(new THREE.Vector3());
+  const lastRot = useRef(new THREE.Quaternion());
+  const still = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const html = document.documentElement;
+    return () => {
+      window.clearTimeout(still.current);
+      delete html.dataset.orbit;
+    };
+  }, []);
   useFrame(() => {
     if (!visible) return;
+    // con umbral: el final de la inercia mueve la cámara en cantidades que no se ven
+    const moved = lastPos.current.distanceToSquared(camera.position) > 1e-6 || lastRot.current.angleTo(camera.quaternion) > 2e-4;
+    if (moved) {
+      lastPos.current.copy(camera.position);
+      lastRot.current.copy(camera.quaternion);
+      const html = document.documentElement;
+      if (html.dataset.orbit !== 'moving') html.dataset.orbit = 'moving';
+      window.clearTimeout(still.current);
+      still.current = window.setTimeout(() => {
+        html.dataset.orbit = 'still';
+      }, 180);
+    }
     for (const t of tags) {
       const el = anchors.current.get(t.id);
       if (!el) continue;
@@ -96,7 +122,8 @@ export function FloorTagLayer({
   const setHovered = useTour((s) => s.setHoveredLevel);
   return (
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-500', visible ? 'opacity-100' : 'opacity-0')}>
-      <ol aria-label={tr('Pisos del edificio')}>
+      {/* se desvanecen mientras la cámara se mueve (data-orbit, FloorTagProjector) */}
+      <ol aria-label={tr('Pisos del edificio')} className="transition-opacity duration-300 ease-out orbiting:opacity-0 orbiting:duration-150">
         {[...tags]
           .sort((a, b) => b.order - a.order)
           .map((t) => {
