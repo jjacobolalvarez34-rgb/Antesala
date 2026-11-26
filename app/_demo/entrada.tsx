@@ -25,6 +25,7 @@ import {
   Tv,
   WashingMachine,
   Wifi,
+  Clapperboard,
 } from 'lucide-react';
 
 import { BookingWidget } from '@/components/booking/BookingWidget';
@@ -33,6 +34,7 @@ import { type CoverHeroPoint, HeroNivel } from '@/components/hotel/CoverHero';
 import { FidelityBadge } from '@/components/hotel/FidelityBadge';
 import { NivelImg, type NivelImgSrc } from '@/components/hotel/NivelImg';
 import { getHotelBundle } from '@/lib/content';
+import { loadGuided } from '@/lib/guided';
 import { findLevel, formatArea, formatCOP, offerOf, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
 import { assetUrl, mediaUrl } from '@/lib/media';
 import type { Media, Unit } from '@/lib/types';
@@ -72,6 +74,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
   const tr = (es: string, vars?: Record<string, string | number>) => t(lang, es, vars);
   const routes = routesFor(lang);
   const bundle = await getHotelBundle((await params).hotel, lang);
+  const guided = bundle ? await loadGuided(bundle.hotel.slug) : null;
   if (!bundle) notFound();
   const { hotel, tokens } = bundle;
   const info = hotel.info ?? {};
@@ -231,14 +234,26 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             </p>
           ) : null}
           {/* el recorrido 3D, de primeras: es lo que distingue la demo (Jacobo, 2026-11-24: "está muy escondido") */}
-          <Link
-            href={routes.explorar(hotel.slug)}
-            className={`group mt-8 inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] bg-bone px-6 text-[0.9375rem] font-medium text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] transition-colors hover:bg-white md:mt-10 md:min-h-14 md:px-7 md:text-base`}
-          >
-            <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
-            {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
-            <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          <div className={`mt-8 flex flex-wrap gap-3 md:mt-10 ${centered ? 'justify-center' : ''}`}>
+            <Link
+              href={routes.explorar(hotel.slug)}
+              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] bg-bone px-6 text-[0.9375rem] font-medium text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] transition-colors hover:bg-white md:min-h-14 md:px-7 md:text-base`}
+            >
+              <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
+              {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
+              <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            {/* vista guiada (D-095): como un video, sin 3D en vivo; solo si el hotel la tiene */}
+            {guided ? (
+              <Link
+                href={routes.guiada(hotel.slug)}
+                className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] border border-bone/45 px-6 text-[0.9375rem] font-medium text-bone backdrop-blur-[2px] transition-colors hover:border-bone hover:bg-bone/10 md:min-h-14 md:px-7 md:text-base`}
+              >
+                <Clapperboard aria-hidden className="size-5" strokeWidth={1.5} />
+                {tr('Vista guiada')}
+              </Link>
+            ) : null}
+          </div>
         </div>
         {hero ? (
           <FidelityBadge fidelity={hero.fidelity} className="absolute top-[8.75rem] right-4 md:top-auto md:right-10 md:bottom-28" />

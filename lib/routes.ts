@@ -4,6 +4,7 @@ import type { Route } from 'next';
 export const routes = {
   hotel: (h: string) => `/h/${h}` as Route,
   explorar: (h: string) => `/h/${h}/explorar` as Route,
+  guiada: (h: string) => `/h/${h}/guiada` as Route,
   lista: (h: string) => `/h/${h}/lista` as Route,
   comparar: (h: string) => `/h/${h}/comparar` as Route,
   panel: (h: string) => `/h/${h}/panel` as Route,

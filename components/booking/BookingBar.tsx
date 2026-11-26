@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useSelectedLayoutSegments } from 'next/navigation';
+import { useSearchParams, useSelectedLayoutSegments } from 'next/navigation';
+import { Suspense } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { useLang } from '@/components/i18n/Lang';
@@ -125,23 +126,71 @@ function resolveStage(data: BookingSummary, segments: string[], lang: Lang): Sta
 export function BookingBar({ data }: { data: BookingSummary }) {
   const segments = useSelectedLayoutSegments();
   const lang = useLang();
-  const stage = resolveStage(data, segments, lang);
-  const o = offerTexts(data.offer, lang);
-  const venta = data.offer && data.offer !== 'noche';
   // el panel es para el gerente del hotel: sin barra de reserva
   if (segments[0] === 'panel') return null;
-
+  // vista guiada (D-095): el piso y la unidad van en la URL (?piso=&u=). La reserva aparece solo
+  // con una habitación abierta (Jacobo, 2026-11-25: "antes ensucia la experiencia"; D-096)
+  if (segments[0] === 'guiada') {
+    return (
+      <Suspense fallback={null}>
+        <GuidedBar data={data} />
+      </Suspense>
+    );
+  }
   // en las páginas sin 3D, en escritorio, la reserva va en el encabezado fijo (HotelHeader)
   const inScene = segments[0] === 'explorar' || segments[0] === 'piso' || segments[0] === 'unidad';
+  return <Bar data={data} stage={resolveStage(data, segments, lang)} inScene={inScene} />;
+}
 
+function GuidedBar({ data }: { data: BookingSummary }) {
+  const q = useSearchParams();
+  const lang = useLang();
+  const u = q.get('u');
+  if (!u || !data.units.some((x) => x.id === u && x.levelId === q.get('piso'))) return null;
+  return <Bar key="guiada" data={data} stage={guidedStage(data, q.get('piso'), u, lang)} inScene enter />;
+}
+
+/** En la vista guiada, la barra sigue a lo que se ve; volver sube un paso dentro de la misma vista. */
+function guidedStage(data: BookingSummary, piso: string | null, u: string | null, lang: Lang): Stage {
+  const routes = routesFor(lang);
+  const base = routes.guiada(data.slug);
+  const unit = u ? data.units.find((x) => x.id === u && x.levelId === piso) : undefined;
+  const level = piso ? data.levels.find((l) => l.id === piso) : undefined;
+  if (unit && level) {
+    const s = resolveStage(data, ['unidad', unit.id], lang);
+    const alt = unit.occupied ? data.units.find((x) => x.id === unit.alternative) : undefined;
+    return {
+      ...s,
+      occupied: s.occupied
+        ? { href: alt ? (`${base}?piso=${alt.levelId}&u=${alt.id}` as typeof base) : undefined, name: alt?.name }
+        : undefined,
+      back: `${base}?piso=${level.id}` as typeof base,
+      backLabel: tr(lang, 'Volver a {x}', { x: level.name }),
+    };
+  }
+  if (level) return { ...resolveStage(data, ['piso', level.id], lang), back: base, backLabel: tr(lang, 'Volver al edificio') };
+  return {
+    ...resolveStage(data, [], lang),
+    label: tr(lang, 'Vista guiada'),
+    back: routes.hotel(data.slug),
+    backLabel: tr(lang, 'Volver a la entrada'),
+  };
+}
+
+function Bar({ data, stage, inScene, enter = false }: { data: BookingSummary; stage: Stage; inScene: boolean; enter?: boolean }) {
+  const lang = useLang();
+  const o = offerTexts(data.offer, lang);
+  const venta = data.offer && data.offer !== 'noche';
   return (
     <div
+      data-booking-bar
       className={cn(
         // pointer-events-auto: con la escena activa la capa de la página deja pasar los toques al 3D; sin
         // esto la flecha de volver no respondía (el toque se iba al canvas; reporte de Jacobo, 2026-11-16)
         'pointer-events-auto fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background pb-[var(--safe-bottom)]',
         'md:inset-x-auto md:right-6 md:bottom-6 md:w-[26rem] md:rounded-[var(--hotel-r-card,6px)] md:border md:pb-0 md:shadow-[0_18px_40px_-24px_rgb(28_27_25/0.45)]',
         !inScene && 'md:hidden',
+        enter && 'animate-in duration-300 ease-out fade-in slide-in-from-bottom-3',
       )}
     >
       <nav aria-label={tr(lang, 'Reserva')} className="mx-auto flex h-[var(--booking-bar-h)] max-w-3xl items-center gap-3 px-3 md:px-3">

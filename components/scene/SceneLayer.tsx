@@ -69,7 +69,8 @@ export function SceneLayer({ data: wire }: { data: SceneDataWire | TerrainDataWi
   // Escritorio: en tiempo ocioso. Táctil (D-051): por intención, con el primer toque o
   // desplazamiento; evaluar three.js en ocio bloqueaba el hilo de un celular lento ~1 s
   useEffect(() => {
-    if (!allowed || sceneMounted) return;
+    // en la vista guiada (D-095) no hay 3D: que no le quite red ni procesador al video
+    if (!allowed || sceneMounted || stageName === 'guiada') return;
     let done = false;
     const run = () => {
       if (done) return;

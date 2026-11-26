@@ -480,3 +480,10 @@ html:has(.marca-antesala) {
 .marca-antesala ::selection {
   background: color-mix(in oklab, #d2b88c 40%, transparent);
 }
+
+/* Vista guiada (D-095): a pantalla completa, sin la franja de la demo ni el encabezado del hotel.
+   El aviso de hotel ficticio sigue a la vista dentro de la vista guiada (regla 7). */
+body:has([data-guided-view]) [data-demo-banner],
+body:has([data-guided-view]) [data-hotel-header] {
+  display: none;
+}

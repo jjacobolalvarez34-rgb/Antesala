@@ -36,6 +36,7 @@ export function routesFor(lang: Lang) {
   return {
     hotel: (h: string) => `${p}/h/${h}` as Route,
     explorar: (h: string) => `${p}/h/${h}/explorar` as Route,
+    guiada: (h: string) => `${p}/h/${h}/guiada` as Route,
     lista: (h: string) => `${p}/h/${h}/lista` as Route,
     comparar: (h: string) => `${p}/h/${h}/comparar` as Route,
     panel: (h: string) => `${p}/h/${h}/panel` as Route,
