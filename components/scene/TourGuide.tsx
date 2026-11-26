@@ -1,6 +1,6 @@
 'use client';
 
-import { Hand, MousePointerClick, Move3d, X } from 'lucide-react';
+import { Hand, MousePointerClick, Move3d } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useLang } from '@/components/i18n/Lang';
@@ -97,50 +97,12 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
   const tap = tr(touch ? 'Toca' : 'Haz clic en');
   const Icon = touch ? Hand : MousePointerClick;
 
-  if (shown === 'explorar') {
-    return portal(
-      <div className="pointer-events-none fixed inset-x-3 top-[calc(var(--safe-top,0px)+6.25rem)] z-40 flex justify-center md:top-28">
-        <section
-          aria-labelledby="guia-titulo"
-          className="glass-dark pointer-events-auto w-full max-w-sm animate-in rounded-3xl p-5 shadow-2xl duration-500 fade-in slide-in-from-top-2"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <h2 id="guia-titulo" className="font-display text-subtitle leading-tight">
-              Así se recorre el hotel
-            </h2>
-            <button
-              type="button"
-              onClick={() => setShown(null)}
-              aria-label={tr('Cerrar la guía')}
-              className="-mt-1 -mr-1 grid size-9 shrink-0 place-items-center rounded-full hover:bg-bone/10"
-            >
-              <X aria-hidden className="size-4" />
-            </button>
-          </div>
-          <ol className="mt-3 flex flex-col gap-2.5 text-sm text-bone/85">
-            {[`${tap} ${tr('el número de un piso, junto al edificio.')}`, tr('Elige tu habitación en la planta.'), tr('Recórrela por dentro y reserva.')].map((t, i) => (
-              <li key={t} className="flex items-center gap-3">
-                <span className="grid size-6 shrink-0 place-items-center rounded-full bg-accent-on-dark text-xs font-semibold text-ink">
-                  {i + 1}
-                </span>
-                {t}
-              </li>
-            ))}
-          </ol>
-          <button
-            type="button"
-            onClick={() => setShown(null)}
-            className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-bone px-4 text-sm font-medium text-ink transition-colors hover:bg-bone/85"
-          >
-            Empezar
-          </button>
-        </section>
-      </div>,
-    );
-  }
-
+  // la primera ayuda era una tarjeta grande ("Así se recorre el hotel") que tapaba el edificio
+  // (Jacobo, 2026-11-24): ahora es la misma píldora pequeña de las demás
   const text =
-    shown === 'piso'
+    shown === 'explorar'
+      ? `${tap} ${tr('el número de un piso para abrirlo')}`
+      : shown === 'piso'
       ? `${tap} ${tr('una habitación para entrar')}`
       : shown === 'unidad'
         ? `${tap} ${tr('un espacio para verlo de cerca')}`
