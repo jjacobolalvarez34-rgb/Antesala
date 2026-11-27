@@ -538,6 +538,12 @@ function Building({
   }, [intro, onIntroEnd, video]);
 
   const playing = intro === 'video';
+  // el arranque (Jacobo, 2026-11-27: "primero aparece desde una perspectiva y luego salta"): mientras
+  // el video carga se veía la torre quieta (el final del video) y después el video empezaba desde la
+  // calle. Ahora la torre quieta no se ve hasta que el video empezó, y todo entra con un fundido
+  const [started, setStarted] = useState(false);
+  const [stillReady, setStillReady] = useState(false);
+  const visible = playing ? started : stillReady || started;
   // la ayuda se va sola: tapaba el primer piso
   const [hintGone, setHintGone] = useState(false);
   useEffect(() => {
@@ -577,8 +583,18 @@ function Building({
 
   return (
     <>
-      <div className="absolute" style={{ left: box.left, top: box.top, width: box.w, height: box.h }}>
-        <DayNight day={orient.pisos} night={orient.night?.pisos} isNight={night} style={cover ? undefined : { maskImage: mask }} />
+      <motion.div
+        className="absolute"
+        style={{ left: box.left, top: box.top, width: box.w, height: box.h }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: visible ? 1 : 0 }}
+        transition={{ duration: 1.1, ease: 'easeOut' }}
+      >
+        <div className={cn('absolute inset-0', playing && !started ? 'invisible' : '')}>
+          <DayNight day={orient.pisos} night={orient.night?.pisos} isNight={night} style={cover ? undefined : { maskImage: mask }} />
+        </div>
+        {/* si no hay video (o se salta), la torre entra cuando cargó su foto */}
+        <img src={night && orient.night?.pisos ? orient.night.pisos : orient.pisos} alt="" hidden onLoad={() => setStillReady(true)} />
         {video ? (
           <motion.video
             key={video}
@@ -588,6 +604,7 @@ function Building({
             playsInline
             preload="auto"
             onEnded={onIntroEnd}
+            onPlaying={() => setStarted(true)}
             className="absolute inset-0 size-full"
             initial={false}
             animate={{ opacity: playing ? 1 : 0 }}
@@ -653,7 +670,7 @@ function Building({
             );
           })}
         </svg>
-      </div>
+      </motion.div>
 
       <AnimatePresence>{hand ? <GestureHint key="mano" x={hand.x} y={hand.y - 20} kind="tap" label={tr('Toca un piso')} /> : null}</AnimatePresence>
 
