@@ -291,6 +291,17 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
 - [ ] **Que entrar al 3D sea un "wow" con solo ver el edificio** (Jacobo, 2026-11-26: "tal vez sea innecesario el fondo así; lo que busco es que apenas entres, solo ver el edificio ya sea WOW"). Pensar un fondo que no compita: el edificio como pieza de exhibición (su manzana con plazoleta y jardines, y la ciudad apenas sugerida en la bruma o en volúmenes claros sin ventanas), con mejor luz de llegada. Va junto con el entorno con lógica y Niebla Alta de noche. Anotado, sin hacer
 - [ ] **Reservar en el modo libre solo con una habitación abierta**, como en el guiado (D-096). Jacobo (2026-11-26): "el botón de reservar sigue allí". Es otra excepción a la regla 4: confirmar con Jacobo si aplica a todo el modo libre (edificio y piso) y registrarla en DECISIONES. Anotado, sin hacer
 - [ ] **Al pasar el mouse o tocar un piso, que se enciendan sus ventanas** (Jacobo, 2026-11-26): en vez de (o además de) la franja de color, las ventanas de ese piso se prenden con luz cálida, de día y de noche, como un edificio real. Anotado, sin hacer
+- [x] **Mano que enseña el gesto, en los dos modos** — hecho el 2026-11-26 (`GestureHint` en `TourGuide` y en la vista guiada)
+- [ ] **Franja de Antesala y "Esencial · Inmersivo · Premium" plegable** (Jacobo, 2026-11-26): oculta arriba, con una cintica para bajarla; también en la página del hotel. El selector de idioma no depende de esa franja (va aparte). Ojo con la regla 7: el aviso de hotel ficticio tiene que seguir visible (en la cinta plegada o en el pie). Anotado, sin hacer
+- [ ] **Portada Noche de Niebla Alta, ajustes** (Jacobo, 2026-11-26):
+  - el botón dorado "Recorrer el edificio en 3D" compite con las luces del edificio: buscar un botón que no pelee con la foto;
+  - quitar "Imagen ilustrativa" de la portada (el aviso ya está en la franja y en el pie);
+  - la consulta de disponibilidad no tiene encabezado y no se entiende: ponerle uno;
+  - mucho texto: recortar;
+  - el párrafo bajo "Chapinero Alto" (letra de títulos, muy fina) no se lee sobre el negro; en general, la letra es un poco fina para un fondo tan oscuro: más peso o más contraste.
+
+  Anotado, sin hacer
+- [ ] **Luz y sombras al pasar del guiado al libre** (Jacobo, 2026-11-26): si en el guiado se cambia a día y luego se entra al modo libre, el libre vuelve a la hora real (no respeta el día/noche elegido) y la sombra del edificio sale mal, sobre todo en los pisos 4 y 5. Llevar el día/noche elegido de un modo al otro y revisar la sombra. Anotado, sin hacer
 - [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
 - [x] Botón también dentro del 3D para pasar de uno a otro — hecho: selector Guiado | Libre en los dos modos (D-097)
