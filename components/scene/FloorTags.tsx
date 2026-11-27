@@ -73,6 +73,11 @@ export function FloorTagProjector({
         html.dataset.orbit = 'still';
       }, 180);
     }
+    // primero, dónde cae la esquina derecha de cada piso; después, todos los números en una sola
+    // columna alineada en la más a la derecha (cada uno buscaba su esquina y con la perspectiva
+    // quedaban corridos unos de otros: Jacobo, 2026-11-23)
+    const spots: { el: HTMLElement; px: number; py: number }[] = [];
+    let column = -Infinity;
     for (const t of tags) {
       const el = anchors.current.get(t.id);
       if (!el) continue;
@@ -94,12 +99,15 @@ export function FloorTagProjector({
         continue;
       }
       el.style.visibility = 'visible';
-      // nunca fuera de la pantalla: en celular el edificio llena el ancho y los números quedaban
-      // medio cortados en el borde (Jacobo, 2026-11-16). Si no caben, se quedan dentro del borde
-      // y la línea se acorta. ~72 px: la línea más el número.
-      const px = Math.min(((best + 1) / 2) * size.width, size.width - 72);
-      const py = ((1 - by) / 2) * size.height;
-      el.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) translateY(-50%)`;
+      const px = ((best + 1) / 2) * size.width;
+      column = Math.max(column, px);
+      spots.push({ el, px, py: ((1 - by) / 2) * size.height });
+    }
+    // nunca fuera de la pantalla: en celular el edificio llena el ancho y los números quedaban
+    // medio cortados en el borde (Jacobo, 2026-11-16). ~72 px: la línea más el número.
+    const x = Math.min(column, size.width - 72);
+    for (const sp of spots) {
+      sp.el.style.transform = `translate3d(${x.toFixed(1)}px, ${sp.py.toFixed(1)}px, 0) translateY(-50%)`;
     }
   });
   return null;

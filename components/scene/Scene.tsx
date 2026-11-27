@@ -312,12 +312,15 @@ function Rig({
 function UnitLights({ light, units }: { light: LightUniforms; units: SceneUnit[] }) {
   const hovered = useTour((s) => s.hoveredUnit?.id ?? null);
   const selected = useTour((s) => s.selectedUnit);
+  // al pasar por un piso (o tocarlo), sus ventanas se encienden como un edificio real
+  // (Jacobo, 2026-11-26); de día también, para que se note el piso elegido
+  const hoveredLevel = useTour((s) => s.hoveredLevelId);
   useFrame((_, delta) => {
     const arr = light.uUnitLight.value;
     const k = 1 - Math.exp(-delta * 16);
     for (let i = 0; i < Math.min(units.length, MAX_UNITS); i++) {
       const id = units[i]!.id;
-      const target = id === hovered || id === selected ? 1 : 0;
+      const target = id === hovered || id === selected || (hoveredLevel !== null && units[i]!.levelId === hoveredLevel) ? 1 : 0;
       arr[i] = arr[i]! + (target - arr[i]!) * k;
     }
   });
