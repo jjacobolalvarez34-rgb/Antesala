@@ -2,11 +2,23 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useSyncExternalStore, type ReactNode } from 'react';
 
 import { LangSwitch } from '@/components/i18n/LangSwitch';
 
 const KEY = 'antesala:franja';
+const listeners = new Set<() => void>();
+const subscribe = (l: () => void) => {
+  listeners.add(l);
+  return () => listeners.delete(l);
+};
+const read = () => {
+  try {
+    return sessionStorage.getItem(KEY) === 'abierta';
+  } catch {
+    return false;
+  }
+};
 
 /**
  * La franja de la demo, plegable (Jacobo, 2026-11-26: "en el celular satura muchísimo la vista, y
@@ -15,21 +27,15 @@ const KEY = 'antesala:franja';
  * aparte, siempre a la mano. Recuerda lo elegido durante la visita.
  */
 export function DemoBannerFold({ label, hideLabel = 'Ocultar', children }: { label: string; hideLabel?: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem(KEY) === 'abierta') setOpen(true);
-    } catch {
-      /* sin almacenamiento: plegada */
-    }
-  }, []);
+  // lo elegido en la visita (sessionStorage); en el servidor, plegada
+  const open = useSyncExternalStore(subscribe, read, () => false);
   const toggle = (v: boolean) => {
-    setOpen(v);
     try {
       sessionStorage.setItem(KEY, v ? 'abierta' : 'plegada');
     } catch {
       /* sin almacenamiento */
     }
+    listeners.forEach((l) => l());
   };
 
   return (
