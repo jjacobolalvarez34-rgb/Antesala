@@ -150,8 +150,38 @@ export function useBarrio(frame: BuildingFrame, inCorridor: (x: number, z: numbe
           }
           continue;
         }
-        // el patio de la manzana (en la del hotel, apenas un piso de patio bajo, para no tapar su base)
-        yards.push({ x: mx, y: hotel ? 0.01 : 0.04, z: mz, w: ix1 - ix0, h: hotel ? 0.02 : 0.08, d: iz1 - iz0, rotY: 0 });
+        // el patio de la manzana
+        if (hotel) {
+          // la manzana del hotel: una torre aislada con sus retiros (por eso tiene cuatro fachadas).
+          // Plazoleta adoquinada alrededor y jardines de césped con árboles en la mitad delantera,
+          // donde no hay vecinos (Jacobo, 2026-11-26: "darle lógica: un parque o algo a los lados")
+          sidewalks.push({ x: mx, y: 0.06, z: mz, w: ix1 - ix0, h: 0.12, d: iz1 - iz0, rotY: 0 });
+          const gx0 = ix0 + 2;
+          const gx1 = cx - frame.width / 2 - 4;
+          const gz0 = cz - 2;
+          const gz1 = iz1 - 2;
+          if (gx1 - gx0 > 6 && gz1 - gz0 > 6) {
+            // dos jardines separados por un sendero que llega a la plazoleta del costado
+            const mid = (gz0 + gz1) / 2;
+            for (const [a0, a1] of [
+              [gz0, mid - 1.2],
+              [mid + 1.2, gz1],
+            ] as const) {
+              parks.push({ x: (gx0 + gx1) / 2, y: 0.1, z: (a0 + a1) / 2, w: gx1 - gx0, h: 0.12, d: a1 - a0, rotY: 0 });
+              for (let k = 0; k < 5; k++) {
+                parkTrees.push({ x: gx0 + 2 + rand() * (gx1 - gx0 - 4), z: a0 + 1.5 + rand() * Math.max(0.1, a1 - a0 - 3), s: 0.75 + rand() * 0.4 });
+              }
+            }
+          }
+          // jardín angosto detrás del hotel (su retiro posterior)
+          const bz1 = cz - frame.depth / 2 - 3;
+          const bz0 = bz1 - 5;
+          if (bz0 > iz0 + 2) {
+            parks.push({ x: cx, y: 0.1, z: (bz0 + bz1) / 2, w: frame.width + 6, h: 0.12, d: bz1 - bz0, rotY: 0 });
+          }
+        } else {
+          yards.push({ x: mx, y: 0.04, z: mz, w: ix1 - ix0, h: 0.08, d: iz1 - iz0, rotY: 0 });
+        }
 
         // edificios pegados a lo largo de los cuatro bordes de la manzana
         const sides: { a0: number; a1: number; along: 'x' | 'z'; edge: number; dir: 1 | -1 }[] = [
@@ -250,7 +280,8 @@ export function BarrioMeshes({
       roof: muteNeighbor(new THREE.MeshStandardMaterial({ color: '#8b867e', roughness: 0.95 })),
       asphalt: new THREE.MeshStandardMaterial({ color: '#46474a', roughness: 0.95 }),
       walk: paved(new THREE.MeshStandardMaterial({ color: '#8a8479', roughness: 0.92 }), 0.6),
-      yard: new THREE.MeshStandardMaterial({ color: '#6b665c', roughness: 1 }),
+      // patios interiores de manzana como jardines (antes tierra beige: "no se ve real")
+      yard: new THREE.MeshStandardMaterial({ color: '#6f7a5c', roughness: 1 }),
       park: new THREE.MeshStandardMaterial({ color: '#5d6b44', roughness: 1 }),
       mark: new THREE.MeshStandardMaterial({ color: '#e9e6df', roughness: 0.6 }),
     };
