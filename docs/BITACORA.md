@@ -55,6 +55,16 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
   - catálogo de seis diseños de web en `docs/disenos/` (`python pipeline/catalogo_web.py`).
 
   Falta: compilación completa y recapturar las vistas guiadas (cambiaron la ciudad y la noche).
+- **27 de noviembre:**
+  - vistas guiadas recapturadas con la ciudad nueva y la noche iluminada;
+  - planta en 3D opcional en el guiado (16 ángulos por piso; el primer ángulo salía corrido por la inercia de la cámara: ahora hay un calentamiento);
+  - Reservar solo con habitación abierta también en el libre;
+  - aviso de "hay más abajo" en el celular;
+  - 360° con fundido y cambio de espacio sin cerrar;
+  - números de piso alineados;
+  - ventanas del piso encendidas al pasar;
+  - menos texto en la portada Noche;
+  - gimnasios como decisión abierta 17.
 - **Agente productor:** `docs/PRODUCCION.md` y `.claude/agents/productor.md`, el proceso para producir un lugar nuevo (hotel, gimnasio, coworking…) con o sin información.
 
 **Decisiones**
