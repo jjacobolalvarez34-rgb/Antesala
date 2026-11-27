@@ -388,7 +388,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                           </span>
                         ))}
                     </p>
-                    {c.highlights.length ? (
+                    {c.highlights.length && !noche ? (
                       <ul className="mt-6 flex flex-col gap-2 border-t border-border pt-6 text-sm">
                         {c.highlights.map((h) => (
                           <li key={h} className="flex items-center gap-3">
@@ -549,7 +549,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
               {info.address ? <p className="mt-5 max-w-md text-pretty text-foreground/75">{info.address}</p> : null}
               {info.nearby?.length ? (
                 <ul className="mt-10 border-t border-border">
-                  {info.nearby.map((n) => (
+                  {(noche ? info.nearby.slice(0, 3) : info.nearby).map((n) => (
                     <li key={n.name} className="flex items-baseline justify-between gap-4 border-b border-border py-4 text-[0.9375rem]">
                       <span>{n.name}</span>
                       <span className="shrink-0 text-sm text-muted-foreground">{n.time}</span>
@@ -576,7 +576,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
                   ) : null}
                 </dl>
               ) : null}
-              {info.policies?.length ? (
+              {info.policies?.length && !noche ? (
                 <ul className="mt-8 flex flex-col gap-4 text-[0.9375rem]">
                   {info.policies.map((p) => (
                     <li key={p} className="flex items-start gap-3">
