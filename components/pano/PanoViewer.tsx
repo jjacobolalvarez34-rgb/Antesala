@@ -15,10 +15,44 @@ import { useT } from '@/components/i18n/Lang';
  * La imagen se lee por dirección en el shader (sin depender de cómo una esfera reparte la
  * textura): el centro de la imagen es el norte del plano y hacia la derecha va el oriente.
  */
-export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: string; title: string; yaw?: number; onClose: () => void }) {
+export interface PanoSpace {
+  title: string;
+  url: string;
+  yaw?: number;
+}
+
+export default function PanoViewer({
+  url: firstUrl,
+  title: firstTitle,
+  yaw: firstYaw = 0,
+  spaces = [],
+  onClose,
+}: {
+  url: string;
+  title: string;
+  yaw?: number;
+  /** los otros espacios con 360° de la misma unidad: se cambia sin cerrar (Jacobo, 2026-11-26) */
+  spaces?: PanoSpace[];
+  onClose: () => void;
+}) {
   const tr = useT();
   const host = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [cur, setCur] = useState<PanoSpace>({ title: firstTitle, url: firstUrl, yaw: firstYaw });
+  const { url, title } = cur;
+  const yaw = cur.yaw ?? 0;
+  // entrar y salir con fundido y un leve acercamiento (antes era un corte seco)
+  const [closing, setClosing] = useState(false);
+  const close = () => {
+    if (closing) return;
+    setClosing(true);
+    window.setTimeout(onClose, 380);
+  };
+  const go = (sp: PanoSpace) => {
+    if (sp.url === url) return;
+    setState('loading');
+    setCur(sp);
+  };
 
   useEffect(() => {
     const el = host.current;
@@ -156,15 +190,29 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
     };
   }, [url, yaw]);
 
+  const closeRef = useRef(close);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    closeRef.current = close;
+  });
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && closeRef.current();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [onClose]);
+  }, []);
 
   return createPortal(
-    <div role="dialog" aria-modal="true" aria-label={`${title} en 360°`} className="fixed inset-0 z-[100] bg-ink text-bone">
-      <div ref={host} className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing" />
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${title} en 360°`}
+      className={`fixed inset-0 z-[100] bg-ink text-bone transition-opacity duration-300 ease-out starting:opacity-0 ${closing ? 'opacity-0' : 'opacity-100'}`}
+    >
+      <div
+        ref={host}
+        className={`absolute inset-0 cursor-grab touch-none transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] active:cursor-grabbing ${
+          state === 'ready' && !closing ? 'scale-100 opacity-100 blur-0' : 'scale-[1.12] opacity-0 blur-sm'
+        }`}
+      />
       <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-4 p-4 md:p-6">
         <div className="pointer-events-auto rounded-md px-4 py-2 glass-dark">
           <p className="font-display text-xl leading-none">{title}</p>
@@ -172,13 +220,32 @@ export default function PanoViewer({ url, title, yaw = 0, onClose }: { url: stri
         </div>
         <button
           type="button"
-          onClick={onClose}
+          onClick={close}
           aria-label={tr('Cerrar el 360°')}
           className="pointer-events-auto grid size-11 place-items-center rounded-full glass-dark transition-colors hover:bg-ink"
         >
           <X aria-hidden className="size-5" />
         </button>
       </div>
+      {/* los otros espacios de la unidad, para pasar de uno a otro sin cerrar */}
+      {spaces.length > 1 ? (
+        <nav
+          aria-label={tr('Otros espacios')}
+          className="absolute inset-x-0 bottom-0 flex justify-center gap-2 overflow-x-auto px-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] [scrollbar-width:none]"
+        >
+          {spaces.map((sp) => (
+            <button
+              key={sp.url}
+              type="button"
+              onClick={() => go(sp)}
+              aria-current={sp.url === url ? 'true' : undefined}
+              className={`min-h-11 shrink-0 rounded-full px-4 text-sm transition-colors ${sp.url === url ? 'bg-bone text-ink' : 'glass-dark hover:bg-ink'}`}
+            >
+              {sp.title}
+            </button>
+          ))}
+        </nav>
+      ) : null}
       {state !== 'ready' ? (
         <div className="pointer-events-none absolute inset-0 grid place-items-center text-[0.625rem] tracking-[0.3em] text-bone/60 uppercase">
           {tr(state === 'loading' ? 'Cargando el 360°' : 'No se pudo cargar el 360°')}

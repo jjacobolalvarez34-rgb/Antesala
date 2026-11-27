@@ -13,6 +13,7 @@ import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 import { LangSwitch } from '@/components/i18n/LangSwitch';
 import { ModeSwitch } from '@/components/hotel/TourChooser';
 import { GestureHint } from '@/components/motion/GestureHint';
+import { ScrollHint } from '@/components/motion/ScrollHint';
 import { PanoButton } from '@/components/pano/PanoButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import type { GuidedData, GuidedLevel, GuidedOrient, GuidedUnit, P2 } from '@/lib/guided-types';
@@ -1236,6 +1237,7 @@ function Floor({
             style={chrome.desktop ? undefined : { bottom: chrome.H - chrome.barTop }}
           >
             <UnitPanel key={unit.id} data={data} unit={unit} offer={offer} onClose={() => go({ piso: level.id })} />
+            <ScrollHint target={sheetRef} />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -1318,7 +1320,13 @@ function UnitPanel({ data, unit, offer, onClose }: { data: GuidedData; unit: Gui
             >
               {space.photos.length ? <Gallery items={space.photos} title={space.name} className="mt-3" /> : null}
               {space.pano ? (
-                <PanoButton url={space.pano.url} yaw={space.pano.yaw} title={space.name} className="mt-3 w-full justify-center" />
+                <PanoButton
+                  url={space.pano.url}
+                  yaw={space.pano.yaw}
+                  title={space.name}
+                  spaces={plan?.spaces.flatMap((sp) => (sp.pano ? [{ title: sp.name, url: sp.pano.url, yaw: sp.pano.yaw }] : []))}
+                  className="mt-3 w-full justify-center"
+                />
               ) : null}
               {!space.photos.length && !space.pano ? (
                 <p className="mt-2 text-sm text-muted-foreground">{tr('Aún no hay fotos de este espacio.')}</p>
