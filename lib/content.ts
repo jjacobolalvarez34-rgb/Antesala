@@ -185,7 +185,7 @@ const tokensSchema = z.object({
       corners: z.enum(['rectas', 'suaves', 'redondas']).optional(),
       hero: z.enum(['abajo', 'centro']).optional(),
       title: z.enum(['normal', 'mayusculas']).optional(),
-      theme: z.enum(['claro', 'noche']).optional(),
+      theme: z.enum(['claro', 'noche', 'bruma']).optional(),
     })
     .optional(),
 }) satisfies z.ZodType<HotelTokens>;

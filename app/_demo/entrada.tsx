@@ -35,6 +35,7 @@ import { NivelImg, type NivelImgSrc } from '@/components/hotel/NivelImg';
 import { getHotelBundle } from '@/lib/content';
 import { loadGuided } from '@/lib/guided';
 import { TourButton } from '@/components/hotel/TourChooser';
+import { ElevationPicker } from '@/components/hotel/ElevationPicker';
 import { findLevel, formatArea, formatCOP, offerOf, pluralize, priceFrom, unitPrice } from '@/lib/hotel';
 import { assetUrl, mediaUrl } from '@/lib/media';
 import type { Media, Unit } from '@/lib/types';
@@ -178,6 +179,9 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
   const upper = tokens.look?.title === 'mayusculas';
   // tema noche (D-099): la página oscura, la fachada de noche en la portada y el botón en el acento
   const noche = tokens.look?.theme === 'noche';
+  // tema bruma (Cénit, 2026-11-27): la foto se funde en bruma clara hacia abajo, el nombre en tinta
+  // y el edificio en alzado para elegir la habitación (Niebla + Plano)
+  const bruma = tokens.look?.theme === 'bruma';
   const h2 = 'font-display text-[2.5rem] leading-[1.02] tracking-tight text-balance md:text-[3.75rem]';
 
   return (
@@ -221,9 +225,12 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
         ) : null}
         {/* arriba, para leer el menú; abajo, para el nombre */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-ink/70 to-transparent" />
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
-        <div className={`mx-auto w-full max-w-7xl px-5 pb-28 md:px-10 md:pb-36 ${centered ? 'text-center' : ''}`}>
-          <p className={`${eyebrow} text-bone/80`}>{place}</p>
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t ${bruma ? 'from-background via-background/55 via-35% to-transparent to-70%' : 'from-ink/90 via-ink/30 to-transparent'}`}
+        />
+        <div className={`mx-auto w-full max-w-7xl px-5 pb-28 md:px-10 md:pb-36 ${centered ? 'text-center' : ''} ${bruma ? 'text-ink' : ''}`}>
+          <p className={`${eyebrow} ${bruma ? 'text-ink/70' : 'text-bone/80'}`}>{place}</p>
           <h1
             className={
               upper
@@ -244,7 +251,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
           {centered ? <span aria-hidden className="noche-linea mx-auto mt-6 block h-px w-24 bg-accent-on-dark" /> : null}
           {tokens.brand.tagline ? (
             <p
-              className={`mt-5 font-display text-[1.375rem] text-bone/90 italic md:text-[2rem] ${centered ? 'mx-auto max-w-2xl' : 'max-w-xl'}`}
+              className={`mt-5 font-display text-[1.375rem] ${bruma ? 'text-ink/80' : 'text-bone/90'} italic md:text-[2rem] ${centered ? 'mx-auto max-w-2xl' : 'max-w-xl'}`}
             >
               {tokens.brand.tagline}
             </p>
@@ -254,7 +261,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             <TourButton
               slug={hotel.slug}
               guided={!!guided}
-              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.9375rem] font-medium transition-colors ${noche ? 'noche-lampara border border-accent-on-dark/70 bg-ink/55 text-bone tracking-[0.16em] uppercase text-[0.8125rem] backdrop-blur-sm hover:bg-ink/75 hover:border-accent-on-dark' : 'bg-bone text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] hover:bg-white'} md:min-h-14 md:px-7 md:text-base`}
+              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.9375rem] font-medium transition-colors ${noche ? 'noche-lampara border border-accent-on-dark/70 bg-ink/55 text-bone tracking-[0.16em] uppercase text-[0.8125rem] backdrop-blur-sm hover:bg-ink/75 hover:border-accent-on-dark' : bruma ? 'bg-ink text-bone shadow-[0_18px_40px_-18px_rgb(0_0_0/0.5)] hover:bg-accent' : 'bg-bone text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] hover:bg-white'} md:min-h-14 md:px-7 md:text-base`}
             >
               <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
@@ -268,7 +275,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
       {/* Consulta de fechas, montada sobre el borde de la portada */}
       <div className="relative z-10 mx-auto -mt-16 max-w-5xl px-4 md:-mt-12 md:px-10">
         {/* sin encabezado no se entendía qué era (Jacobo, 2026-11-26) */}
-        <p className={`${eyebrow} mb-2.5 text-center text-bone/85 md:text-left`}>{tr('¿Cuándo vienes? Consulta la disponibilidad')}</p>
+        <p className={`${eyebrow} mb-2.5 text-center ${bruma ? 'text-ink/70' : 'text-bone/85'} md:text-left`}>{tr('¿Cuándo vienes? Consulta la disponibilidad')}</p>
         <BookingWidget context={booking} maxGuests={maxGuests} from={from} suffix={offer.suffix} />
       </div>
 
@@ -430,6 +437,8 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
           </ul>
         </section>
       </div>
+
+      {bruma && hotel.site.kind === 'edificio' ? <ElevationPicker hotel={hotel} lang={lang} /> : null}
 
       {/* Lo distinto de esta web: elegir la habitación viéndola */}
       <section aria-labelledby="recorrido" className="noche-revela mt-24 bg-ink text-bone md:mt-36">

@@ -274,7 +274,7 @@ export interface HotelTokens {
     hero?: 'abajo' | 'centro';
     title?: 'normal' | 'mayusculas';
     /** la portada clara (por defecto) u oscura, con la fachada de noche (D-099) */
-    theme?: 'claro' | 'noche';
+    theme?: 'claro' | 'noche' | 'bruma';
   };
 }
 

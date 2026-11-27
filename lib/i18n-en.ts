@@ -357,6 +357,11 @@ export const EN: Record<string, string> = {
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
   // modos del recorrido (D-097)
+  'Alzado · {n} pisos': 'Elevation · {n} floors',
+  'Elige tu habitación en la torre': 'Choose your room in the tower',
+  'Cada piso y cada habitación, con su disponibilidad. Toca una para verla por dentro.': 'Every floor and every room, with its availability. Tap one to see inside.',
+  'Libres hoy': 'Free today',
+  'Lugar común': 'Common area',
   'Ver la planta en 2D': 'See the plan in 2D',
   'Ver la planta en 3D': 'See the plan in 3D',
   'Otros espacios': 'Other spaces',
