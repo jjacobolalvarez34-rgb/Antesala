@@ -5,6 +5,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useLang } from '@/components/i18n/Lang';
 import { t } from '@/lib/i18n';
+import { GestureHint } from '@/components/motion/GestureHint';
 
 /**
  * Guía del recorrido (D-048): la primera vez en el edificio, una tarjeta con
@@ -111,18 +112,31 @@ export function TourGuide({ step, active }: { step: GuideStep | null; active: bo
           : tr('Arrastra para mirar alrededor');
   const HintIcon = shown === 'espacio' || shown === 'mirar' ? Move3d : Icon;
 
+  // y una mano sobre la escena que muestra el gesto (Jacobo, 2026-11-26: "un dedito que señale dónde
+  // tocar, para que la gente sepa qué hacer"): en el edificio y en el espacio se arrastra; en el
+  // piso y la unidad se toca. Se va con la píldora (al primer gesto o a los pocos segundos).
+  const drag = shown === 'explorar' || shown === 'espacio' || shown === 'mirar';
+
   return portal(
-    <div
-      role="status"
-      className="pointer-events-none fixed inset-x-3 top-[calc(var(--safe-top,0px)+6.25rem)] z-40 flex justify-center md:top-28"
-    >
-      <p className="glass-dark flex animate-in items-center gap-2 rounded-full py-2 pr-4 pl-3 text-sm shadow-xl duration-500 fade-in slide-in-from-top-2">
-        <span className="relative grid size-6 place-items-center">
-          <span className="absolute size-6 animate-ping rounded-full bg-accent-on-dark/30" />
-          <HintIcon aria-hidden className="relative size-4 text-accent-on-dark" />
-        </span>
-        {text}
-      </p>
-    </div>,
+    <>
+      <GestureHint
+        x={window.innerWidth / 2}
+        y={window.innerHeight * 0.55}
+        kind={drag ? 'drag' : 'tap'}
+        label={drag ? tr('Arrastra para girar') : tr(touch ? 'Toca aquí' : 'Haz clic aquí')}
+      />
+      <div
+        role="status"
+        className="pointer-events-none fixed inset-x-3 top-[calc(var(--safe-top,0px)+6.25rem)] z-40 flex justify-center md:top-28"
+      >
+        <p className="glass-dark flex animate-in items-center gap-2 rounded-full py-2 pr-4 pl-3 text-sm shadow-xl duration-500 fade-in slide-in-from-top-2">
+          <span className="relative grid size-6 place-items-center">
+            <span className="absolute size-6 animate-ping rounded-full bg-accent-on-dark/30" />
+            <HintIcon aria-hidden className="relative size-4 text-accent-on-dark" />
+          </span>
+          {text}
+        </p>
+      </div>
+    </>,
   );
 }

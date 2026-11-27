@@ -357,6 +357,11 @@ export const EN: Record<string, string> = {
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
   // modos del recorrido (D-097)
+  'Toca un piso': 'Tap a floor',
+  'Toca una habitación': 'Tap a room',
+  'Toca aquí': 'Tap here',
+  'Haz clic aquí': 'Click here',
+  'Arrastra para girar': 'Drag to turn',
   'Cambiar de piso': 'Change floor',
   Entrar: 'Enter',
   'Modo guiado': 'Guided mode',

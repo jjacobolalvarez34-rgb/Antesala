@@ -12,6 +12,7 @@ import { Gallery } from '@/components/gallery/Gallery';
 import { useLang, useRoutes, useT } from '@/components/i18n/Lang';
 import { LangSwitch } from '@/components/i18n/LangSwitch';
 import { ModeSwitch } from '@/components/hotel/TourChooser';
+import { GestureHint } from '@/components/motion/GestureHint';
 import { PanoButton } from '@/components/pano/PanoButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import type { GuidedData, GuidedLevel, GuidedOrient, GuidedUnit, P2 } from '@/lib/guided-types';
@@ -539,12 +540,25 @@ function Building({
   const [hintGone, setHintGone] = useState(false);
   useEffect(() => {
     if (!ready || hintGone) return;
-    const id = window.setTimeout(() => setHintGone(true), 4500);
-    return () => window.clearTimeout(id);
+    const id = window.setTimeout(() => setHintGone(true), 6000);
+    // y al primer toque: ya entendió
+    const gone = () => setHintGone(true);
+    window.addEventListener('pointerdown', gone, { once: true });
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener('pointerdown', gone);
+    };
   }, [ready, hintGone]);
 
   const bands = data.levels.filter((l) => orient.floors?.[l.id]);
   const showFloors = !playing && active;
+  // la mano que enseña a tocar un piso (Jacobo, 2026-11-26): sobre un piso del medio de la torre
+  const handBand = bands[Math.floor(bands.length / 2)];
+  const hand = (() => {
+    if (!handBand || hintGone || !showFloors) return null;
+    const b = bbox(orient.floors![handBand.id]!);
+    return { x: box.left + ((b.x0 + b.x1) / 2) * box.w, y: box.top + ((b.y0 + b.y1) / 2) * box.h };
+  })();
 
   const summary = (l: GuidedLevel) => {
     if (!l.units.length) return l.pois.map((p) => p.name).join(' · ');
@@ -638,6 +652,8 @@ function Building({
           })}
         </svg>
       </div>
+
+      <AnimatePresence>{hand ? <GestureHint key="mano" x={hand.x} y={hand.y - 20} kind="tap" label={tr('Toca un piso')} /> : null}</AnimatePresence>
 
       {/* el número de cada piso, a la derecha de la torre */}
       <div className={cn('pointer-events-none absolute inset-0 transition-opacity duration-500', showFloors ? 'opacity-100' : 'opacity-0')}>
@@ -848,6 +864,26 @@ function Floor({
   const freeCount = level.units.filter((id) => !data.units[id]?.occupied).length;
   const prices = level.units.map((id) => data.units[id]?.price).filter((p): p is number => p !== undefined);
   const poiInfo = poi ? level.pois.find((p) => p.id === poi) : undefined;
+  // la mano que enseña a tocar una habitación, una vez por visita, cuando ya se dibujó la planta
+  const [handSeen, setHandSeen] = useState(false);
+  useEffect(() => {
+    if (!drawn || handSeen || unit) return;
+    const id = window.setTimeout(() => setHandSeen(true), 5000);
+    const gone = () => setHandSeen(true);
+    window.addEventListener('pointerdown', gone, { once: true });
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener('pointerdown', gone);
+    };
+  }, [drawn, handSeen, unit]);
+  const handUnit = shot?.spaces.find((sp) => sp.kind === 'unit');
+  const handAt =
+    drawn && !handSeen && !unit && handUnit && base
+      ? (() => {
+          const [lx, ly] = polygonLabelPoint(handUnit.poly);
+          return { x: base.left + lx * base.w, y: base.top + ly * base.h + 16 };
+        })()
+      : null;
   const pick = (id: string, isUnit: boolean) => (isUnit ? go({ piso: level.id, u: id }) : setPoi((p) => (p === id ? null : id)));
   const fg = night ? 'text-bone' : 'text-ink';
   const fgSoft = night ? 'text-bone/70' : 'text-ink/70';
@@ -1143,6 +1179,10 @@ function Floor({
             {list}
           </motion.div>
         ) : null}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {handAt ? <GestureHint key="mano-planta" x={handAt.x} y={handAt.y} kind="tap" label={tr('Toca una habitación')} /> : null}
       </AnimatePresence>
 
       {/* un lugar común: qué es */}
