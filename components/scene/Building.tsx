@@ -528,14 +528,29 @@ function Floor({
   const windowGeo = useMemo(() => buildWindowGeometry(parts.windows), [parts.windows]);
   const glowGeo = useMemo(() => buildGlowGeometry(parts.windows), [parts.windows]);
   const mats = useMemo(() => makeMaterials(tex, light), [tex, light]);
+  const nightFacade = useRef<boolean | null>(null);
   // con la fachada horneada, las piezas opacas por código no se dibujan (siguen recibiendo el mouse)
   useEffect(() => {
     const parts = [mats.clad, mats.concrete, mats.frame, mats.green, mats.slab];
     for (const m of parts) m.visible = !baked || (m === mats.slab && !baked.losa);
+    nightFacade.current = null;
     return () => {
       for (const m of parts) m.visible = true;
     };
   }, [baked, mats]);
+  // la horneada trae el sol de día pintado (sombras de los marcos, balcones y aleros): de noche se
+  // veía el sol en plena noche ("las sombras de las ventanas se ven mal", Jacobo 2026-11-16). De
+  // noche se dibuja la fachada por código, sin sol, y la horneada se oculta; el cambio es a mitad
+  // del paso de día a noche, cuando ya está oscuro, y no se nota
+  useFrame(() => {
+    if (!baked) return;
+    const nightNow = light.uNight.value >= 0.5;
+    if (nightFacade.current === nightNow) return;
+    nightFacade.current = nightNow;
+    for (const m of [baked.fachadaMat, baked.losaMat]) if (m) m.visible = !nightNow;
+    for (const m of [mats.clad, mats.concrete, mats.frame, mats.green]) m.visible = nightNow;
+    mats.slab.visible = nightNow || !baked.losa;
+  });
   // horneada de día: de noche se oscurece con la luz del visor; bajo el puntero se entibia
   useFrame(() => {
     if (!baked) return;
@@ -1002,7 +1017,13 @@ function Roof({
   }, [dimmed, gone, mats, baked]);
   // la cubierta horneada también se oscurece de noche
   useFrame(() => {
-    if (baked) baked.mat.color.copy(WHITE).lerp(NIGHT_TINT, light.uNight.value * 0.66);
+    if (baked) {
+      baked.mat.color.copy(WHITE).lerp(NIGHT_TINT, light.uNight.value * 0.66);
+      // como la fachada: la cubierta horneada trae el sol de día; de noche queda la de código
+      const day = light.uNight.value < 0.5;
+      baked.mesh.visible = day;
+      for (const m of [mats.roof, mats.concrete, mats.wood]) m.visible = !day;
+    }
   });
 
   const { parapet, beams, rails } = useMemo(() => {

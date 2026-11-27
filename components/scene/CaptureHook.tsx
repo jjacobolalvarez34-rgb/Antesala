@@ -132,10 +132,10 @@ export function CaptureHook({
           for (let q: THREE.Object3D | null = m; q; q = q.parent) if (!q.visible) vis = false;
           if (!vis) return;
           const mat = m.material as THREE.Material;
-          if (!mat || mat.opacity < 0.05) return;
+          if (!mat || mat.opacity < 0.05 || !mat.visible) return;
           m.geometry.computeBoundingBox();
           const bb = m.geometry.boundingBox!;
-          if (bb.max.y - bb.min.y < 1.5) return;
+          if (bb.max.y - bb.min.y < 1.5 && !/fachada|horneado/i.test(m.name + (mat.name ?? ''))) return;
           const props = gl.properties.get(mat) as { uniforms?: Record<string, { value: unknown }> };
           const u = props.uniforms;
           const extra = u ? ` cut=${JSON.stringify(u.uCut?.value)} sink=${JSON.stringify(u.uSink?.value)}` : ' sin-programa';
