@@ -19,6 +19,7 @@ import type { GuidedData, GuidedLevel, GuidedOrient, GuidedUnit, P2 } from '@/li
 import { formatArea, formatPrice, offerTexts, pluralize } from '@/lib/hotel';
 import { polygonLabelPoint } from '@/lib/plan';
 import type { Offer } from '@/lib/types';
+import { useTour } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
 /*
@@ -218,12 +219,11 @@ export function GuidedView({ data, offer }: { data: GuidedData; offer?: Offer })
 
   // de noche: si hay tomas de noche, empieza según la hora (como el 3D) y se cambia con el botón
   const hasNight = !!orient?.night?.pisos;
-  const [nightPick, setNight] = useState<boolean | null>(null);
-  const [clockNight] = useState(() => {
-    const h = new Date().getHours();
-    return h >= 18 || h < 6;
-  });
-  const night = hasNight && (nightPick ?? clockNight);
+  // el mismo día/noche del modo libre (estado del recorrido): lo que se elige en uno vale en el
+  // otro (Jacobo, 2026-11-26: al pasar del guiado de día al libre, el libre volvía a la hora real)
+  const storeNight = useTour((st) => st.night);
+  const setNight = useTour((st) => st.setNight);
+  const night = hasNight && storeNight;
 
   /** la planta de un piso en esta orientación (o en la otra, si aquí no está) */
   const floorShot = useCallback(

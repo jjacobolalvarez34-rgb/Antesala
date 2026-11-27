@@ -301,7 +301,7 @@ Medido en celular simulado (CPU 4× más lenta, 4G): Cénit Premium tarda 11 s e
   - el párrafo bajo "Chapinero Alto" (letra de títulos, muy fina) no se lee sobre el negro; en general, la letra es un poco fina para un fondo tan oscuro: más peso o más contraste.
 
   Anotado, sin hacer
-- [ ] **Luz y sombras al pasar del guiado al libre** (Jacobo, 2026-11-26): si en el guiado se cambia a día y luego se entra al modo libre, el libre vuelve a la hora real (no respeta el día/noche elegido) y la sombra del edificio sale mal, sobre todo en los pisos 4 y 5. Llevar el día/noche elegido de un modo al otro y revisar la sombra. Anotado, sin hacer
+- [x] **Luz y sombras al pasar del guiado al libre** — hecho el 2026-11-26: los dos modos comparten el día/noche (estado del recorrido). En la prueba, la sombra de los pisos 4 y 5 salió bien; si vuelve a fallar, anotar cómo se llegó. (Jacobo, 2026-11-26): si en el guiado se cambia a día y luego se entra al modo libre, el libre vuelve a la hora real (no respeta el día/noche elegido) y la sombra del edificio sale mal, sobre todo en los pisos 4 y 5. Llevar el día/noche elegido de un modo al otro y revisar la sombra. Anotado, sin hacer
 - [ ] Gimnasio u otro tipo de espacio: decidir con Jacobo la oferta (membresía, clase de prueba) y los muebles nuevos antes de producirlo (`docs/PRODUCCION.md` §0.1)
 - [ ] Con renders de Cycles (decisión abierta 16): cambiar las imágenes por las fotorrealistas, el visor queda igual
 - [x] Botón también dentro del 3D para pasar de uno a otro — hecho: selector Guiado | Libre en los dos modos (D-097)
