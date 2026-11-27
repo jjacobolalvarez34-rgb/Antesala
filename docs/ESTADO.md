@@ -258,6 +258,14 @@ Cada hotel es una carpeta de contenido. Un hotel nuevo no requiere código nuevo
     - con qué motor de render (Blender, que ya está, o D5/Unreal);
     - cuánto cobrarlo frente al Premium actual.
 
+- **17. ¿Antesala para gimnasios (y otros tipos de lugar)?** (idea de Jacobo, 2026-11-26)
+  - **Lo que ya sirve:** el modelo de niveles, unidades y espacios cabe en un gimnasio. Las sedes o pisos son niveles; las salas (pesas, cardio, clases, piscina) son unidades; la recepción, los vestieres y la cafetería son lugares comunes. El proceso para producirlo está en `docs/PRODUCCION.md`.
+  - **Lo que falta decidir:**
+    - qué se "reserva" en un gimnasio: una membresía, una clase de prueba o una visita guiada;
+    - cómo se muestra la disponibilidad: horario y aforo por sala, en vez de libre u ocupada;
+    - qué muebles nuevos hacen falta en la planta y la maqueta (caminadoras, bicicletas, racks, bancos, colchonetas).
+  - **A decidir:** si se abre este segmento; con cuál oferta empezar; si se hace una demo ficticia de gimnasio para venderlo.
+
 ---
 
 ## 8. Dónde está cada cosa
