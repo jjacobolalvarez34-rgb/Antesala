@@ -357,6 +357,7 @@ export const EN: Record<string, string> = {
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
   // modos del recorrido (D-097)
+  'Demo · hotel ficticio': 'Demo · fictional hotel',
   'Toca un piso': 'Tap a floor',
   'Toca una habitación': 'Tap a room',
   'Toca aquí': 'Tap here',

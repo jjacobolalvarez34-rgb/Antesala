@@ -5,6 +5,7 @@ import { AntesalaSymbol } from '@/components/brand/AntesalaLogo';
 import { LangSwitch } from '@/components/i18n/LangSwitch';
 import { t, type Lang } from '@/lib/i18n';
 
+import { DemoBannerFold } from './DemoBannerFold';
 import { NivelSelector } from './Nivel';
 
 /**
@@ -26,7 +27,7 @@ export function DemoBanner({
   niveles?: boolean;
 }) {
   return (
-    <div role="note" data-demo-banner className="pointer-events-auto relative z-[60] bg-ink text-bone">
+    <DemoBannerFold label={t(lang, 'Demo · hotel ficticio')} hideLabel={t(lang, 'Ocultar')}>
       <div className="mx-auto grid min-h-9 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-3 py-1.5 md:px-6">
         <Link
           href="/#demos"
@@ -46,6 +47,6 @@ export function DemoBanner({
           <LangSwitch />
         </div>
       </div>
-    </div>
+    </DemoBannerFold>
   );
 }
