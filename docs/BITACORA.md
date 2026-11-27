@@ -45,6 +45,16 @@ Registro de cada sesión de trabajo, con **la más reciente arriba**. Claude Cod
   Probado en producción: 12 de 12 pisos (antes, 1 de 8). Las vistas guiadas se recapturaron con la horneada.
 - **Maqueta del espacio como casa de muñecas:** se quitan los muros del lado de la cámara y los demás quedan completos (antes todo a 1,15 m, y en Cénit parecía que se quitaba la fachada).
 - **Vista guiada de noche:** sin la franja clara arriba.
+- **Tarde del 26:**
+  - portada Noche de Niebla Alta (D-099), con animaciones y ajustes de legibilidad;
+  - franja de la demo plegada en una tira de 24 px;
+  - dedito que enseña el gesto en los dos modos;
+  - Niebla de noche más luminosa;
+  - plazoleta y jardines de retiro en la manzana del hotel, y patios verdes;
+  - guiado y libre comparten el día/noche;
+  - catálogo de seis diseños de web en `docs/disenos/` (`python pipeline/catalogo_web.py`).
+
+  Falta: compilación completa y recapturar las vistas guiadas (cambiaron la ciudad y la noche).
 - **Agente productor:** `docs/PRODUCCION.md` y `.claude/agents/productor.md`, el proceso para producir un lugar nuevo (hotel, gimnasio, coworking…) con o sin información.
 
 **Decisiones**
