@@ -1,0 +1,1517 @@
+<title>Niebla Alta · otros tres caminos para la web</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Caveat:wght@500;700&family=Instrument+Sans:wght@400;500;600;700&family=Schibsted+Grotesk:wght@400..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Azeret+Mono:wght@200..500&display=swap">
+<style>
+/* Tres propuestas más (D, E, F). Cada una es un mundo visual propio, con un solo tema.
+   Regla de movimiento: nada empieza invisible. Las entradas y los revelados parten de un
+   estado legible (desplazado, desenfocado o recortado en parte) y llegan al final.
+   Con movimiento reducido no se anima nada. */
+:root {
+  --bar-bg: #121314;
+  --bar-ink: #eeeeea;
+  --bar-dim: #8f918d;
+  --barh: 56px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bar-bg); font-family: "Instrument Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid #e2321c; outline-offset: 3px; }
+[id] { scroll-margin-top: calc(var(--barh) + 16px); }
+.prop { overflow-x: clip; }
+.prop[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- barra de propuestas ---------- */
+.switch { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: var(--bar-bg); color: var(--bar-ink); border-bottom: 1px solid #2a2c2d; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--bar-bg); }
+.switch .in { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; justify-content: space-between; padding: 9px max(16px, env(safe-area-inset-right, 0px)) 9px max(16px, env(safe-area-inset-left, 0px)); max-width: 1440px; margin: 0 auto; }
+.switch p { margin: 0; font-size: 12.5px; color: var(--bar-dim); letter-spacing: .01em; }
+.switch p b { color: var(--bar-ink); font-weight: 600; }
+.tabs { display: flex; gap: 4px; background: #1f2122; border-radius: 999px; padding: 3px; }
+.tabs button { font: 500 13px/1 "Instrument Sans", sans-serif; color: var(--bar-ink); background: none; border: 0; border-radius: 999px; padding: 9px 14px; cursor: pointer; white-space: nowrap; transition: background-color .25s, color .25s; }
+.tabs button:hover { background: #2c2f30; }
+.tabs button[aria-selected="true"] { background: var(--bar-ink); color: var(--bar-bg); }
+.tabs button span { opacity: .55; margin-right: 6px; }
+
+/* ---------- revelado genérico al hacer scroll ---------- */
+.rv-in { animation: var(--rv, rvUp) .95s cubic-bezier(.2,.75,.2,1) var(--d, 0s) backwards; }
+@keyframes rvUp { from { transform: translateY(30px); opacity: .3; } }
+
+/* =================================================================
+   D · POSTAL — afiche de viaje, fotos en duotono cobalto y girasol,
+   el reverso de una postal. Alfa Slab One + Instrument Sans + Caveat.
+   ================================================================= */
+.pd {
+  --ice: #e5ebf0; --ice-2: #cdd7e1; --card: #f7f9fb; --cobalt: #1f3a8f; --deep: #11204e; --sun: #f5c33b; --sky: #7c9fdd;
+  --ink: #12204a; --mute: #4b5778;
+  --slab: "Alfa Slab One", Rockwell, "Roboto Slab", serif; --body: "Instrument Sans", system-ui, sans-serif; --hand: Caveat, "Segoe Print", cursive;
+  background-color: var(--ice); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6;
+  background-image: radial-gradient(rgba(31,58,143,.08) 1px, transparent 1.4px); background-size: 7px 7px;
+}
+.pd .wrap { max-width: 1240px; margin: 0 auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+.pd h1, .pd h2, .pd h3 { font-family: var(--slab); font-weight: 400; margin: 0; text-wrap: balance; }
+.pd-eyebrow { font: 700 11.5px/1.3 var(--body); letter-spacing: .2em; text-transform: uppercase; color: var(--cobalt); margin: 0; }
+.pd-hand { font-family: var(--hand); font-weight: 700; color: var(--deep); }
+
+/* duotono: gris multiplicado sobre el color claro, sombras aclaradas al color oscuro */
+.duo { position: relative; display: block; overflow: hidden; isolation: isolate; background-color: var(--hi, #e5ebf0); transition: background-color .7s ease; }
+.duo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(1.04); mix-blend-mode: multiply; transition: filter .7s ease, transform 1.2s cubic-bezier(.2,.7,.2,1); }
+.duo::after { content: ""; position: absolute; inset: 0; background: var(--lo, #1a2f78); mix-blend-mode: lighten; transition: opacity .7s ease; pointer-events: none; }
+.duo.sun { --hi: #f5c33b; }
+.duo.sky { --hi: #b8cdee; }
+.duo.color, .pd-places a:hover .duo, .pd-places a:focus-visible .duo, .pcard:hover .front .duo { background-color: #fff; }
+.duo.color img, .pd-places a:hover .duo img, .pd-places a:focus-visible .duo img, .pcard:hover .front .duo img { filter: none; }
+.duo.color::after, .pd-places a:hover .duo::after, .pd-places a:focus-visible .duo::after, .pcard:hover .front .duo::after { opacity: 0; }
+
+.pd-btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 50px; padding: 0 22px; font: 700 15px/1.1 var(--body); text-decoration: none; border: 2px solid var(--deep); color: var(--deep); background: transparent; box-shadow: 4px 4px 0 var(--deep); transition: transform .2s, box-shadow .2s, background-color .2s; cursor: pointer; }
+.pd-btn.sun { background: var(--sun); }
+.pd-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--deep); }
+.pd-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--deep); }
+.pd-btn i { font-style: normal; transition: transform .3s; }
+.pd-btn:hover i { transform: translateX(4px); }
+.pd-btn.sm { min-height: 42px; padding: 0 16px; font-size: 14px; box-shadow: 3px 3px 0 var(--deep); }
+
+.pd-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+.pd-logo { font: 400 25px/1 var(--slab); color: var(--cobalt); text-decoration: none; }
+.pd-top nav { display: flex; gap: 28px; font-weight: 600; font-size: 14.5px; }
+.pd-top nav a { text-decoration: none; background: linear-gradient(var(--sun), var(--sun)) left 88% / 0 7px no-repeat; transition: background-size .35s; }
+.pd-top nav a:hover { background-size: 100% 7px; }
+
+.pd-hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 30px; padding-bottom: 44px; align-items: stretch; }
+.pd-poster { position: relative; background: var(--cobalt); padding: 14px; display: flex; flex-direction: column; color: var(--sun); animation: pdPoster 1.1s cubic-bezier(.2,.8,.2,1) backwards; }
+@keyframes pdPoster { from { transform: translateY(26px) rotate(-1.6deg); } }
+.pd-poster .duo { aspect-ratio: 4 / 3; --lo: #142a6e; }
+.pd-poster .duo img { animation: pdSettle 2.4s cubic-bezier(.2,.7,.2,1) backwards; object-position: 50% 40%; }
+@keyframes pdSettle { from { transform: scale(1.16); } }
+.pd-chip { position: absolute; top: 28px; left: 28px; z-index: 2; background: var(--deep); color: var(--sun); font: 700 11px/1 var(--body); letter-spacing: .22em; text-transform: uppercase; padding: 9px 11px; }
+.pd-title { font-size: clamp(60px, 7.3vw, 104px); line-height: .86; text-transform: uppercase; color: var(--sun); margin: 20px 4px 14px !important; text-shadow: 5px 5px 0 var(--sky); animation: pdReg 1.6s .2s cubic-bezier(.2,.8,.2,1) backwards; }
+.pd-title span { display: block; }
+@keyframes pdReg { from { text-shadow: 20px -10px 0 var(--sky); } }
+.pd-poster-foot { margin: auto 0 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; border-top: 2px solid var(--sun); padding: 11px 4px 2px; font: 600 11.5px/1.3 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--ice); }
+
+.pd-back { position: relative; background: var(--card); border: 2px solid var(--deep); display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); animation: pdBack 1.2s .12s cubic-bezier(.2,.8,.2,1) backwards; }
+@keyframes pdBack { from { transform: translateX(34px) rotate(1.4deg); } }
+.pd-msg { padding: 32px 32px 30px; border-right: 2px dashed rgba(17,32,78,.32); display: flex; flex-direction: column; }
+.pd-msg .pd-hand { font-size: clamp(40px, 4.3vw, 58px); line-height: .98; margin: 16px 0 0; position: relative; }
+.pd-scribble { display: block; width: min(260px, 70%); height: 16px; margin-top: 6px; overflow: visible; }
+.pd-scribble path { stroke-dasharray: 320; animation: pdDraw 1.4s .7s ease-out backwards; }
+@keyframes pdDraw { from { stroke-dashoffset: 320; } }
+.pd-lead { color: var(--mute); font-size: 17px; margin: 18px 0 0; max-width: 42ch; }
+.pd-btns { display: flex; flex-wrap: wrap; gap: 14px; margin-top: auto; padding-top: 28px; }
+.pd-addr { position: relative; padding: 24px 26px 22px; display: flex; flex-direction: column; gap: 14px; }
+.pd-addr .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; min-height: 160px; }
+.pd-pm { width: 118px; height: 118px; color: rgba(17,32,78,.55); margin-top: 26px; flex: none; }
+.pd-pm .spin { transform-origin: 60px 60px; animation: pdSpin 40s linear infinite; }
+@keyframes pdSpin { to { transform: rotate(360deg); } }
+.pd-pm text { font: 700 9.6px/1 var(--body); letter-spacing: 2.2px; fill: currentColor; }
+.stamp { --r: 5px; display: block; padding: calc(2 * var(--r)); background: #fff; flex: none;
+  -webkit-mask: radial-gradient(circle var(--r) at center, #0000 96%, #000) calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)), linear-gradient(#000 0 0) content-box;
+          mask: radial-gradient(circle var(--r) at center, #0000 96%, #000) calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)), linear-gradient(#000 0 0) content-box; }
+.pd-addr .stamp { width: 132px; rotate: 4deg; transition: rotate .5s; filter: drop-shadow(0 0 0 transparent); }
+.pd-addr .stamp:hover { rotate: -2deg; }
+.stamp .duo { aspect-ratio: 4 / 5; }
+.stamp small { display: block; font: 700 9.5px/1.2 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--deep); margin-top: 6px; text-align: center; }
+.pd-lines { list-style: none; margin: 0; padding: 0; }
+.pd-lines li { border-bottom: 1.5px solid rgba(17,32,78,.28); padding: 10px 2px 3px; font: 700 27px/1 var(--hand); color: var(--deep); }
+.pd-note { font-size: 11.5px; color: var(--mute); margin: auto 0 0; letter-spacing: .02em; }
+
+/* banda de correo aéreo */
+.pd-air { padding-block: 9px; background: repeating-linear-gradient(-45deg, var(--cobalt) 0 16px, var(--card) 16px 26px, var(--sun) 26px 42px, var(--card) 42px 52px); background-size: 148px 148px; animation: pdStripes 6s linear infinite; }
+@keyframes pdStripes { to { background-position: 148px 0; } }
+.pd-air .strip { background: var(--card); border-block: 2px solid var(--deep); overflow: hidden; }
+.pd-air .track { display: flex; width: max-content; animation: pdMarq 46s linear infinite; }
+.pd-air span { font: 400 15px/1 var(--slab); color: var(--deep); padding: 10px 0; white-space: nowrap; letter-spacing: .04em; text-transform: uppercase; }
+.pd-air span::after { content: "✦"; color: var(--cobalt); margin: 0 22px; font-family: var(--body); }
+@keyframes pdMarq { to { transform: translateX(-50%); } }
+
+.pd-sec { padding-block: 96px; }
+.pd-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 14px 40px; margin-bottom: 44px; }
+.pd-head h2 { font-size: clamp(38px, 4.7vw, 66px); line-height: .98; color: var(--deep); margin-top: 12px; max-width: 16ch; }
+.pd-head .pd-hand { font-size: 28px; line-height: 1.1; margin: 0; color: var(--cobalt); max-width: 22ch; }
+
+/* postales que se voltean */
+.pd-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px; }
+.pcard { appearance: none; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; perspective: 1400px; rotate: var(--rot, 0deg); transition: rotate .55s cubic-bezier(.2,.7,.2,1), translate .55s cubic-bezier(.2,.7,.2,1); }
+.pcard:hover, .pcard:focus-visible { rotate: 0deg; translate: 0 -8px; }
+.pcard .in { display: grid; transform-style: preserve-3d; transition: transform .95s cubic-bezier(.3,.75,.2,1); }
+.pcard[aria-pressed="true"] .in { transform: rotateY(180deg); }
+.pcard .face { grid-area: 1 / 1; -webkit-backface-visibility: hidden; backface-visibility: hidden; background: var(--card); border: 2px solid var(--deep); box-shadow: 6px 6px 0 rgba(17,32,78,.16); padding: 10px; display: flex; flex-direction: column; }
+.pcard .front .duo { aspect-ratio: 3 / 2; }
+.pcard .front .duo img { object-position: 50% 55%; }
+.pcard:hover .front .duo img { transform: scale(1.05); }
+.pcard .nm { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin: 14px 6px 0; }
+.pcard .nm b { font: 400 30px/1 var(--slab); color: var(--deep); font-weight: 400; }
+.pcard .nm span { font: 600 13px/1.2 var(--body); color: var(--mute); white-space: nowrap; }
+.pcard .ft { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 12px 6px 4px; padding-top: 10px; border-top: 1.5px dashed rgba(17,32,78,.3); font-size: 14px; }
+.pcard .ft b { background: var(--sun); color: var(--deep); padding: 3px 8px; font-weight: 700; }
+.pcard .ft em { font-style: normal; color: var(--cobalt); font-weight: 600; font-size: 13px; }
+.pcard .back { transform: rotateY(180deg); display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 0; padding: 18px; }
+.pcard .back .l { padding-right: 16px; border-right: 2px dashed rgba(17,32,78,.3); display: flex; flex-direction: column; gap: 10px; }
+.pcard .back .l .pd-hand { font-size: 27px; line-height: 1.05; margin: 0; }
+.pcard .back .l p { margin: 0; font-size: 14px; color: var(--mute); }
+.pcard .back .l em { margin-top: auto; font-style: normal; font-weight: 700; font-size: 13.5px; color: var(--cobalt); }
+.pcard .back .r { padding-left: 16px; display: flex; flex-direction: column; gap: 8px; }
+.pcard .back .price { align-self: flex-end; border: 2px solid var(--deep); background: var(--sun); padding: 8px 10px; text-align: center; font: 400 19px/1 var(--slab); color: var(--deep); rotate: 3deg; }
+.pcard .back .price small { display: block; font: 700 9.5px/1.3 var(--body); letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; }
+.pcard .back .r span { border-bottom: 1.5px solid rgba(17,32,78,.25); font: 700 21px/1.25 var(--hand); color: var(--deep); padding-top: 4px; }
+
+/* sellos por piso */
+.pd-blue { background-color: var(--deep); color: var(--ice); background-image: radial-gradient(rgba(229,235,240,.07) 1px, transparent 1.4px); background-size: 7px 7px; }
+.pd-blue .pd-eyebrow { color: var(--sun); }
+.pd-blue .pd-head h2 { color: var(--card); }
+.pd-blue .pd-head p { color: #c3cde0; margin: 0; max-width: 40ch; }
+.pd-floors { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 44px; align-items: start; }
+.pd-stamps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.fstamp { --r: 6px; appearance: none; border: 0; cursor: pointer; text-align: left; color: var(--deep); background: var(--card); padding: calc(2 * var(--r)); rotate: var(--rot, 0deg); transition: rotate .45s cubic-bezier(.2,.7,.2,1), translate .45s cubic-bezier(.2,.7,.2,1), background-color .3s;
+  -webkit-mask: radial-gradient(circle var(--r) at center, #0000 96%, #000) calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)), linear-gradient(#000 0 0) content-box;
+          mask: radial-gradient(circle var(--r) at center, #0000 96%, #000) calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)), linear-gradient(#000 0 0) content-box; }
+.fstamp:hover, .fstamp:focus-visible { rotate: 0deg; translate: 0 -5px; }
+.fstamp .fs { position: relative; display: flex; flex-direction: column; min-height: 156px; border: 1.5px solid var(--deep); padding: 12px 12px 11px; overflow: hidden; transition: background-color .3s; }
+.fstamp .fs-l { font: 700 10.5px/1 var(--body); letter-spacing: .2em; text-transform: uppercase; }
+.fstamp .fs-n { font: 400 64px/.95 var(--slab); margin-top: 4px; }
+.fstamp .fs-s { font-size: 13px; line-height: 1.25; margin-top: auto; padding-top: 6px; }
+.fstamp .fs-f { display: inline-block; align-self: flex-start; margin-top: 6px; font: 700 12px/1 var(--body); padding: 4px 7px; background: var(--sun); }
+.fstamp .fs-f.none { background: var(--ice-2); }
+.fstamp .cancel { position: absolute; top: 8px; right: -6px; width: 92px; height: 60px; color: var(--cobalt); opacity: 0; transition: opacity .2s; }
+.fstamp .cancel path, .fstamp .cancel circle { stroke-dasharray: 160; stroke-dashoffset: 160; }
+.fstamp[aria-pressed="true"] .fs { background: var(--sun); }
+.fstamp[aria-pressed="true"] .fs-f { background: var(--card); }
+.fstamp[aria-pressed="true"] .cancel { opacity: 1; }
+.fstamp[aria-pressed="true"] .cancel path, .fstamp[aria-pressed="true"] .cancel circle { transition: stroke-dashoffset .9s ease-out; stroke-dashoffset: 0; }
+.pd-panel { background: var(--card); color: var(--ink); border: 2px solid var(--sun); box-shadow: 8px 8px 0 var(--sun); padding: 26px 26px 24px; }
+.pd-panel h3 { font-size: 40px; line-height: 1; color: var(--deep); margin-top: 8px; }
+.pd-panel > p { margin: 8px 0 0; color: var(--mute); font-size: 15px; }
+.pd-panel ul { list-style: none; margin: 18px 0 0; padding: 0; }
+.pd-panel li { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 11px 0; border-top: 1.5px dashed rgba(17,32,78,.25); }
+.pd-panel li b { font: 400 22px/1 var(--slab); color: var(--deep); font-weight: 400; }
+.pd-panel li span { font-weight: 600; font-size: 15px; line-height: 1.25; }
+.pd-panel li span small { display: block; font-weight: 400; font-size: 13px; color: var(--mute); }
+.pd-panel li .pr { font-weight: 700; font-size: 14.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pd-panel li em { font-style: normal; font: 700 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; padding: 5px 7px; white-space: nowrap; }
+.pd-panel li em.free { background: var(--sun); color: var(--deep); }
+.pd-panel li em.oc { border: 1.5px solid #8a93ad; color: #66708d; }
+.pd-panel li em.poi { background: var(--ice); color: var(--cobalt); }
+.pd-panel .pd-btn { margin-top: 20px; }
+
+/* lugares comunes como afiches */
+.pd-places { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 26px; align-items: start; }
+.pd-places a { display: block; text-decoration: none; border: 2px solid var(--deep); padding: 10px; background: var(--band); color: var(--bandink); transition: translate .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s; box-shadow: 0 0 0 var(--deep); }
+.pd-places a:hover, .pd-places a:focus-visible { translate: -4px -6px; box-shadow: 8px 10px 0 var(--deep); }
+.pd-places a:nth-child(2) { margin-top: 70px; }
+.pd-places a:nth-child(3) { margin-top: 26px; }
+.pd-places .duo { aspect-ratio: 4 / 5; }
+.pd-places a:nth-child(n+2) .duo { aspect-ratio: 1 / 1; }
+.pd-places a:hover .duo img { transform: scale(1.05); }
+.pd-places .lbl { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 14px 4px 4px; }
+.pd-places .lbl b { font: 400 clamp(26px, 2.6vw, 36px)/1 var(--slab); font-weight: 400; text-transform: uppercase; }
+.pd-places .lbl span { font: 700 11px/1 var(--body); letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; }
+.pd-places p { margin: 6px 4px 4px; font-size: 14px; opacity: .85; }
+
+/* escribe tu postal */
+.pd-write { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 48px; align-items: start; }
+.pd-form { display: grid; gap: 18px; }
+.pd-form fieldset { border: 0; margin: 0; padding: 0; }
+.pd-form legend, .pd-form label > span { display: block; font: 700 11px/1.2 var(--body); letter-spacing: .18em; text-transform: uppercase; color: var(--cobalt); margin-bottom: 8px; }
+.pd-types { display: flex; flex-wrap: wrap; gap: 10px; }
+.pd-types label { position: relative; }
+.pd-types input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.pd-types label i { display: block; font-style: normal; font-weight: 700; font-size: 14.5px; padding: 11px 14px; border: 2px solid var(--deep); background: var(--card); transition: background-color .2s, transform .2s; }
+.pd-types input:checked + i { background: var(--sun); transform: rotate(-2deg); }
+.pd-types input:focus-visible + i { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+.pd-form .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pd-form input[type="date"], .pd-form select { width: 100%; min-height: 50px; font: 600 16px var(--body); color: var(--ink); background: var(--card); border: 2px solid var(--deep); border-radius: 0; padding: 0 12px; }
+.pd-err { color: #b0281a; font-weight: 600; font-size: 14px; margin: 0; min-height: 1.4em; }
+.pd-pc { background: var(--card); border: 2px solid var(--deep); display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); rotate: -1deg; box-shadow: 10px 10px 0 rgba(17,32,78,.14); transition: rotate .5s; }
+.pd-pc:hover { rotate: 0deg; }
+.pd-pc .l { padding: 26px 22px; border-right: 2px dashed rgba(17,32,78,.3); min-height: 320px; }
+.pd-pc .l p { margin: 0; font: 700 26px/34px var(--hand); color: var(--deep); background-image: linear-gradient(transparent 32px, rgba(17,32,78,.18) 32px, rgba(17,32,78,.18) 33.5px, transparent 33.5px); background-size: 100% 34px; }
+.pd-pc .l p.ink { animation: pdInk .6s ease-out; }
+@keyframes pdInk { from { opacity: .35; filter: blur(2px); } }
+.pd-pc .r { padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 10px; }
+.pd-pc .r .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.pd-pc .stamp { width: 104px; rotate: 3deg; }
+.pd-pc .pm2 { width: 92px; height: 92px; color: rgba(17,32,78,.5); flex: none; margin-top: 10px; }
+.pd-pc .pm2 text { font: 700 11px/1 var(--body); fill: currentColor; letter-spacing: 1px; }
+.pd-pc .pd-lines li { font-size: 22px; padding-top: 8px; }
+.pd-send { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+.pd-send p { margin: 0; font-size: 13.5px; color: var(--mute); max-width: 36ch; }
+
+/* incluido + preguntas */
+.pd-two { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.pd-two h2 { font-size: clamp(32px, 3.6vw, 48px); color: var(--deep); margin: 10px 0 24px; }
+.pd-inc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 26px; }
+.pd-inc li { display: flex; gap: 12px; align-items: baseline; padding: 13px 0; border-top: 2px dotted rgba(17,32,78,.3); font-weight: 500; }
+.pd-inc li::before { content: ""; flex: none; width: 11px; height: 11px; background: var(--sun); border: 2px solid var(--deep); transform: rotate(45deg) translateY(-1px); }
+.pd-faq details { border-top: 2px solid var(--deep); padding: 16px 0; }
+.pd-faq details:last-child { border-bottom: 2px solid var(--deep); }
+.pd-faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; font-weight: 700; font-size: 17.5px; }
+.pd-faq summary::-webkit-details-marker { display: none; }
+.pd-faq summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 28px; height: 28px; background: var(--sun); border: 2px solid var(--deep); font: 400 18px/1 var(--slab); transition: transform .35s; }
+.pd-faq details[open] summary::after { transform: rotate(45deg); }
+.pd-faq details p { margin: 10px 0 0; color: var(--mute); max-width: 60ch; }
+.pd-faq details[open] p { animation: rvUp .5s ease-out backwards; }
+
+.pd-foot { background: var(--cobalt); color: var(--ice); padding-block: 56px 64px; }
+.pd-foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 22px; }
+.pd-foot .logo { font: 400 clamp(44px, 6vw, 80px)/.9 var(--slab); color: var(--sun); text-shadow: 4px 4px 0 var(--deep); }
+.pd-foot p { margin: 0; font-size: 14px; color: #d3dbea; }
+.pd-foot .pd-note { color: #b9c5dd; margin-top: 8px; }
+.pd-dock { display: none; }
+.pd .rv-tilt { --rv: pdTilt; }
+@keyframes pdTilt { from { transform: translateY(36px) rotate(-3deg); opacity: .3; } }
+
+/* =================================================================
+   E · VITRINA — suizo: retícula de 12 columnas, letra enorme,
+   negro, gris y un rojo de señal. Schibsted Grotesk.
+   ================================================================= */
+.pe {
+  --paper: #efefeb; --card: #f8f8f5; --ink: #0e0e0e; --mid: #5f5f5a; --soft: #cfcfc9; --red: #e2321c;
+  --grot: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  background: var(--paper); color: var(--ink); font-family: var(--grot); font-size: 16px; line-height: 1.5;
+}
+.pe-g { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 20px; max-width: 1440px; margin-inline: auto; padding-inline: max(24px, env(safe-area-inset-left, 0px)); }
+.pe h1, .pe h2, .pe h3 { margin: 0; font-weight: 700; letter-spacing: -.04em; text-wrap: balance; }
+.c-1-3 { grid-column: 1 / 4; } .c-4-6 { grid-column: 4 / 7; } .c-7-12 { grid-column: 7 / 13; } .c-4-12 { grid-column: 4 / 13; }
+.c-1-7 { grid-column: 1 / 8; } .c-8-12 { grid-column: 8 / 13; } .c-1-4 { grid-column: 1 / 5; } .c-5-12 { grid-column: 5 / 13; } .c-all { grid-column: 1 / -1; }
+.pe-idx { font-weight: 500; font-size: 14px; margin: 0; }
+.pe-nav { padding-block: 18px 16px; align-items: start; border-bottom: 1px solid var(--ink); }
+.pe-nav .logo { grid-column: 1 / 4; font-weight: 800; font-size: 20px; letter-spacing: -.03em; text-decoration: none; line-height: 1.1; }
+.pe-nav .info { grid-column: 4 / 7; margin: 0; font-size: 13px; line-height: 1.35; color: var(--mid); }
+.pe-nav nav { grid-column: 7 / 11; display: flex; gap: 22px; font-size: 14px; font-weight: 500; }
+.pe-nav nav a { text-decoration: none; position: relative; }
+.pe-nav nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: right; transition: transform .35s; }
+.pe-nav nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+.pe-cta { grid-column: 11 / 13; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--red); color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; padding: 11px 14px; transition: background-color .25s; align-self: start; }
+.pe-cta:hover { background: var(--ink); }
+.pe-cta span, .pe-btn span { transition: transform .3s; }
+.pe-cta:hover span, .pe-btn:hover span { transform: translateX(5px); }
+
+.pe-giant { grid-column: 1 / -1; font-weight: 800 !important; font-size: clamp(72px, 15.6vw, 226px); line-height: .8 !important; letter-spacing: -.072em !important; margin: 26px 0 0 -.05em !important; white-space: nowrap; }
+.pe-giant .w { display: inline-block; }
+.pe-giant .w > span { display: inline-block; animation: peCh 1.15s cubic-bezier(.2,.8,.2,1) calc(var(--i) * 55ms) backwards; transition: font-weight .45s cubic-bezier(.2,.7,.2,1), color .3s; }
+.pe-giant .w > span:hover { font-weight: 400; color: var(--red); }
+@keyframes peCh { from { font-weight: 400; transform: translateY(.14em); } }
+.pe-row1 { margin-top: 34px; align-items: start; }
+.pe-row1 .mark { display: block; width: 22px; height: 22px; background: var(--red); margin-bottom: 18px; animation: peMark .9s .5s cubic-bezier(.2,.8,.2,1) backwards; }
+@keyframes peMark { from { transform: scale(0); } }
+.pe-tag { font-size: clamp(22px, 2vw, 28px); line-height: 1.12; font-weight: 600; letter-spacing: -.02em; margin: 0; }
+.pe-intro { margin: 0; color: var(--mid); font-size: 16.5px; }
+.pe-btns { display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin-top: 22px; }
+.pe-btn { display: flex; justify-content: space-between; align-items: center; gap: 14px; min-height: 50px; padding: 0 16px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--ink); transition: background-color .25s, color .25s; }
+.pe-btn.red { background: var(--red); border-color: var(--red); color: #fff; }
+.pe-btn.red:hover { background: var(--ink); border-color: var(--ink); }
+.pe-btn:not(.red):hover { background: var(--ink); color: var(--paper); }
+.pe-note { font-size: 12px; color: var(--mid); margin: 16px 0 0; }
+.pe-row1 figure { margin: 0; }
+.pe-row1 figure .ph { overflow: hidden; aspect-ratio: 16 / 10; }
+.pe-row1 figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; animation: peWipe 1.4s .15s cubic-bezier(.7,0,.2,1) backwards; }
+@keyframes peWipe { from { clip-path: inset(0 0 0 42%); transform: scale(1.08); } }
+.pe-row1 figcaption, .pe-cap { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--mid); padding-top: 8px; margin-top: 8px; border-top: 1px solid var(--ink); }
+
+.pe-facts { margin-top: 70px; }
+.pe-facts > div { grid-column: span 3; border-top: 1px solid var(--ink); padding-top: 12px; }
+.pe-facts .n { display: block; font-weight: 800; font-size: clamp(52px, 6.4vw, 100px); line-height: .9; letter-spacing: -.055em; }
+.pe-facts .n small { font-size: .34em; letter-spacing: -.01em; font-weight: 600; margin-left: .15em; }
+.pe-facts .l { display: block; margin-top: 8px; font-size: 13px; color: var(--mid); }
+.pe .rv-rule { --rv: peRule; transform-origin: left; }
+@keyframes peRule { from { clip-path: inset(0 100% 0 0); } }
+.pe .rv-x { --rv: peX; }
+@keyframes peX { from { transform: translateX(-28px); opacity: .3; } }
+
+.pe-sec { padding-top: 120px; }
+.pe-sh { align-items: baseline; margin-bottom: 52px; }
+.pe-sh h2 { font-size: clamp(40px, 5.4vw, 82px); line-height: .94; }
+.pe-bars { margin-bottom: 64px; }
+.pe-bars .bar { display: contents; }
+.pe-bars .bar > span { grid-column: 1 / 4; font-weight: 600; font-size: 17px; padding-block: 10px; border-top: 1px solid var(--soft); align-self: stretch; display: flex; align-items: center; }
+.pe-bars .bar > div { grid-column: 4 / 13; display: flex; align-items: center; gap: 14px; padding-block: 10px; border-top: 1px solid var(--soft); }
+.pe-bars i { display: block; height: 38px; width: var(--w); background: var(--ink); transform-origin: left; transition: background-color .3s; }
+.pe-bars i.rv-in { animation: peBar 1.2s cubic-bezier(.2,.8,.2,1) var(--d, 0s) backwards; }
+@keyframes peBar { from { transform: scaleX(.35); } }
+.pe-bars b { font-weight: 800; font-size: 22px; letter-spacing: -.03em; white-space: nowrap; }
+.pe-bars .bar.on i { background: var(--red); }
+.pe-types > a { grid-column: span 4; text-decoration: none; display: flex; flex-direction: column; }
+.pe-types .ph { overflow: hidden; aspect-ratio: 4 / 3; background: var(--soft); }
+.pe-types img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+.pe-types a:hover img, .pe-types a:focus-visible img { transform: scale(1.06); }
+.pe-types h3 { font-size: 34px; line-height: 1; margin-top: 18px; display: inline-block; position: relative; align-self: flex-start; }
+.pe-types h3::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 3px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.pe-types a:hover h3::after, .pe-types a:focus-visible h3::after { transform: scaleX(1); }
+.pe-types p { margin: 12px 0 0; color: var(--mid); }
+.pe-types dl { margin: 16px 0 0; display: grid; grid-template-columns: 1fr 1fr 1.3fr; border-top: 1px solid var(--ink); }
+.pe-types dl div { padding-top: 10px; }
+.pe-types dt { font-size: 12px; color: var(--mid); }
+.pe-types dd { margin: 2px 0 0; font-weight: 700; font-size: 19px; letter-spacing: -.02em; }
+
+/* la vitrina de habitaciones */
+.pe-dark { background: var(--ink); color: var(--paper); margin-top: 120px; padding-block: 100px 110px; }
+.pe-dark .pe-idx { color: #a3a39d; }
+.pe-count { grid-column: 4 / 13; margin: 18px 0 0; font-size: 17px; color: #bdbdb7; }
+.pe-count b { color: var(--paper); font-weight: 800; font-size: 1.5em; letter-spacing: -.03em; }
+.pe-ctl { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; border-block: 1px solid #333; padding-block: 14px; margin-top: 36px; }
+.pe-ctl .grp { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pe-ctl .grp > span { font-size: 12px; color: #9a9a94; margin-right: 6px; }
+.pe-ctl button { appearance: none; background: none; border: 1px solid #4a4a46; color: var(--paper); font-weight: 500; font-size: 14px; padding: 8px 12px; cursor: pointer; transition: background-color .2s, color .2s, border-color .2s; }
+.pe-ctl button:hover { border-color: var(--paper); }
+.pe-ctl button[aria-pressed="true"] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.pe-ctl .sw[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+.pe-list { grid-column: 1 / 8; grid-row: 2; margin-top: 8px; }
+.pe-row { appearance: none; width: 100%; background: none; border: 0; border-bottom: 1px solid #2c2c2a; color: var(--paper); cursor: pointer; text-align: left; display: grid; grid-template-columns: 74px minmax(0, 1.7fr) .7fr .7fr 1fr 92px; gap: 12px; align-items: center; padding: 13px 10px; font-size: 15px; transition: background-color .2s, color .2s; }
+.pe-row[hidden] { display: none; }
+.pe-row .id { font-weight: 800; font-size: 26px; letter-spacing: -.04em; line-height: 1; }
+.pe-row .pr { font-weight: 600; text-align: right; }
+.pe-row .st { display: flex; align-items: center; gap: 7px; font-size: 13px; justify-content: flex-end; }
+.pe-row .st::before { content: ""; width: 10px; height: 10px; background: currentColor; }
+.pe-row .st.oc { color: #84847e; }
+.pe-row .st.oc::before { background: none; border: 1.5px solid currentColor; }
+.pe-row .fl, .pe-row .ar { color: #b8b8b2; }
+.pe-row:hover { background: #1d1d1c; }
+.pe-row[aria-current="true"] { background: var(--paper); color: var(--ink); }
+.pe-row[aria-current="true"] .fl, .pe-row[aria-current="true"] .ar { color: var(--mid); }
+.pe-row[aria-current="true"] .id { color: var(--red); }
+.pe-prev { grid-column: 9 / 13; grid-row: 2; position: sticky; top: calc(var(--barh) + 24px); align-self: start; border-top: 4px solid var(--red); padding-top: 16px; margin-top: 8px; }
+.pe-prev .big { font-weight: 800; font-size: clamp(90px, 10vw, 150px); line-height: .8; letter-spacing: -.07em; margin: 0 0 0 -.04em; }
+.pe-prev .nm { font-size: 22px; font-weight: 700; letter-spacing: -.02em; margin: 14px 0 0; }
+.pe-prev .stt { margin: 4px 0 0; font-size: 14px; color: #b8b8b2; }
+.pe-prev .ph { overflow: hidden; aspect-ratio: 4 / 3; margin-top: 16px; background: #222; }
+.pe-prev .ph img { width: 100%; height: 100%; object-fit: cover; }
+.pe-prev dl { display: grid; grid-template-columns: repeat(3, 1fr); margin: 14px 0 0; border-top: 1px solid #3a3a37; }
+.pe-prev dl div { padding-top: 8px; }
+.pe-prev dt { font-size: 12px; color: #9a9a94; }
+.pe-prev dd { margin: 2px 0 0; font-weight: 700; font-size: 18px; }
+.pe-prev .pe-btn { margin-top: 16px; }
+.pe-prev .pe-btn.red:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+.pe-places > a { text-decoration: none; display: block; }
+.pe-places .ph { overflow: hidden; background: var(--soft); }
+.pe-places img { width: 100%; height: 100%; object-fit: cover; transition: filter .8s ease, transform 1.1s cubic-bezier(.2,.7,.2,1); }
+@media (hover: hover) {
+  .pe-places img { filter: grayscale(1) contrast(1.05); }
+  .pe-places a:hover img, .pe-places a:focus-visible img { filter: none; transform: scale(1.04); }
+}
+.pe-places .big { grid-column: 1 / 8; grid-row: span 2; }
+.pe-places .big .ph { aspect-ratio: 4 / 3.3; }
+.pe-places .sm { grid-column: 8 / 13; }
+.pe-places .sm .ph { aspect-ratio: 16 / 10; }
+.pe-places .sm + .sm { margin-top: 28px; }
+.pe-places .pe-cap b { color: var(--ink); font-weight: 700; font-size: 15px; }
+.pe-places .pe-cap { align-items: baseline; }
+.pe-places .ph { position: relative; }
+.pe-places .ph::after { content: ""; position: absolute; top: 0; right: 0; width: 46px; height: 46px; background: var(--red); transform: translate(100%, -100%); transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.pe-places a:hover .ph::after, .pe-places a:focus-visible .ph::after { transform: none; }
+
+.pe-inc > li { grid-column: span 3; list-style: none; border-top: 1px solid var(--ink); padding: 12px 0 34px; }
+.pe-inc { padding-block: 0; margin-block: 0; }
+.pe-inc span { display: block; color: var(--red); font-weight: 600; font-size: 13px; }
+.pe-inc b { display: block; margin-top: 10px; font-size: 21px; line-height: 1.15; letter-spacing: -.025em; font-weight: 600; max-width: 16ch; }
+.pe-hours div { border-top: 1px solid var(--ink); padding-top: 10px; margin-bottom: 26px; }
+.pe-hours span { font-size: 13px; color: var(--mid); }
+.pe-hours b { display: block; font-weight: 800; font-size: clamp(54px, 6vw, 92px); line-height: .9; letter-spacing: -.055em; }
+.pe-hours b small { font-size: .32em; font-weight: 600; letter-spacing: -.01em; margin-left: .12em; }
+.pe-faq details { border-top: 1px solid var(--ink); }
+.pe-faq details:last-child { border-bottom: 1px solid var(--ink); }
+.pe-faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0; font-weight: 600; font-size: clamp(19px, 1.9vw, 26px); letter-spacing: -.025em; line-height: 1.15; }
+.pe-faq summary::-webkit-details-marker { display: none; }
+.pe-faq summary i { position: relative; flex: none; width: 22px; height: 22px; transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.pe-faq summary i::before, .pe-faq summary i::after { content: ""; position: absolute; left: 0; right: 0; top: 10px; height: 2px; background: var(--ink); }
+.pe-faq summary i::after { transform: rotate(90deg); }
+.pe-faq details[open] summary i { transform: rotate(45deg); }
+.pe-faq details[open] summary i::before, .pe-faq details[open] summary i::after { background: var(--red); }
+.pe-faq details p { margin: 0 0 22px; color: var(--mid); max-width: 58ch; font-size: 17px; }
+.pe-faq details[open] p { animation: peX .5s ease-out backwards; }
+.pe-foot { background: var(--red); color: #fff; margin-top: 130px; padding-block: 34px 34px; }
+.pe-foot .go { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: end; gap: 20px; text-decoration: none; font-weight: 800; font-size: clamp(44px, 7.6vw, 124px); line-height: .88; letter-spacing: -.06em; padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,.6); }
+.pe-foot .go span { display: inline-block; transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.pe-foot .go:hover span { transform: translateX(18px); }
+.pe-foot .small { margin-top: 16px; font-size: 13px; }
+.pe-foot .small > * { margin: 0; }
+.pe-foot .small b { font-weight: 800; font-size: 16px; letter-spacing: -.02em; }
+.pe-dock { display: none; }
+
+/* =================================================================
+   F · DIARIO — la estadía hora por hora; el color del cielo cambia
+   con la hora. Bricolage Grotesque + Azeret Mono.
+   ================================================================= */
+.pf {
+  --sky: #d7ded2; --ink: #1d281e; --acc: #546b2c;
+  --line: color-mix(in srgb, var(--ink) 22%, transparent);
+  --brico: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif; --mono: "Azeret Mono", ui-monospace, monospace;
+  background-color: var(--sky); color: var(--ink); font-family: var(--brico); font-size: 17px; line-height: 1.6;
+  transition: background-color 1.3s ease, color 1.3s ease;
+}
+.pf[data-sky="atardecer"] { --sky: #f2b39b; --ink: #33150c; --acc: #7e2a14; }
+.pf[data-sky="anochecer"] { --sky: #4a3a56; --ink: #f8ebe0; --acc: #ffc26e; color-scheme: dark; }
+.pf[data-sky="noche"] { --sky: #14172b; --ink: #f2e9d7; --acc: #ffb84d; color-scheme: dark; }
+.pf[data-sky="manana"] { --sky: #d5e5ee; --ink: #0f2633; --acc: #1f6788; }
+.pf[data-sky="mediodia"] { --sky: #f3f3ee; --ink: #171717; --acc: #3b6a2a; }
+.pf .wrap { max-width: 1280px; margin: 0 auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+.pf h1, .pf h2, .pf h3 { margin: 0; font-weight: 700; letter-spacing: -.035em; text-wrap: balance; font-variation-settings: "opsz" 96; }
+.pf-k { font: 400 11.5px/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; margin: 0; }
+.pf-btn { display: inline-flex; align-items: center; gap: 14px; min-height: 52px; padding: 0 8px 0 22px; border-radius: 999px; background: var(--ink); color: var(--sky); font-weight: 600; font-size: 15.5px; text-decoration: none; border: 1.5px solid var(--ink); transition: background-color 1.3s, color 1.3s, border-color 1.3s, gap .3s; }
+.pf-btn i { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--acc); color: var(--sky); font-style: normal; transition: transform .35s cubic-bezier(.2,.7,.2,1), background-color 1.3s; }
+.pf-btn:hover { gap: 20px; }
+.pf-btn:hover i { transform: rotate(-45deg); }
+.pf-btn.ghost { background: transparent; color: var(--ink); padding: 0 22px; }
+.pf-btn.ghost:hover { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+.pf-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 20px; }
+.pf-top .logo { font-weight: 800; font-size: 23px; letter-spacing: -.04em; text-decoration: none; line-height: 1; }
+.pf-top .logo small { display: block; font: 400 10.5px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; margin-top: 4px; opacity: .75; }
+.pf-top nav { display: flex; gap: 26px; font-size: 15px; }
+.pf-top nav a { text-decoration: none; opacity: .8; transition: opacity .2s; }
+.pf-top nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+
+.pf-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 56px; align-items: center; padding-block: 24px 80px; }
+.pf-hero h1 { font-size: clamp(66px, 8.4vw, 128px); line-height: .86; font-weight: 800; margin-top: 16px; animation: pfFocus 1.3s .05s cubic-bezier(.2,.75,.2,1) backwards; }
+@keyframes pfFocus { from { filter: blur(10px); opacity: .35; transform: translateY(14px); } }
+.pf-hero .sub { font-size: clamp(24px, 2.3vw, 32px); line-height: 1.12; font-weight: 500; letter-spacing: -.02em; margin: 20px 0 0; animation: pfFocus 1.3s .25s cubic-bezier(.2,.75,.2,1) backwards; }
+.pf-hero .lead { margin: 16px 0 0; max-width: 44ch; opacity: .85; animation: pfFocus 1.3s .4s cubic-bezier(.2,.75,.2,1) backwards; }
+.pf-hero .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; animation: pfFocus 1.3s .55s cubic-bezier(.2,.75,.2,1) backwards; }
+.pf-hero .note { font: 400 11px/1.5 var(--mono); opacity: .7; margin: 22px 0 0; letter-spacing: .02em; }
+.pf-scrub { margin: 0; animation: pfOpen 1.5s .1s cubic-bezier(.7,0,.2,1) backwards; }
+@keyframes pfOpen { from { clip-path: inset(10% 14% 10% 14%); } }
+.pf-scrub .frame { position: relative; aspect-ratio: 16 / 10.5; overflow: hidden; border-radius: 3px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.pf-scrub .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1s ease, transform 4s ease-out; }
+.pf-scrub .frame img.off { opacity: 0; transform: scale(1.07); }
+.pf-scrub .frame img.on { opacity: 1; transform: scale(1); }
+.pf-scrub .row { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-top: 16px; }
+.pf-clock { display: flex; align-items: baseline; gap: 8px; font-family: var(--mono); font-weight: 200; line-height: 1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.pf-clock .dg { display: inline-block; }
+.pf .cl { font-style: normal; margin: 0 -.2em; }
+.pf-clock .ap { font-size: .22em; font-weight: 400; letter-spacing: .04em; }
+.pf-scrub .pf-clock { font-size: clamp(54px, 5.2vw, 76px); }
+.pf-scrub .what { text-align: right; }
+.pf-scrub .what b { display: block; font-size: 22px; letter-spacing: -.02em; line-height: 1.1; }
+.pf-scrub .what span { font: 400 11px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+.pf-range { position: relative; margin-top: 18px; }
+.pf-range input { -webkit-appearance: none; appearance: none; width: 100%; height: 34px; background: transparent; margin: 0; cursor: pointer; position: relative; z-index: 2; }
+.pf-range input::-webkit-slider-runnable-track { height: 2px; background: var(--ink); }
+.pf-range input::-moz-range-track { height: 2px; background: var(--ink); }
+.pf-range input::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--acc); border: 3px solid var(--sky); box-shadow: 0 0 0 1.5px var(--ink); margin-top: -10px; transition: transform .2s; }
+.pf-range input::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--acc); border: 3px solid var(--sky); box-shadow: 0 0 0 1.5px var(--ink); }
+.pf-range input:active::-webkit-slider-thumb { transform: scale(1.25); }
+.pf-ticks { position: absolute; left: 11px; right: 11px; top: 11px; height: 12px; display: flex; justify-content: space-between; pointer-events: none; }
+.pf-ticks i { width: 1.5px; height: 12px; background: var(--ink); }
+.pf-tl { display: flex; justify-content: space-between; font: 400 10.5px/1 var(--mono); letter-spacing: .06em; opacity: .75; margin-top: 2px; }
+.pf-hint { font: 400 11px/1.4 var(--mono); opacity: .7; margin: 10px 0 0; }
+
+.pf-diary { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 64px; max-width: 1280px; margin: 0 auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+.pf-rail { position: sticky; top: calc(var(--barh) + 28px); align-self: start; padding-top: 70px; }
+.pf-rail .pf-clock { font-size: 92px; }
+.pf-rail .ttl { font-size: 24px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; margin: 10px 0 0; }
+.pf-rail .day { margin-top: 18px; }
+.pf-arc { width: 100%; max-width: 250px; height: auto; margin-top: 18px; overflow: visible; }
+.pf-arc .path { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 3 5; }
+.pf-arc .hz { stroke: var(--ink); stroke-width: 1.5; }
+.pf-arc .body { fill: var(--acc); stroke: var(--acc); stroke-width: 2; transition: cx 1s cubic-bezier(.2,.7,.2,1), cy 1s cubic-bezier(.2,.7,.2,1), fill .6s; }
+.pf-arc .body.moon { fill: var(--sky); }
+.pf-arc text { font: 400 9px var(--mono); fill: currentColor; opacity: .7; letter-spacing: .08em; }
+.pf-rail ol { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.pf-rail li button { appearance: none; background: none; border: 0; width: 100%; text-align: left; display: grid; grid-template-columns: 84px 1fr; gap: 8px; padding: 8px 0 8px 12px; cursor: pointer; border-bottom: 1px solid var(--line); opacity: .55; position: relative; transition: opacity .3s; font-size: 15px; }
+.pf-rail li button span { font: 400 11.5px/1.8 var(--mono); }
+.pf-rail li button::before { content: ""; position: absolute; left: 0; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--acc); transform: translateY(-50%) scale(0); transition: transform .3s; }
+.pf-rail li button:hover { opacity: .85; }
+.pf-rail li button[aria-current="true"] { opacity: 1; font-weight: 600; }
+.pf-rail li button[aria-current="true"]::before { transform: translateY(-50%) scale(1); }
+.pf-rail .prog { display: none; }
+.pf-ch { padding-block: 70px 90px; border-top: 1px solid var(--line); }
+.pf-ch:first-child { border-top: 0; }
+.pf-ch .when { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.pf-ch .when b { font: 300 22px/1 var(--mono); letter-spacing: -.07em; }
+.pf-ch h2 { font-size: clamp(42px, 5.2vw, 76px); line-height: .94; margin-top: 14px; max-width: 14ch; }
+.pf-ch > p { max-width: 46ch; font-size: 18.5px; margin: 20px 0 0; }
+.pf-ch figure { margin: 36px 0 0; }
+.pf-ch figure .ph { overflow: hidden; border-radius: 3px; background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.pf-ch figure img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.4s cubic-bezier(.2,.7,.2,1); }
+.pf-ch figure .ph:hover img { transform: scale(1.045); }
+.pf-ch figcaption { display: flex; justify-content: space-between; gap: 12px; font: 400 11px/1.5 var(--mono); letter-spacing: .06em; text-transform: uppercase; opacity: .75; margin-top: 10px; }
+.pf-ch .wide .ph { aspect-ratio: 16 / 9; }
+.pf-ch .pair { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.pf-ch .pair figure:nth-child(2) { margin-top: 110px; }
+.pf-ch .pair .ph { aspect-ratio: 4 / 3; }
+.pf-ch .pair figure:nth-child(2) .ph { aspect-ratio: 4 / 5; }
+.pf-ch .side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 34px; align-items: end; }
+.pf-ch .side .txt { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; gap: 30px; }
+.pf-ch .side .txt p { margin: 0; max-width: 34ch; font-size: 18.5px; }
+.pf-ch .side .num { font: 200 clamp(110px, 13vw, 190px)/.8 var(--mono); letter-spacing: -.08em; color: var(--acc); opacity: .55; transition: color 1.3s; }
+.pf-ch .side .ph { aspect-ratio: 4 / 5; }
+.pf .rv-img { --rv: pfImg; }
+@keyframes pfImg { from { clip-path: inset(0 0 14% 0); transform: translateY(26px); } }
+.pf .rv-focus { --rv: pfFocus; }
+.pf-end { padding-block: 70px 100px; border-top: 1px solid var(--line); }
+.pf-end .big { font: 200 clamp(80px, 12vw, 170px)/.9 var(--mono); letter-spacing: -.06em; margin: 0; }
+.pf-end .big small { font-size: .2em; letter-spacing: .04em; font-weight: 400; }
+.pf-end h2 { font-size: clamp(40px, 5vw, 70px); line-height: .95; margin-top: 18px; }
+.pf-end p { max-width: 46ch; margin: 18px 0 0; font-size: 18.5px; }
+.pf-end .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+.pf-rooms { padding-block: 110px; border-top: 1px solid var(--line); }
+.pf-rooms .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 56px; align-items: end; margin-bottom: 44px; }
+.pf-rooms h2 { font-size: clamp(42px, 5.2vw, 76px); line-height: .94; margin-top: 12px; }
+.pf-rooms .head p { margin: 0; max-width: 44ch; }
+.pf-pick { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 56px; align-items: start; }
+.pf-opts { display: grid; border-top: 1px solid var(--line); }
+.pf-opts button { appearance: none; background: none; border: 0; border-bottom: 1px solid var(--line); text-align: left; cursor: pointer; padding: 20px 0; display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: baseline; opacity: .5; transition: opacity .3s, padding .4s cubic-bezier(.2,.7,.2,1); }
+.pf-opts button b { font-size: clamp(30px, 3.2vw, 46px); font-weight: 700; letter-spacing: -.035em; line-height: 1; }
+.pf-opts button span { font: 400 12px/1.4 var(--mono); letter-spacing: .04em; }
+.pf-opts button em { grid-column: 1 / -1; font-style: normal; font-size: 15.5px; }
+.pf-opts button:hover { opacity: .8; }
+.pf-opts button[aria-selected="true"] { opacity: 1; padding-left: 18px; box-shadow: inset 4px 0 0 var(--acc); }
+.pf-show .frame { position: relative; aspect-ratio: 16 / 10.5; overflow: hidden; border-radius: 3px; }
+.pf-show .frame img { width: 100%; height: 100%; object-fit: cover; }
+.pf-show .facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); margin-top: 18px; }
+.pf-show .facts div { padding-top: 10px; }
+.pf-show .facts dt { font: 400 10.5px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+.pf-show .facts dd { margin: 2px 0 0; font-weight: 700; font-size: 22px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pf-show .free { margin: 18px 0 0; font-size: 16px; }
+.pf-show .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; padding: 0; list-style: none; }
+.pf-show .chips li { font: 400 12.5px/1 var(--mono); padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; }
+.pf-show .chips li b { font-weight: 500; }
+.pf-show .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+.pf-notes { padding-block: 100px 110px; border-top: 1px solid var(--line); }
+.pf-notes .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: 56px; }
+.pf-notes h2 { font-size: clamp(34px, 3.8vw, 52px); line-height: 1; margin: 12px 0 26px; }
+.pf-inc { list-style: none; margin: 0; padding: 0; counter-reset: n; }
+.pf-inc li { counter-increment: n; display: grid; grid-template-columns: 46px 1fr; padding: 12px 0; border-top: 1px solid var(--line); }
+.pf-inc li::before { content: counter(n, decimal-leading-zero); font: 400 12px/1.9 var(--mono); opacity: .7; }
+.pf-faq details { border-top: 1px solid var(--line); padding: 16px 0; }
+.pf-faq details:last-child { border-bottom: 1px solid var(--line); }
+.pf-faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 18px; font-weight: 600; font-size: 19px; letter-spacing: -.015em; }
+.pf-faq summary::-webkit-details-marker { display: none; }
+.pf-faq summary::after { content: "+"; font: 300 22px/1 var(--mono); transition: transform .35s; }
+.pf-faq details[open] summary::after { transform: rotate(45deg); }
+.pf-faq details p { margin: 10px 0 0; opacity: .85; max-width: 58ch; }
+.pf-faq details[open] p { animation: pfFocus .7s ease-out backwards; }
+.pf-foot { padding-block: 60px 70px; border-top: 1px solid var(--line); }
+.pf-foot .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; }
+.pf-foot .logo { font-weight: 800; font-size: clamp(40px, 5vw, 64px); letter-spacing: -.045em; line-height: .9; }
+.pf-foot p { margin: 0; font-size: 14px; opacity: .85; }
+.pf-foot .note { font: 400 11px/1.5 var(--mono); margin-top: 6px; opacity: .7; }
+.pf-dock { display: none; }
+
+/* ---------- escritorio mediano ---------- */
+@media (max-width: 1100px) {
+  .pe-nav nav { display: none; }
+  .pe-nav .info { grid-column: 4 / 9; }
+  .pe-nav .pe-cta { grid-column: 9 / 13; }
+  .pf-diary { grid-template-columns: 240px minmax(0, 1fr); gap: 40px; }
+  .pf-rail .pf-clock { font-size: 74px; }
+}
+
+/* ---------- celular ---------- */
+@media (max-width: 820px) {
+  .switch .in { flex-direction: column-reverse; align-items: stretch; gap: 6px; padding-block: 7px 6px; }
+  .switch p { font-size: 10.5px; text-align: center; }
+  .switch p .what { display: none; }
+  .tabs button { flex: 1; padding: 9px 6px; }
+
+  /* D */
+  .pd-top nav { display: none; }
+  .pd-hero { grid-template-columns: 1fr; gap: 22px; }
+  .pd-title { font-size: 19vw; }
+  .pd-back { grid-template-columns: 1fr; }
+  .pd-msg { border-right: 0; border-bottom: 2px dashed rgba(17,32,78,.32); padding: 24px 20px; }
+  .pd-btns { flex-direction: column; align-items: stretch; }
+  .pd-addr { padding: 20px; }
+  .pd-addr .row { min-height: 0; }
+  .pd-sec { padding-block: 72px; }
+  .pd-cards { grid-template-columns: 1fr; gap: 28px; }
+  .pd-floors, .pd-write, .pd-two { grid-template-columns: 1fr; gap: 36px; }
+  .pd-stamps { gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fstamp .fs { min-height: 138px; }
+  .fstamp .fs-n { font-size: 52px; }
+  .pd-panel { padding: 20px 16px; }
+  .pd-panel li { grid-template-columns: 46px minmax(0, 1fr) auto; }
+  .pd-panel li .pr { grid-column: 2; grid-row: 2; font-weight: 600; font-size: 13.5px; }
+  .pd-panel li em { grid-column: 3; grid-row: 1 / span 2; }
+  .pd-places { grid-template-columns: 1fr; gap: 22px; }
+  .pd-places a:nth-child(n) { margin-top: 0; }
+  .pd-places a:nth-child(n) .duo { aspect-ratio: 4 / 3; }
+  .pd-pc { grid-template-columns: 1fr; rotate: 0deg; }
+  .pd-pc .l { border-right: 0; border-bottom: 2px dashed rgba(17,32,78,.3); min-height: 0; padding: 20px 18px; }
+  .pd-pc .l p { font-size: 24px; }
+  .pd-inc { grid-template-columns: 1fr; }
+  .pd-foot { padding-bottom: 110px; }
+  .pd-dock { display: flex; position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); gap: 8px; }
+  .pd-dock .pd-btn { flex: 1; background: var(--sun); box-shadow: 3px 3px 0 var(--deep); padding: 0 12px; gap: 8px; font-size: 14px; white-space: nowrap; }
+  .pd-dock .pd-btn.wa { flex: none; background: var(--card); }
+
+  /* E */
+  .pe-g { column-gap: 14px; padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+  .pe-g > * { grid-column: 1 / -1 !important; }
+  .pe-nav { align-items: center; }
+  .pe-nav .logo { grid-column: 1 / 7 !important; }
+  .pe-nav .info { display: none; }
+  .pe-nav .pe-cta { grid-column: 7 / 13 !important; }
+  .pe-giant { font-size: 30.5vw; white-space: normal; line-height: .78 !important; margin-top: 18px !important; }
+  .pe-giant .w { display: block; }
+  .pe-row1 { row-gap: 24px; margin-top: 26px; }
+  .pe-row1 figure { order: -1; }
+  .pe-facts { margin-top: 50px; row-gap: 20px; }
+  .pe-facts > div { grid-column: span 6 !important; }
+  .pe-sec { padding-top: 84px; }
+  .pe-sh { row-gap: 10px; margin-bottom: 34px; }
+  .pe-bars .bar > span { grid-column: 1 / 5 !important; font-size: 14px; }
+  .pe-bars .bar > div { grid-column: 5 / 13 !important; }
+  .pe-bars i { height: 30px; }
+  .pe-bars b { font-size: 17px; }
+  .pe-types { row-gap: 44px; }
+  .pe-dark { margin-top: 84px; padding-block: 72px 80px; }
+  .pe-count { margin-top: 10px; }
+  .pe-ctl { gap: 10px; margin-top: 24px; }
+  .pe-prev { position: sticky; top: var(--barh); z-index: 3; background: var(--ink); display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 4px 14px; align-items: start; padding: 12px 0; margin: 0; border-top-width: 3px; border-bottom: 1px solid #333; }
+  .pe-prev .big { font-size: 40px; grid-column: 2; grid-row: 1; }
+  .pe-prev .ph { grid-column: 1; grid-row: 1 / span 3; margin: 0; aspect-ratio: 1; }
+  .pe-prev .nm { grid-column: 2; font-size: 16px; margin: 0; }
+  .pe-prev .stt { grid-column: 2; font-size: 12.5px; margin: 0; }
+  .pe-prev dl { display: none; }
+  .pe-prev .pe-btn { grid-column: 1 / -1; margin-top: 10px; min-height: 44px; font-size: 14px; }
+  .pe-list, .pe-prev { grid-row: auto; }
+  .pe-row { grid-template-columns: 54px minmax(0, 1fr) auto 70px; gap: 10px; padding: 12px 4px; font-size: 14px; }
+  .pe-row .id { font-size: 22px; }
+  .pe-row .ar { display: none; }
+  .pe-row .fl { grid-column: 2; grid-row: 2; font-size: 12.5px; }
+  .pe-row .ty { grid-column: 2; grid-row: 1; line-height: 1.2; }
+  .pe-row .id { grid-row: 1 / span 2; }
+  .pe-row .pr { grid-column: 3; grid-row: 1 / span 2; }
+  .pe-row .st { grid-column: 4; grid-row: 1 / span 2; font-size: 12px; }
+  .pe-places .big, .pe-places .sm { grid-row: auto; }
+  .pe-places .big .ph { aspect-ratio: 4 / 3; }
+  .pe-places > a + a { margin-top: 24px !important; }
+  .pe-inc > li { grid-column: span 6 !important; padding-bottom: 22px; }
+  .pe-inc b { font-size: 17px; }
+  .pe-foot { margin-top: 90px; padding-bottom: 96px; }
+  .pe-foot .go { font-size: 13vw; }
+  .pe-dock { display: flex; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--ink); }
+  .pe-dock a { flex: 1; display: flex; justify-content: space-between; align-items: center; min-height: 56px; padding: 0 18px; background: var(--red); color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; }
+  .pe-dock a.wa { flex: none; background: var(--ink); }
+
+  /* F */
+  .pf-top nav { display: none; }
+  .pf-hero { grid-template-columns: 1fr; gap: 34px; padding-bottom: 60px; }
+  .pf-hero h1 { font-size: 21vw; }
+  .pf-hero .btns { flex-direction: column; align-items: stretch; }
+  .pf-hero .btns .pf-btn { justify-content: space-between; }
+  .pf-hero .btns .pf-btn.ghost { justify-content: center; }
+  .pf-scrub .what b { font-size: 18px; }
+  .pf-tl span:nth-child(even) { visibility: hidden; }
+  .pf-diary { grid-template-columns: 1fr; gap: 0; }
+  .pf-rail { top: var(--barh); z-index: 5; padding: 10px 20px 12px; margin-inline: -20px; background: var(--sky); transition: background-color 1.3s; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; align-items: center; border-bottom: 1px solid var(--line); }
+  .pf-rail .pf-clock { font-size: 34px; grid-row: 1 / span 2; }
+  .pf-rail .ttl { font-size: 17px; margin: 0; }
+  .pf-rail .day { margin: 0; font-size: 10px; }
+  .pf-rail .pf-arc, .pf-rail ol { display: none; }
+  .pf-rail .prog { display: block; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--acc); transform-origin: left; transform: scaleX(var(--p, .1)); transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .pf-ch { padding-block: 54px 64px; }
+  .pf-ch .pair { grid-template-columns: 1fr; gap: 0; }
+  .pf-ch .pair figure:nth-child(2) { margin-top: 18px; width: 72%; margin-left: auto; }
+  .pf-ch .pair figure:nth-child(2) .ph { aspect-ratio: 4 / 3; }
+  .pf-ch .side { grid-template-columns: 1fr; gap: 0; }
+  .pf-ch .side .txt { gap: 0; }
+  .pf-ch .side .num { display: none; }
+  .pf-ch .side .txt p { margin: 20px 0 0; }
+  .pf-ch .side .ph { aspect-ratio: 4 / 3; }
+  .pf-rooms { padding-block: 80px; }
+  .pf-rooms .head, .pf-pick, .pf-notes .grid { grid-template-columns: 1fr; gap: 24px; }
+  .pf-show .btns, .pf-end .btns { flex-direction: column; align-items: stretch; }
+  .pf-show .btns .pf-btn, .pf-end .btns .pf-btn { justify-content: space-between; }
+  .pf-show .btns .pf-btn.ghost, .pf-end .btns .pf-btn.ghost { justify-content: center; }
+  .pf-notes { padding-block: 80px; }
+  .pf-foot { padding-bottom: 120px; }
+  .pf-dock { display: flex; position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .pf-dock .pf-btn { flex: 1; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+}
+</style>
+
+<header class="switch">
+  <div class="in">
+    <p><b>Niebla Alta</b><span class="what"> · otros tres caminos para la web del hotel ·</span> Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p>
+    <div class="tabs" role="tablist" aria-label="Propuestas">
+      <button role="tab" id="t-d" aria-controls="p-d" aria-selected="true"><span>D</span>Postal</button>
+      <button role="tab" id="t-e" aria-controls="p-e" aria-selected="false"><span>E</span>Vitrina</button>
+      <button role="tab" id="t-f" aria-controls="p-f" aria-selected="false"><span>F</span>Diario</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================ D · POSTAL ============================ -->
+<main class="prop pd" id="p-d" role="tabpanel" aria-labelledby="t-d">
+  <div class="wrap pd-top">
+    <a class="pd-logo" href="#p-d">Niebla Alta</a>
+    <nav aria-label="Secciones"><a href="#pd-postales">Habitaciones</a><a href="#pd-sellos">El edificio</a><a href="#pd-escribe">Reservar</a></nav>
+    <a class="pd-btn sun sm" href="#pd-sellos">Recorrido 3D <i>→</i></a>
+  </div>
+
+  <section class="wrap pd-hero">
+    <div class="pd-poster">
+      <span class="duo sun"><img src="{{fachada-dia}}" alt="Fachada de ladrillo de Niebla Alta, con los cerros orientales detrás"></span>
+      <span class="pd-chip">Bogotá · Colombia</span>
+      <h1 class="pd-title"><span>Niebla</span><span>Alta</span></h1>
+      <p class="pd-poster-foot"><span>Apartahotel</span><span>Chapinero Alto</span><span>6 pisos · 21 habitaciones</span></p>
+    </div>
+    <div class="pd-back">
+      <div class="pd-msg">
+        <p class="pd-eyebrow">Apartahotel en Chapinero Alto</p>
+        <p class="pd-hand">Para quedarse unos días en Bogotá.</p>
+        <svg class="pd-scribble" viewBox="0 0 260 16" aria-hidden="true"><path d="M3 11 C 50 3, 90 15, 140 8 S 220 4, 257 9" fill="none" stroke="#f5c33b" stroke-width="5" stroke-linecap="round"/></svg>
+        <p class="pd-lead">Apartahotel de seis pisos en Chapinero Alto, a pocas cuadras de la Circunvalar. Cada unidad tiene cocina propia, luz de tarde y, en los pisos altos, vista a los cerros orientales.</p>
+        <div class="pd-btns">
+          <a class="pd-btn sun" href="#pd-sellos">Recorrer el edificio en 3D <i>→</i></a>
+          <a class="pd-btn" href="#pd-escribe">Escribir por WhatsApp</a>
+        </div>
+      </div>
+      <div class="pd-addr">
+        <div class="row">
+          <svg class="pd-pm" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="pd-pm-c" d="M60,60 m-43,0 a43,43 0 1,1 86,0 a43,43 0 1,1 -86,0"/></defs>
+            <g class="spin"><text><textPath href="#pd-pm-c">NIEBLA ALTA · CHAPINERO ALTO ·</textPath></text></g>
+            <circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="60" cy="60" r="31" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <text x="60" y="57" text-anchor="middle" style="letter-spacing:1px">BOGOTÁ</text>
+            <text x="60" y="71" text-anchor="middle" style="letter-spacing:1px">3 P. M.</text>
+          </svg>
+          <span class="stamp"><span class="duo"><img src="{{fachada-noche}}" alt="Niebla Alta de noche, con las ventanas encendidas"></span><small>De noche</small></span>
+        </div>
+        <ul class="pd-lines" aria-label="Dirección de la postal"><li>Niebla Alta</li><li>Chapinero Alto</li><li>Bogotá, Colombia</li></ul>
+        <p class="pd-note">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="pd-air" aria-hidden="true"><div class="strip"><div class="track">
+    <span>Por avión</span><span>Chapinero Alto</span><span>6 pisos</span><span>21 habitaciones</span><span>Llegada 3:00 p. m.</span><span>Salida 12:00 m.</span><span>Terraza en el piso 6</span>
+    <span>Por avión</span><span>Chapinero Alto</span><span>6 pisos</span><span>21 habitaciones</span><span>Llegada 3:00 p. m.</span><span>Salida 12:00 m.</span><span>Terraza en el piso 6</span>
+  </div></div></div>
+
+  <section class="pd-sec" id="pd-postales">
+    <div class="wrap">
+      <div class="pd-head">
+        <div><p class="pd-eyebrow">Habitaciones</p><h2 data-rv>Tres postales, tres maneras de quedarse</h2></div>
+        <p class="pd-hand" data-rv style="--d:.15s">Toca una postal para darle la vuelta.</p>
+      </div>
+      <div class="pd-cards">
+        <button class="pcard rv-tilt" data-rv type="button" aria-pressed="false" style="--rot:-2deg">
+          <span class="in">
+            <span class="face front">
+              <span class="duo"><img data-tp="estudio" src="{{201-sala}}" alt="Estudio con cama, escritorio y zona de estar"></span>
+              <span class="nm"><b>Estudio</b><span>32 m² · 2 personas</span></span>
+              <span class="ft"><b>desde $ 260.000</b><em>Dar la vuelta ↻</em></span>
+            </span>
+            <span class="face back" aria-hidden="true">
+              <span class="l"><span class="pd-hand">Todo a mano, en un solo ambiente.</span><p>Cocina propia y escritorio junto a la ventana.</p><em>Elegirlo en el recorrido 3D →</em></span>
+              <span class="r"><span class="price">$ 260.000<small>desde, por noche</small></span><span>32 m²</span><span>2 personas</span><span>Pisos 2 a 5</span></span>
+            </span>
+          </span>
+        </button>
+        <button class="pcard rv-tilt" data-rv type="button" aria-pressed="false" style="--rot:1.6deg;--d:.12s">
+          <span class="in">
+            <span class="face front">
+              <span class="duo"><img data-tp="suite-balcon" src="{{402-dormitorio}}" alt="Dormitorio de la suite con balcón, con ventanal a los cerros"></span>
+              <span class="nm"><b>Suite con balcón</b><span>54 m² · 3 personas</span></span>
+              <span class="ft"><b>desde $ 390.000</b><em>Dar la vuelta ↻</em></span>
+            </span>
+            <span class="face back" aria-hidden="true">
+              <span class="l"><span class="pd-hand">Un dormitorio aparte y un balcón hacia los cerros.</span><p>Cocina propia y sala independiente.</p><em>Elegirla en el recorrido 3D →</em></span>
+              <span class="r"><span class="price">$ 390.000<small>desde, por noche</small></span><span>54 m²</span><span>3 personas</span><span>Pisos 2 a 5</span></span>
+            </span>
+          </span>
+        </button>
+        <button class="pcard rv-tilt" data-rv type="button" aria-pressed="false" style="--rot:-1deg;--d:.24s">
+          <span class="in">
+            <span class="face front">
+              <span class="duo"><img data-tp="penthouse" src="{{601-sala}}" alt="Sala y comedor del penthouse con ventanales"></span>
+              <span class="nm"><b>Penthouse</b><span>95 m² · 4 personas</span></span>
+              <span class="ft"><b>desde $ 940.000</b><em>Dar la vuelta ↻</em></span>
+            </span>
+            <span class="face back" aria-hidden="true">
+              <span class="l"><span class="pd-hand">El último piso, con terraza propia.</span><p>Sala, comedor y dormitorio con vista a los cerros.</p><em>Elegirlo en el recorrido 3D →</em></span>
+              <span class="r"><span class="price">$ 940.000<small>desde, por noche</small></span><span>95 m²</span><span>4 personas</span><span>Piso 6</span></span>
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-sec pd-blue" id="pd-sellos">
+    <div class="wrap">
+      <div class="pd-head">
+        <div><p class="pd-eyebrow">El edificio, piso por piso</p><h2 data-rv>Seis pisos, seis sellos</h2></div>
+        <p data-rv style="--d:.15s">Toca un piso para ver qué queda libre en las fechas de ejemplo. En el recorrido 3D entras a cada habitación.</p>
+      </div>
+      <div class="pd-floors">
+        <div class="pd-stamps" id="pd-stamps">
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="6" aria-pressed="false" style="--rot:-2deg"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">6</span><span class="fs-s">Penthouse y terraza</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="5" aria-pressed="false" style="--rot:1.5deg;--d:.06s"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">5</span><span class="fs-s">Estudios y suites</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="4" aria-pressed="false" style="--rot:-1deg;--d:.12s"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">4</span><span class="fs-s">Estudios y suites</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="3" aria-pressed="false" style="--rot:2deg;--d:.18s"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">3</span><span class="fs-s">Estudios y suites</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="2" aria-pressed="false" style="--rot:-1.5deg;--d:.24s"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">2</span><span class="fs-s">Estudios y suites</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+          <button class="fstamp rv-tilt" data-rv type="button" data-f="1" aria-pressed="false" style="--rot:1deg;--d:.3s"><span class="fs"><span class="fs-l">Piso</span><span class="fs-n">1</span><span class="fs-s">Lobby y cowork</span><span class="fs-f"></span><svg class="cancel" viewBox="0 0 92 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="2"/><path d="M40 18 q8 -6 16 0 t16 0 t16 0 M40 30 q8 -6 16 0 t16 0 t16 0 M40 42 q8 -6 16 0 t16 0 t16 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></span></button>
+        </div>
+        <div class="pd-panel" id="pd-panel" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-sec">
+    <div class="wrap">
+      <div class="pd-head">
+        <div><p class="pd-eyebrow">Lugares comunes</p><h2 data-rv>Abajo, el lobby y el cowork. Arriba, la terraza.</h2></div>
+      </div>
+      <div class="pd-places">
+        <a href="#pd-sellos" class="rv-tilt" data-rv style="--band:var(--sun);--bandink:var(--deep)"><span class="duo"><img src="{{lobby}}" alt="Lobby con recepción de madera y muro de ladrillo"></span><span class="lbl"><b>Lobby</b><span>Piso 1</span></span><p>Recepción de 7 a. m. a 11 p. m.</p></a>
+        <a href="#pd-sellos" class="rv-tilt" data-rv style="--band:var(--cobalt);--bandink:var(--sun);--d:.1s"><span class="duo sky"><img src="{{cowork}}" alt="Cowork del primer piso con mesa larga"></span><span class="lbl"><b>Cowork</b><span>Piso 1</span></span><p>Con cabinas para llamadas.</p></a>
+        <a href="#pd-sellos" class="rv-tilt" data-rv style="--band:var(--card);--bandink:var(--deep);--d:.2s"><span class="duo sun"><img src="{{terraza-piso-6}}" alt="Terraza común del piso 6 con pérgola de madera"></span><span class="lbl"><b>Terraza</b><span>Piso 6</span></span><p>Común, en la cubierta, con pérgola.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-sec" id="pd-escribe" style="padding-top:20px">
+    <div class="wrap">
+      <div class="pd-head">
+        <div><p class="pd-eyebrow">Reservar directo</p><h2 data-rv>Escribe tu postal</h2></div>
+        <p class="pd-hand" data-rv style="--d:.15s">Llega por WhatsApp, directo al hotel.</p>
+      </div>
+      <div class="pd-write">
+        <form class="pd-form" id="pd-form" onsubmit="event.preventDefault()">
+          <fieldset>
+            <legend>Habitación</legend>
+            <div class="pd-types">
+              <label><input type="radio" name="pd-t" value="estudio" checked><i>Estudio</i></label>
+              <label><input type="radio" name="pd-t" value="suite-balcon"><i>Suite con balcón</i></label>
+              <label><input type="radio" name="pd-t" value="penthouse"><i>Penthouse</i></label>
+            </div>
+          </fieldset>
+          <div class="two">
+            <label><span>Llegada</span><input id="pd-in" type="date" value="2026-12-03"></label>
+            <label><span>Salida</span><input id="pd-out" type="date" value="2026-12-06"></label>
+          </div>
+          <label><span>Huéspedes</span><select id="pd-g"><option value="1">1 persona</option><option value="2" selected>2 personas</option><option value="3">3 personas</option><option value="4">4 personas</option></select></label>
+          <p class="pd-err" id="pd-err" role="alert"></p>
+        </form>
+        <div>
+          <div class="pd-pc">
+            <div class="l"><p id="pd-msg"></p></div>
+            <div class="r">
+              <div class="top">
+                <svg class="pm2" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="42" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="46" cy="46" r="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="46" y="44" text-anchor="middle" id="pd-pm-d">3 DIC</text><text x="46" y="58" text-anchor="middle" style="font-size:8px">BOGOTÁ</text></svg>
+                <span class="stamp"><span class="duo sun"><img id="pd-stamp-img" alt=""></span><small id="pd-stamp-t">Estudio</small></span>
+              </div>
+              <ul class="pd-lines"><li>Niebla Alta</li><li>Recepción</li><li>Chapinero Alto</li></ul>
+            </div>
+          </div>
+          <div class="pd-send">
+            <a class="pd-btn sun" id="pd-send" href="#" target="_blank" rel="noopener">Enviar por WhatsApp <i>→</i></a>
+            <p>El hotel responde con la disponibilidad y el valor total de la estadía.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pd-sec" style="padding-top:30px" id="pd-faq">
+    <div class="wrap pd-two">
+      <div>
+        <p class="pd-eyebrow">Incluido</p>
+        <h2 data-rv>Lo que ya está en el edificio</h2>
+        <ul class="pd-inc">
+          <li>Wifi de fibra en todo el edificio</li><li>Cocina equipada en cada unidad</li><li>Recepción de 7 a. m. a 11 p. m.</li><li>Entrada con código las 24 horas</li><li>Cowork con cabinas para llamadas</li><li>Terraza común en la cubierta</li><li>Lavandería por encargo</li><li>Aseo diario o a pedido</li>
+        </ul>
+      </div>
+      <div class="pd-faq">
+        <p class="pd-eyebrow">Antes de reservar</p>
+        <h2 data-rv>Preguntas</h2>
+        <details open><summary>¿Puedo elegir la habitación exacta?</summary><p>Sí. En el recorrido ves cada piso y cada habitación, con su vista y su precio. Al reservar, el mensaje ya dice cuál elegiste.</p></details>
+        <details><summary>¿Cómo reservo?</summary><p>Por WhatsApp, directo con el hotel. Respondemos con la disponibilidad y el valor total de la estadía.</p></details>
+        <details><summary>¿Tienen parqueadero?</summary><p>No dentro del edificio. Hay un parqueadero en convenio a una cuadra, con tarifa por noche.</p></details>
+        <details><summary>¿Sirve para quedarse a trabajar?</summary><p>Sí. Todas las unidades tienen escritorio o mesa junto a la ventana, y el cowork del primer piso tiene cabinas para llamadas.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pd-foot">
+    <div class="wrap">
+      <span class="logo">Niebla Alta</span>
+      <div><p>Chapinero Alto, Bogotá · Llegada 3:00 p. m. · Salida 12:00 m.</p><p class="pd-note">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p></div>
+    </div>
+  </footer>
+  <div class="pd-dock"><a class="pd-btn" href="#pd-sellos">Recorrer el edificio en 3D <i>→</i></a><a class="pd-btn wa" href="#pd-escribe" aria-label="Reservar por WhatsApp">WhatsApp</a></div>
+</main>
+
+<!-- ============================ E · VITRINA ============================ -->
+<main class="prop pe" id="p-e" role="tabpanel" aria-labelledby="t-e" hidden>
+  <div class="pe-g pe-nav">
+    <a class="logo" href="#p-e">Niebla Alta</a>
+    <p class="info">Apartahotel<br>Chapinero Alto, Bogotá</p>
+    <nav aria-label="Secciones"><a href="#pe-unidades">Unidades</a><a href="#pe-vitrina">Disponibilidad</a><a href="#pe-preguntas">Preguntas</a></nav>
+    <a class="pe-cta" href="#pe-vitrina">Recorrido 3D <span>→</span></a>
+  </div>
+
+  <header>
+    <div class="pe-g">
+      <h1 class="pe-giant" aria-label="Niebla Alta"><span class="w" aria-hidden="true"><span style="--i:0">N</span><span style="--i:1">i</span><span style="--i:2">e</span><span style="--i:3">b</span><span style="--i:4">l</span><span style="--i:5">a</span></span> <span class="w" aria-hidden="true"><span style="--i:6">A</span><span style="--i:7">l</span><span style="--i:8">t</span><span style="--i:9">a</span></span></h1>
+    </div>
+    <div class="pe-g pe-row1">
+      <div class="c-1-3">
+        <span class="mark" aria-hidden="true"></span>
+        <p class="pe-idx">(01) Apartahotel</p>
+        <p class="pe-tag" style="margin-top:10px">Para quedarse unos días en Bogotá.</p>
+      </div>
+      <div class="c-4-6">
+        <p class="pe-intro">Apartahotel de seis pisos en Chapinero Alto, a pocas cuadras de la Circunvalar. Cada unidad tiene cocina propia, luz de tarde y, en los pisos altos, vista a los cerros orientales.</p>
+        <div class="pe-btns">
+          <a class="pe-btn red" href="#pe-vitrina">Recorrer el edificio en 3D <span>→</span></a>
+          <a class="pe-btn" href="#pe-vitrina">Reservar por WhatsApp <span>→</span></a>
+        </div>
+        <p class="pe-note">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p>
+      </div>
+      <figure class="c-7-12">
+        <div class="ph"><img src="{{fachada-dia}}" alt="Fachada de ladrillo de Niebla Alta, seis pisos, con los cerros orientales"></div>
+        <figcaption><span>Fachada, Chapinero Alto</span><span>Imagen ilustrativa</span></figcaption>
+      </figure>
+    </div>
+    <div class="pe-g pe-facts">
+      <div class="rv-x" data-rv><span class="n">6</span><span class="l">Pisos</span></div>
+      <div class="rv-x" data-rv style="--d:.08s"><span class="n">21</span><span class="l">Habitaciones, todas con cocina</span></div>
+      <div class="rv-x" data-rv style="--d:.16s"><span class="n">3:00<small>p. m.</small></span><span class="l">Llegada</span></div>
+      <div class="rv-x" data-rv style="--d:.24s"><span class="n">12:00<small>m.</small></span><span class="l">Salida</span></div>
+    </div>
+  </header>
+
+  <section class="pe-sec" id="pe-unidades">
+    <div class="pe-g pe-sh">
+      <p class="pe-idx c-1-3">(02) Unidades</p>
+      <h2 class="c-4-12 rv-x" data-rv>Tres tamaños, un mismo edificio.</h2>
+    </div>
+    <div class="pe-g pe-bars" id="pe-bars">
+      <div class="bar" data-t="estudio"><span>Estudio</span><div><i data-rv style="--w:33.7%"></i><b>32 m²</b></div></div>
+      <div class="bar" data-t="suite-balcon"><span>Suite con balcón</span><div><i data-rv style="--w:56.8%;--d:.1s"></i><b>54 m²</b></div></div>
+      <div class="bar" data-t="penthouse"><span>Penthouse</span><div><i data-rv style="--w:calc(100% - 90px);--d:.2s"></i><b>95 m²</b></div></div>
+    </div>
+    <div class="pe-g pe-types">
+      <a href="#pe-vitrina" data-t="estudio" data-rv class="rv-x"><div class="ph"><img src="{{201-sala}}" alt="Estudio con cama, escritorio y sala"></div><h3>Estudio</h3><p>Todo a mano, en un solo ambiente.</p><dl><div><dt>Área</dt><dd>32 m²</dd></div><div><dt>Personas</dt><dd>2</dd></div><div><dt>Desde</dt><dd>$ 260.000</dd></div></dl></a>
+      <a href="#pe-vitrina" data-t="suite-balcon" data-rv class="rv-x" style="--d:.1s"><div class="ph"><img src="{{402-balcon}}" alt="Sala de la suite 402, con ventanales hacia los cerros"></div><h3>Suite con balcón</h3><p>Un dormitorio aparte y un balcón hacia los cerros.</p><dl><div><dt>Área</dt><dd>54 m²</dd></div><div><dt>Personas</dt><dd>3</dd></div><div><dt>Desde</dt><dd>$ 390.000</dd></div></dl></a>
+      <a href="#pe-vitrina" data-t="penthouse" data-rv class="rv-x" style="--d:.2s"><div class="ph"><img src="{{601-dormitorio}}" alt="Dormitorio del penthouse con vista a los cerros"></div><h3>Penthouse</h3><p>El último piso, con terraza propia.</p><dl><div><dt>Área</dt><dd>95 m²</dd></div><div><dt>Personas</dt><dd>4</dd></div><div><dt>Desde</dt><dd>$ 940.000</dd></div></dl></a>
+    </div>
+  </section>
+
+  <section class="pe-dark" id="pe-vitrina">
+    <div class="pe-g pe-sh" style="margin-bottom:0">
+      <p class="pe-idx c-1-3">(03) Disponibilidad</p>
+      <h2 class="c-4-12 rv-x" data-rv>Las 21 habitaciones, a la vista.</h2>
+      <p class="pe-count" id="pe-count"></p>
+    </div>
+    <div class="pe-g">
+      <div class="pe-ctl" role="group" aria-label="Filtrar y ordenar">
+        <div class="grp" id="pe-f"><span>Tipo</span><button type="button" data-v="all" aria-pressed="true">Todas</button><button type="button" data-v="estudio" aria-pressed="false">Estudio</button><button type="button" data-v="suite-balcon" aria-pressed="false">Suite con balcón</button><button type="button" data-v="penthouse" aria-pressed="false">Penthouse</button></div>
+        <div class="grp"><button type="button" class="sw" id="pe-free" aria-pressed="false">Solo libres</button></div>
+        <div class="grp" id="pe-s"><span>Ordenar</span><button type="button" data-v="f" aria-pressed="true">Piso</button><button type="button" data-v="p" aria-pressed="false">Precio</button></div>
+      </div>
+      <aside class="pe-prev" id="pe-prev" aria-live="polite"></aside>
+      <div class="pe-list" id="pe-rows" role="list"></div>
+    </div>
+  </section>
+
+  <section class="pe-sec">
+    <div class="pe-g pe-sh">
+      <p class="pe-idx c-1-3">(04) Lugares comunes</p>
+      <h2 class="c-4-12 rv-x" data-rv>Abajo se trabaja. Arriba, los cerros.</h2>
+    </div>
+    <div class="pe-g pe-places">
+      <a class="big" href="#pe-vitrina" data-rv><div class="ph"><img src="{{lobby}}" alt="Lobby con recepción de madera y muro de ladrillo"></div><div class="pe-cap"><b>Lobby</b><span>Piso 1 · recepción de 7 a. m. a 11 p. m.</span></div></a>
+      <a class="sm" href="#pe-vitrina" data-rv style="--d:.1s"><div class="ph"><img src="{{cowork}}" alt="Cowork del primer piso"></div><div class="pe-cap"><b>Cowork</b><span>Piso 1 · cabinas para llamadas</span></div></a>
+      <a class="sm" href="#pe-vitrina" data-rv style="--d:.2s"><div class="ph"><img src="{{terraza-piso-6}}" alt="Terraza común del piso 6 con pérgola"></div><div class="pe-cap"><b>Terraza</b><span>Piso 6 · común, en la cubierta</span></div></a>
+    </div>
+  </section>
+
+  <section class="pe-sec">
+    <div class="pe-g pe-sh">
+      <p class="pe-idx c-1-3">(05) Incluido</p>
+      <h2 class="c-4-12 rv-x" data-rv>Ocho cosas que no hay que pedir.</h2>
+    </div>
+    <ul class="pe-g pe-inc">
+      <li data-rv class="rv-x"><span>01</span><b>Wifi de fibra en todo el edificio</b></li>
+      <li data-rv class="rv-x" style="--d:.05s"><span>02</span><b>Cocina equipada en cada unidad</b></li>
+      <li data-rv class="rv-x" style="--d:.1s"><span>03</span><b>Recepción de 7 a. m. a 11 p. m.</b></li>
+      <li data-rv class="rv-x" style="--d:.15s"><span>04</span><b>Entrada con código las 24 horas</b></li>
+      <li data-rv class="rv-x"><span>05</span><b>Cowork con cabinas para llamadas</b></li>
+      <li data-rv class="rv-x" style="--d:.05s"><span>06</span><b>Terraza común en la cubierta</b></li>
+      <li data-rv class="rv-x" style="--d:.1s"><span>07</span><b>Lavandería por encargo</b></li>
+      <li data-rv class="rv-x" style="--d:.15s"><span>08</span><b>Aseo diario o a pedido</b></li>
+    </ul>
+  </section>
+
+  <section class="pe-sec" id="pe-preguntas">
+    <div class="pe-g pe-sh">
+      <p class="pe-idx c-1-3">(06) Antes de reservar</p>
+      <h2 class="c-4-12 rv-x" data-rv>Preguntas.</h2>
+    </div>
+    <div class="pe-g">
+      <div class="c-1-4 pe-hours">
+        <div><span>Llegada</span><b>3:00<small>p. m.</small></b></div>
+        <div><span>Salida</span><b>12:00<small>m.</small></b></div>
+      </div>
+      <div class="c-5-12 pe-faq">
+        <details open><summary>¿Puedo elegir la habitación exacta?<i></i></summary><p>Sí. En el recorrido ves cada piso y cada habitación, con su vista y su precio. Al reservar, el mensaje ya dice cuál elegiste.</p></details>
+        <details><summary>¿Cómo reservo?<i></i></summary><p>Por WhatsApp, directo con el hotel. Respondemos con la disponibilidad y el valor total de la estadía.</p></details>
+        <details><summary>¿Tienen parqueadero?<i></i></summary><p>No dentro del edificio. Hay un parqueadero en convenio a una cuadra, con tarifa por noche.</p></details>
+        <details><summary>¿Sirve para quedarse a trabajar?<i></i></summary><p>Sí. Todas las unidades tienen escritorio o mesa junto a la ventana, y el cowork del primer piso tiene cabinas para llamadas.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pe-foot">
+    <div class="pe-g">
+      <a class="go" href="#pe-vitrina">Recorrer el edificio en 3D <span>→</span></a>
+      <div class="c-1-3 small"><b>Niebla Alta</b></div>
+      <div class="c-4-6 small"><p>Chapinero Alto, Bogotá</p></div>
+      <div class="c-7-12 small"><p>Llegada 3:00 p. m. · Salida 12:00 m. · Reservas por WhatsApp</p><p style="opacity:.8;font-size:12px;margin-top:4px">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p></div>
+    </div>
+  </footer>
+  <div class="pe-dock"><a href="#pe-vitrina">Recorrer el edificio en 3D <span>→</span></a><a class="wa" href="#pe-vitrina">WhatsApp</a></div>
+</main>
+
+<!-- ============================ F · DIARIO ============================ -->
+<main class="prop pf" id="p-f" role="tabpanel" aria-labelledby="t-f" hidden data-sky="tarde">
+  <div class="wrap pf-top">
+    <a class="logo" href="#p-f">Niebla Alta<small>Diario de una estadía</small></a>
+    <nav aria-label="Secciones"><a href="#pf-dia">El día</a><a href="#pf-noche">Habitaciones</a><a href="#pf-notas">Preguntas</a></nav>
+  </div>
+
+  <header class="wrap pf-hero" data-sky="tarde" id="pf-hero">
+    <div>
+      <p class="pf-k">Apartahotel · Chapinero Alto, Bogotá</p>
+      <h1>Niebla Alta</h1>
+      <p class="sub">Para quedarse unos días en Bogotá.</p>
+      <p class="lead">Apartahotel de seis pisos en Chapinero Alto, a pocas cuadras de la Circunvalar. Cada unidad tiene cocina propia, luz de tarde y, en los pisos altos, vista a los cerros orientales.</p>
+      <div class="btns">
+        <a class="pf-btn" href="#pf-noche">Recorrer el edificio en 3D <i>→</i></a>
+        <a class="pf-btn ghost" href="#pf-dia">Leer el día, hora por hora</a>
+      </div>
+      <p class="note">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p>
+    </div>
+    <figure class="pf-scrub" id="pf-scrub">
+      <div class="frame"><img class="on" src="{{fachada-dia}}" alt="Fachada de Niebla Alta en la tarde"><img class="off" alt="" aria-hidden="true"></div>
+      <div class="row">
+        <div class="pf-clock" aria-live="polite"><span class="dg">3<i class="cl">:</i>00</span><span class="ap">p. m.</span></div>
+        <div class="what"><span>Día 1</span><b>Llegada</b></div>
+      </div>
+      <div class="pf-range">
+        <div class="pf-ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <input type="range" min="0" max="6" step="1" value="0" aria-label="Hora del día">
+      </div>
+      <div class="pf-tl" aria-hidden="true"><span>3 p. m.</span><span>4</span><span>5:30</span><span>7 p. m.</span><span>10 p. m.</span><span>7 a. m.</span><span>9 a. m.</span></div>
+      <p class="pf-hint">Arrastra la hora para ver el día en el edificio.</p>
+    </figure>
+  </header>
+
+  <section class="pf-diary" id="pf-dia">
+    <aside class="pf-rail" aria-label="Hora del capítulo">
+      <div class="pf-clock"><span class="dg">3<i class="cl">:</i>00</span><span class="ap">p. m.</span></div>
+      <p class="pf-k day">Día 1</p>
+      <p class="ttl">Llegada</p>
+      <svg class="pf-arc" viewBox="0 0 250 140" aria-hidden="true">
+        <path class="path" d="M15 120 A110 110 0 0 1 235 120"/>
+        <line class="hz" x1="0" y1="120" x2="250" y2="120"/>
+        <text x="15" y="136" text-anchor="middle">6</text><text x="125" y="136" text-anchor="middle">12</text><text x="235" y="136" text-anchor="middle">6</text>
+        <circle class="body" cx="200" cy="40" r="9"/>
+      </svg>
+      <ol id="pf-list"></ol>
+      <span class="prog"></span>
+    </aside>
+    <div>
+      <article class="pf-ch" data-sky="tarde" data-h="15" data-time="3:00" data-ap="p. m." data-day="Día 1" data-title="Llegada" data-img="1">
+        <p class="when"><b>3:00 p. m.</b><span class="pf-k">Capítulo 1 · Día 1</span></p>
+        <h2 class="rv-focus" data-rv>Llegada</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">La recepción está en el primer piso y abre de 7 a. m. a 11 p. m. Desde las 3:00 p. m. la habitación es tuya; si vuelves tarde, la entrada tiene código las 24 horas.</p>
+        <div class="pair">
+          <figure class="rv-img" data-rv><div class="ph"><img src="{{fachada-dia}}" alt="Fachada de ladrillo de Niebla Alta en la tarde"></div><figcaption><span>La fachada</span><span>Chapinero Alto</span></figcaption></figure>
+          <figure class="rv-img" data-rv style="--d:.15s"><div class="ph"><img src="{{lobby}}" alt="Lobby con recepción de madera"></div><figcaption><span>Lobby</span><span>Piso 1</span></figcaption></figure>
+        </div>
+      </article>
+      <article class="pf-ch" data-sky="tarde" data-h="16" data-time="4:00" data-ap="p. m." data-day="Día 1" data-title="La unidad">
+        <p class="when"><b>4:00 p. m.</b><span class="pf-k">Capítulo 2 · Día 1</span></p>
+        <h2 class="rv-focus" data-rv>La unidad</h2>
+        <div class="side">
+          <div class="txt"><span class="num" aria-hidden="true">02</span><p class="rv-focus" data-rv style="--d:.1s">Cada unidad tiene cocina equipada y escritorio o mesa junto a la ventana. Por la tarde entra la luz; en los pisos altos, la ventana da a los cerros orientales.</p></div>
+          <figure class="rv-img" data-rv style="margin:0"><div class="ph"><img src="{{402-dormitorio}}" alt="Dormitorio de la suite 402 con ventanal a los cerros"></div><figcaption><span>Suite con balcón</span><span>Piso 4</span></figcaption></figure>
+        </div>
+        <figure class="wide rv-img" data-rv><div class="ph"><img src="{{201-sala}}" alt="Estudio 201 con escritorio junto a la ventana"></div><figcaption><span>Estudio</span><span>Piso 2</span></figcaption></figure>
+      </article>
+      <article class="pf-ch" data-sky="atardecer" data-h="17.5" data-time="5:30" data-ap="p. m." data-day="Día 1" data-title="La terraza">
+        <p class="when"><b>5:30 p. m.</b><span class="pf-k">Capítulo 3 · Día 1</span></p>
+        <h2 class="rv-focus" data-rv>La terraza</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">En la cubierta, en el piso 6, hay una terraza común con pérgola. Desde ahí se ven los cerros y los techos de ladrillo del barrio.</p>
+        <figure class="wide rv-img" data-rv><div class="ph"><img src="{{terraza-piso-6}}" alt="Terraza común del piso 6 con pérgola de madera"></div><figcaption><span>Terraza común</span><span>Piso 6</span></figcaption></figure>
+      </article>
+      <article class="pf-ch" data-sky="anochecer" data-h="19" data-time="7:00" data-ap="p. m." data-day="Día 1" data-title="Cena en casa">
+        <p class="when"><b>7:00 p. m.</b><span class="pf-k">Capítulo 4 · Día 1</span></p>
+        <h2 class="rv-focus" data-rv>Cena en casa</h2>
+        <div class="side">
+          <div class="txt"><span class="num" aria-hidden="true">04</span><p class="rv-focus" data-rv style="--d:.1s">Con cocina propia, la cena es a la hora que quieras. En el penthouse, la sala y el comedor dan a los ventanales.</p></div>
+          <figure class="rv-img" data-rv style="margin:0"><div class="ph"><img src="{{601-sala}}" alt="Sala y comedor del penthouse con ventanales"></div><figcaption><span>Penthouse</span><span>Piso 6</span></figcaption></figure>
+        </div>
+      </article>
+      <article class="pf-ch" data-sky="noche" data-h="22" data-time="10:00" data-ap="p. m." data-day="Día 1" data-title="El edificio encendido">
+        <p class="when"><b>10:00 p. m.</b><span class="pf-k">Capítulo 5 · Día 1</span></p>
+        <h2 class="rv-focus" data-rv>El edificio encendido</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">Desde la calle, los seis pisos con las ventanas encendidas. La recepción atiende hasta las 11 p. m.; después, la puerta abre con código.</p>
+        <figure class="wide rv-img" data-rv><div class="ph"><img src="{{fachada-noche}}" alt="Fachada de Niebla Alta de noche con las ventanas encendidas"></div><figcaption><span>La fachada de noche</span><span>Chapinero Alto</span></figcaption></figure>
+      </article>
+      <article class="pf-ch" data-sky="manana" data-h="7" data-time="7:00" data-ap="a. m." data-day="Día 2" data-title="Despertar">
+        <p class="when"><b>7:00 a. m.</b><span class="pf-k">Capítulo 6 · Día 2</span></p>
+        <h2 class="rv-focus" data-rv>Despertar</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">La ventana da a los cerros orientales. El aseo es diario o a pedido: tú decides si hoy entra alguien.</p>
+        <div class="pair">
+          <figure class="rv-img" data-rv><div class="ph"><img src="{{601-dormitorio}}" alt="Dormitorio del penthouse en la mañana"></div><figcaption><span>Dormitorio del penthouse</span><span>Piso 6</span></figcaption></figure>
+          <figure class="rv-img" data-rv style="--d:.15s"><div class="ph"><img src="{{402-balcon}}" alt="Sala de la suite 402 con ventanales"></div><figcaption><span>Suite 402</span><span>Piso 4</span></figcaption></figure>
+        </div>
+      </article>
+      <article class="pf-ch" data-sky="manana" data-h="9" data-time="9:00" data-ap="a. m." data-day="Día 2" data-title="A trabajar">
+        <p class="when"><b>9:00 a. m.</b><span class="pf-k">Capítulo 7 · Día 2</span></p>
+        <h2 class="rv-focus" data-rv>A trabajar</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">El cowork del primer piso tiene cabinas para llamadas, y el wifi de fibra llega a todo el edificio.</p>
+        <figure class="wide rv-img" data-rv><div class="ph"><img src="{{cowork}}" alt="Cowork del primer piso con mesa larga"></div><figcaption><span>Cowork</span><span>Piso 1</span></figcaption></figure>
+      </article>
+      <article class="pf-ch pf-end" data-sky="mediodia" data-h="12" data-time="12:00" data-ap="m." data-day="Día 2" data-title="Salida">
+        <p class="big">12<i class="cl">:</i>00<small> m.</small></p>
+        <h2 class="rv-focus" data-rv>Salida. O un día más.</h2>
+        <p class="rv-focus" data-rv style="--d:.1s">La salida es a las 12:00 m. Si te quedas unos días, la lavandería va por encargo y el aseo, cuando lo pidas.</p>
+        <div class="btns"><a class="pf-btn" href="#pf-noche">Elegir la habitación en 3D <i>→</i></a><a class="pf-btn ghost" href="#pf-noche">Reservar por WhatsApp</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="pf-rooms" id="pf-noche" data-sky="mediodia">
+    <div class="wrap">
+      <div class="head">
+        <div><p class="pf-k">Habitaciones</p><h2 class="rv-focus" data-rv>¿Dónde pasas la noche?</h2></div>
+        <p class="rv-focus" data-rv style="--d:.1s">Tres tipos de unidad en el mismo edificio. En el recorrido 3D eliges la habitación exacta, con su piso y su vista.</p>
+      </div>
+      <div class="pf-pick">
+        <div class="pf-opts" role="tablist" aria-label="Tipo de habitación" id="pf-opts">
+          <button role="tab" type="button" data-t="estudio" aria-selected="true"><b>Estudio</b><span>32 m² · 2 personas</span><em>Todo a mano, en un solo ambiente.</em></button>
+          <button role="tab" type="button" data-t="suite-balcon" aria-selected="false"><b>Suite con balcón</b><span>54 m² · 3 personas</span><em>Un dormitorio aparte y un balcón hacia los cerros.</em></button>
+          <button role="tab" type="button" data-t="penthouse" aria-selected="false"><b>Penthouse</b><span>95 m² · 4 personas</span><em>El último piso, con terraza propia.</em></button>
+        </div>
+        <div class="pf-show" id="pf-show" role="tabpanel" aria-live="polite">
+          <div class="frame"><img id="pf-show-img" alt=""></div>
+          <dl class="facts"><div><dt>Área</dt><dd id="pf-s-a"></dd></div><div><dt>Personas</dt><dd id="pf-s-c"></dd></div><div><dt>Desde, por noche</dt><dd id="pf-s-p"></dd></div></dl>
+          <p class="free" id="pf-s-f"></p>
+          <ul class="chips" id="pf-s-u"></ul>
+          <div class="btns"><a class="pf-btn" href="#pf-noche">Elegirla en el recorrido 3D <i>→</i></a><a class="pf-btn ghost" href="#pf-noche">Reservar por WhatsApp</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pf-notes" id="pf-notas" data-sky="mediodia">
+    <div class="wrap grid">
+      <div>
+        <p class="pf-k">Incluido</p>
+        <h2 class="rv-focus" data-rv>Lo que ya está resuelto</h2>
+        <ol class="pf-inc">
+          <li>Wifi de fibra en todo el edificio</li><li>Cocina equipada en cada unidad</li><li>Recepción de 7 a. m. a 11 p. m.</li><li>Entrada con código las 24 horas</li><li>Cowork con cabinas para llamadas</li><li>Terraza común en la cubierta</li><li>Lavandería por encargo</li><li>Aseo diario o a pedido</li>
+        </ol>
+      </div>
+      <div class="pf-faq">
+        <p class="pf-k">Antes de reservar</p>
+        <h2 class="rv-focus" data-rv>Notas al margen</h2>
+        <details open><summary>¿Puedo elegir la habitación exacta?</summary><p>Sí. En el recorrido ves cada piso y cada habitación, con su vista y su precio. Al reservar, el mensaje ya dice cuál elegiste.</p></details>
+        <details><summary>¿Cómo reservo?</summary><p>Por WhatsApp, directo con el hotel. Respondemos con la disponibilidad y el valor total de la estadía.</p></details>
+        <details><summary>¿Tienen parqueadero?</summary><p>No dentro del edificio. Hay un parqueadero en convenio a una cuadra, con tarifa por noche.</p></details>
+        <details><summary>¿Sirve para quedarse a trabajar?</summary><p>Sí. Todas las unidades tienen escritorio o mesa junto a la ventana, y el cowork del primer piso tiene cabinas para llamadas.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pf-foot" data-sky="noche">
+    <div class="wrap">
+      <span class="logo">Niebla Alta</span>
+      <div><p>Chapinero Alto, Bogotá · Llegada 3:00 p. m. · Salida 12:00 m.</p><p class="note">Hotel ficticio · imágenes ilustrativas · con tecnología de Antesala</p></div>
+    </div>
+  </footer>
+  <div class="pf-dock"><a class="pf-btn" href="#pf-noche">Recorrer el edificio en 3D <i>→</i></a></div>
+</main>
+
+<script>
+(() => {
+// datos de la demo (content/hotels/niebla-alta/hotel.json): piso, unidad, tipo, precio en las fechas de ejemplo, ocupada
+const UNITS = [{"id": "201", "f": 2, "c": "estudio", "p": 280000, "oc": false}, {"id": "301", "f": 3, "c": "estudio", "p": 290000, "oc": false}, {"id": "402", "f": 4, "c": "suite-balcon", "p": 430000, "oc": false}, {"id": "502", "f": 5, "c": "suite-balcon", "p": 490000, "oc": false}, {"id": "601", "f": 6, "c": "penthouse", "p": 940000, "oc": false}, {"id": "203", "f": 2, "c": "estudio", "p": 260000, "oc": false}, {"id": "202", "f": 2, "c": "suite-balcon", "p": 410000, "oc": false}, {"id": "204", "f": 2, "c": "suite-balcon", "p": 390000, "oc": true}, {"id": "205", "f": 2, "c": "suite-balcon", "p": 390000, "oc": true}, {"id": "303", "f": 3, "c": "estudio", "p": 270000, "oc": true}, {"id": "302", "f": 3, "c": "suite-balcon", "p": 420000, "oc": true}, {"id": "304", "f": 3, "c": "suite-balcon", "p": 400000, "oc": false}, {"id": "305", "f": 3, "c": "suite-balcon", "p": 400000, "oc": false}, {"id": "401", "f": 4, "c": "estudio", "p": 300000, "oc": false}, {"id": "403", "f": 4, "c": "estudio", "p": 280000, "oc": true}, {"id": "404", "f": 4, "c": "suite-balcon", "p": 410000, "oc": true}, {"id": "405", "f": 4, "c": "suite-balcon", "p": 410000, "oc": false}, {"id": "501", "f": 5, "c": "estudio", "p": 310000, "oc": true}, {"id": "503", "f": 5, "c": "estudio", "p": 290000, "oc": false}, {"id": "504", "f": 5, "c": "suite-balcon", "p": 420000, "oc": false}, {"id": "505", "f": 5, "c": "suite-balcon", "p": 420000, "oc": true}];
+const T = {
+  estudio: { name: 'Estudio', area: 32, cap: 2, from: 260000 },
+  'suite-balcon': { name: 'Suite con balcón', area: 54, cap: 3, from: 390000 },
+  penthouse: { name: 'Penthouse', area: 95, cap: 4, from: 940000 },
+};
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const cop = (v) => '$ ' + v.toLocaleString('es-CO');
+const typeSrc = (t) => ($(`img[data-tp="${t}"]`) || {}).src || '';
+const floorUnits = (f) => UNITS.filter((u) => u.f === f).sort((a, b) => a.id.localeCompare(b.id));
+const anim = (el, kf, o) => (!RM && el && el.animate ? el.animate(kf, o) : null);
+
+// altura de la barra (para los elementos pegajosos)
+const sw = $('.switch');
+const setBar = () => document.documentElement.style.setProperty('--barh', sw.offsetHeight + 'px');
+setBar(); addEventListener('resize', setBar);
+
+// pestañas
+const tabs = $$('.tabs [role=tab]');
+tabs.forEach((t) => t.addEventListener('click', () => {
+  tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+  $$('.prop').forEach((p) => (p.hidden = p.id !== t.getAttribute('aria-controls')));
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setBar();
+}));
+
+// revelado al hacer scroll: se dispara justo cuando el elemento asoma; nunca parte invisible
+const io = new IntersectionObserver((es) => es.forEach((e) => {
+  if (e.isIntersecting) { e.target.classList.add('rv-in'); io.unobserve(e.target); }
+}), { threshold: 0 });
+$$('[data-rv]').forEach((el) => io.observe(el));
+
+/* ---------------- D · POSTAL ---------------- */
+$$('.pcard').forEach((b) => b.addEventListener('click', () => {
+  const on = b.getAttribute('aria-pressed') !== 'true';
+  b.setAttribute('aria-pressed', String(on));
+  $('.front', b).setAttribute('aria-hidden', String(on));
+  $('.back', b).setAttribute('aria-hidden', String(!on));
+}));
+
+const panel = $('#pd-panel');
+$$('.fstamp').forEach((s) => {
+  const f = Number(s.dataset.f);
+  const us = floorUnits(f);
+  const free = us.filter((u) => !u.oc).length;
+  const tag = $('.fs-f', s);
+  if (f === 1) { tag.textContent = 'Zona común'; tag.classList.add('none'); }
+  else tag.textContent = `${free} de ${us.length} libre${us.length === 1 ? '' : 's'}`;
+  s.addEventListener('click', () => showFloor(f));
+});
+function showFloor(f) {
+  $$('.fstamp').forEach((s) => s.setAttribute('aria-pressed', String(Number(s.dataset.f) === f)));
+  const us = floorUnits(f);
+  const free = us.filter((u) => !u.oc).length;
+  let h;
+  if (f === 1) {
+    h = `<p class="pd-eyebrow">Piso 1 · zona común</p><h3>Lobby y cowork</h3><p>Aquí no hay habitaciones: está la recepción, abierta de 7 a. m. a 11 p. m., y el cowork con cabinas para llamadas. La entrada tiene código las 24 horas.</p>
+      <ul><li><b>—</b><span>Lobby<small>Recepción y sala de espera</small></span><span class="pr"></span><em class="poi">Común</em></li><li><b>—</b><span>Cowork<small>Cabinas para llamadas</small></span><span class="pr"></span><em class="poi">Común</em></li></ul>`;
+  } else {
+    const rows = us.map((u) => `<li><b>${u.id}</b><span>${T[u.c].name}<small>${T[u.c].area} m² · ${T[u.c].cap} personas</small></span><span class="pr">${cop(u.p)}</span><em class="${u.oc ? 'oc' : 'free'}">${u.oc ? 'Ocupada' : 'Libre'}</em></li>`).join('')
+      + (f === 6 ? '<li><b>—</b><span>Terraza común<small>En la cubierta, con pérgola</small></span><span class="pr"></span><em class="poi">Común</em></li>' : '');
+    h = `<p class="pd-eyebrow">Piso ${f} de 6 · fechas de ejemplo</p><h3>${free} de ${us.length} libre${us.length === 1 ? '' : 's'}</h3><p>Precio por noche en las fechas de ejemplo.</p><ul>${rows}</ul>`;
+  }
+  h += `<a class="pd-btn sun" href="#pd-sellos">Ver el piso ${f} en el recorrido 3D <i>→</i></a>`;
+  panel.innerHTML = h;
+  $$('li', panel).forEach((li, i) => anim(li, [{ transform: 'translateX(-14px)', opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 450, delay: i * 55, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' }));
+}
+showFloor(4);
+
+// escribe tu postal
+const pdForm = $('#pd-form'), pdMsg = $('#pd-msg'), pdIn = $('#pd-in'), pdOut = $('#pd-out'), pdG = $('#pd-g');
+const fmtD = (v) => { const [y, m, d] = v.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('es-CO', { day: 'numeric', month: 'long' }); };
+function writeCard() {
+  const t = $('input[name="pd-t"]:checked', pdForm).value;
+  const c = T[t];
+  [...pdG.options].forEach((o) => (o.disabled = Number(o.value) > c.cap));
+  if (Number(pdG.value) > c.cap) pdG.value = String(c.cap);
+  const a = pdIn.value, b = pdOut.value;
+  const err = $('#pd-err');
+  let txt;
+  if (!a || !b || b <= a) { err.textContent = 'La salida tiene que ser después de la llegada.'; txt = `Hola, Niebla Alta. Quisiera el ${c.name}. ¿Qué fechas tienen libres?`; }
+  else {
+    err.textContent = '';
+    const n = Math.round((new Date(b) - new Date(a)) / 864e5);
+    const g = Number(pdG.value);
+    txt = `Hola, Niebla Alta. Quisiera ${t === 'suite-balcon' ? 'la' : 'el'} ${c.name} del ${fmtD(a)} al ${fmtD(b)} (${n} noche${n === 1 ? '' : 's'}), para ${g} persona${g === 1 ? '' : 's'}. ¿Me confirman disponibilidad y el valor total?`;
+    const [, mm, dd] = a.split('-').map(Number);
+    $('#pd-pm-d').textContent = `${dd} ${['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'][mm - 1]}`;
+  }
+  pdMsg.textContent = txt;
+  pdMsg.classList.remove('ink'); void pdMsg.offsetWidth; pdMsg.classList.add('ink');
+  $('#pd-stamp-img').src = typeSrc(t);
+  $('#pd-stamp-t').textContent = c.name;
+  $('#pd-send').href = 'https://wa.me/?text=' + encodeURIComponent(txt);
+}
+pdForm.addEventListener('input', writeCard);
+pdForm.addEventListener('change', writeCard);
+writeCard();
+
+/* ---------------- E · VITRINA ---------------- */
+const peRows = $('#pe-rows'), pePrev = $('#pe-prev');
+const peState = { type: 'all', free: false, sort: 'f', sel: '402' };
+const rowEls = new Map();
+UNITS.slice().sort((a, b) => a.f - b.f || a.id.localeCompare(b.id)).forEach((u) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'pe-row'; b.setAttribute('role', 'listitem'); b.dataset.id = u.id;
+  b.innerHTML = `<b class="id">${u.id}</b><span class="ty">${T[u.c].name}</span><span class="fl">Piso ${u.f}</span><span class="ar">${T[u.c].area} m²</span><span class="pr">${cop(u.p)}</span><span class="st ${u.oc ? 'oc' : 'free'}">${u.oc ? 'Ocupada' : 'Libre'}</span>`;
+  b.addEventListener('click', () => { peState.sel = u.id; peSelect(); });
+  b.addEventListener('mouseenter', () => { if (matchMedia('(hover: hover)').matches) { peState.sel = u.id; peSelect(); } });
+  b.addEventListener('focus', () => { peState.sel = u.id; peSelect(); });
+  rowEls.set(u.id, b); peRows.appendChild(b);
+});
+const freeAll = UNITS.filter((u) => !u.oc).length;
+$('#pe-count').innerHTML = `<b>${freeAll}</b> de ${UNITS.length} libres en las fechas de ejemplo. Precios por noche.`;
+function peSelect() {
+  const u = UNITS.find((x) => x.id === peState.sel);
+  rowEls.forEach((el, id) => el.setAttribute('aria-current', String(id === u.id)));
+  const c = T[u.c];
+  pePrev.innerHTML = `<p class="big">${u.id}</p><p class="nm">${c.name}</p><p class="stt">Piso ${u.f} de 6 · ${u.oc ? 'ocupada en las fechas de ejemplo' : 'libre en las fechas de ejemplo'}</p>
+    <div class="ph"><img src="${typeSrc(u.c)}" alt="${c.name} (imagen ilustrativa del tipo)"></div>
+    <dl><div><dt>Área</dt><dd>${c.area} m²</dd></div><div><dt>Personas</dt><dd>${c.cap}</dd></div><div><dt>Por noche</dt><dd>${cop(u.p)}</dd></div></dl>
+    <a class="pe-btn red" href="#pe-vitrina" data-alt="${u.oc ? u.c : ''}">${u.oc ? 'Ver una libre igual' : 'Reservar la ' + u.id + ' por WhatsApp'} <span>→</span></a>`;
+  anim($('.big', pePrev), [{ transform: 'translateY(.18em)', opacity: .35 }, { transform: 'none', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  anim($('.ph img', pePrev), [{ clipPath: 'inset(0 0 0 30%)' }, { clipPath: 'inset(0)' }], { duration: 520, easing: 'cubic-bezier(.7,0,.2,1)' });
+  $$('#pe-bars .bar').forEach((b) => b.classList.toggle('on', b.dataset.t === u.c));
+  const alt = $('[data-alt]', pePrev);
+  if (u.oc) alt.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    const other = UNITS.filter((x) => x.c === u.c && !x.oc).sort((a, b) => a.p - b.p)[0];
+    if (other) { peState.sel = other.id; if (rowEls.get(other.id).hidden) { peState.type = 'all'; peApply(); } peSelect(); rowEls.get(other.id).scrollIntoView({ block: 'nearest', behavior: RM ? 'auto' : 'smooth' }); }
+  });
+}
+function peApply() {
+  const before = new Map(); rowEls.forEach((el, id) => { if (!el.hidden) before.set(id, el.getBoundingClientRect().top); });
+  const list = UNITS.filter((u) => (peState.type === 'all' || u.c === peState.type) && (!peState.free || !u.oc))
+    .sort((a, b) => (peState.sort === 'p' ? a.p - b.p : a.f - b.f) || a.id.localeCompare(b.id));
+  const show = new Set(list.map((u) => u.id));
+  rowEls.forEach((el, id) => (el.hidden = !show.has(id)));
+  list.forEach((u) => peRows.appendChild(rowEls.get(u.id)));
+  list.forEach((u, i) => {
+    const el = rowEls.get(u.id);
+    if (before.has(u.id)) {
+      const dy = before.get(u.id) - el.getBoundingClientRect().top;
+      if (dy) anim(el, [{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.75,.2,1)' });
+    } else anim(el, [{ transform: 'translateX(-18px)', opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 420, delay: Math.min(i, 10) * 28, easing: 'ease-out', fill: 'backwards' });
+  });
+  $$('#pe-f button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === peState.type)));
+  $$('#pe-s button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === peState.sort)));
+  $('#pe-free').setAttribute('aria-pressed', String(peState.free));
+  if (!show.has(peState.sel) && list.length) { peState.sel = list[0].id; peSelect(); }
+}
+$$('#pe-f button').forEach((b) => b.addEventListener('click', () => { peState.type = b.dataset.v; peApply(); }));
+$$('#pe-s button').forEach((b) => b.addEventListener('click', () => { peState.sort = b.dataset.v; peApply(); }));
+$('#pe-free').addEventListener('click', () => { peState.free = !peState.free; peApply(); });
+$$('.pe-types a').forEach((a) => {
+  const on = () => $$('#pe-bars .bar').forEach((b) => b.classList.toggle('on', b.dataset.t === a.dataset.t));
+  a.addEventListener('mouseenter', on); a.addEventListener('focus', on);
+  a.addEventListener('click', () => { peState.type = a.dataset.t; peApply(); });
+});
+peApply(); peSelect();
+
+/* ---------------- F · DIARIO ---------------- */
+const pf = $('#p-f');
+const chs = $$('.pf-ch', pf);
+const rail = $('.pf-rail', pf), list = $('#pf-list');
+chs.forEach((c, i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<button type="button"><span>${c.dataset.time} ${c.dataset.ap}</span>${c.dataset.title}</button>`;
+  $('button', li).addEventListener('click', () => c.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' }));
+  list.appendChild(li);
+});
+function setClock(box, time, ap) {
+  const dg = $('.dg', box), a = $('.ap', box);
+  if (dg.textContent === time && a.textContent === ap) return;
+  const out = anim(dg, [{ transform: 'none', opacity: 1 }, { transform: 'translateY(-35%)', opacity: 0 }], { duration: 170, easing: 'ease-in' });
+  const swap = () => { dg.innerHTML = time.replace(':', '<i class="cl">:</i>'); a.textContent = ap; anim(dg, [{ transform: 'translateY(35%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
+  out ? (out.onfinish = swap) : swap();
+}
+const arcBody = $('.pf-arc .body', pf);
+function setArc(h) {
+  const day = h >= 6 && h < 18;
+  const t = day ? (h - 6) / 12 : (((h - 18) + 24) % 24) / 12;
+  const ang = Math.PI * (1 - t);
+  arcBody.setAttribute('cx', (125 + 110 * Math.cos(ang)).toFixed(1));
+  arcBody.setAttribute('cy', (120 - 110 * Math.sin(ang)).toFixed(1));
+  arcBody.classList.toggle('moon', !day);
+}
+function setChapter(i) {
+  const c = chs[i];
+  setClock(rail, c.dataset.time, c.dataset.ap);
+  $('.ttl', rail).textContent = c.dataset.title;
+  $('.day', rail).textContent = c.dataset.day;
+  setArc(Number(c.dataset.h));
+  $$('button', list).forEach((b, j) => b.setAttribute('aria-current', String(j === i)));
+  rail.style.setProperty('--p', ((i + 1) / chs.length).toFixed(3));
+}
+setChapter(0);
+const skyIO = new IntersectionObserver((es) => es.forEach((e) => {
+  if (!e.isIntersecting) return;
+  const el = e.target;
+  if (el.id === 'pf-hero') { pf.dataset.sky = scrubSky(); return; }
+  pf.dataset.sky = el.dataset.sky;
+  const i = chs.indexOf(el);
+  if (i >= 0) setChapter(i);
+}), { rootMargin: '-48% 0px -48% 0px' });
+$$('[data-sky]', pf).forEach((el) => el !== pf && skyIO.observe(el));
+
+// la hora del encabezado: arrastrar para ver el día
+const scrubCh = chs.slice(0, 7);
+const scrub = $('#pf-scrub'), range = $('input', scrub), frames = $$('.frame img', scrub);
+let cur = 0, front = 0;
+function scrubSky() { return scrubCh[cur].dataset.sky; }
+function showHour(i) {
+  if (i === cur) return;
+  cur = i;
+  const c = scrubCh[i];
+  const nextImg = frames[1 - front];
+  nextImg.src = $('figure img', c).src;
+  nextImg.alt = $('figure img', c).alt; nextImg.removeAttribute('aria-hidden');
+  frames[front].setAttribute('aria-hidden', 'true'); frames[front].alt = '';
+  nextImg.className = 'on'; frames[front].className = 'off';
+  front = 1 - front;
+  setClock($('.row', scrub), c.dataset.time, c.dataset.ap);
+  $('.what b', scrub).textContent = c.dataset.title;
+  $('.what span', scrub).textContent = c.dataset.day;
+  range.value = String(i);
+  const heroTop = $('#pf-hero').getBoundingClientRect();
+  if (heroTop.bottom > innerHeight * .5) pf.dataset.sky = c.dataset.sky;
+}
+frames[1].src = frames[0].src;
+let auto = null, touched = false;
+range.addEventListener('input', () => { touched = true; clearInterval(auto); showHour(Number(range.value)); });
+function startAuto() {
+  if (RM || touched || auto) return;
+  auto = setInterval(() => {
+    if (pf.hidden) return;
+    const r = $('#pf-hero').getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    showHour((cur + 1) % scrubCh.length);
+  }, 3200);
+}
+startAuto();
+
+// ¿dónde pasas la noche?
+const showImg = $('#pf-show-img');
+function pickRoom(t) {
+  const c = T[t];
+  $$('#pf-opts button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.t === t)));
+  showImg.src = typeSrc(t); showImg.alt = c.name + ' (imagen ilustrativa)';
+  anim(showImg, [{ opacity: .3, transform: 'scale(1.06)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  $('#pf-s-a').textContent = c.area + ' m²';
+  $('#pf-s-c').textContent = String(c.cap);
+  $('#pf-s-p').textContent = cop(c.from);
+  const all = UNITS.filter((u) => u.c === t).sort((a, b) => a.p - b.p || a.id.localeCompare(b.id));
+  const free = all.filter((u) => !u.oc);
+  $('#pf-s-f').textContent = all.length === 1
+    ? (free.length ? `Hay un solo ${c.name.toLowerCase()} y está libre en las fechas de ejemplo:` : `Hay un solo ${c.name.toLowerCase()} y está ocupado en las fechas de ejemplo.`)
+    : `Libres en las fechas de ejemplo: ${free.length} de ${all.length}. Por noche:`;
+  $('#pf-s-u').innerHTML = free.map((u) => `<li><b>${u.id}</b> · piso ${u.f} · ${cop(u.p)}</li>`).join('');
+  $$('#pf-s-u li').forEach((li, i) => anim(li, [{ transform: 'translateY(8px)', opacity: .3 }, { transform: 'none', opacity: 1 }], { duration: 380, delay: i * 40, easing: 'ease-out', fill: 'backwards' }));
+}
+$$('#pf-opts button').forEach((b) => b.addEventListener('click', () => pickRoom(b.dataset.t)));
+pickRoom('estudio');
+})();
+</script>
