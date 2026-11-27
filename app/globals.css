@@ -500,7 +500,8 @@ body:has([data-guided-view]) [data-hotel-header] {
   --card: color-mix(in oklab, var(--hotel-ink) 92%, var(--hotel-base));
   --secondary: color-mix(in oklab, var(--hotel-ink) 88%, var(--hotel-base));
   --muted: color-mix(in oklab, var(--hotel-ink) 85%, var(--hotel-base));
-  --muted-foreground: color-mix(in oklab, var(--hotel-base) 60%, var(--hotel-ink));
+  /* grises más claros que en el tema claro: la letra fina sobre el negro casi no se leía */
+  --muted-foreground: color-mix(in oklab, var(--hotel-base) 76%, var(--hotel-ink));
   --border: color-mix(in oklab, var(--hotel-base) 14%, var(--hotel-ink));
   --accent: var(--hotel-accent-on-dark);
   --primary: var(--hotel-accent-on-dark);
@@ -559,6 +560,10 @@ body:has([data-guided-view]) [data-hotel-header] {
   to { transform: scaleX(1); opacity: 1; }
 }
 /* 5. El botón dorado respira, como una lámpara */
+.tema-noche p,
+.tema-noche li {
+  font-weight: 450;
+}
 .tema-noche .noche-lampara {
   animation:
     noche-sube 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.8s both,
@@ -569,8 +574,8 @@ body:has([data-guided-view]) [data-hotel-header] {
   to { opacity: 1; transform: none; }
 }
 @keyframes noche-respira {
-  0%, 100% { box-shadow: 0 0 34px -10px color-mix(in oklab, var(--hotel-accent-on-dark) 45%, transparent); }
-  50% { box-shadow: 0 0 70px -4px color-mix(in oklab, var(--hotel-accent-on-dark) 70%, transparent); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--hotel-accent-on-dark) 0%, transparent); }
+  50% { box-shadow: 0 0 26px -6px color-mix(in oklab, var(--hotel-accent-on-dark) 45%, transparent); }
 }
 /* 6. Las secciones aparecen al bajar (solo donde el navegador lo sabe hacer; si no, se ven quietas) */
 @supports (animation-timeline: view()) {

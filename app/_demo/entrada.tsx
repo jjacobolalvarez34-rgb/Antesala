@@ -254,7 +254,7 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             <TourButton
               slug={hotel.slug}
               guided={!!guided}
-              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.9375rem] font-medium transition-colors ${noche ? 'noche-lampara bg-accent-on-dark text-ink tracking-[0.16em] uppercase text-[0.8125rem] shadow-[0_0_60px_-6px_color-mix(in_oklab,var(--hotel-accent-on-dark)_55%,transparent)] hover:brightness-110' : 'bg-bone text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] hover:bg-white'} md:min-h-14 md:px-7 md:text-base`}
+              className={`group inline-flex min-h-13 items-center gap-3 rounded-[var(--hotel-r-btn,3px)] px-6 text-[0.9375rem] font-medium transition-colors ${noche ? 'noche-lampara border border-accent-on-dark/70 bg-ink/55 text-bone tracking-[0.16em] uppercase text-[0.8125rem] backdrop-blur-sm hover:bg-ink/75 hover:border-accent-on-dark' : 'bg-bone text-ink shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] hover:bg-white'} md:min-h-14 md:px-7 md:text-base`}
             >
               <Move3d aria-hidden className="size-5" strokeWidth={1.5} />
               {terrain ? tr('Recorrer el terreno en 3D') : tr('Recorrer el edificio en 3D')}
@@ -262,13 +262,13 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
             </TourButton>
           </div>
         </div>
-        {hero ? (
-          <FidelityBadge fidelity={hero.fidelity} className="absolute top-[8.75rem] right-4 md:top-auto md:right-10 md:bottom-28" />
-        ) : null}
+        {/* sin "Imagen ilustrativa" en la portada (Jacobo, 2026-11-26): el aviso de demo va en la cinta y en el pie */}
       </section>
 
       {/* Consulta de fechas, montada sobre el borde de la portada */}
       <div className="relative z-10 mx-auto -mt-16 max-w-5xl px-4 md:-mt-12 md:px-10">
+        {/* sin encabezado no se entendía qué era (Jacobo, 2026-11-26) */}
+        <p className={`${eyebrow} mb-2.5 text-center text-bone/85 md:text-left`}>{tr('¿Cuándo vienes? Consulta la disponibilidad')}</p>
         <BookingWidget context={booking} maxGuests={maxGuests} from={from} suffix={offer.suffix} />
       </div>
 
@@ -292,7 +292,15 @@ export async function EntradaPage({ params }: DemoProps<{ hotel: string }>, lang
           <div className="md:col-span-7">
             <p className={`${eyebrow} text-accent`}>{hotel.neighborhood ?? hotel.city}</p>
             {hotel.intro ? (
-              <p className="mt-5 font-display text-[1.875rem] leading-[1.18] text-pretty md:text-[2.75rem]">{hotel.intro}</p>
+              <p
+                className={
+                  noche
+                    ? 'mt-5 text-[1.25rem] leading-[1.55] font-medium text-pretty md:text-[1.5rem]'
+                    : 'mt-5 font-display text-[1.875rem] leading-[1.18] text-pretty md:text-[2.75rem]'
+                }
+              >
+                {hotel.intro}
+              </p>
             ) : null}
             <TourButton
               slug={hotel.slug}

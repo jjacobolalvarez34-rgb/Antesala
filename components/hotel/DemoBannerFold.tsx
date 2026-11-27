@@ -64,21 +64,19 @@ export function DemoBannerFold({ label, hideLabel = 'Ocultar', children }: { lab
         ) : null}
       </AnimatePresence>
       {!open ? (
-        // plegada: la cinta y el idioma al centro, colgando sobre la página
-        <div className="absolute inset-x-0 top-0 flex items-start justify-center">
+        // plegada: una tira delgada propia (colgando encima tapaba el menú y el nombre del hotel)
+        <div className="pointer-events-auto flex h-6 items-center justify-center gap-2 bg-ink px-2 text-bone">
           <button
             type="button"
             onClick={() => toggle(true)}
             aria-expanded={false}
-            className="pointer-events-auto inline-flex min-h-7 items-center gap-1.5 rounded-b-xl bg-ink/85 px-3 pt-0.5 pb-1 text-[0.6875rem] tracking-wide text-bone/85 shadow-lg backdrop-blur-sm transition-colors hover:bg-ink hover:text-bone"
+            className="inline-flex h-6 items-center gap-1 px-2 text-[0.6875rem] tracking-wide text-bone/80 transition-colors hover:text-bone"
           >
             {label}
             <ChevronDown aria-hidden className="size-3.5" />
           </button>
-          {/* el idioma, pegado a la cinta (a la derecha tapaba los botones del encabezado) */}
-          <div className="pointer-events-auto ml-1.5 rounded-b-xl bg-ink/85 px-1 pt-0.5 pb-1 shadow-lg backdrop-blur-sm">
-            <LangSwitch />
-          </div>
+          <span aria-hidden className="h-3 w-px bg-bone/20" />
+          <LangSwitch className="[&_a]:min-h-5 [&_a]:px-2 [&_a]:text-[0.625rem]" />
         </div>
       ) : null}
     </div>
