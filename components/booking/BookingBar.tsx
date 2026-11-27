@@ -139,7 +139,10 @@ export function BookingBar({ data }: { data: BookingSummary }) {
   }
   // en las páginas sin 3D, en escritorio, la reserva va en el encabezado fijo (HotelHeader)
   const inScene = segments[0] === 'explorar' || segments[0] === 'piso' || segments[0] === 'unidad';
-  return <Bar data={data} stage={resolveStage(data, segments, lang)} inScene={inScene} />;
+  // en el recorrido libre, Reservar aparece con una habitación abierta, como en el guiado (D-096,
+  // Jacobo 2026-11-26: "el botón de reservar sigue allí"); la flecha de volver se queda siempre
+  const noReserve = segments[0] === 'explorar' || segments[0] === 'piso';
+  return <Bar data={data} stage={resolveStage(data, segments, lang)} inScene={inScene} noReserve={noReserve} />;
 }
 
 function GuidedBar({ data }: { data: BookingSummary }) {
@@ -179,7 +182,20 @@ function guidedStage(data: BookingSummary, piso: string | null, u: string | null
   };
 }
 
-function Bar({ data, stage, inScene, enter = false }: { data: BookingSummary; stage: Stage; inScene: boolean; enter?: boolean }) {
+function Bar({
+  data,
+  stage,
+  inScene,
+  enter = false,
+  noReserve = false,
+}: {
+  data: BookingSummary;
+  stage: Stage;
+  inScene: boolean;
+  enter?: boolean;
+  /** sin el botón de reservar (edificio y piso del recorrido libre) */
+  noReserve?: boolean;
+}) {
   const lang = useLang();
   const o = offerTexts(data.offer, lang);
   const venta = data.offer && data.offer !== 'noche';
@@ -226,7 +242,7 @@ function Bar({ data, stage, inScene, enter = false }: { data: BookingSummary; st
               <ArrowRight aria-hidden className="size-4" />
             </Link>
           ) : null
-        ) : (
+        ) : noReserve ? null : (
           <ReserveButton context={stage.context} price={stage.price} capacity={stage.capacity} offer={data.offer} className="shrink-0" />
         )}
       </nav>

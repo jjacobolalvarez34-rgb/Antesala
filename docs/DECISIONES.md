@@ -621,6 +621,7 @@ Formato: **D-NNN · fecha · título** — decisión · por qué · alternativas
 **D-096 · 2026-11-25 · En la vista guiada, Reservar aparece con la habitación abierta**
 - Decisión: en `/h/<slug>/guiada` la barra de reserva no se muestra en el edificio ni en el piso. Entra, con un fundido, al abrir una habitación, y se va al cerrarla. En el resto de la demo sigue siempre visible (regla 4).
 - Por qué: Jacobo (2026-11-25): "el botón aparece cuando veo una habitación, no antes, porque ensucia la experiencia". La vista guiada es un recorrido a pantalla completa, como un video, y ahí la reserva tiene sentido cuando ya hay algo concreto que reservar. Es una excepción a la regla 4 pedida por el dueño, solo para esta vista.
+- Ampliación (2026-11-27): en el recorrido libre, el edificio y el piso tampoco muestran el botón Reservar (la barra sí, con su flecha de volver); aparece con una unidad abierta. Las páginas sin 3D (lista, portada) siguen con la reserva siempre visible.
 
 **D-097 · 2026-11-26 · Recorrido 3D con dos modos: guiado y libre**
 - Decisión:
