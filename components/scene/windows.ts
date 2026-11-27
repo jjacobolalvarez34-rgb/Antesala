@@ -10,7 +10,12 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
  * lobby (siempre encendido). Un segundo quad aditivo hace el resplandor.
  */
 
-export const MAX_UNITS = 24;
+/**
+ * Unidades con luz propia en las ventanas. Eran 24 y Cénit tiene 52: del piso 9 para arriba no se
+ * encendía nada (Jacobo, 2026-11-27). Van empaquetadas de a 4 por vec4 (16 casillas para 64): un
+ * arreglo de floats gasta una casilla entera por valor y en celulares el tope es bajo.
+ */
+export const MAX_UNITS = 64;
 
 /** Estilos de ventana: cortinas a los lados, visillo, lobby (sin cortinas, siempre encendido). */
 export const STYLE = { panels: 0, sheer: 1, lobby: 2 } as const;
@@ -76,8 +81,8 @@ export const buildGlowGeometry = (specs: WindowSpec[]) => buildQuads(specs, 1.35
 
 const common = /* glsl */ `
   uniform float uNight;
-  uniform float uUnitLight[${MAX_UNITS}];
-  uniform float uOccupied[${MAX_UNITS}];
+  uniform vec4 uUnitLight[${MAX_UNITS / 4}];
+  uniform vec4 uOccupied[${MAX_UNITS / 4}];
   varying vec4 vRoom;
   float hash1(float n) { return fract(sin(n) * 43758.5453123); }
   float roomLight() {
@@ -86,10 +91,13 @@ const common = /* glsl */ `
     float occupied = 0.0;
     if (slot > -0.5) {
       int i = int(slot + 0.5);
-      for (int k = 0; k < ${MAX_UNITS}; k++) {
-        if (k == i) {
-          unitL = uUnitLight[k];
-          occupied = uOccupied[k];
+      int q = i / 4;
+      int r = i - q * 4;
+      vec4 pick = vec4(r == 0 ? 1.0 : 0.0, r == 1 ? 1.0 : 0.0, r == 2 ? 1.0 : 0.0, r == 3 ? 1.0 : 0.0);
+      for (int k = 0; k < ${MAX_UNITS / 4}; k++) {
+        if (k == q) {
+          unitL = dot(uUnitLight[k], pick);
+          occupied = dot(uOccupied[k], pick);
         }
       }
     }
@@ -159,13 +167,19 @@ export function createWindowMaterial(light: LightUniforms, atlas: THREE.Texture)
         vec3 p = o + d * t;
 
         float L = roomLight();
-        vec3 warm = vec3(1.0, 0.70, 0.42);
         float seed = vRoom.y;
+        // cada ventana con su luz: más cálida o más neutra, y alguna con el azul de un televisor
+        // (todas se veían iguales, Jacobo 2026-11-27)
+        vec3 warm = mix(vec3(1.0, 0.68, 0.40), vec3(1.0, 0.84, 0.64), hash1(seed * 11.3));
+        if (hash1(seed * 17.9) < 0.1) warm = vec3(0.62, 0.72, 1.0) * 0.8;
         vec3 albedo;
         if (t == tz) {
           float cell = vRoom.x;
           vec2 off = vec2(mod(cell, 2.0) * 0.5, floor(cell / 2.0) < 0.5 ? 0.5 : 0.0);
-          albedo = texture2D(uAtlas, off + clamp(p.xy, 0.01, 0.99) * 0.5).rgb;
+          // el interior volteado en la mitad de las ventanas: el doble de cuartos distintos
+          vec2 q2 = clamp(p.xy, 0.01, 0.99);
+          if (hash1(seed * 13.7) > 0.5) q2.x = 1.0 - q2.x;
+          albedo = texture2D(uAtlas, off + q2 * 0.5).rgb * (0.85 + 0.3 * hash1(seed * 19.1));
         } else if (t == ty) {
           if (d.y < 0.0) {
             float plank = 0.88 + 0.12 * sin(p.x * 14.0 + floor(p.z * 4.0) * 2.1);
@@ -177,8 +191,9 @@ export function createWindowMaterial(light: LightUniforms, atlas: THREE.Texture)
           albedo = mix(vec3(0.78, 0.72, 0.64), vec3(0.70, 0.66, 0.6), hash1(seed * 7.0));
         }
         // lámpara de techo hacia el centro del cuarto
-        float lamp = 1.0 - smoothstep(0.0, 0.9, length(vec2(p.x - 0.5, p.z - uDepth * 0.55)));
-        float ceilingSpot = (t == ty && d.y > 0.0) ? (1.0 - smoothstep(0.0, 0.22, length(vec2(p.x - 0.5, p.z - uDepth * 0.55)))) : 0.0;
+        float lx = 0.3 + 0.4 * hash1(seed * 23.3);
+        float lamp = 1.0 - smoothstep(0.0, 0.9, length(vec2(p.x - lx, p.z - uDepth * 0.55)));
+        float ceilingSpot = (t == ty && d.y > 0.0) ? (1.0 - smoothstep(0.0, 0.22, length(vec2(p.x - lx, p.z - uDepth * 0.55)))) : 0.0;
         vec3 dayAmb = mix(vec3(0.26, 0.27, 0.29), vec3(0.015, 0.02, 0.035), uNight);
         float deep = 1.0 - 0.45 * clamp(p.z / uDepth, 0.0, 1.0);
         vec3 col = albedo * (dayAmb * deep + warm * L * (0.75 + 1.1 * lamp)) + warm * ceilingSpot * L * 2.5;
@@ -195,8 +210,9 @@ export function createWindowMaterial(light: LightUniforms, atlas: THREE.Texture)
           float weave = uHasLinen > 0.5 ? dot(texture2D(uLinen, vUv * vec2(1.2, 1.6)).rgb, vec3(0.3333)) : 0.6;
           vec3 fabric = vec3(0.86, 0.83, 0.78) * mix(1.0, weave * 1.65, 0.28);
           fabric *= mix(vec3(0.97, 0.94, 0.88), vec3(0.9, 0.86, 0.8), hash1(seed * 2.3)) * folds;
-          float left = 0.1 + 0.22 * hash1(seed * 3.1);
-          float right = 0.1 + 0.22 * hash1(seed * 5.7);
+          // cortinas más o menos cerradas según la ventana
+          float left = 0.06 + 0.36 * hash1(seed * 3.1);
+          float right = 0.06 + 0.36 * hash1(seed * 5.7);
           float edge = 0.015;
           float panel = 1.0 - smoothstep(left - edge, left + edge, x) + smoothstep(1.0 - right - edge, 1.0 - right + edge, x);
           float sheer = style > 0.5 ? 0.42 : 0.0;
