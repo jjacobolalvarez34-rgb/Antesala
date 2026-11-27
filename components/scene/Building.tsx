@@ -542,7 +542,8 @@ function Floor({
     const n = light.uNight.value;
     for (const m of [baked.fachadaMat, baked.losaMat]) {
       if (!m) continue;
-      m.color.copy(WHITE).lerp(NIGHT_TINT, n * 0.82);
+      // de noche la fachada horneada se oscurece menos: con 0,82 casi no se veía el edificio
+      m.color.copy(WHITE).lerp(NIGHT_TINT, n * 0.66);
       if (state === 'hovered') m.color.lerp(WARM_HOVER, 0.25);
     }
   });
@@ -889,11 +890,13 @@ function Entrance({
 function Uplights({ building, light }: { building: Building; light: LightUniforms }) {
   const geo = useMemo(() => {
     const parts: THREE.BufferGeometry[] = [];
+    // los bañadores suben hasta ~60 % del edificio (antes 9 m fijos: arriba quedaba oscuro)
+    const tall = Math.max(9, building.floors * (building.floorHeightM ?? 3) * 0.6);
     for (const e of edgesOf(building.footprint as Pt[])) {
       const bays = bayCount(e.length);
       const bw = e.length / bays;
       for (let b = 0; b <= bays; b++) {
-        const box = onEdge(e, b * bw, 0.26, 4.5, 1.7, 9.0, 0);
+        const box = onEdge(e, b * bw, 0.26, tall / 2, 1.7, tall, 0);
         const g = new THREE.PlaneGeometry(box.w, box.h);
         g.rotateY(facing(e));
         g.translate(box.x, box.y, box.z);
@@ -920,7 +923,7 @@ function Uplights({ building, light }: { building: Building; light: LightUniform
           varying vec2 vUv;
           void main() {
             float x = abs(vUv.x - 0.5) * 2.0;
-            float a = pow(1.0 - vUv.y, 1.35) * (1.0 - x * x) * 0.5 * uNight;
+            float a = pow(1.0 - vUv.y, 1.2) * (1.0 - x * x) * 0.62 * uNight;
             gl_FragColor = vec4(vec3(1.0, 0.78, 0.5) * a, 1.0);
           }
         `,
@@ -999,7 +1002,7 @@ function Roof({
   }, [dimmed, gone, mats, baked]);
   // la cubierta horneada también se oscurece de noche
   useFrame(() => {
-    if (baked) baked.mat.color.copy(WHITE).lerp(NIGHT_TINT, light.uNight.value * 0.82);
+    if (baked) baked.mat.color.copy(WHITE).lerp(NIGHT_TINT, light.uNight.value * 0.66);
   });
 
   const { parapet, beams, rails } = useMemo(() => {

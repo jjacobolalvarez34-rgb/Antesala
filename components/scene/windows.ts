@@ -97,8 +97,10 @@ const common = /* glsl */ `
     float dim = 0.7 + 0.3 * hash1(vRoom.y * 13.3);
     // ventanas de habitaciones del hotel: de noche, encendidas solo si están ocupadas (D-054);
     // las demás ventanas (sin unidad) siguen al azar para que el edificio se vea habitado
+    // las libres no quedan negras: un resplandor cálido tenue detrás de la cortina, como un hotel
+    // de noche (Jacobo, 2026-11-26: "el edificio casi no se ve"); las ocupadas, plenas
     float nightLit = slot > -0.5
-      ? occupied * uNight * dim
+      ? mix(0.3, 1.0, occupied) * uNight * dim
       : step(0.48, hash1(vRoom.y * 91.7)) * uNight * dim;
     return max(unitL, nightLit);
   }
