@@ -7,6 +7,8 @@ import { ViewFromWindowButton } from '@/components/scene/ViewFromWindowButton';
 import { formatArea, formatCOP, offerOf, pluralize, unitPrice } from '@/lib/hotel';
 import type { Category, Hotel, Level, Unit } from '@/lib/types';
 import { useLang, useT } from '@/components/i18n/Lang';
+import { ScrollHint } from '@/components/motion/ScrollHint';
+import { useRef } from 'react';
 
 /**
  * Panel de la unidad sobre su maqueta 3D (bloque 3): bottom sheet en móvil,
@@ -27,12 +29,13 @@ export function UnitSheet({
   const tr = useT();
   const lang = useLang();
   const price = unitPrice(unit);
+  const scrollRef = useRef<HTMLDivElement>(null);
   return (
     <section
       aria-label={unit.name}
       className="glass-dark pointer-events-auto fixed inset-x-3 bottom-[calc(var(--booking-bar-h)+var(--safe-bottom)+1.25rem)] z-30 hidden max-h-[46dvh] animate-in flex-col overflow-hidden rounded-3xl shadow-2xl duration-500 fade-in slide-in-from-bottom-4 scene:flex md:inset-x-auto md:top-32 md:right-6 md:bottom-auto md:max-h-[calc(100dvh-var(--booking-bar-h)-11rem)] md:w-[380px] md:slide-in-from-right-4"
     >
-      <div className="scrollbar-none overflow-y-auto p-4 md:p-5">
+      <div ref={scrollRef} className="scrollbar-none overflow-y-auto p-4 md:p-5">
         <p className="text-xs tracking-[0.12em] text-bone/60 uppercase">
           {[category?.name, level?.name].filter(Boolean).join(' · ')}
         </p>
@@ -57,6 +60,7 @@ export function UnitSheet({
           {unit.exterior?.length ? <ViewFromWindowButton unitId={unit.id} /> : null}
           <ExactUnitPicker hotel={hotel} unit={unit} tone="dark" className="mt-5" />
         </MobileCollapse>
+        <ScrollHint target={scrollRef} />
       </div>
     </section>
   );
