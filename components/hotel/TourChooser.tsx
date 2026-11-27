@@ -93,7 +93,7 @@ function TourChooser({ slug, open, onClose }: { slug: string; open: boolean; onC
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="w-full max-w-2xl rounded-t-2xl bg-background p-5 text-left pb-[calc(1.25rem+var(--safe-bottom,0px))] text-ink shadow-2xl md:rounded-[var(--hotel-r-card,6px)] md:p-8"
+            className="w-full max-w-2xl rounded-t-2xl bg-background p-5 text-left pb-[calc(1.25rem+var(--safe-bottom,0px))] text-foreground shadow-2xl md:rounded-[var(--hotel-r-card,6px)] md:p-8"
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 30, opacity: 0 }}
@@ -107,7 +107,7 @@ function TourChooser({ slug, open, onClose }: { slug: string; open: boolean; onC
                   {tr('¿Cómo quieres recorrerlo?')}
                 </h2>
               </div>
-              <button type="button" onClick={onClose} aria-label={tr('Cerrar')} className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center text-ink/70 hover:text-ink">
+              <button type="button" onClick={onClose} aria-label={tr('Cerrar')} className="-mt-1 -mr-2 grid size-11 shrink-0 place-items-center text-foreground/70 hover:text-foreground">
                 <X aria-hidden className="size-5" strokeWidth={1.5} />
               </button>
             </div>
