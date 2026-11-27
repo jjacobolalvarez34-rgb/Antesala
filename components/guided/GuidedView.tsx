@@ -14,6 +14,7 @@ import { LangSwitch } from '@/components/i18n/LangSwitch';
 import { ModeSwitch } from '@/components/hotel/TourChooser';
 import { GestureHint } from '@/components/motion/GestureHint';
 import { ScrollHint } from '@/components/motion/ScrollHint';
+import { SpinPlan } from './SpinPlan';
 import { PanoButton } from '@/components/pano/PanoButton';
 import { PlanSvg } from '@/components/plan/PlanSvg';
 import type { GuidedData, GuidedLevel, GuidedOrient, GuidedUnit, P2 } from '@/lib/guided-types';
@@ -806,6 +807,9 @@ function Floor({
   const [hover, setHover] = useState<string | null>(null);
   const [poi, setPoi] = useState<string | null>(null);
   const [drawn, setDrawn] = useState(false);
+  // la planta en 3D es opcional: por defecto la 2D, que es más liviana (Jacobo, 2026-11-27)
+  const [spin3d, setSpin3d] = useState(false);
+  const spinData = data.spin?.[level.id];
   const sheetRef = useRef<HTMLDivElement>(null);
   const [sheetH, setSheetH] = useState(0);
 
@@ -930,6 +934,17 @@ function Floor({
       exit={{ opacity: 0, scale: 0.9, rotate: 5, transition: { duration: 0.5, ease: EASE } }}
     >
       {/* la planta: entra girando y se asienta */}
+      {spin3d && spinData ? (
+        <SpinPlan
+          key={`giro-${level.id}`}
+          spin={spinData}
+          area={area}
+          units={data.units}
+          poiNames={Object.fromEntries(level.pois.map((p) => [p.id, p.name]))}
+          selected={unit?.id ?? poi}
+          onPick={pick}
+        />
+      ) : (
       <div className="absolute inset-0" style={{ perspective: 1600 }}>
         <AnimatePresence initial custom={dir}>
           {shot && base && target ? (
@@ -1051,6 +1066,7 @@ function Floor({
           ) : null}
         </AnimatePresence>
       </div>
+      )}
 
       {/* el piso: nombre, resumen, subir y bajar, y la lista (en escritorio, una columna) */}
       <AnimatePresence>
@@ -1117,8 +1133,22 @@ function Floor({
                 </motion.div>
               </AnimatePresence>
             </div>
-            {/* subir y bajar de piso */}
+            {/* subir y bajar de piso, y la planta en 3D si hay tomas de giro */}
             <div className={cn('flex shrink-0 gap-1.5', chrome.desktop ? 'mt-5' : '')}>
+              {spinData ? (
+                <button
+                  type="button"
+                  onClick={() => setSpin3d((v) => !v)}
+                  aria-pressed={spin3d}
+                  aria-label={spin3d ? tr('Ver la planta en 2D') : tr('Ver la planta en 3D')}
+                  className={cn(
+                    'grid h-11 min-w-11 place-items-center rounded-full px-3 text-xs font-semibold tracking-wide shadow-sm transition-colors',
+                    spin3d ? 'bg-ink text-bone' : 'bg-background/90 text-ink hover:bg-background',
+                  )}
+                >
+                  {spin3d ? '2D' : '3D'}
+                </button>
+              ) : null}
               {[
                 { l: above, icon: ChevronUp, label: tr('Piso de arriba') },
                 { l: below, icon: ChevronDown, label: tr('Piso de abajo') },

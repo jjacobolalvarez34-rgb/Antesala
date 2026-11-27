@@ -357,6 +357,8 @@ export const EN: Record<string, string> = {
   'Aún no hay fotos de este espacio.': 'No photos of this space yet.',
   'Recorrido guiado': 'Guided tour',
   // modos del recorrido (D-097)
+  'Ver la planta en 2D': 'See the plan in 2D',
+  'Ver la planta en 3D': 'See the plan in 3D',
   'Otros espacios': 'Other spaces',
   'Hay más abajo': 'More below',
   '¿Cuándo vienes? Consulta la disponibilidad': 'When are you coming? Check availability',

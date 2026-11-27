@@ -36,6 +36,8 @@ export async function GuiadaPage({ params }: DemoProps<{ hotel: string }>, lang:
     o?.night?.pisos,
     ...Object.values(o?.levels ?? {}).flatMap((l) => [l.img, l.night]),
   ]);
+  const spinSrcs = Object.values(manifest.spin ?? {}).flatMap((sp) => sp.frames.map((f) => f.img));
+  srcs.push(...spinSrcs);
   await Promise.all(srcs.filter((s): s is string => !!s).map(async (s) => versions.set(s, await fileVersion(hotel.slug, s))));
   const url = (src?: string) => (src ? `${assetUrl(hotel.slug, src)}?v=${versions.get(src) ?? '0'}` : undefined);
   const orients: GuidedData['orients'] = {};
@@ -118,6 +120,9 @@ export async function GuiadaPage({ params }: DemoProps<{ hotel: string }>, lang:
       ]),
     ),
     plans: planData,
+    spin: manifest.spin
+      ? Object.fromEntries(Object.entries(manifest.spin).map(([id, sp]) => [id, { ...sp, frames: sp.frames.map((f) => ({ ...f, img: url(f.img)! })) }]))
+      : undefined,
   };
 
   return (

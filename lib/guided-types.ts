@@ -37,6 +37,14 @@ export interface GuidedManifest {
   backgroundNight?: string;
   skyNight?: string;
   orients: Partial<Record<'h' | 'v', GuidedOrient>>;
+  /** la planta en 3D, opcional: cada piso desde varios ángulos alrededor (pipeline GIRO=1) */
+  spin?: Record<string, GuidedSpin>;
+}
+
+export interface GuidedSpin {
+  w: number;
+  h: number;
+  frames: { img: string; spaces: { id: string; kind: 'unit' | 'poi'; poly: P2[] }[] }[];
 }
 
 /** Lo que recibe el visor (components/guided/GuidedView.tsx), ya con URLs y textos. */
@@ -93,6 +101,7 @@ export interface GuidedData {
   backgroundNight: string;
   skyNight: string;
   orients: GuidedManifest['orients'];
+  spin?: GuidedManifest['spin'];
   /** de arriba hacia abajo */
   levels: GuidedLevel[];
   units: Record<string, GuidedUnit>;

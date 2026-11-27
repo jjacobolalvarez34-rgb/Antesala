@@ -285,3 +285,77 @@ for (const m of MOMENTS)
       });
     }
   }
+
+/**
+ * Planta en 3D, opcional (Jacobo, 2026-11-27: "que haya un botón 3D pero que el predeterminado sea
+ * el 2D, porque optimiza recursos"): cada planta desde GIRO_PASOS ángulos alrededor, de día, en
+ * una toma de 960 × 720 que sirve para las dos orientaciones. El visor cambia la foto al arrastrar.
+ * Uso: GIRO=1 HOTEL=<slug> npx playwright test -c pipeline/renders.config.ts guiada.spec -g giro
+ */
+const SPIN_STEPS = Number(process.env.GIRO_PASOS ?? 16);
+if (process.env.GIRO) {
+  for (const level of hotel.levels as { id: string; order: number; realista?: string }[]) {
+    test(`${slug} · giro piso ${level.id}`, async ({ page }) => {
+      test.setTimeout(600_000);
+      const W = 960;
+      const H = 720;
+      await page.setViewportSize({ width: W, height: H });
+      await open(page, `/h/${slug}/piso/${level.id}`, 10, 3_000);
+      await page.waitForFunction((id) => window.__antesalaCaptura!.planInfo(id).found, level.id, { timeout: 120_000, polling: 500 });
+      if (level.realista) {
+        await page.waitForFunction((id) => window.__antesalaCaptura!.planReady(id), level.id, { timeout: 90_000, polling: 500 });
+        await page.waitForTimeout(600);
+      }
+      const spaces = await page.evaluate(() => window.__antesalaCaptura!.spaces());
+      if (!(await page.evaluate((id) => window.__antesalaCaptura!.isolateFloor(id, '#ebe6dd'), level.id))) return;
+      // la planta sale del edificio como un cajón: se espera a que se asiente (si no, el primer
+      // ángulo salía corrido)
+      await page.waitForTimeout(2500);
+      const pts = spaces.flatMap((sp) => sp.points);
+      if (!pts.length) return;
+      const xs = pts.map((p) => p[0]);
+      const zs = pts.map((p) => p[2]);
+      const c: V3 = [(Math.min(...xs) + Math.max(...xs)) / 2, pts[0]![1], (Math.min(...zs) + Math.max(...zs)) / 2];
+      const diag = Math.hypot(Math.max(...xs) - Math.min(...xs), Math.max(...zs) - Math.min(...zs));
+      const fov = 30;
+      const polar = 52 * DEG;
+      // la misma distancia en todos los ángulos: la planta no cambia de tamaño al girar
+      const fit = (diag * 0.6) / Math.tan((fov / 2) * DEG);
+      const az0 = (manifest as Manifest & { facadeAz?: number }).facadeAz ?? 0;
+      const dir = path.join(out, 'giro');
+      mkdirSync(dir, { recursive: true });
+      const frames: { img: string; spaces: { id: string; kind: string; poly: P2[] }[] }[] = [];
+      // calentamiento: el primer cambio de cámara todavía arrastra la inercia de la anterior y el
+      // primer ángulo salía corrido; se pone la cámara una vez y se espera a que se asiente
+      {
+        const az = az0 + 24 * DEG;
+        await page.evaluate((p) => window.__antesalaCaptura!.setCamera(p), {
+          target: c,
+          position: [c[0] + fit * Math.sin(polar) * Math.sin(az), c[1] + fit * Math.cos(polar), c[2] + fit * Math.sin(polar) * Math.cos(az)] as V3,
+          fov,
+        });
+        await page.waitForTimeout(1500);
+      }
+      for (let k = 0; k < SPIN_STEPS; k++) {
+        const az = az0 + 24 * DEG + (k * 2 * Math.PI) / SPIN_STEPS;
+        await page.evaluate((p) => window.__antesalaCaptura!.setCamera(p), {
+          target: c,
+          position: [c[0] + fit * Math.sin(polar) * Math.sin(az), c[1] + fit * Math.cos(polar), c[2] + fit * Math.sin(polar) * Math.cos(az)] as V3,
+          fov,
+        });
+        await page.waitForTimeout(350);
+        const file = `giro/piso-${level.id}-${String(k).padStart(2, '0')}.jpg`;
+        await page.screenshot({ path: path.join(out, file), type: 'jpeg', quality: 78 });
+        const projected = [];
+        for (const s of spaces) {
+          const p2 = await page.evaluate((ps) => window.__antesalaCaptura!.project(ps), s.points);
+          projected.push({ id: s.id, kind: s.kind, poly: round(p2) });
+        }
+        frames.push({ img: `media/guiada/${file}`, spaces: projected });
+      }
+      const m2 = manifest as Manifest & { spin?: Record<string, { w: number; h: number; frames: typeof frames }> };
+      m2.spin = { ...(m2.spin ?? {}), [level.id]: { w: W, h: H, frames } };
+      save();
+    });
+  }
+}
